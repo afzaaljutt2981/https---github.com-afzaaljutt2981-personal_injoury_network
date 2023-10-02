@@ -9,6 +9,8 @@ import '../../chat_screen/view/chat_view.dart';
 import '../../create_event/view/add_event_view.dart';
 import '../../drawer/view/drawer_home.dart';
 import '../../events/view/events_view.dart';
+import '../../notifications/view/notification_view.dart';
+import '../../orginizer_profile/view/orgnaizer_view.dart';
 import '../../scan_screen/view/qr_scan_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -74,10 +76,20 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       ),
                     ),
-                    Image(
-                      height: 20.sp,
-                      width: 20.sp,
-                      image: const AssetImage('assets/images/notification.png'),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const NotificationView()));
+                      },
+                      child: Image(
+                        height: 20.sp,
+                        width: 20.sp,
+                        image:
+                            const AssetImage('assets/images/notification.png'),
+                      ),
                     ),
                   ],
                 ),
@@ -175,10 +187,10 @@ class _HomeViewState extends State<HomeView> {
                       'assets/images/person_home.png',
                       'Users',
                       onTap: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => const HomeQrScanView()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const OrgnaizerProfileScreen()));
                       },
                     ),
                     homeFeatures(
