@@ -8,7 +8,8 @@ import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import '../../chat_screen/view/chat_view.dart';
 import '../../create_event/view/add_event_view.dart';
 import '../../drawer/view/drawer_home.dart';
-import '../../events/view/events_view.dart';
+import '../../events/view/search_events_view.dart';
+import '../../events_details/view/events_view.dart';
 import '../../notifications/view/notification_view.dart';
 import '../../orginizer_profile/view/orgnaizer_view.dart';
 import '../../scan_screen/view/qr_scan_view.dart';
@@ -148,7 +149,15 @@ class _HomeViewState extends State<HomeView> {
                   children: [
                     Expanded(
                       child: TextFormField(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SearchEventScreen()));
+                        },
                         maxLines: 1,
+                        readOnly: true,
                         //  controller: controller,
                         style: AppTextStyles.josefin(
                             style: TextStyle(
@@ -190,7 +199,8 @@ class _HomeViewState extends State<HomeView> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const OrgnaizerProfileScreen()));
+                                builder: (context) =>
+                                    const OrgnaizerProfileScreen()));
                       },
                     ),
                     homeFeatures(
@@ -406,7 +416,7 @@ class _HomeViewState extends State<HomeView> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          const EventsView()));
+                                                          const EventsDetailsView()));
                                             },
                                             Text(
                                               "View Event",

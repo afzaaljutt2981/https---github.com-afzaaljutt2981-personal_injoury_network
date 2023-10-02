@@ -9,14 +9,14 @@ import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 
 import 'events_qr_view.dart';
 
-class EventsView extends StatefulWidget {
-  const EventsView({super.key});
+class EventsDetailsView extends StatefulWidget {
+  const EventsDetailsView({super.key});
 
   @override
-  State<EventsView> createState() => _EventsViewState();
+  State<EventsDetailsView> createState() => _EventsDetailsViewState();
 }
 
-class _EventsViewState extends State<EventsView> {
+class _EventsDetailsViewState extends State<EventsDetailsView> {
   bool registerFee = false;
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:personal_injury_networking/ui/events/view/scan_qr_screen.dart';
+import 'package:personal_injury_networking/ui/events_details/view/scan_qr_screen.dart';
 
 import '../../../global/app_buttons/white_background_button.dart';
 import '../../../global/utils/app_colors.dart';
