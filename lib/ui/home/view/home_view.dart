@@ -8,6 +8,7 @@ import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import '../../chat_screen/view/chat_view.dart';
 import '../../create_event/view/add_event_view.dart';
 import '../../drawer/view/drawer_home.dart';
+import '../../events/view/all_events_screen.dart';
 import '../../events/view/search_events_view.dart';
 import '../../events_details/view/events_view.dart';
 import '../../notifications/view/notification_view.dart';
@@ -220,7 +221,7 @@ class _HomeViewState extends State<HomeView> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const AddEventView()));
+                                builder: (context) => const AllEventScreen()));
                       },
                     ),
                     homeFeatures(
