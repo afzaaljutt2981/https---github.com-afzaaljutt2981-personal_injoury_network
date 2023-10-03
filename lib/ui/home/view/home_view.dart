@@ -48,198 +48,216 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 15.w, right: 25.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 25.h,
-                  bottom: 25.h,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MyDrawerHome()));
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 10.h),
-                        child: Image(
-                          height: 50.sp,
-                          width: 50.sp,
-                          image:
-                              const AssetImage('assets/images/profile_pic.png'),
+        //
+
+        //
+        SingleChildScrollView(
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 15.w,
+              right: 25.w,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 25.h,
+                    bottom: 25.h,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MyDrawerHome()));
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 10.h),
+                          child: Image(
+                            height: 50.sp,
+                            width: 50.sp,
+                            image: const AssetImage(
+                                'assets/images/profile_pic.png'),
+                          ),
                         ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const NotificationView()));
-                      },
-                      child: Image(
-                        height: 20.sp,
-                        width: 20.sp,
-                        image:
-                            const AssetImage('assets/images/notification.png'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Text(
-                "Welcome Afzaal",
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: const Color(0xFFB2E5F5),
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600)),
-              ),
-              CustomSizeBox(10.h),
-              Text(
-                "Find Amazing Events Near You",
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28.sp,
-                        fontWeight: FontWeight.w700)),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 20.h,
-                  bottom: 20.h,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Image(
-                      height: 22.sp,
-                      width: 22.sp,
-                      image:
-                          const AssetImage('assets/images/location_yellow.png'),
-                    ),
-                    SizedBox(
-                      width: 7.w,
-                    ),
-                    Text(
-                      "258 events around you",
-                      style: AppTextStyles.josefin(
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w600)),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.sp),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
+                      GestureDetector(
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      const SearchEventScreen()));
+                                      const NotificationView()));
                         },
-                        maxLines: 1,
-                        readOnly: true,
-                        //  controller: controller,
+                        child: Image(
+                          height: 20.sp,
+                          width: 20.sp,
+                          image: const AssetImage(
+                              'assets/images/notification.png'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                  "Welcome Afzaal",
+                  style: AppTextStyles.josefin(
+                      style: TextStyle(
+                          color: const Color(0xFFB2E5F5),
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600)),
+                ),
+                CustomSizeBox(10.h),
+                Text(
+                  "Find Amazing Events Near You",
+                  style: AppTextStyles.josefin(
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28.sp,
+                          fontWeight: FontWeight.w700)),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 20.h,
+                    bottom: 20.h,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Image(
+                        height: 22.sp,
+                        width: 22.sp,
+                        image: const AssetImage(
+                            'assets/images/location_yellow.png'),
+                      ),
+                      SizedBox(
+                        width: 7.w,
+                      ),
+                      Text(
+                        "258 events around you",
                         style: AppTextStyles.josefin(
                             style: TextStyle(
-                                color: const Color(0xFF1F314A),
-                                fontSize: 13.sp)),
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.only(left: 12.w),
-                            border: InputBorder.none,
-                            hintText: "Search Events",
-                            hintStyle: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    color: const Color(0xFF1F314A)
-                                        .withOpacity(0.40),
-                                    fontSize: 13.sp))),
+                                color: Colors.white,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w600)),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 20.w),
-                      child: Image(
-                        height: 18.sp,
-                        width: 18.sp,
-                        image:
-                            const AssetImage('assets/images/search_icon.png'),
+                    ],
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.sp),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SearchEventScreen()));
+                          },
+                          maxLines: 1,
+                          readOnly: true,
+                          //  controller: controller,
+                          style: AppTextStyles.josefin(
+                              style: TextStyle(
+                                  color: const Color(0xFF1F314A),
+                                  fontSize: 13.sp)),
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.only(left: 12.w),
+                              border: InputBorder.none,
+                              hintText: "Search Events",
+                              hintStyle: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      color: const Color(0xFF1F314A)
+                                          .withOpacity(0.40),
+                                      fontSize: 13.sp))),
+                        ),
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: EdgeInsets.only(right: 20.w),
+                        child: Image(
+                          height: 18.sp,
+                          width: 18.sp,
+                          image:
+                              const AssetImage('assets/images/search_icon.png'),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              CustomSizeBox(20.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 14.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    homeFeatures(
-                      'assets/images/person_home.png',
-                      'Users',
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const OrgnaizerProfileScreen()));
-                      },
-                    ),
-                    homeFeatures(
-                      'assets/images/sms_home.png',
-                      'Chats',
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ChatScreen()));
-                      },
-                    ),
-                    homeFeatures(
-                      'assets/images/events_icon_home.png',
-                      'Events',
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const AllEventScreen()));
-                      },
-                    ),
-                    homeFeatures(
-                      'assets/images/qr_icon_home.png',
-                      'QR',
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomeQrScanView()));
-                      },
-                    ),
-                  ],
-                ),
-              )
-            ],
+                CustomSizeBox(20.h),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 14.w),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      homeFeatures(
+                        'assets/images/person_home.png',
+                        'Users',
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const OrgnaizerProfileScreen()));
+                        },
+                      ),
+                      homeFeatures(
+                        'assets/images/sms_home.png',
+                        'Chats',
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const ChatScreen()));
+                        },
+                      ),
+                      homeFeatures(
+                        'assets/images/events_icon_home.png',
+                        'Events',
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AllEventScreen()));
+                        },
+                      ),
+                      homeFeatures(
+                        'assets/images/qr_icon_home.png',
+                        'QR',
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const HomeQrScanView()));
+                        },
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
+
+        //
+        //
+
+        //
         Positioned(
           bottom: 0,
           child: Container(

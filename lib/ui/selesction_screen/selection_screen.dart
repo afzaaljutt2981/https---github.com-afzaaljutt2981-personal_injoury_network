@@ -56,7 +56,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                   topRight: Radius.circular(35.sp),
                 )),
             child: SingleChildScrollView(
-              physics: const ClampingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

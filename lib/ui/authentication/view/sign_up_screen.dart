@@ -104,7 +104,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         style: TextStyle(
                             color: AppColors.kPrimaryColor, fontSize: 18.sp)),
                   )),
-            )
+            ),
+           CustomSizeBox(15.h),
           ],
         ),
       ),

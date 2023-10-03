@@ -291,7 +291,8 @@ class _AddEventViewState extends State<AddEventView> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 20.w, right: 30.w, bottom: 30.h),
+              padding: EdgeInsets.only(
+                  left: 20.w, right: 30.w, bottom: 30.h, top: 12.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
