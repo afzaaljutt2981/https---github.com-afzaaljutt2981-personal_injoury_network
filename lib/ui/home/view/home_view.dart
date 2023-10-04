@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
@@ -53,8 +54,7 @@ class _HomeViewState extends State<HomeView> {
         //
         SingleChildScrollView(
           physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics()
-          ),
+              parent: AlwaysScrollableScrollPhysics()),
           child: Padding(
             padding: EdgeInsets.only(
               left: 15.w,
@@ -74,9 +74,19 @@ class _HomeViewState extends State<HomeView> {
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const MyDrawerHome()));
+                            context,
+                            PageTransition(
+                              childCurrent: widget,
+                              type: PageTransitionType.leftToRight,
+                              duration: const Duration(milliseconds: 200),
+                              reverseDuration: const Duration(milliseconds: 200),
+                              child: const MyDrawerHome(),
+                            ),
+                          );
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => const MyDrawerHome()));
                         },
                         child: Padding(
                           padding: EdgeInsets.only(top: 10.h),
