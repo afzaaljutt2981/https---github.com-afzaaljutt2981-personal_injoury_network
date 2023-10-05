@@ -79,7 +79,8 @@ class _HomeViewState extends State<HomeView> {
                               childCurrent: widget,
                               type: PageTransitionType.leftToRight,
                               duration: const Duration(milliseconds: 200),
-                              reverseDuration: const Duration(milliseconds: 200),
+                              reverseDuration:
+                                  const Duration(milliseconds: 200),
                               child: const MyDrawerHome(),
                             ),
                           );
@@ -101,10 +102,17 @@ class _HomeViewState extends State<HomeView> {
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const NotificationView()));
+                            context,
+                            PageTransition(
+                              childCurrent: widget,
+                              type: PageTransitionType.rightToLeft,
+                              // alignment: Alignment.center,
+                              duration: const Duration(milliseconds: 200),
+                              reverseDuration:
+                                  const Duration(milliseconds: 200),
+                              child: const NotificationView(),
+                            ),
+                          );
                         },
                         child: Image(
                           height: 20.sp,
@@ -172,10 +180,17 @@ class _HomeViewState extends State<HomeView> {
                         child: TextFormField(
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SearchEventScreen()));
+                              context,
+                              PageTransition(
+                                childCurrent: widget,
+                                type: PageTransitionType.size,
+                                alignment: Alignment.center,
+                                duration: const Duration(milliseconds: 200),
+                                reverseDuration:
+                                    const Duration(milliseconds: 200),
+                                child: const SearchEventScreen(),
+                              ),
+                            );
                           },
                           maxLines: 1,
                           readOnly: true,
@@ -218,10 +233,17 @@ class _HomeViewState extends State<HomeView> {
                         'Users',
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const OrgnaizerProfileScreen()));
+                            context,
+                            PageTransition(
+                              childCurrent: widget,
+                              type: PageTransitionType.size,
+                              alignment: Alignment.center,
+                              duration: const Duration(milliseconds: 200),
+                              reverseDuration:
+                                  const Duration(milliseconds: 200),
+                              child: const OrgnaizerProfileScreen(),
+                            ),
+                          );
                         },
                       ),
                       homeFeatures(
@@ -229,9 +251,17 @@ class _HomeViewState extends State<HomeView> {
                         'Chats',
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const ChatScreen()));
+                            context,
+                            PageTransition(
+                              childCurrent: widget,
+                              type: PageTransitionType.size,
+                              alignment: Alignment.center,
+                              duration: const Duration(milliseconds: 200),
+                              reverseDuration:
+                                  const Duration(milliseconds: 200),
+                              child: const ChatScreen(),
+                            ),
+                          );
                         },
                       ),
                       homeFeatures(
@@ -239,10 +269,17 @@ class _HomeViewState extends State<HomeView> {
                         'Events',
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const AllEventScreen()));
+                            context,
+                            PageTransition(
+                              childCurrent: widget,
+                              type: PageTransitionType.size,
+                              alignment: Alignment.center,
+                              duration: const Duration(milliseconds: 200),
+                              reverseDuration:
+                                  const Duration(milliseconds: 200),
+                              child: const AllEventScreen(),
+                            ),
+                          );
                         },
                       ),
                       homeFeatures(
@@ -250,10 +287,17 @@ class _HomeViewState extends State<HomeView> {
                         'QR',
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const HomeQrScanView()));
+                            context,
+                            PageTransition(
+                              childCurrent: widget,
+                              type: PageTransitionType.size,
+                              alignment: Alignment.center,
+                              duration: const Duration(milliseconds: 200),
+                              reverseDuration:
+                                  const Duration(milliseconds: 200),
+                              child: const HomeQrScanView(),
+                            ),
+                          );
                         },
                       ),
                     ],
@@ -442,10 +486,26 @@ class _HomeViewState extends State<HomeView> {
                                             40.sp,
                                             () {
                                               Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const EventsDetailsView()));
+                                                context,
+                                                PageTransition(
+                                                  childCurrent: widget,
+                                                  type: PageTransitionType
+                                                      .leftToRightWithFade,
+                                                  alignment: Alignment.center,
+                                                  duration: const Duration(
+                                                      milliseconds: 200),
+                                                  reverseDuration:
+                                                      const Duration(
+                                                          milliseconds: 200),
+                                                  child:
+                                                      const EventsDetailsView(),
+                                                ),
+                                              );
+                                              // Navigator.push(
+                                              //     context,
+                                              //     MaterialPageRoute(
+                                              //         builder: (context) =>
+                                              //             const EventsDetailsView()));
                                             },
                                             Text(
                                               "View Event",

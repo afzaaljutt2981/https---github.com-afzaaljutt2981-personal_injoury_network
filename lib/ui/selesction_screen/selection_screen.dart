@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
@@ -26,7 +27,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
           top: 0,
           child: SizedBox(
             width: screenWidth,
-            height: screenHeight * 0.7,
+            height: screenHeight * 0.72,
             child: const Image(
               image: AssetImage('assets/images/intro_background_image.png'),
               fit: BoxFit.cover,
@@ -81,9 +82,20 @@ class _SelectionScreenState extends State<SelectionScreen> {
                     padding: EdgeInsets.symmetric(horizontal: 30.sp),
                     child: GetButton(50.h, () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SignUpScreen()));
+                        context,
+                        PageTransition(
+                          childCurrent: widget,
+                          type: PageTransitionType.rightToLeft,
+                          alignment: Alignment.center,
+                          duration: const Duration(milliseconds: 200),
+                          reverseDuration: const Duration(milliseconds: 200),
+                          child: const SignUpScreen(),
+                        ),
+                      );
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => const SignUpScreen()));
                     },
                         Text(
                           "Get Started",

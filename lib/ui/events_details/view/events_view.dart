@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
@@ -369,9 +370,16 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
               padding: EdgeInsets.only(left: 40.w, right: 40.w, bottom: 20.h),
               child: GetButton(50.sp, () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const EventsQrView()));
+                  context,
+                  PageTransition(
+                    childCurrent: widget,
+                    type: PageTransitionType.bottomToTop,
+                    alignment: Alignment.center,
+                    duration: const Duration(milliseconds: 200),
+                    reverseDuration: const Duration(milliseconds: 200),
+                    child: const EventsQrView(),
+                  ),
+                );
               },
                   Text(
                     "Join Now",

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/ui/create_event/view/add_event_view.dart';
 import 'package:personal_injury_networking/ui/events/view/past_events.dart';
 import 'package:personal_injury_networking/ui/events/view/up_coming_events.dart';
@@ -97,9 +98,20 @@ class _AllEventScreenState extends State<AllEventScreen>
               child: GestureDetector(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AddEventView()));
+                    context,
+                    PageTransition(
+                      childCurrent: widget,
+                      type: PageTransitionType.rightToLeft,
+                      alignment: Alignment.center,
+                      duration: const Duration(milliseconds: 200),
+                      reverseDuration: const Duration(milliseconds: 200),
+                      child: const AddEventView(),
+                    ),
+                  );
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => const AddEventView()));
                 },
                 child: Icon(
                   Icons.more_vert_outlined,

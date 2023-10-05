@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/ui/events_details/view/scan_qr_screen.dart';
 
 import '../../../global/app_buttons/white_background_button.dart';
@@ -67,9 +68,20 @@ class _EventsQrViewState extends State<EventsQrView> {
                 top: screenHeight * 0.82, left: 30.w, right: 30.w),
             child: GetwhiteButton(50.sp, () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const EventScanQrScreen()));
+                context,
+                PageTransition(
+                  childCurrent: widget,
+                  type: PageTransitionType.bottomToTop,
+                  alignment: Alignment.center,
+                  duration: const Duration(milliseconds: 200),
+                  reverseDuration: const Duration(milliseconds: 200),
+                  child: const EventScanQrScreen(),
+                ),
+              );
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => const EventScanQrScreen()));
             },
                 Text(
                   "QR Scan",

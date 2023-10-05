@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
@@ -54,20 +57,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
             CustomSizeBox(15.h),
             processStagesCount(index),
             CustomSizeBox(25.h),
-            index == 1
-                ? process1()
-                : index == 2
-                    ? process2()
-                    : process3(),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.w),
+              child: AnimatedContainer(
+                duration: const Duration(seconds: 1),
+                curve: Curves.bounceIn,
+                child: index == 1
+                    ? process1()
+                    : index == 2
+                        ? process2()
+                        : process3(),
+              ),
+            ),
             index == 3
                 ? Padding(
                     padding: EdgeInsets.only(
                         left: 30.w, right: 30.w, top: index == 1 ? 80.h : 80.h),
                     child: GetwhiteButton(50.sp, () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomeView()));
+                        context,
+                        PageTransition(
+                          childCurrent: widget,
+                          type: PageTransitionType.leftToRight,
+                          alignment: Alignment.center,
+                          duration: const Duration(milliseconds: 200),
+                          reverseDuration: const Duration(milliseconds: 200),
+                          child: const HomeView(),
+                        ),
+                      );
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => const HomeView()));
                     },
                         Text(
                           "Save",
@@ -87,14 +108,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       : index == 2
                           ? 40.h
                           : 30.h),
-              child: GetwhiteButton(50.sp, () {
+              child: GetwhiteButton(50.sp, () async {
                 if (index == 1) {
+                  await loader();
+                  await Future.delayed(const Duration(seconds: 1));
                   setState(() {
                     index = index + 1;
+                    Navigator.pop(context);
                   });
                 } else if (index == 2) {
+                  await loader();
+                  await Future.delayed(const Duration(seconds: 1));
                   setState(() {
-                    index++;
+                    index = index + 1;
+                    Navigator.pop(context);
                   });
                 }
               },
@@ -105,7 +132,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             color: AppColors.kPrimaryColor, fontSize: 18.sp)),
                   )),
             ),
-           CustomSizeBox(15.h),
+            CustomSizeBox(15.h),
           ],
         ),
       ),
@@ -234,21 +261,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
         CustomSizeBox(10.h),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30.w),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.sp),
-              color: Colors.white,
-            ),
-            child: Column(
-              children: [
-                textfield("First Name", textFieldController[0], 1, 0),
-                textfield("Last Name", textFieldController[1], 1, 0),
-                textfield("Company", textFieldController[2], 1, 0),
-                textfield("Position/ Job", textFieldController[3], 1, 1),
-              ],
-            ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.sp),
+            color: Colors.white,
+          ),
+          child: Column(
+            children: [
+              textfield("First Name", textFieldController[0], 1, 0),
+              textfield("Last Name", textFieldController[1], 1, 0),
+              textfield("Company", textFieldController[2], 1, 0),
+              textfield("Position/ Job", textFieldController[3], 1, 1),
+            ],
           ),
         )
       ],
@@ -259,46 +283,42 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Column(
       children: [
         CustomSizeBox(10.h),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30.w),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.sp),
-              color: Colors.white,
-            ),
-            child: Column(
-              children: [
-                textfield("Cellphone", textFieldController[4], 1, 0),
-                textfield("Email", textFieldController[5], 1, 0),
-                textfield("Website", textFieldController[6], 1, 0),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: 13.h, left: 15.w, bottom: 3.h, right: 15.w),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Describe what you look for in Networking events:',
-                        style: AppTextStyles.josefin(
-                            style: TextStyle(
-                                color:
-                                    const Color(0xFF1F314A).withOpacity(0.40),
-                                fontSize: 11.sp)),
-                      ),
-                      Container(
-                        height: 80.h,
-                        decoration: BoxDecoration(
-                            color: const Color(0xFFD9D9D9).withOpacity(0.35),
-                            borderRadius: BorderRadius.circular(10.sp)),
-                        child: textfield('', textFieldController[7], 4, 0),
-                      ),
-                      CustomSizeBox(10.h)
-                    ],
-                  ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.sp),
+            color: Colors.white,
+          ),
+          child: Column(
+            children: [
+              textfield("Cellphone", textFieldController[4], 1, 0),
+              textfield("Email", textFieldController[5], 1, 0),
+              textfield("Website", textFieldController[6], 1, 0),
+              Padding(
+                padding: EdgeInsets.only(
+                    top: 13.h, left: 15.w, bottom: 3.h, right: 15.w),
+                child: Column(
+                  children: [
+                    Text(
+                      'Describe what you look for in Networking events:',
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              color: const Color(0xFF1F314A).withOpacity(0.40),
+                              fontSize: 11.sp)),
+                    ),
+                    Container(
+                      height: 80.h,
+                      decoration: BoxDecoration(
+                          color: const Color(0xFFD9D9D9).withOpacity(0.35),
+                          borderRadius: BorderRadius.circular(10.sp)),
+                      child: textfield('', textFieldController[7], 4, 0),
+                    ),
+                    CustomSizeBox(10.h)
+                  ],
                 ),
-                textfield("Hobbies/ Interests", textFieldController[8], 1, 0),
-                CustomSizeBox(20.h)
-              ],
-            ),
+              ),
+              textfield("Hobbies/ Interests", textFieldController[8], 1, 0),
+              CustomSizeBox(20.h)
+            ],
           ),
         )
       ],
@@ -309,24 +329,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Column(
       children: [
         CustomSizeBox(10.h),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30.w),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.sp),
-              color: Colors.white,
-            ),
-            child: Column(
-              children: [
-                textfield("Username", textFieldController[9], 1, 0),
-                textfield("Password", textFieldController[10], 1, 0),
-                textfield("Confirm Password", textFieldController[11], 1, 0),
-                CustomSizeBox(20.h),
-              ],
-            ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.sp),
+            color: Colors.white,
+          ),
+          child: Column(
+            children: [
+              textfield("Username", textFieldController[9], 1, 0),
+              textfield("Password", textFieldController[10], 1, 0),
+              textfield("Confirm Password", textFieldController[11], 1, 0),
+              CustomSizeBox(20.h),
+            ],
           ),
         )
       ],
     );
+  }
+
+  Future loader() async {
+    return Timer(
+        const Duration(seconds: 0),
+        () => showDialog(
+            context: context,
+            builder: (context) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }));
   }
 }
