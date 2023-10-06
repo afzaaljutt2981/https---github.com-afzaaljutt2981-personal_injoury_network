@@ -6,21 +6,24 @@ import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
+import 'package:stepper_page_view/stepper_page_view.dart';
 
 import '../../../global/utils/app_text_styles.dart';
 import '../../home/view/home_view.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final controller = PageController(initialPage: 0);
   final textFieldController =
       List.generate(12, (i) => TextEditingController(), growable: true);
   int index = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,91 +49,105 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   'Create Account',
                   textAlign: TextAlign.center,
                   style: AppTextStyles.josefin(
-                      style: TextStyle(
-                          height: 1.1.sp,
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white)),
+                    style: TextStyle(
+                      height: 1.1.sp,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ),
             CustomSizeBox(15.h),
             processStagesCount(index),
             CustomSizeBox(25.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.w),
-              child: AnimatedContainer(
-                duration: const Duration(seconds: 1),
-                curve: Curves.bounceIn,
-                child: index == 1
-                    ? process1()
-                    : index == 2
-                        ? process2()
-                        : process3(),
+            SizedBox(
+              height: index == 3 ? 250.h : 330.h,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30.w),
+                child: PageView(
+                  controller: controller,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    process1(),
+                    process2(),
+                    process3(),
+                  ],
+                ),
               ),
             ),
             index == 3
                 ? Padding(
-                    padding: EdgeInsets.only(
-                        left: 30.w, right: 30.w, top: index == 1 ? 80.h : 80.h),
-                    child: GetwhiteButton(50.sp, () {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                          childCurrent: widget,
-                          type: PageTransitionType.leftToRight,
-                          alignment: Alignment.center,
-                          duration: const Duration(milliseconds: 200),
-                          reverseDuration: const Duration(milliseconds: 200),
-                          child: const HomeView(),
+                    padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 0),
+                    child: GetwhiteButton(
+                      50.sp,
+                      () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            childCurrent: widget,
+                            type: PageTransitionType.leftToRight,
+                            alignment: Alignment.center,
+                            duration: const Duration(milliseconds: 200),
+                            reverseDuration: const Duration(milliseconds: 200),
+                            child: const HomeView(),
+                          ),
+                        );
+                      },
+                      Text(
+                        "Save",
+                        style: AppTextStyles.josefin(
+                          style: TextStyle(
+                            color: AppColors.kPrimaryColor,
+                            fontSize: 18.sp,
+                          ),
                         ),
-                      );
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => const HomeView()));
-                    },
-                        Text(
-                          "Save",
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  color: AppColors.kPrimaryColor,
-                                  fontSize: 18.sp)),
-                        )),
+                      ),
+                    ),
                   )
                 : const SizedBox(),
             Padding(
               padding: EdgeInsets.only(
-                  left: 30.w,
-                  right: 30.w,
-                  top: index == 1
-                      ? 80.h
-                      : index == 2
-                          ? 40.h
-                          : 30.h),
-              child: GetwhiteButton(50.sp, () async {
-                if (index == 1) {
-                  await loader();
-                  await Future.delayed(const Duration(seconds: 1));
-                  setState(() {
-                    index = index + 1;
-                    Navigator.pop(context);
-                  });
-                } else if (index == 2) {
-                  await loader();
-                  await Future.delayed(const Duration(seconds: 1));
-                  setState(() {
-                    index = index + 1;
-                    Navigator.pop(context);
-                  });
-                }
-              },
-                  Text(
-                    index < 3 ? "Next" : "QR Scan",
-                    style: AppTextStyles.josefin(
-                        style: TextStyle(
-                            color: AppColors.kPrimaryColor, fontSize: 18.sp)),
-                  )),
+                left: 30.w,
+                right: 30.w,
+                top: index == 1
+                    ? 0.h
+                    : index == 2
+                        ? 40.h
+                        : 30.h,
+              ),
+              child: GetwhiteButton(
+                50.sp,
+                () async {
+                  if (index == 1) {
+                    setState(() {
+                      index = index + 1;
+                      controller.nextPage(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
+                    });
+                  } else if (index == 2) {
+                    setState(() {
+                      index = index + 1;
+                      controller.nextPage(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
+                    });
+                  }
+                },
+                Text(
+                  index < 3 ? "Next" : "QR Scan",
+                  style: AppTextStyles.josefin(
+                    style: TextStyle(
+                      color: AppColors.kPrimaryColor,
+                      fontSize: 18.sp,
+                    ),
+                  ),
+                ),
+              ),
             ),
             CustomSizeBox(15.h),
           ],
@@ -146,13 +163,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Container(
           height: 20.sp,
           width: 20.sp,
-          decoration:
-              const BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.red,
+          ),
           child: Center(
             child: Text(
               "1",
               style: AppTextStyles.josefin(
-                  style: TextStyle(color: Colors.white, fontSize: 11.sp)),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 11.sp,
+                ),
+              ),
             ),
           ),
         ),
@@ -167,13 +190,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
           height: 20.sp,
           width: 20.sp,
           decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: index < 2 ? Colors.white : Colors.red),
+            shape: BoxShape.circle,
+            color: index < 2 ? Colors.white : Colors.red,
+          ),
           child: Center(
             child: Text(
               "2",
               style: AppTextStyles.josefin(
-                  style: TextStyle(color: Colors.white, fontSize: 11.sp)),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 11.sp,
+                ),
+              ),
             ),
           ),
         ),
@@ -188,13 +216,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
           height: 20.sp,
           width: 20.sp,
           decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: index < 3 ? Colors.white : Colors.red),
+            shape: BoxShape.circle,
+            color: index < 3 ? Colors.white : Colors.red,
+          ),
           child: Center(
             child: Text(
               "3",
               style: AppTextStyles.josefin(
-                  style: TextStyle(color: Colors.white, fontSize: 11.sp)),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 11.sp,
+                ),
+              ),
             ),
           ),
         )
@@ -210,16 +243,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
           maxLines: maxLines,
           controller: controller,
           style: AppTextStyles.josefin(
-              style:
-                  TextStyle(color: const Color(0xFF1F314A), fontSize: 15.sp)),
+            style: TextStyle(
+              color: const Color(0xFF1F314A),
+              fontSize: 15.sp,
+            ),
+          ),
           decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(left: 10.w),
-              border: InputBorder.none,
-              hintText: hintTest,
-              hintStyle: AppTextStyles.josefin(
-                  style: TextStyle(
-                      color: const Color(0xFF1F314A).withOpacity(0.40),
-                      fontSize: 14.sp))),
+            contentPadding: EdgeInsets.only(left: 10.w),
+            border: InputBorder.none,
+            hintText: hintTest,
+            hintStyle: AppTextStyles.josefin(
+              style: TextStyle(
+                color: const Color(0xFF1F314A).withOpacity(0.40),
+                fontSize: 14.sp,
+              ),
+            ),
+          ),
         ),
         last == 0
             ? Container(
@@ -295,22 +334,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
               textfield("Website", textFieldController[6], 1, 0),
               Padding(
                 padding: EdgeInsets.only(
-                    top: 13.h, left: 15.w, bottom: 3.h, right: 15.w),
+                  top: 13.h,
+                  left: 15.w,
+                  bottom: 3.h,
+                  right: 15.w,
+                ),
                 child: Column(
                   children: [
                     Text(
                       'Describe what you look for in Networking events:',
                       style: AppTextStyles.josefin(
-                          style: TextStyle(
-                              color: const Color(0xFF1F314A).withOpacity(0.40),
-                              fontSize: 11.sp)),
+                        style: TextStyle(
+                          color: const Color(0xFF1F314A).withOpacity(0.40),
+                          fontSize: 11.sp,
+                        ),
+                      ),
                     ),
                     Container(
                       height: 80.h,
                       decoration: BoxDecoration(
-                          color: const Color(0xFFD9D9D9).withOpacity(0.35),
-                          borderRadius: BorderRadius.circular(10.sp)),
-                      child: textfield('', textFieldController[7], 4, 0),
+                        color: const Color(0xFFD9D9D9).withOpacity(0.35),
+                        borderRadius: BorderRadius.circular(10.sp),
+                      ),
+                      child: textfield(
+                        '',
+                        textFieldController[7],
+                        4,
+                        0,
+                      ),
                     ),
                     CustomSizeBox(10.h)
                   ],
@@ -346,16 +397,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ],
     );
   }
-
-  Future loader() async {
-    return Timer(
-        const Duration(seconds: 0),
-        () => showDialog(
-            context: context,
-            builder: (context) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }));
-  }
 }
+
+
+
+//   Future loader() async {
+//     return Timer(
+//         const Duration(seconds: 0),
+//         () => showDialog(
+//             context: context,
+//             builder: (context) {
+//               return const Center(
+//                 child: CircularProgressIndicator(),
+//               );
+//             }));
+//   }
+// }
