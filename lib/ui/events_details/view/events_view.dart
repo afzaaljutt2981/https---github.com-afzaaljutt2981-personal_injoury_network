@@ -49,17 +49,29 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
             ),
           ),
           actions: [
-            Padding(
-              padding: EdgeInsets.only(right: 20.w),
-              child: GestureDetector(
-                onTap: () {},
-                child: Image(
-                  height: 22.sp,
-                  width: 22.sp,
-                  image: const AssetImage('assets/images/qr_events.png'),
+            Padding(padding: EdgeInsets.only(right: 60.w), child: Container()
+
+                // GestureDetector(
+                //   onTap: () {
+                //         Navigator.push(
+                //     context,
+                //     PageTransition(
+                //       childCurrent: widget,
+                //       type: PageTransitionType.bottomToTop,
+                //       alignment: Alignment.center,
+                //       duration: const Duration(milliseconds: 200),
+                //       reverseDuration: const Duration(milliseconds: 200),
+                //       child: const EventsQrView(),
+                //     ),
+                //   );
+                //   },
+                //   child: Image(
+                //     height: 22.sp,
+                //     width: 22.sp,
+                //     image: const AssetImage('assets/images/qr_events.png'),
+                //   ),
+                // ),
                 ),
-              ),
-            ),
           ],
         ),
         body: Column(
@@ -73,6 +85,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
+                        height: 190.h,
                         margin: EdgeInsets.only(top: 10.h),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.sp),
@@ -117,96 +130,116 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                           fontSize: 22.sp)),
                                 ),
                               ),
+                              CustomSizeBox(30.h),
                               Padding(
-                                padding: EdgeInsets.only(
-                                  top: 15.h,
-                                  bottom: 19.h,
-                                ),
+                                padding:
+                                    EdgeInsets.only(top: 10.h, bottom: 10.h),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Image(
-                                      height: 18.sp,
-                                      width: 18.sp,
+                                      height: 35.sp,
+                                      width: 35.sp,
                                       image: const AssetImage(
-                                          'assets/images/microphone_events.png'),
-                                    ),
-                                    SizedBox(
-                                      width: 7.w,
-                                    ),
-                                    Text(
-                                      "Hosted by Afzaal",
-                                      style: AppTextStyles.josefin(
-                                          style: TextStyle(
-                                              color: const Color(0xFFF9C24B),
-                                              fontSize: 12.sp,
-                                              fontWeight: FontWeight.w500)),
+                                          'assets/images/profile_pic.png'),
                                     ),
                                   ],
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: registerFee ? 0.h : 0.h,
-                                    bottom: registerFee ? 2.h : 14.h),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          registerFee = !registerFee;
-                                        });
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Image(
-                                            height: 22.sp,
-                                            width: 22.sp,
-                                            image: const AssetImage(
-                                                'assets/images/person_events.png'),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                              left: 7.w,
-                                            ),
-                                            child: Text('Register Free',
-                                                style: GoogleFonts.montserrat(
-                                                  fontSize: 11.sp,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.white,
-                                                )),
-                                          ),
-                                          Icon(
-                                            registerFee == false
-                                                ? Icons.arrow_drop_down
-                                                : Icons.arrow_drop_up,
-                                            size: 24.sp,
-                                            color: Colors.white,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Text('Limited Seats',
-                                        style: GoogleFonts.montserrat(
-                                            fontSize: 10.sp,
-                                            fontWeight: FontWeight.w600,
-                                            color: const Color(0xFFF9C24B))),
-                                  ],
-                                ),
-                              ),
-                              registerFee == true
-                                  ? Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: 7.h, left: 27.w),
-                                      child: Text('200.0\$',
-                                          style: GoogleFonts.montserrat(
-                                              fontSize: 12.sp,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white)),
-                                    )
-                                  : Container()
+                              )
+                              // Padding(
+                              //   padding: EdgeInsets.only(
+                              //     top: 15.h,
+                              //     bottom: 19.h,
+                              //   ),
+                              //   child: Row(
+                              //     mainAxisAlignment: MainAxisAlignment.start,
+                              //     children: [
+                              // Image(
+                              //   height: 18.sp,
+                              //   width: 18.sp,
+                              //   image: const AssetImage(
+                              //       'assets/images/microphone_events.png'),
+                              // ),
+                              //       SizedBox(
+                              //         width: 7.w,
+                              //       ),
+                              //       Text(
+                              //         "Hosted by Afzaal",
+                              //         style: AppTextStyles.josefin(
+                              //             style: TextStyle(
+                              //                 color: const Color(0xFFF9C24B),
+                              //                 fontSize: 12.sp,
+                              //                 fontWeight: FontWeight.w500)),
+                              //       ),
+                              //     ],
+                              //   ),
+                              // ),
+                              //
+                              //
+                              //
+                              //
+                              //
+                              // Padding(
+                              //   padding: EdgeInsets.only(
+                              //       top: registerFee ? 0.h : 0.h,
+                              //       bottom: registerFee ? 2.h : 14.h),
+                              //   child: Row(
+                              //     mainAxisAlignment:
+                              //         MainAxisAlignment.spaceBetween,
+                              //     children: [
+                              //       GestureDetector(
+                              //         onTap: () {
+                              //           setState(() {
+                              //             registerFee = !registerFee;
+                              //           });
+                              //         },
+                              //         child: Row(
+                              //           children: [
+                              //             Image(
+                              //               height: 22.sp,
+                              //               width: 22.sp,
+                              //               image: const AssetImage(
+                              //                   'assets/images/person_events.png'),
+                              //             ),
+                              //             Padding(
+                              //               padding: EdgeInsets.only(
+                              //                 left: 7.w,
+                              //               ),
+                              //               child: Text('Register Free',
+                              //                   style: GoogleFonts.montserrat(
+                              //                     fontSize: 11.sp,
+                              //                     fontWeight: FontWeight.w600,
+                              //                     color: Colors.white,
+                              //                   )),
+                              //             ),
+                              //             Icon(
+                              //               registerFee == false
+                              //                   ? Icons.arrow_drop_down
+                              //                   : Icons.arrow_drop_up,
+                              //               size: 24.sp,
+                              //               color: Colors.white,
+                              //             )
+                              //           ],
+                              //         ),
+                              //       ),
+                              //       Text('Limited Seats',
+                              //           style: GoogleFonts.montserrat(
+                              //               fontSize: 10.sp,
+                              //               fontWeight: FontWeight.w600,
+                              //               color: const Color(0xFFF9C24B))),
+                              //     ],
+                              //   ),
+                              // ),
+                              //   registerFee == true
+                              //       ? Padding(
+                              //           padding: EdgeInsets.only(
+                              //               bottom: 7.h, left: 27.w),
+                              //           child: Text('200.0\$',
+                              //               style: GoogleFonts.montserrat(
+                              //                   fontSize: 12.sp,
+                              //                   fontWeight: FontWeight.w600,
+                              //                   color: Colors.white)),
+                              //         )
+                              //       : Container()
                             ],
                           ),
                         ),
@@ -369,17 +402,17 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
             Padding(
               padding: EdgeInsets.only(left: 40.w, right: 40.w, bottom: 20.h),
               child: GetButton(50.sp, () {
-                Navigator.push(
-                  context,
-                  PageTransition(
-                    childCurrent: widget,
-                    type: PageTransitionType.bottomToTop,
-                    alignment: Alignment.center,
-                    duration: const Duration(milliseconds: 200),
-                    reverseDuration: const Duration(milliseconds: 200),
-                    child: const EventsQrView(),
-                  ),
-                );
+                // Navigator.push(
+                //   context,
+                //   PageTransition(
+                //     childCurrent: widget,
+                //     type: PageTransitionType.bottomToTop,
+                //     alignment: Alignment.center,
+                //     duration: const Duration(milliseconds: 200),
+                //     reverseDuration: const Duration(milliseconds: 200),
+                //     child: const EventsQrView(),
+                //   ),
+                // );
               },
                   Text(
                     "Join Now",

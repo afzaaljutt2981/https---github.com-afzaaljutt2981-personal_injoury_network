@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 
-import '../authentication/view/sign_up_screen.dart';
+import '../authentication/view/login_view.dart';
 
 class SelectionScreen extends StatefulWidget {
   const SelectionScreen({super.key});
@@ -36,14 +37,18 @@ class _SelectionScreenState extends State<SelectionScreen> {
         ),
         Positioned(
             top: screenHeight * 0.3,
-            left: screenWidth * 0.4,
-            child: Text(
-              "Text Here",
-              style: AppTextStyles.josefin(
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w800)),
+            child: SizedBox(
+              width: screenWidth,
+              child: Text(
+                "A Venue for hosting \nOnline and Hybrid Events",
+                textAlign: TextAlign.center,
+                style: AppTextStyles.josefin(
+                    style: TextStyle(
+                        height: 1.5,
+                        color: Colors.white,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w600)),
+              ),
             )),
         Positioned(
           bottom: 0,
@@ -61,22 +66,19 @@ class _SelectionScreenState extends State<SelectionScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CustomSizeBox(20.h),
+                  CustomSizeBox(25.h),
                   Image(
                     image:
                         const AssetImage('assets/images/intro_screen_logo.png'),
-                    height: 70.sp,
-                    width: 70.sp,
+                    height: 65.sp,
+                    width: 65.sp,
                   ),
-                  CustomSizeBox(20.h),
-                  Text(
-                    'Look What Our Maids Can Do !!!.',
-                    style: AppTextStyles.josefin(
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.sp)),
-                  ),
+                  CustomSizeBox(10.h),
+                  Text('Let’s get Started to get amazing features',
+                      style: GoogleFonts.poppins(
+                          color: Colors.black.withOpacity(0.56),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13.sp)),
                   CustomSizeBox(40.h),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30.sp),
@@ -89,13 +91,9 @@ class _SelectionScreenState extends State<SelectionScreen> {
                           alignment: Alignment.center,
                           duration: const Duration(milliseconds: 200),
                           reverseDuration: const Duration(milliseconds: 200),
-                          child: const SignUpScreen(),
+                          child: const LoginView(),
                         ),
                       );
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => const SignUpScreen()));
                     },
                         Text(
                           "Get Started",

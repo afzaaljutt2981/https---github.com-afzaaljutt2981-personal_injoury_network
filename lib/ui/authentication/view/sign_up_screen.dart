@@ -1,13 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
-import 'package:stepper_page_view/stepper_page_view.dart';
 
+import '../../../global/helper/auth_text_field.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../home/view/home_view.dart';
 
@@ -30,127 +28,119 @@ class _SignUpScreenState extends State<SignUpScreen> {
       backgroundColor: AppColors.kPrimaryColor,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CustomSizeBox(65.h),
-            Center(
-              child: Image(
-                height: 90.sp,
-                width: 90.sp,
-                image: const AssetImage('assets/images/primary_icon.png'),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomSizeBox(40.h),
+              Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+                size: 18.sp,
               ),
-            ),
-            CustomSizeBox(20.h),
-            Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30.sp),
-                child: Text(
-                  'Create Account',
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.josefin(
-                    style: TextStyle(
-                      height: 1.1.sp,
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
+              CustomSizeBox(10.h),
+              Center(
+                child: Image(
+                  height: 90.sp,
+                  width: 90.sp,
+                  image: const AssetImage('assets/images/primary_icon.png'),
                 ),
               ),
-            ),
-            CustomSizeBox(15.h),
-            processStagesCount(index),
-            CustomSizeBox(25.h),
-            SizedBox(
-              height: index == 3 ? 250.h : 330.h,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30.w),
-                child: PageView(
-                  controller: controller,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    process1(),
-                    process2(),
-                    process3(),
-                  ],
-                ),
-              ),
-            ),
-            index == 3
-                ? Padding(
-                    padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 0),
-                    child: GetwhiteButton(
-                      50.sp,
-                      () {
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            childCurrent: widget,
-                            type: PageTransitionType.leftToRight,
-                            alignment: Alignment.center,
-                            duration: const Duration(milliseconds: 200),
-                            reverseDuration: const Duration(milliseconds: 200),
-                            child: const HomeView(),
-                          ),
-                        );
-                      },
-                      Text(
-                        "Save",
-                        style: AppTextStyles.josefin(
-                          style: TextStyle(
-                            color: AppColors.kPrimaryColor,
-                            fontSize: 18.sp,
-                          ),
-                        ),
+              CustomSizeBox(20.h),
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30.sp),
+                  child: Text(
+                    'Create Account',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.josefin(
+                      style: TextStyle(
+                        height: 1.1.sp,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
                       ),
                     ),
-                  )
-                : const SizedBox(),
-            Padding(
-              padding: EdgeInsets.only(
-                left: 30.w,
-                right: 30.w,
-                top: index == 1
-                    ? 0.h
-                    : index == 2
-                        ? 40.h
-                        : 30.h,
+                  ),
+                ),
               ),
-              child: GetwhiteButton(
-                50.sp,
-                () async {
-                  if (index == 1) {
-                    setState(() {
-                      index = index + 1;
-                      controller.nextPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
+              CustomSizeBox(15.h),
+              processStagesCount(index),
+              CustomSizeBox(25.h),
+              SizedBox(
+                height: 330.h,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  child: PageView(
+                    controller: controller,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      process1(),
+                      process2(),
+                      process3(),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 30.w,
+                  right: 30.w,
+                  top: index == 1
+                      ? 0.h
+                      : index == 2
+                          ? 40.h
+                          : 30.h,
+                ),
+                child: GetwhiteButton(
+                  50.sp,
+                  () async {
+                    if (index == 1) {
+                      setState(() {
+                        index = index + 1;
+                        controller.nextPage(
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                        );
+                      });
+                    } else if (index == 2) {
+                      setState(() {
+                        index = index + 1;
+                        controller.nextPage(
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                        );
+                      });
+                    }
+                    if (index == 3 && textFieldController[9].text.isNotEmpty) {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          childCurrent: widget,
+                          type: PageTransitionType.leftToRight,
+                          alignment: Alignment.center,
+                          duration: const Duration(milliseconds: 200),
+                          reverseDuration: const Duration(milliseconds: 200),
+                          child: const BottomNavigationScreen(),
+                        ),
                       );
-                    });
-                  } else if (index == 2) {
-                    setState(() {
-                      index = index + 1;
-                      controller.nextPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    });
-                  }
-                },
-                Text(
-                  index < 3 ? "Next" : "QR Scan",
-                  style: AppTextStyles.josefin(
-                    style: TextStyle(
-                      color: AppColors.kPrimaryColor,
-                      fontSize: 18.sp,
+                    }
+                  },
+                  Text(
+                    index < 3 ? "Next" : "Save",
+                    style: AppTextStyles.josefin(
+                      style: TextStyle(
+                        color: AppColors.kPrimaryColor,
+                        fontSize: 18.sp,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            CustomSizeBox(15.h),
-          ],
+              CustomSizeBox(15.h),
+            ],
+          ),
         ),
       ),
     );
@@ -235,42 +225,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget textfield(String hintTest, TextEditingController controller,
-      int maxLines, int last) {
-    return Column(
-      children: [
-        TextFormField(
-          maxLines: maxLines,
-          controller: controller,
-          style: AppTextStyles.josefin(
-            style: TextStyle(
-              color: const Color(0xFF1F314A),
-              fontSize: 15.sp,
-            ),
-          ),
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(left: 10.w),
-            border: InputBorder.none,
-            hintText: hintTest,
-            hintStyle: AppTextStyles.josefin(
-              style: TextStyle(
-                color: const Color(0xFF1F314A).withOpacity(0.40),
-                fontSize: 14.sp,
-              ),
-            ),
-          ),
-        ),
-        last == 0
-            ? Container(
-                width: double.infinity,
-                height: 1,
-                color: Colors.grey[200],
-              )
-            : const SizedBox(),
-      ],
-    );
-  }
-
   Widget process1() {
     return Column(
       children: [
@@ -307,10 +261,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           child: Column(
             children: [
-              textfield("First Name", textFieldController[0], 1, 0),
-              textfield("Last Name", textFieldController[1], 1, 0),
-              textfield("Company", textFieldController[2], 1, 0),
-              textfield("Position/ Job", textFieldController[3], 1, 1),
+              AuthTextFieldClass(
+                controller: textFieldController[0],
+                hintText: 'First Name',
+                last: 0,
+                maxLines: 1,
+              ),
+              AuthTextFieldClass(
+                controller: textFieldController[1],
+                hintText: 'Last Name',
+                last: 0,
+                maxLines: 1,
+              ),
+              AuthTextFieldClass(
+                controller: textFieldController[2],
+                hintText: 'Company',
+                last: 0,
+                maxLines: 1,
+              ),
+              AuthTextFieldClass(
+                controller: textFieldController[3],
+                hintText: 'Position/ Job',
+                last: 1,
+                maxLines: 1,
+              ),
             ],
           ),
         )
@@ -329,9 +303,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           child: Column(
             children: [
-              textfield("Cellphone", textFieldController[4], 1, 0),
-              textfield("Email", textFieldController[5], 1, 0),
-              textfield("Website", textFieldController[6], 1, 0),
+              AuthTextFieldClass(
+                controller: textFieldController[4],
+                hintText: 'Cellphone',
+                last: 0,
+                maxLines: 1,
+              ),
+              AuthTextFieldClass(
+                controller: textFieldController[5],
+                hintText: 'Email',
+                last: 0,
+                maxLines: 1,
+              ),
+              AuthTextFieldClass(
+                controller: textFieldController[6],
+                hintText: 'Location',
+                last: 0,
+                maxLines: 1,
+              ),
               Padding(
                 padding: EdgeInsets.only(
                   top: 13.h,
@@ -356,18 +345,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         color: const Color(0xFFD9D9D9).withOpacity(0.35),
                         borderRadius: BorderRadius.circular(10.sp),
                       ),
-                      child: textfield(
-                        '',
-                        textFieldController[7],
-                        4,
-                        0,
+                      child: AuthTextFieldClass(
+                        controller: textFieldController[7],
+                        hintText: ' ',
+                        last: 0,
+                        maxLines: 4,
                       ),
                     ),
                     CustomSizeBox(10.h)
                   ],
                 ),
               ),
-              textfield("Hobbies/ Interests", textFieldController[8], 1, 0),
+              AuthTextFieldClass(
+                controller: textFieldController[8],
+                hintText: 'Hobbies/ Interests',
+                last: 0,
+                maxLines: 1,
+              ),
               CustomSizeBox(20.h)
             ],
           ),
@@ -387,9 +381,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           child: Column(
             children: [
-              textfield("Username", textFieldController[9], 1, 0),
-              textfield("Password", textFieldController[10], 1, 0),
-              textfield("Confirm Password", textFieldController[11], 1, 0),
+              AuthTextFieldClass(
+                controller: textFieldController[9],
+                hintText: 'Username',
+                last: 0,
+                maxLines: 1,
+              ),
+              AuthTextFieldClass(
+                controller: textFieldController[10],
+                hintText: 'Password',
+                last: 0,
+                maxLines: 1,
+              ),
+              AuthTextFieldClass(
+                controller: textFieldController[11],
+                hintText: 'Confirm Password',
+                last: 0,
+                maxLines: 1,
+              ),
               CustomSizeBox(20.h),
             ],
           ),
