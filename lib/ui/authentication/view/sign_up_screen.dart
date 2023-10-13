@@ -34,10 +34,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomSizeBox(40.h),
-              Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 18.sp,
+              Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      if (index == 1) {
+                        Navigator.pop(context);
+                      } else {
+                        setState(() {
+                          index--;
+                        });
+                      }
+                    },
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                      size: 18.sp,
+                    ),
+                  ),
+                ],
               ),
               CustomSizeBox(10.h),
               Center(

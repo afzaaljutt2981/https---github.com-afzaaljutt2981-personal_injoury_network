@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
 
 import '../../../global/app_buttons/app_primary_button.dart';
 import '../../../global/helper/custom_sized_box.dart';
@@ -88,27 +89,30 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              PageTransition(
-                                childCurrent: widget,
-                                type: PageTransitionType.rightToLeft,
-                                duration: const Duration(milliseconds: 200),
-                                reverseDuration:
-                                    const Duration(milliseconds: 200),
-                                child: const NotificationView(),
-                              ),
-                            );
-                          },
-                          child: Image(
-                            height: 20.sp,
-                            width: 20.sp,
-                            image: const AssetImage(
-                                'assets/images/notification.png'),
-                          ),
-                        ),
+                        userType == 'user'
+                            ? GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    PageTransition(
+                                      childCurrent: widget,
+                                      type: PageTransitionType.rightToLeft,
+                                      duration:
+                                          const Duration(milliseconds: 200),
+                                      reverseDuration:
+                                          const Duration(milliseconds: 200),
+                                      child: const NotificationView(),
+                                    ),
+                                  );
+                                },
+                                child: Image(
+                                  height: 20.sp,
+                                  width: 20.sp,
+                                  image: const AssetImage(
+                                      'assets/images/notification.png'),
+                                ),
+                              )
+                            : const SizedBox(),
                       ],
                     ),
                   ),
@@ -122,93 +126,101 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   CustomSizeBox(10.h),
                   Text(
-                    "Find Amazing Events Near You",
+                    userType == 'user'
+                        ? "Find Amazing Events Near You"
+                        : "Create Amazing Events for audience",
                     style: AppTextStyles.josefin(
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 28.sp,
                             fontWeight: FontWeight.w700)),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: 20.h,
-                      bottom: 20.h,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image(
-                          height: 20.sp,
-                          width: 20.sp,
-                          image: const AssetImage(
-                              'assets/images/location_yellow.png'),
-                        ),
-                        SizedBox(
-                          width: 7.w,
-                        ),
-                        Text(
-                          "258 events around you",
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w600)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15.sp),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                PageTransition(
-                                  childCurrent: widget,
-                                  type: PageTransitionType.size,
-                                  alignment: Alignment.center,
-                                  duration: const Duration(milliseconds: 200),
-                                  reverseDuration:
-                                      const Duration(milliseconds: 200),
-                                  child: const SearchEventScreen(),
-                                ),
-                              );
-                            },
-                            maxLines: 1,
-                            readOnly: true,
-                            style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    color: const Color(0xFF1F314A),
-                                    fontSize: 13.sp)),
-                            decoration: InputDecoration(
-                                contentPadding: EdgeInsets.only(left: 12.w),
-                                border: InputBorder.none,
-                                hintText: "Search Events",
-                                hintStyle: AppTextStyles.josefin(
+                  userType == 'user'
+                      ? Padding(
+                          padding: EdgeInsets.only(
+                            top: 20.h,
+                            bottom: 20.h,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Image(
+                                height: 20.sp,
+                                width: 20.sp,
+                                image: const AssetImage(
+                                    'assets/images/location_yellow.png'),
+                              ),
+                              SizedBox(
+                                width: 7.w,
+                              ),
+                              Text(
+                                "258 events around you",
+                                style: AppTextStyles.josefin(
                                     style: TextStyle(
-                                        color: const Color(0xFF1F314A)
-                                            .withOpacity(0.40),
-                                        fontSize: 13.sp))),
+                                        color: Colors.white,
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w600)),
+                              ),
+                            ],
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 20.w),
-                          child: Image(
-                            height: 18.sp,
-                            width: 18.sp,
-                            image: const AssetImage(
-                                'assets/images/search_icon.png'),
+                        )
+                      : const SizedBox(),
+                  userType == 'user'
+                      ? Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.sp),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      PageTransition(
+                                        childCurrent: widget,
+                                        type: PageTransitionType.size,
+                                        alignment: Alignment.center,
+                                        duration:
+                                            const Duration(milliseconds: 200),
+                                        reverseDuration:
+                                            const Duration(milliseconds: 200),
+                                        child: const SearchEventScreen(),
+                                      ),
+                                    );
+                                  },
+                                  maxLines: 1,
+                                  readOnly: true,
+                                  style: AppTextStyles.josefin(
+                                      style: TextStyle(
+                                          color: const Color(0xFF1F314A),
+                                          fontSize: 13.sp)),
+                                  decoration: InputDecoration(
+                                      contentPadding:
+                                          EdgeInsets.only(left: 12.w),
+                                      border: InputBorder.none,
+                                      hintText: "Search Events",
+                                      hintStyle: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              color: const Color(0xFF1F314A)
+                                                  .withOpacity(0.40),
+                                              fontSize: 13.sp))),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(right: 20.w),
+                                child: Image(
+                                  height: 18.sp,
+                                  width: 18.sp,
+                                  image: const AssetImage(
+                                      'assets/images/search_icon.png'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : const SizedBox(),
                   CustomSizeBox(20.h),
                 ],
               ),
@@ -217,7 +229,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Positioned(
             bottom: 0,
             child: Container(
-              height: screenHeight * 0.49,
+              height:
+                  userType == 'user' ? screenHeight * 0.49 : screenHeight * 0.6,
               width: screenWidth,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -239,7 +252,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Nearest Events",
+                              userType == 'user'
+                                  ? "Nearest Events"
+                                  : "Upcoming Events",
                               style: AppTextStyles.josefin(
                                 style: TextStyle(
                                     color: const Color(0xFF16183B),
@@ -248,11 +263,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Text(
-                              "See All",
+                              userType == 'user' ? "See All" : "See All Events",
                               style: AppTextStyles.josefin(
                                 style: TextStyle(
                                     decoration: TextDecoration.underline,
-                                    color: const Color(0xFF9CA5D6),
+                                    color: userType == 'user'
+                                        ? const Color(0xFF9CA5D6)
+                                        : const Color(0xFF4571E1),
                                     fontSize: 10.sp,
                                     fontWeight: FontWeight.w600),
                               ),

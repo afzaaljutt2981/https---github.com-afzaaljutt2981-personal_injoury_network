@@ -8,6 +8,7 @@ import 'package:personal_injury_networking/ui/authentication/view/sign_up_screen
 import 'package:personal_injury_networking/ui/home/view/home_screen.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
+import '../../forgetPassword/view/forget_view.dart';
 import '../../home/view/home_view.dart';
 
 class LoginView extends StatefulWidget {
@@ -67,15 +68,30 @@ class _LoginViewState extends State<LoginView> {
               CustomSizeBox(10.h),
               SizedBox(
                 width: screenWidth,
-                child: Text(
-                  'Forget Password?',
-                  style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w400),
+                child: GestureDetector(
+                  onTap: (){
+                     Navigator.push(
+                    context,
+                    PageTransition(
+                      childCurrent: widget,
+                      type: PageTransitionType.rightToLeft,
+                      alignment: Alignment.center,
+                      duration: const Duration(milliseconds: 200),
+                      reverseDuration: const Duration(milliseconds: 200),
+                      child: const ForgetPasswordView(), 
+                    ),
+                  );
+                  },
+                  child: Text(
+                    'Forget Password?',
+                    style: AppTextStyles.josefin(
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400),
+                    ),
+                    textAlign: TextAlign.end,
                   ),
-                  textAlign: TextAlign.end,
                 ),
               ),
               Padding(

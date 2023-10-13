@@ -7,6 +7,7 @@ import 'package:personal_injury_networking/global/app_buttons/app_primary_button
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
+import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
 
 import 'events_qr_view.dart';
 
@@ -49,29 +50,31 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
             ),
           ),
           actions: [
-            Padding(padding: EdgeInsets.only(right: 60.w), child: Container()
-
-                // GestureDetector(
-                //   onTap: () {
-                //         Navigator.push(
-                //     context,
-                //     PageTransition(
-                //       childCurrent: widget,
-                //       type: PageTransitionType.bottomToTop,
-                //       alignment: Alignment.center,
-                //       duration: const Duration(milliseconds: 200),
-                //       reverseDuration: const Duration(milliseconds: 200),
-                //       child: const EventsQrView(),
-                //     ),
-                //   );
-                //   },
-                //   child: Image(
-                //     height: 22.sp,
-                //     width: 22.sp,
-                //     image: const AssetImage('assets/images/qr_events.png'),
-                //   ),
-                // ),
-                ),
+            Padding(
+              padding: EdgeInsets.only(right: userType == 'user' ? 60.w : 30.w),
+              child: userType == 'user'
+                  ? Container()
+                  : GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            childCurrent: widget,
+                            type: PageTransitionType.rightToLeft,
+                            alignment: Alignment.center,
+                            duration: const Duration(milliseconds: 200),
+                            reverseDuration: const Duration(milliseconds: 200),
+                            child: const EventsQrView(),
+                          ),
+                        );
+                      },
+                      child: Image(
+                        height: 22.sp,
+                        width: 22.sp,
+                        image: const AssetImage('assets/images/qr_events.png'),
+                      ),
+                    ),
+            ),
           ],
         ),
         body: Column(
@@ -84,165 +87,150 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        height: 190.h,
-                        margin: EdgeInsets.only(top: 10.h),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.sp),
-                            image: const DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/background_events.png'),
-                                fit: BoxFit.cover)),
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              left: 20.w, top: 5.h, right: 20.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text('Weekly Virtual Event',
-                                      style: GoogleFonts.montserrat(
-                                        fontSize: 11.sp,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white,
-                                      )),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 50.w, top: 15.h, bottom: 10.h),
-                                    child: Image(
-                                      height: 34.sp,
-                                      width: 34.sp,
-                                      image: const AssetImage(
-                                          'assets/images/verified_icon_events.png'),
-                                    ),
+                      Stack(
+                        children: [
+                          Container(
+                            height: 200.h,
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(top: 10.h),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.sp),
+                            ),
+                            child: userType == 'user'
+                                ? const Image(
+                                    image: AssetImage(
+                                        'assets/images/background_events.png'),
+                                    fit: BoxFit.contain,
+                                  )
+                                : const Image(
+                                    image: AssetImage(
+                                        'assets/images/background_events_admin.png'),
+                                    fit: BoxFit.contain,
                                   ),
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(right: 50.w),
-                                child: Text(
-                                  "The Creative Coffee Talks Pakistan",
-                                  style: AppTextStyles.josefin(
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          color: const Color(0xFF9EE8FF),
-                                          fontSize: 22.sp)),
-                                ),
-                              ),
-                              CustomSizeBox(30.h),
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(top: 10.h, bottom: 10.h),
-                                child: Row(
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 20.w, top: 10.h, right: 20.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
                                   children: [
-                                    Image(
-                                      height: 35.sp,
-                                      width: 35.sp,
-                                      image: const AssetImage(
-                                          'assets/images/profile_pic.png'),
+                                    Text('Weekly Virtual Event',
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 11.sp,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        )),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 50.w, top: 15.h, bottom: 15.h),
+                                      child: Image(
+                                        height: 34.sp,
+                                        width: 34.sp,
+                                        image: const AssetImage(
+                                            'assets/images/verified_icon_events.png'),
+                                      ),
                                     ),
                                   ],
                                 ),
-                              )
-                              // Padding(
-                              //   padding: EdgeInsets.only(
-                              //     top: 15.h,
-                              //     bottom: 19.h,
-                              //   ),
-                              //   child: Row(
-                              //     mainAxisAlignment: MainAxisAlignment.start,
-                              //     children: [
-                              // Image(
-                              //   height: 18.sp,
-                              //   width: 18.sp,
-                              //   image: const AssetImage(
-                              //       'assets/images/microphone_events.png'),
-                              // ),
-                              //       SizedBox(
-                              //         width: 7.w,
-                              //       ),
-                              //       Text(
-                              //         "Hosted by Afzaal",
-                              //         style: AppTextStyles.josefin(
-                              //             style: TextStyle(
-                              //                 color: const Color(0xFFF9C24B),
-                              //                 fontSize: 12.sp,
-                              //                 fontWeight: FontWeight.w500)),
-                              //       ),
-                              //     ],
-                              //   ),
-                              // ),
-                              //
-                              //
-                              //
-                              //
-                              //
-                              // Padding(
-                              //   padding: EdgeInsets.only(
-                              //       top: registerFee ? 0.h : 0.h,
-                              //       bottom: registerFee ? 2.h : 14.h),
-                              //   child: Row(
-                              //     mainAxisAlignment:
-                              //         MainAxisAlignment.spaceBetween,
-                              //     children: [
-                              //       GestureDetector(
-                              //         onTap: () {
-                              //           setState(() {
-                              //             registerFee = !registerFee;
-                              //           });
-                              //         },
-                              //         child: Row(
-                              //           children: [
-                              //             Image(
-                              //               height: 22.sp,
-                              //               width: 22.sp,
-                              //               image: const AssetImage(
-                              //                   'assets/images/person_events.png'),
-                              //             ),
-                              //             Padding(
-                              //               padding: EdgeInsets.only(
-                              //                 left: 7.w,
-                              //               ),
-                              //               child: Text('Register Free',
-                              //                   style: GoogleFonts.montserrat(
-                              //                     fontSize: 11.sp,
-                              //                     fontWeight: FontWeight.w600,
-                              //                     color: Colors.white,
-                              //                   )),
-                              //             ),
-                              //             Icon(
-                              //               registerFee == false
-                              //                   ? Icons.arrow_drop_down
-                              //                   : Icons.arrow_drop_up,
-                              //               size: 24.sp,
-                              //               color: Colors.white,
-                              //             )
-                              //           ],
-                              //         ),
-                              //       ),
-                              //       Text('Limited Seats',
-                              //           style: GoogleFonts.montserrat(
-                              //               fontSize: 10.sp,
-                              //               fontWeight: FontWeight.w600,
-                              //               color: const Color(0xFFF9C24B))),
-                              //     ],
-                              //   ),
-                              // ),
-                              //   registerFee == true
-                              //       ? Padding(
-                              //           padding: EdgeInsets.only(
-                              //               bottom: 7.h, left: 27.w),
-                              //           child: Text('200.0\$',
-                              //               style: GoogleFonts.montserrat(
-                              //                   fontSize: 12.sp,
-                              //                   fontWeight: FontWeight.w600,
-                              //                   color: Colors.white)),
-                              //         )
-                              //       : Container()
-                            ],
+                                SizedBox(
+                                  height: 95.h,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 50.w),
+                                    child: Text(
+                                      "The Creative Coffee Talks Pakistan  ",
+                                      style: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              color: const Color(0xFF9EE8FF),
+                                              fontSize: 22.sp)),
+                                    ),
+                                  ),
+                                ),
+                                userType == 'user'
+                                    ? Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Row(
+                                          children: [
+                                            Image(
+                                              height: 35.sp,
+                                              width: 35.sp,
+                                              image: const AssetImage(
+                                                  'assets/images/profile_pic.png'),
+                                            ),
+                                            SizedBox(
+                                              width: 15.w,
+                                            ),
+                                            Expanded(
+                                                child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "John Smith ",
+                                                  style: AppTextStyles.josefin(
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.white,
+                                                          fontSize: 13.sp)),
+                                                ),
+                                                CustomSizeBox(5.h),
+                                                Text(
+                                                  "Organizer ",
+                                                  style: AppTextStyles.josefin(
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          color: const Color(
+                                                              0xFF706E8F),
+                                                          fontSize: 10.sp)),
+                                                ),
+                                              ],
+                                            )),
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 30.w),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.sp),
+                                                    color: //Colors.purple.shade400
+
+                                                        const Color(0xFF3C4784)
+                                                            .withOpacity(
+                                                                0.818)),
+                                                child: Padding(
+                                                  padding:
+                                                      EdgeInsets.all(10.sp),
+                                                  child: Center(
+                                                    child: Text(
+                                                      "Follow",
+                                                      style:
+                                                          AppTextStyles.josefin(
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      11.sp)),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    : const SizedBox()
+                              ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                       Padding(
                         padding: EdgeInsets.only(
@@ -283,7 +271,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         ),
                       ),
                       Text(
-                        'Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo, lenean eli lacinia bibendum nulla sed consectetur quis risus eget urna urna mollis ornare  mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo, lenean eli lacinia bibendum nulla sed consectetur quis risus eget urna urna mollis ornare vel eu..',
+                        'Maecenas faucibus mollis interdum.  urna urna mollis ornare  mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo, lenean eli lacinia bibendum nulla sed consectetur quis risus eget urna urna mollis ornare vel eu..',
                         style: AppTextStyles.josefin(
                             style: TextStyle(
                                 color: AppColors.kBlackColor, fontSize: 12.sp)),
@@ -399,27 +387,74 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 40.w, right: 40.w, bottom: 20.h),
-              child: GetButton(50.sp, () {
-                // Navigator.push(
-                //   context,
-                //   PageTransition(
-                //     childCurrent: widget,
-                //     type: PageTransitionType.bottomToTop,
-                //     alignment: Alignment.center,
-                //     duration: const Duration(milliseconds: 200),
-                //     reverseDuration: const Duration(milliseconds: 200),
-                //     child: const EventsQrView(),
-                //   ),
-                // );
-              },
-                  Text(
-                    "Join Now",
-                    style: AppTextStyles.josefin(
-                        style: TextStyle(color: Colors.white, fontSize: 18.sp)),
-                  )),
-            ),
+            userType == 'user'
+                ? Padding(
+                    padding:
+                        EdgeInsets.only(left: 40.w, right: 40.w, bottom: 20.h),
+                    child: GetButton(
+                        50.sp,
+                        () {},
+                        Text(
+                          "Register",
+                          style: AppTextStyles.josefin(
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 18.sp)),
+                        )),
+                  )
+                : Padding(
+                    padding: EdgeInsets.only(
+                      left: 29.w,
+                      right: 29.w,
+                      bottom: 25.h,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: AppColors.kPrimaryColor,
+                                  width: 1.5.sp),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12.sp)),
+                          child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 22.w, vertical: 14.h),
+                              child: Center(
+                                child: Text(
+                                  'Invite Guests',
+                                  style: AppTextStyles.josefin(
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          color: AppColors.kPrimaryColor,
+                                          fontSize: 16.sp)),
+                                ),
+                              )),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: const Color(0xFFD70E0E),
+                                  width: 1.5.sp),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12.sp)),
+                          child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 22.w, vertical: 14.h),
+                              child: Center(
+                                child: Text(
+                                  'Cancel Event',
+                                  style: AppTextStyles.josefin(
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          color: const Color(0xFFD70E0E),
+                                          fontSize: 16.sp)),
+                                ),
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
           ],
         ));
   }
