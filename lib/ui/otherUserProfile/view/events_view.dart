@@ -37,7 +37,7 @@ class _OrgnaizerEventsState extends State<OrgnaizerEvents> {
                   width: 100.sp,
                   image: const AssetImage(
                       'assets/images/no_history_orgnaizer_event.png')),
-              CustomSizeBox(10.h),
+              CustomSizeBox(14.h),
               Text(
                 'No events history',
                 style: AppTextStyles.josefin(
@@ -75,8 +75,8 @@ class _OrgnaizerEventsState extends State<OrgnaizerEvents> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          height: 120.sp,
-                          width: 110.sp,
+                          height: 110.sp,
+                          width: 100.sp,
                           decoration: BoxDecoration(
                               color: Colors.grey[300],
                               borderRadius: BorderRadius.circular(20.sp),

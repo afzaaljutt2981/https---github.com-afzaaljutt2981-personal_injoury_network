@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 
@@ -32,36 +33,26 @@ class _AddEventViewState extends State<AddEventView> {
             padding: EdgeInsets.all(17.sp),
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
-              child: const Icon(
-                Icons.arrow_back,
+              child: Icon(
+                Icons.arrow_back_ios,
                 color: Colors.white,
+                size: 18.sp,
               ),
             ),
           ),
           title: Center(
-            child: Text(
-              "Create Event",
-              style: AppTextStyles.josefin(
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w700)),
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(right: 20.w),
-              child: GestureDetector(
-                onTap: () {},
-                child: Image(
-                  height: 22.sp,
-                  width: 22.sp,
-                  image: const AssetImage(
-                      'assets/images/more_circle_create_event.png'),
-                ),
+            child: Padding(
+              padding: EdgeInsets.only(right: 45.w),
+              child: Text(
+                "Create Event",
+                style: AppTextStyles.josefin(
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w700)),
               ),
             ),
-          ],
+          ),
         ),
         body: Column(
           children: [
@@ -252,12 +243,20 @@ class _AddEventViewState extends State<AddEventView> {
                                   color: Colors.white, fontSize: 14.sp)),
                         ),
                         CustomSizeBox(7.h),
-                        textfield(
-                            descriptionController,
-                            'Write event discription here..',
-                            false,
-                            5,
-                            Colors.grey[400]!),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400]!,
+                              borderRadius: BorderRadius.circular(10.sp)),
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+                            child: textfield(
+                                descriptionController,
+                                'Write event discription here..',
+                                false,
+                                5,
+                                Colors.grey[400]!),
+                          ),
+                        ),
                         CustomSizeBox(15.h),
                         Container(
                           width: double.infinity,
@@ -299,10 +298,7 @@ class _AddEventViewState extends State<AddEventView> {
                   SizedBox(
                     width: 230.w,
                     child: GetwhiteButton(50.sp, () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => const EventsQrView()));
+                      eventCreated();
                     },
                         Text(
                           "Save",
@@ -335,7 +331,7 @@ class _AddEventViewState extends State<AddEventView> {
         maxLines: maxlines,
         controller: controller,
         style: AppTextStyles.josefin(
-            style: TextStyle(color: const Color(0xFF1F314A), fontSize: 15.sp)),
+            style: TextStyle(color: const Color(0xFF1F314A), fontSize: 18.sp)),
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(left: 10.w),
             border: InputBorder.none,
@@ -382,6 +378,75 @@ class _AddEventViewState extends State<AddEventView> {
                     color: const Color(0xFF1F314A).withOpacity(0.40),
                     fontSize: 15.sp))),
       ),
+    );
+  }
+
+  void eventCreated() {
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25.sp))),
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25.sp),
+              topRight: Radius.circular(25.sp),
+            ),
+          ),
+          height: MediaQuery.of(context).size.height * 0.55,
+          child: Column(
+            children: [
+              Expanded(
+                  child: Column(
+                children: [
+                  CustomSizeBox(33.h),
+                  Image(
+                      height: 130.sp,
+                      width: 130.sp,
+                      image: const AssetImage(
+                          'assets/images/no_history_orgnaizer_event.png')),
+                  CustomSizeBox(28.h),
+                  Text(
+                    'Event Name',
+                    style: AppTextStyles.josefin(
+                        style: TextStyle(
+                            fontSize: 28.sp,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.kBlackColor)),
+                  ),
+                  CustomSizeBox(18.h),
+                  Text(
+                    'Event Created  Successfully!',
+                    style: AppTextStyles.josefin(
+                        style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.kBlackColor)),
+                  ),
+                ],
+              )),
+              Padding(
+                padding: EdgeInsets.only(left: 30.w, right: 30.w, bottom: 25.h),
+                child: GetButton(
+                  50.sp,
+                  () {},
+                  Text(
+                    'View Your Events',
+                    style: AppTextStyles.josefin(
+                        style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white)),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }

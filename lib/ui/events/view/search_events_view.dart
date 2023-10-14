@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
-import '../../orginizer_profile/model/events_history_model.dart';
+import '../../otherUserProfile/model/events_history_model.dart';
 
 class SearchEventScreen extends StatefulWidget {
   const SearchEventScreen({super.key});

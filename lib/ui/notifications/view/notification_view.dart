@@ -45,38 +45,29 @@ class _NotificationViewState extends State<NotificationView> {
           backgroundColor: Colors.white,
           elevation: 0,
           leading: Padding(
-            padding: EdgeInsets.all(19.sp),
+            padding: EdgeInsets.all(17.sp),
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
-              child: Image(
-                height: 10.sp,
-                width: 10.sp,
-                image: const AssetImage('assets/images/back_arrow_events.png'),
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: const Color(0xFF120D26),
+                size: 18.sp,
               ),
             ),
           ),
-          title: Text(
-            "Notification",
-            style: AppTextStyles.josefin(
-                style: TextStyle(
-              fontSize: 20.sp,
-              fontWeight: FontWeight.w800,
-              color: AppColors.kPrimaryColor,
-            )),
-          ),
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(right: 20.w),
-              child: GestureDetector(
-                onTap: () {},
-                child: Icon(
-                  Icons.more_vert_outlined,
-                  color: Colors.black,
-                  size: 22.sp,
-                ),
+          title: Center(
+            child: Padding(
+              padding: EdgeInsets.only(right: 45.w),
+              child: Text(
+                "Notifications",
+                style: AppTextStyles.josefin(
+                    style: TextStyle(
+                        color: const Color(0xFF120D26),
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.w500)),
               ),
             ),
-          ],
+          ),
         ),
         body: notiList.isEmpty
             ? Column(

@@ -7,7 +7,7 @@ import 'package:personal_injury_networking/global/utils/app_colors.dart';
 
 import '../../../global/helper/auth_text_field.dart';
 import '../../../global/utils/app_text_styles.dart';
-import '../../home/view/home_view.dart';
+import '../../home/view/navigation_view.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -137,7 +137,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           alignment: Alignment.center,
                           duration: const Duration(milliseconds: 200),
                           reverseDuration: const Duration(milliseconds: 200),
-                          child: const BottomNavigationScreen(),
+                          child:  BottomNavigationScreen(selectedIndex: 0,),
                         ),
                       );
                     }

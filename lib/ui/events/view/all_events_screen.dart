@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/ui/create_event/view/add_event_view.dart';
 import 'package:personal_injury_networking/ui/events/view/past_events.dart';
 import 'package:personal_injury_networking/ui/events/view/up_coming_events.dart';
@@ -66,61 +67,60 @@ class _AllEventScreenState extends State<AllEventScreen>
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          leading: Padding(
-            padding: EdgeInsets.all(19.sp),
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Image(
-                height: 10.sp,
-                width: 10.sp,
-                image: const AssetImage('assets/images/back_arrow_events.png'),
-              ),
+          automaticallyImplyLeading: false,
+          // leading: Padding(
+          //   padding: EdgeInsets.all(19.sp),
+          //   child: GestureDetector(
+          //     onTap: () => Navigator.pop(context),
+          //     child: Image(
+          //       height: 10.sp,
+          //       width: 10.sp,
+          //       image: const AssetImage('assets/images/back_arrow_events.png'),
+          //     ),
+          //   ),
+          // ),
+          title: Center(
+            child: Text(
+              "All Events",
+              style: AppTextStyles.josefin(
+                  style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.kPrimaryColor)),
             ),
           ),
-          title: Text(
-            "Events",
-            style: AppTextStyles.josefin(
-                style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFF120D26))),
-          ),
-          actions: [
-            allEventsList.isEmpty
-                ? const SizedBox()
-                : Image(
-                    height: 18.sp,
-                    width: 18.sp,
-                    image: const AssetImage('assets/images/search_icon.png'),
-                  ),
-            Padding(
-              padding: EdgeInsets.only(right: 20.w, left: 10.w),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      childCurrent: widget,
-                      type: PageTransitionType.rightToLeft,
-                      alignment: Alignment.center,
-                      duration: const Duration(milliseconds: 200),
-                      reverseDuration: const Duration(milliseconds: 200),
-                      child: const AddEventView(),
-                    ),
-                  );
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => const AddEventView()));
-                },
-                child: Icon(
-                  Icons.more_vert_outlined,
-                  color: Colors.black,
-                  size: 22.sp,
-                ),
-              ),
-            ),
-          ],
+          // actions: [
+          //   allEventsList.isEmpty
+          //       ? const SizedBox()
+          //       : Image(
+          //           height: 18.sp,
+          //           width: 18.sp,
+          //           image: const AssetImage('assets/images/search_icon.png'),
+          //         ),
+          //   Padding(
+          //     padding: EdgeInsets.only(right: 20.w, left: 10.w),
+          //     child: GestureDetector(
+          //       onTap: () {
+          //         Navigator.push(
+          //           context,
+          //           PageTransition(
+          //             childCurrent: widget,
+          //             type: PageTransitionType.rightToLeft,
+          //             alignment: Alignment.center,
+          //             duration: const Duration(milliseconds: 200),
+          //             reverseDuration: const Duration(milliseconds: 200),
+          //             child: const AddEventView(),
+          //           ),
+          //         );
+          //       },
+          //       child: Icon(
+          //         Icons.more_vert_outlined,
+          //         color: Colors.black,
+          //         size: 22.sp,
+          //       ),
+          //     ),
+          //   ),
+          // ],
         ),
         body: allEventsList.isNotEmpty
             ? Column(

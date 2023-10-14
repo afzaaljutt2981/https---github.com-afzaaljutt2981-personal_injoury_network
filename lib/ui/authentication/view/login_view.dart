@@ -9,7 +9,7 @@ import 'package:personal_injury_networking/ui/home/view/home_screen.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../forgetPassword/view/forget_view.dart';
-import '../../home/view/home_view.dart';
+import '../../home/view/navigation_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -109,7 +109,7 @@ class _LoginViewState extends State<LoginView> {
                       alignment: Alignment.center,
                       duration: const Duration(milliseconds: 200),
                       reverseDuration: const Duration(milliseconds: 200),
-                      child: const BottomNavigationScreen(),
+                      child:  BottomNavigationScreen( selectedIndex: 0, ),
                     ),
                   );
                 },

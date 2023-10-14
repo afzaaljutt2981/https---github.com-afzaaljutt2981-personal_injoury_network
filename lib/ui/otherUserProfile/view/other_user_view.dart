@@ -3,26 +3,28 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
-import 'package:personal_injury_networking/ui/orginizer_profile/view/about_view.dart';
-import 'package:personal_injury_networking/ui/orginizer_profile/view/events_view.dart';
+import 'package:personal_injury_networking/ui/otherUserProfile/view/about_view.dart';
+import 'package:personal_injury_networking/ui/otherUserProfile/view/events_view.dart';
+import 'package:personal_injury_networking/ui/otherUserProfile/view/reviews_view.dart';
 import '../../../global/utils/app_text_styles.dart';
 
-class OrgnaizerProfileScreen extends StatefulWidget {
-  const OrgnaizerProfileScreen({super.key});
+class OtherUserProfileScreen extends StatefulWidget {
+  const OtherUserProfileScreen({super.key});
 
   @override
-  State<OrgnaizerProfileScreen> createState() => _OrgnaizerProfileScreenState();
+  State<OtherUserProfileScreen> createState() => _OtherUserProfileScreenState();
 }
 
-class _OrgnaizerProfileScreenState extends State<OrgnaizerProfileScreen>
+class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
     with SingleTickerProviderStateMixin {
   TabController? tabController;
   @override
   void initState() {
-    tabController = TabController(length: 2, vsync: this);
+    tabController = TabController(length: 3, vsync: this);
     super.initState();
   }
 
+  bool isFollow = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,26 +36,13 @@ class _OrgnaizerProfileScreenState extends State<OrgnaizerProfileScreen>
           padding: EdgeInsets.all(19.sp),
           child: GestureDetector(
             onTap: () => Navigator.pop(context),
-            child: Image(
-              height: 10.sp,
-              width: 10.sp,
-              image: const AssetImage('assets/images/back_arrow_events.png'),
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: AppColors.kPrimaryColor,
+              size: 18.sp,
             ),
           ),
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 20.w),
-            child: GestureDetector(
-              onTap: () {},
-              child: Icon(
-                Icons.more_vert_outlined,
-                color: Colors.black,
-                size: 22.sp,
-              ),
-            ),
-          ),
-        ],
       ),
       body: Column(
         children: [
@@ -145,31 +134,46 @@ class _OrgnaizerProfileScreenState extends State<OrgnaizerProfileScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: AppColors.kPrimaryColor,
-                      borderRadius: BorderRadius.circular(7.sp)),
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 34.w, vertical: 12.h),
-                    child: Row(
-                      children: [
-                        Image(
-                          height: 20.sp,
-                          width: 20.sp,
-                          image: const AssetImage(
-                              'assets/images/follow_orgnizer_screen.png'),
-                        ),
-                        SizedBox(
-                          width: 15.w,
-                        ),
-                        Text(
-                          'Follow',
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 16.sp)),
-                        ),
-                      ],
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isFollow = !isFollow;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: AppColors.kPrimaryColor,
+                        borderRadius: BorderRadius.circular(7.sp)),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: isFollow == false ? 34.w : 23.w,
+                          vertical: 12.h),
+                      child: Row(
+                        children: [
+                          isFollow == false
+                              ? Image(
+                                  height: 20.sp,
+                                  width: 20.sp,
+                                  image: const AssetImage(
+                                      'assets/images/follow_orgnizer_screen.png'),
+                                )
+                              : Image(
+                                  height: 20.sp,
+                                  width: 20.sp,
+                                  image: const AssetImage(
+                                      'assets/images/followed_other_user.png'),
+                                ),
+                          SizedBox(
+                            width: 15.w,
+                          ),
+                          Text(
+                            isFollow ? 'Followed ' : 'Follow',
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16.sp)),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -237,14 +241,25 @@ class _OrgnaizerProfileScreenState extends State<OrgnaizerProfileScreen>
                       textScaleFactor: 1,
                     ),
                   ),
+                  Tab(
+                    child: Text(
+                      'REVIEWS',
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 15.sp)),
+                      textScaleFactor: 1,
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
           Expanded(
-              child: TabBarView(
-                  controller: tabController,
-                  children: const [OrgnaizerAbout(), OrgnaizerEvents()]))
+              child: TabBarView(controller: tabController, children: const [
+            OrgnaizerAbout(),
+            OrgnaizerEvents(),
+            OtherUserReviewScreen()
+          ]))
         ],
       ),
     );

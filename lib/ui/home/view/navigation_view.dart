@@ -6,24 +6,23 @@ import 'package:personal_injury_networking/ui/events/view/all_events_screen.dart
 import 'package:personal_injury_networking/ui/home/view/home_screen.dart';
 import 'package:personal_injury_networking/ui/scan_screen/view/qr_scan_view.dart';
 import '../../chat_screen/view/all_users.dart';
-import '../../user_profile/user_profile.dart';
+import '../../myProfile/my_profile.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
-  const BottomNavigationScreen({super.key});
-
+  BottomNavigationScreen({required this.selectedIndex, super.key});
+  int selectedIndex;
   @override
   State<BottomNavigationScreen> createState() => _BottomNavigationScreenState();
 }
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
-
-  int _selectedIndex = 0;
   PageController? _pageController;
-
+  int? selectedIndex;
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+    selectedIndex = widget.selectedIndex;
+    _pageController = PageController(initialPage: selectedIndex!);
   }
 
   @override
@@ -31,21 +30,31 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     _pageController!.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
+    void onItemTapped(int index) {
+      setState(() {
+        selectedIndex = index;
+        _pageController!.animateToPage(index,
+            duration: const Duration(milliseconds: 200), curve: Curves.linear);
+      });
+    }
+
     return Scaffold(
       body: SizedBox.expand(
         child: PageView(
+          physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
           onPageChanged: (index) {
-            setState(() => _selectedIndex = index);
+            setState(() => selectedIndex = index);
           },
-          children:  <Widget>[
+          children: <Widget>[
             const HomeScreen(),
             const AllUsersChat(),
             const HomeQrScanView(),
             const AllEventScreen(),
-            BasicInfo('Afzaal', 'Jutt', 'afzal@gmail.com' )
+            BasicInfo('Afzaal', 'Jutt', 'afzal@gmail.com')
           ],
         ),
       ), //widgets[selectedIndex],
@@ -98,19 +107,11 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
             ],
             selectedItemColor: AppColors.kPrimaryColor,
             unselectedItemColor: AppColors.kBlackColor,
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
+            currentIndex: selectedIndex!,
+            onTap: onItemTapped,
           ),
         ),
       ),
     );
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      _pageController?.animateToPage(index,
-          duration: const Duration(milliseconds: 200), curve: Curves.linear);
-    });
   }
 }

@@ -9,6 +9,8 @@ import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
 
+import '../../allParticipent/view/participants_view.dart';
+import '../../otherUserProfile/view/other_user_view.dart';
 import 'events_qr_view.dart';
 
 class EventsDetailsView extends StatefulWidget {
@@ -31,10 +33,10 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
             padding: EdgeInsets.all(19.sp),
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
-              child: Image(
-                height: 10.sp,
-                width: 10.sp,
-                image: const AssetImage('assets/images/back_arrow_events.png'),
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.kPrimaryColor,
+                size: 18.sp,
               ),
             ),
           ),
@@ -332,51 +334,131 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                       CustomSizeBox(25.h),
                       Row(
                         children: [
-                          Container(
-                            height: 40.sp,
-                            width: 40.sp,
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFFF2F1F8)),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  childCurrent: widget,
+                                  type: PageTransitionType.rightToLeft,
+                                  alignment: Alignment.center,
+                                  duration: const Duration(milliseconds: 200),
+                                  reverseDuration:
+                                      const Duration(milliseconds: 200),
+                                  child: const OtherUserProfileScreen(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 40.sp,
+                              width: 40.sp,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFFF2F1F8)),
+                            ),
                           ),
                           SizedBox(
                             width: 5.w,
                           ),
-                          Container(
-                            height: 40.sp,
-                            width: 40.sp,
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFFF2F1F8)),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  childCurrent: widget,
+                                  type: PageTransitionType.rightToLeft,
+                                  alignment: Alignment.center,
+                                  duration: const Duration(milliseconds: 200),
+                                  reverseDuration:
+                                      const Duration(milliseconds: 200),
+                                  child: const OtherUserProfileScreen(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 40.sp,
+                              width: 40.sp,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFFF2F1F8)),
+                            ),
                           ),
                           SizedBox(
                             width: 5.w,
                           ),
-                          Container(
-                            height: 40.sp,
-                            width: 40.sp,
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFFF2F1F8)),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  childCurrent: widget,
+                                  type: PageTransitionType.rightToLeft,
+                                  alignment: Alignment.center,
+                                  duration: const Duration(milliseconds: 200),
+                                  reverseDuration:
+                                      const Duration(milliseconds: 200),
+                                  child: const OtherUserProfileScreen(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 40.sp,
+                              width: 40.sp,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFFF2F1F8)),
+                            ),
                           ),
                           SizedBox(
                             width: 5.w,
                           ),
-                          Container(
-                            height: 40.sp,
-                            width: 40.sp,
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFFF2F1F8)),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  childCurrent: widget,
+                                  type: PageTransitionType.rightToLeft,
+                                  alignment: Alignment.center,
+                                  duration: const Duration(milliseconds: 200),
+                                  reverseDuration:
+                                      const Duration(milliseconds: 200),
+                                  child: const OtherUserProfileScreen(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 40.sp,
+                              width: 40.sp,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFFF2F1F8)),
+                            ),
                           ),
                           SizedBox(
                             width: 5.w,
                           ),
-                          Text(
-                            '+92 Participants',
-                            style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: 12.sp),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  childCurrent: widget,
+                                  type: PageTransitionType.rightToLeft,
+                                  alignment: Alignment.center,
+                                  duration: const Duration(milliseconds: 200),
+                                  reverseDuration:
+                                      const Duration(milliseconds: 200),
+                                  child: const AllParticipantsView(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              '+92 Participants',
+                              style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 12.sp),
+                              ),
                             ),
                           )
                         ],
