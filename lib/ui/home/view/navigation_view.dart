@@ -49,12 +49,12 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
           onPageChanged: (index) {
             setState(() => selectedIndex = index);
           },
-          children: <Widget>[
-            const HomeScreen(),
-            const AllUsersChat(),
-            const HomeQrScanView(),
-            const AllEventScreen(),
-            BasicInfo('Afzaal', 'Jutt', 'afzal@gmail.com')
+          children: const <Widget>[
+            HomeScreen(),
+            AllUsersChat(),
+            HomeQrScanView(),
+            AllEventScreen(),
+            MyProfileInfo()
           ],
         ),
       ), //widgets[selectedIndex],

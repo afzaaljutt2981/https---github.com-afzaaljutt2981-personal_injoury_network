@@ -1,421 +1,281 @@
-
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 
 import '../../global/helper/text_field.dart';
 import '../../global/utils/app_colors.dart';
 import '../../global/utils/app_text_styles.dart';
 
-class BasicInfo extends StatefulWidget {
-  BasicInfo(this.fName, this.lName, this.emal);
-  String fName;
-  String lName;
-  String emal;
+class MyProfileInfo extends StatefulWidget {
+  const MyProfileInfo({super.key});
+
   @override
-  State<BasicInfo> createState() => _BasicInfoState();
+  State<MyProfileInfo> createState() => _MyProfileInfoState();
 }
 
-final _forkey = GlobalKey<FormState>();
-DateTime selectedDate = DateTime.now();
-bool _editAble = false;
-TextEditingController fname = TextEditingController();
-TextEditingController lname = TextEditingController();
-TextEditingController dob = TextEditingController();
-TextEditingController email = TextEditingController();
-TextEditingController cell = TextEditingController();
-
-class _BasicInfoState extends State<BasicInfo> {
-  String? profilePicUrl;
-  //XFile? file;
-  // Future pickImageFromCamera() async {
-  //   XFile? image = await ImagePicker().pickImage(source: ImageSource.camera);
-  //   setState(() {
-  //     file = image;
-  //   });
-  // }
+class _MyProfileInfoState extends State<MyProfileInfo> {
   @override
-  // Future pickImageFromGallery() async {
-  //   XFile? oimage = await ImagePicker().pickImage(source: ImageSource.gallery);
-  //   setState(() {
-  //     file = oimage;
-  //   });
-  // }
-
   @override
   void initState() {
     super.initState();
-    fname.text = widget.fName;
-    lname.text = widget.lName;
-    email.text = widget.emal;
-    cell.text = '+9266630642981';
+    textFieldController[0].text = 'Fiverr LLC';
+    textFieldController[1].text = 'Manager';
+    textFieldController[2].text = 'www.xyz@gmail.com';
+    textFieldController[3].text = '+1 234 453 4563';
+    textFieldController[4].text = '54 Houston, Texas, 76778, US ';
+    textFieldController[5].text =
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s";
   }
 
-  String uniqueNameClass = DateTime.now().millisecondsSinceEpoch.toString();
-
-  // Future uploadFile() async {
-  //   if (file == null) return;
-  //   Reference referenceRoot = FirebaseStorage.instance.ref();
-  //   Reference refrenceDirImages = referenceRoot
-  //       .child(FirebaseAuth.instance.currentUser!.uid)
-  //       .child("basicInfo")
-  //       .child(uniqueNameClass);
-
-  //   try {
-  //     await refrenceDirImages.putFile(File(file!.path));
-  //     profilePicUrl = await refrenceDirImages.getDownloadURL();
-
-  //   } catch (e) {
-
-  //   }
-  //   return profilePicUrl;
-  // }
-
+  bool readOnlyTextFields = false;
+  bool imageEditAble = false;
+  final textFieldController =
+      List.generate(6, (i) => TextEditingController(), growable: true);
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-        backgroundColor: Colors.white,
-        // AppBar
-
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          title: Center(
-            child: Text(
-              "User Profile",
-              style: AppTextStyles.josefin(
-                  style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w800,
-                      color: const Color(0xFF120D26))),
+        backgroundColor: const Color(0xFFf5f4ff),
+        body: Column(children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            color: const Color(0xFFf5f4ff),
+            child: Padding(
+              padding: EdgeInsets.only(top: 50.h, bottom: 15.h),
+              child: Center(
+                child: Text(
+                  'Profile',
+                  style: AppTextStyles.josefin(
+                      style: TextStyle(
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.kBlackColor)),
+                ),
+              ),
             ),
           ),
-        ),
-
-        //body
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Form(
-            key: _forkey,
-            child: Column(
-              children: [
-                SizedBox(height: screenHeight * 0.02),
-                Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0),
-                          spreadRadius: 2,
-                          blurRadius: 4,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    width: screenWidth * 0.95,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Profile Pic
-
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: InkWell(
-                              onTap: () {
-                                _editAble ? showBottomModelSheetWidget() : null;
-                              },
-                              child: Center(
-                                child: Stack(
-                                  children: [
-                                    SizedBox(
-                                      //color: Colors.red,
-                                      height: 125.sp,
-                                      width: 130.sp,
+          Expanded(
+              child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(35.sp),
+                    topRight: Radius.circular(35.sp))),
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomSizeBox(20.h),
+                    Center(
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: 100.sp,
+                            width: 100.sp,
+                            decoration:
+                                const BoxDecoration(shape: BoxShape.circle),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              imageEditAble
+                                  ? showBottomModelSheetWidget()
+                                  : null;
+                            },
+                            child: Image(
+                              height: 90.sp,
+                              width: 90.sp,
+                              image: const AssetImage(
+                                  'assets/images/profile_pic.png'),
+                            ),
+                          ),
+                          imageEditAble
+                              ? Positioned(
+                                  right: 4.h,
+                                  top: 50.sp,
+                                  child: Container(
+                                    height: 25.sp,
+                                    width: 25.sp,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[400],
+                                      shape: BoxShape.circle,
                                     ),
-                                    CircleAvatar(
-                                      radius: 60.sp,
-                                      backgroundImage: const AssetImage(
-                                          "assets/images/profile_pic.png"),
-                                      // child: file == null
-                                      //     ? (value.infoUser != null)?
-                                      //        CircleAvatar(
-                                      //     radius: 78,
-                                      //     backgroundColor: Colors.white,
-                                      //     backgroundImage: NetworkImage(value.infoUser!.profileImage) ) :
-                                      //      const CircleAvatar(
-
-                                      //     radius: 78,
-                                      //     backgroundImage: AssetImage(
-                                      //         "assets/images/extra/profilePic.png"))                                    //     ? (value.infoUser!.profileImage != null)
-
-                                      //     : ClipRRect(
-                                      //   borderRadius: BorderRadius.circular(100),
-                                      //   child: Image.file(
-                                      //     File(file!.path),
-                                      //     fit: BoxFit.cover,
-                                      //     width: 400,
-                                      //   ),
-                                      // )
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        imageEditAble
+                                            ? showBottomModelSheetWidget()
+                                            : null;
+                                      },
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.edit,
+                                          color: Colors.white,
+                                          size: 17.sp,
+                                        ),
+                                      ),
                                     ),
-                                    Positioned(
-                                      right: 0,
-                                      top: 64.sp,
-                                      child: _editAble
-                                          ? Container(
-                                              decoration: const BoxDecoration(
-                                                  color:
-                                                      AppColors.kPrimaryColor,
-                                                  shape: BoxShape.circle),
-                                              child: Padding(
-                                                padding: EdgeInsets.all(4.sp),
-                                                child: Icon(
-                                                  Icons.edit,
-                                                  size: 20.sp,
-                                                  color: Colors.white,
-                                                ),
-                                              ))
-                                          : const SizedBox(),
-                                    ),
-                                  ],
-                                ),
-                              )),
-                        ),
-
-                        // Add Photo container
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                          child: Center(
-                            child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  _editAble = true;
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(40),
-                                    border: Border.all(
-                                        color: AppColors.kPrimaryColor,
-                                        width: 2)),
-                                //  color: Colors.red,
-                                width: screenWidth * 0.4,
-                                height: screenHeight * 0.04,
-                                child: Center(
-                                  child: Text(
-                                    "Edit Profile",
-                                    style: AppTextStyles.josefin(
-                                        style: const TextStyle(
-                                            color: AppColors.kPrimaryColor,
-                                            fontSize: 14)),
                                   ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 15, left: 15),
-                          child: Text(
-                            "First Name",
-                            style: AppTextStyles.josefin(
-                                style: const TextStyle(
-                                    color: AppColors.kBlackColor,
-                                    fontSize: 16)),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10, right: 12, top: 0),
-                          child: TextFieldClass(
-                            icon: Icon(
-                              Icons.person,
-                              color: AppColors.kPrimaryColor,
-                              size: 22.sp,
-                            ),
-                            // label: "First Name",
-                            editAble: _editAble,
-                            hinText: "James",
-                            fieldController: fname,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 15, left: 15),
-                          child: Text(
-                            "Last Name",
-                            style: AppTextStyles.josefin(
-                                style: const TextStyle(
-                                    color: AppColors.kBlackColor,
-                                    fontSize: 16)),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10, right: 12, top: 0),
-                          child: TextFieldClass(
-                            icon: Icon(
-                              Icons.person,
-                              color: AppColors.kPrimaryColor,
-                              size: 22.sp,
-                            ),
-                            // label: "Last Name",
-                            editAble: _editAble,
-                            hinText: "Bonds",
-                            fieldController: lname,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 15, left: 15),
-                          child: Text(
-                            "Cell Phone",
-                            style: AppTextStyles.josefin(
-                                style: const TextStyle(
-                                    color: AppColors.kBlackColor,
-                                    fontSize: 16)),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10, right: 12, top: 0),
-                          child: TextFieldClass(
-                            icon: Icon(
-                              Icons.phone,
-                              color: AppColors.kPrimaryColor,
-                              size: 22.sp,
-                            ),
-                            //   label: "Cell Phone",
-                            editAble: _editAble,
-                            hinText: "+9 30303 848548338",
-                            fieldController: cell,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 15, left: 15),
-                          child: Text(
-                            "Email",
-                            style: AppTextStyles.josefin(
-                                style: const TextStyle(
-                                    color: AppColors.kBlackColor,
-                                    fontSize: 16)),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10, right: 12, top: 0),
-                          child: TextFieldClass(
-                            icon: Icon(
-                              Icons.email_outlined,
-                              color: AppColors.kPrimaryColor,
-                              size: 22.sp,
-                            ),
-                            //  label: "Email",
-                            editAble: _editAble,
-                            hinText: "afzaal@gmail.com",
-                            fieldController: email,
-                          ),
-                        ),
-                      ],
+                                )
+                              : const SizedBox(),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-
-                // Next Button
-                SizedBox(
-                  height: screenHeight * 0.02,
-                ),
-
-                _editAble
-                    ? Container(
-                        height: screenHeight * 0.07,
-                        width: screenWidth * 0.87,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: AppColors.kPrimaryColor,
-                        ),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(50)))),
-                          onPressed: () async {
-                            setState(() {
-                              _editAble = !_editAble;
-                            });
-                            //   if (_forkey.currentState!.validate()) {
-                            //     LoadingDialogue.showLoaderDialog(context);
-                            //     profilePicUrl = await uploadFile();
-                            //     if (profilePicUrl == null) {
-                            //     if  (value.infoUser?.profileImage == null){
-                            //       // ignore: use_build_context_synchronously
-                            //       Navigator.pop(context);
-                            //       // ignore: use_build_context_synchronously
-                            //       newSnackBar(context,"Profile picture required");
-                            //     }
-                            //     else{
-                            //       await value.paramedicBasicInfo(fname.text, lname.text, selectedDate.millisecondsSinceEpoch, value.infoUser!.profileImage, email.text );
-
-                            //       // ignore: use_build_context_synchronously
-                            //       Navigator.pop(context);
-                            //       // ignore: use_build_context_synchronously
-                            //       newSnackBar(context, "data saved");
-                            //     }
-
-                            //     }
-                            //     else
-                            //     {
-                            //       await value.paramedicBasicInfo(fname.text, lname.text, selectedDate.millisecondsSinceEpoch, profilePicUrl!, email.text );
-
-                            //  // ignore: use_build_context_synchronously
-                            //  Navigator.pop(context);
-                            //       // ignore: use_build_context_synchronously
-                            //       newSnackBar(context, "data saved");
-                            //     }
-                            //   }
-                            //    else{
-                            //     }
-                          },
-                          child: Text(
-                            "Save Changes",
+                    CustomSizeBox(10.h),
+                    Center(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'John Smith',
+                                style: AppTextStyles.josefin(
+                                    style: TextStyle(
+                                        color: const Color(0xFF27261E),
+                                        fontSize: 24.sp)),
+                              ),
+                              SizedBox(
+                                width: 5.w,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    imageEditAble = !imageEditAble;
+                                  });
+                                },
+                                child: Image(
+                                    width: 15.sp,
+                                    height: 15.sp,
+                                    image: const AssetImage(
+                                        'assets/images/edit_my_profile.png')),
+                              )
+                            ],
+                          ),
+                          CustomSizeBox(4.h),
+                          Text(
+                            'jonathansmith@gmail.com',
                             style: AppTextStyles.josefin(
                                 style: TextStyle(
-                                    color: AppColors.kWhiteColor,
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w400)),
+                                    fontWeight: FontWeight.w400,
+                                    color: const Color(0xFF27261E),
+                                    fontSize: 14.sp)),
                           ),
-                        ))
-                    : const SizedBox(),
-
-                // term and conditions
-                SizedBox(
-                  height: screenHeight * 0.02,
+                        ],
+                      ),
+                    ),
+                    CustomSizeBox(20.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 10.h),
+                          child: Text(
+                            'Company',
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFF1A1167),
+                                    fontSize: 12.sp)),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 20.w),
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                readOnlyTextFields = !readOnlyTextFields;
+                              });
+                            },
+                            child: Image(
+                                width: 16.sp,
+                                height: 16.sp,
+                                image: const AssetImage(
+                                    'assets/images/edit_my_profile.png')),
+                          ),
+                        ),
+                      ],
+                    ),
+                    textField('Enter Your Company', 0, textFieldController[0]),
+                    CustomSizeBox(5.h),
+                    Text(
+                      'Job/Position',
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF1A1167),
+                              fontSize: 12.sp)),
+                    ),
+                    textField('Enter Your Job', 1, textFieldController[1]),
+                    CustomSizeBox(5.h),
+                    Text(
+                      'Website',
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF1A1167),
+                              fontSize: 12.sp)),
+                    ),
+                    textField('Enter Your Website', 2, textFieldController[2]),
+                    CustomSizeBox(5.h),
+                    Text(
+                      'Cellphone',
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF1A1167),
+                              fontSize: 12.sp)),
+                    ),
+                    textField(
+                        'Enter Your Phone No.', 3, textFieldController[3]),
+                    CustomSizeBox(5.h),
+                    Text(
+                      'Location',
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF1A1167),
+                              fontSize: 12.sp)),
+                    ),
+                    textField('Your Location', 4, textFieldController[4]),
+                    CustomSizeBox(5.h),
+                    Text(
+                      'Hobby/ Interests',
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF1A1167),
+                              fontSize: 12.sp)),
+                    ),
+                    textField('Your Hobbies', 5, textFieldController[5]),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 25.w, right: 25.w, bottom: 20.w),
+                      child: GetButton(50.h, () {
+                        setState(() {
+                          readOnlyTextFields = !readOnlyTextFields;
+                          imageEditAble = !imageEditAble;
+                        });
+                      },
+                          Text(
+                            'Save',
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700)),
+                          )),
+                    )
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ));
-  }
-
-  // Date Picker
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(1950, 1),
-        lastDate: DateTime.now());
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
+          ))
+        ]));
   }
 
   showBottomModelSheetWidget() {
@@ -526,6 +386,40 @@ class _BasicInfoState extends State<BasicInfo> {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget textField(
+      String hintText, int index, TextEditingController controller) {
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.sp), color: Colors.white),
+      child: TextFormField(
+        maxLines: index == 5 ? 4 : 1,
+        readOnly: readOnlyTextFields == true ? false : true,
+        textInputAction:
+            index == 5 ? TextInputAction.done : TextInputAction.next,
+        controller: controller,
+        style: AppTextStyles.josefin(
+          style: TextStyle(
+              color: readOnlyTextFields
+                  ? Colors.deepPurple
+                  : const Color(0xFF857FB4),
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w400),
+        ),
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.only(bottom: 10.h),
+          border: InputBorder.none,
+          hintText: hintText,
+          hintStyle: AppTextStyles.josefin(
+            style: TextStyle(
+              color: const Color(0xFF1F314A).withOpacity(0.31),
+              fontSize: 11.sp,
+            ),
+          ),
+        ),
       ),
     );
   }
