@@ -46,7 +46,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
       ),
       body: Column(
         children: [
-          CustomSizeBox(30.h),
+          CustomSizeBox(10.h),
           Center(
               child: Image(
             height: 90.sp,
@@ -59,7 +59,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
             style: AppTextStyles.josefin(
                 style: TextStyle(
                     color: Colors.black,
-                    fontSize: 16.sp,
+                    fontSize: 24.sp,
                     fontWeight: FontWeight.w600)),
           ),
           CustomSizeBox(20.h),

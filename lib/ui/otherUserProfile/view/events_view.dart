@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
@@ -112,10 +113,37 @@ class _OrgnaizerEventsState extends State<OrgnaizerEvents> {
                                           fontSize: 18.sp,
                                           fontWeight: FontWeight.w500)),
                                 ),
+                                userType == 'user'
+                                    ? const SizedBox()
+                                    : Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFF0AFF31)
+                                                  .withOpacity(0.24),
+                                              borderRadius:
+                                                  BorderRadius.circular(20.sp),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(8.sp),
+                                              child: Text(
+                                                'Upcoming',
+                                                style: AppTextStyles.josefin(
+                                                    style: TextStyle(
+                                                        color: const Color(
+                                                            0xFF17DF1F),
+                                                        fontSize: 12.sp)),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      )
                               ],
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
