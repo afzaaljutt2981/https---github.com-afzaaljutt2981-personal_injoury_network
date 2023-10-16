@@ -17,19 +17,20 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final controller = PageController(initialPage: 0);
+  
   final textFieldController =
-      List.generate(12, (i) => TextEditingController(), growable: true);
+      List.generate(13, (i) => TextEditingController(), growable: true);
   int index = 1;
-
+  final controller = PageController(initialPage: 0);
+  bool hidePassword = true;
+  bool hideConfirmPassword = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.kPrimaryColor,
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -38,13 +39,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      if (index == 1) {
+                     // if (index == 1) {
                         Navigator.pop(context);
-                      } else {
-                        setState(() {
-                          index--;
-                        });
-                      }
+                      // } else {
+                      //   setState(() {
+                      //     index--;
+                      //   });
+                      // }
                     },
                     child: Icon(
                       Icons.arrow_back_ios,
@@ -84,7 +85,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               processStagesCount(index),
               CustomSizeBox(25.h),
               SizedBox(
-                height: 330.h,
+                height: index == 2 ? 350.h : 320.h,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.w),
                   child: PageView(
@@ -100,14 +101,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                  left: 30.w,
-                  right: 30.w,
-                  top: index == 1
-                      ? 0.h
-                      : index == 2
-                          ? 40.h
-                          : 30.h,
-                ),
+                    left: 10.w,
+                    right: 10.w,
+                    bottom: index == 3 ? 15.h : 30.h, //0.h,
+                    top: index == 3
+                        ? 15.h
+                        : index == 2
+                            ? 10.h
+                            : 25.h),
                 child: GetwhiteButton(
                   50.sp,
                   () async {
@@ -128,7 +129,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         );
                       });
                     }
-                    if (index == 3 && textFieldController[9].text.isNotEmpty) {
+                    if (index == 3 && textFieldController[10].text.isNotEmpty) {
                       Navigator.push(
                         context,
                         PageTransition(
@@ -137,7 +138,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           alignment: Alignment.center,
                           duration: const Duration(milliseconds: 200),
                           reverseDuration: const Duration(milliseconds: 200),
-                          child:  BottomNavigationScreen(selectedIndex: 0,),
+                          child: BottomNavigationScreen(
+                            selectedIndex: 0,
+                          ),
                         ),
                       );
                     }
@@ -153,7 +156,73 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
-              CustomSizeBox(15.h),
+              index == 3
+                  ? Center(
+                      child: SizedBox(
+                        width: 250.w,
+                        child: Column(
+                          children: [
+                            Text(
+                              'By click Save you are agree with ',
+                              textAlign: TextAlign.center,
+                              style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 10.sp)),
+                            ),
+                            CustomSizeBox(5.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'our ',
+                                  textAlign: TextAlign.center,
+                                  style: AppTextStyles.josefin(
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 10.sp)),
+                                ),
+                                Text(
+                                  'Terms and Condition ',
+                                  textAlign: TextAlign.center,
+                                  style: AppTextStyles.josefin(
+                                      style: TextStyle(
+                                          color: const Color(0xFFF63636),
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 10.sp)),
+                                )
+                              ],
+                            ),
+                            CustomSizeBox(20.h),
+                          ],
+                        ),
+                        // child: Text.rich(
+                        //   TextSpan(
+                        //     children: [
+                        //       TextSpan(
+                        //         text: 'By click Save you are agree with \nour',
+                        // style: AppTextStyles.josefin(
+                        //     style: TextStyle(
+                        //         color: Colors.white,
+                        //         fontWeight: FontWeight.w400,
+                        //         fontSize: 10.sp)),
+                        //       ),
+                        //       TextSpan(
+                        //           text: ' Terms and Condition',
+
+                        //           style: AppTextStyles.josefin(
+                        // style: TextStyle(
+                        //     color: const Color(0xFFF63636),
+                        //     fontWeight: FontWeight.w700,
+                        //     fontSize: 10.sp))),
+                        //     ],
+                        //   ),
+                        // ),
+                      ),
+                    )
+                  : const SizedBox(),
             ],
           ),
         ),
@@ -241,199 +310,276 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget process1() {
-    return Column(
-      children: [
-        Center(
-          child: Stack(
-            children: [
-              Container(
-                height: 85.sp,
-                width: 85.sp,
-                decoration: const BoxDecoration(shape: BoxShape.circle),
-              ),
-              Image(
-                height: 75.sp,
-                width: 75.sp,
-                image: const AssetImage('assets/images/profile_pic.png'),
-              ),
-              Positioned(
-                right: 0,
-                top: 38.sp,
-                child: Image(
-                  height: 20.sp,
-                  width: 20.sp,
-                  image: const AssetImage('assets/images/edit_icon.png'),
-                ),
-              ),
-            ],
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          textField(
+              'First Name', 'Jon', 0, textFieldController[0], false, false),
+          textField(
+              'Last Name', 'Methon', 1, textFieldController[1], false, false),
+          textField('Company', 'Enter Company name', 2, textFieldController[2],
+              false, false),
+          textField(
+            'Position/Job',
+            'Select here',
+            3,
+            textFieldController[3],
+            true,
+            false,
           ),
-        ),
-        CustomSizeBox(10.h),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.sp),
-            color: Colors.white,
-          ),
-          child: Column(
-            children: [
-              AuthTextFieldClass(
-                controller: textFieldController[0],
-                hintText: 'First Name',
-                last: 0,
-                maxLines: 1,
-              ),
-              AuthTextFieldClass(
-                controller: textFieldController[1],
-                hintText: 'Last Name',
-                last: 0,
-                maxLines: 1,
-              ),
-              AuthTextFieldClass(
-                controller: textFieldController[2],
-                hintText: 'Company',
-                last: 0,
-                maxLines: 1,
-              ),
-              AuthTextFieldClass(
-                controller: textFieldController[3],
-                hintText: 'Position/ Job',
-                last: 1,
-                maxLines: 1,
-              ),
-            ],
-          ),
-        )
-      ],
+          CustomSizeBox(20.h)
+        ],
+      ),
     );
   }
 
   Widget process2() {
-    return Column(
-      children: [
-        CustomSizeBox(10.h),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.sp),
-            color: Colors.white,
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          textField('Cell Phone', '+1 356 786 7865', 4, textFieldController[4],
+              false, false),
+          textField('Email', 'abc@gmail.com', 5, textFieldController[5], false,
+              false),
+          textField('Website (Optional)', 'Enter Website name', 6,
+              textFieldController[6], false, false),
+          textField(
+            'Location',
+            'Click here to enter',
+            7,
+            textFieldController[7],
+            true,
+            false,
           ),
-          child: Column(
-            children: [
-              AuthTextFieldClass(
-                controller: textFieldController[4],
-                hintText: 'Cellphone',
-                last: 0,
-                maxLines: 1,
-              ),
-              AuthTextFieldClass(
-                controller: textFieldController[5],
-                hintText: 'Email',
-                last: 0,
-                maxLines: 1,
-              ),
-              AuthTextFieldClass(
-                controller: textFieldController[6],
-                hintText: 'Location',
-                last: 0,
-                maxLines: 1,
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 13.h,
-                  left: 15.w,
-                  bottom: 3.h,
-                  right: 15.w,
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      'Describe what you look for in Networking events:',
-                      style: AppTextStyles.josefin(
-                        style: TextStyle(
-                          color: const Color(0xFF1F314A).withOpacity(0.40),
-                          fontSize: 11.sp,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 80.h,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFD9D9D9).withOpacity(0.35),
-                        borderRadius: BorderRadius.circular(10.sp),
-                      ),
-                      child: AuthTextFieldClass(
-                        controller: textFieldController[7],
-                        hintText: ' ',
-                        last: 0,
-                        maxLines: 4,
-                      ),
-                    ),
-                    CustomSizeBox(10.h)
-                  ],
-                ),
-              ),
-              AuthTextFieldClass(
-                controller: textFieldController[8],
-                hintText: 'Hobbies/ Interests',
-                last: 0,
-                maxLines: 1,
-              ),
-              CustomSizeBox(20.h)
-            ],
-          ),
-        )
-      ],
+          textField('Hobbies/Interests (Optional)', 'Click here to enter', 8,
+              textFieldController[8], false, false),
+          textField('What brings you here?', 'Connecting people?', 9,
+              textFieldController[9], false, false),
+          CustomSizeBox(20.h)
+        ],
+      ),
     );
+    // return Column(
+    //   children: [
+    //     CustomSizeBox(10.h),
+    //     Container(
+    //       decoration: BoxDecoration(
+    //         borderRadius: BorderRadius.circular(15.sp),
+    //         color: Colors.white,
+    //       ),
+    //       child: Column(
+    //         children: [
+    //           AuthTextFieldClass(
+    //             controller: textFieldController[4],
+    //             hintText: 'Cellphone',
+    //             last: 0,
+    //             maxLines: 1,
+    //           ),
+    //           AuthTextFieldClass(
+    //             controller: textFieldController[5],
+    //             hintText: 'Email',
+    //             last: 0,
+    //             maxLines: 1,
+    //           ),
+    //           AuthTextFieldClass(
+    //             controller: textFieldController[6],
+    //             hintText: 'Location',
+    //             last: 0,
+    //             maxLines: 1,
+    //           ),
+    //           Padding(
+    //             padding: EdgeInsets.only(
+    //               top: 13.h,
+    //               left: 15.w,
+    //               bottom: 3.h,
+    //               right: 15.w,
+    //             ),
+    //             child: Column(
+    //               children: [
+    //                 Text(
+    //                   'Describe what you look for in Networking events:',
+    //                   style: AppTextStyles.josefin(
+    //                     style: TextStyle(
+    //                       color: const Color(0xFF1F314A).withOpacity(0.40),
+    //                       fontSize: 11.sp,
+    //                     ),
+    //                   ),
+    //                 ),
+    //                 Container(
+    //                   height: 80.h,
+    //                   decoration: BoxDecoration(
+    //                     color: const Color(0xFFD9D9D9).withOpacity(0.35),
+    //                     borderRadius: BorderRadius.circular(10.sp),
+    //                   ),
+    //                   child: AuthTextFieldClass(
+    //                     controller: textFieldController[7],
+    //                     hintText: ' ',
+    //                     last: 0,
+    //                     maxLines: 4,
+    //                   ),
+    //                 ),
+    //                 CustomSizeBox(10.h)
+    //               ],
+    //             ),
+    //           ),
+    //           AuthTextFieldClass(
+    //             controller: textFieldController[8],
+    //             hintText: 'Hobbies/ Interests',
+    //             last: 0,
+    //             maxLines: 1,
+    //           ),
+    //           CustomSizeBox(20.h)
+    //         ],
+    //       ),
+    //     )
+    //   ],
+    // );
   }
 
   Widget process3() {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          textField('Username', 'Enter username', 10, textFieldController[10],
+              false, false),
+          textField('Password', 'xxxxxxxxx', 11, textFieldController[11], false,
+              hidePassword),
+          textField('Confirm Password', 'xxxxxxxxx', 12,
+              textFieldController[12], false, hideConfirmPassword),
+          CustomSizeBox(20.h)
+        ],
+      ),
+    );
+    // return Column(
+    //   children: [
+    //     CustomSizeBox(10.h),
+    //     Container(
+    //       decoration: BoxDecoration(
+    //         borderRadius: BorderRadius.circular(15.sp),
+    //         color: Colors.white,
+    //       ),
+    //       child: Column(
+    //         children: [
+    //           AuthTextFieldClass(
+    //             controller: textFieldController[9],
+    //             hintText: 'Username',
+    //             last: 0,
+    //             maxLines: 1,
+    //           ),
+    //           AuthTextFieldClass(
+    //             controller: textFieldController[10],
+    //             hintText: 'Password',
+    //             last: 0,
+    //             maxLines: 1,
+    //           ),
+    //           AuthTextFieldClass(
+    //             controller: textFieldController[11],
+    //             hintText: 'Confirm Password',
+    //             last: 0,
+    //             maxLines: 1,
+    //           ),
+    //           CustomSizeBox(20.h),
+    //         ],
+    //       ),
+    //     )
+    //   ],
+    // );
+  }
+
+  Widget textField(String identityText, String hintText, int index,
+      TextEditingController controller, bool readOnly, bool obsecureTerxt) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomSizeBox(10.h),
+        Text(
+          identityText,
+          style: AppTextStyles.josefin(
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500)),
+        ),
+        CustomSizeBox(5.h),
         Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.sp),
-            color: Colors.white,
+              borderRadius: BorderRadius.circular(15.sp), color: Colors.white),
+          child: TextFormField(
+            obscureText: obsecureTerxt,
+            readOnly: readOnly,
+            textInputAction:
+                index == 2 ? TextInputAction.next : TextInputAction.done,
+            controller: controller,
+            style: AppTextStyles.josefin(
+              style: TextStyle(
+                  color: const Color(0xFF000000),
+                  fontSize: 17.sp,
+                  fontWeight: FontWeight.w400),
+            ),
+            decoration: InputDecoration(
+              suffixIcon: index == 3
+                  ? GestureDetector(
+                      onTap: () {},
+                      child: Padding(
+                        padding: EdgeInsets.all(14.sp),
+                        child: Image(
+                            width: 10.sp,
+                            height: 10.sp,
+                            image: const AssetImage(
+                                'assets/images/arrow_down_signup.png')),
+                      ))
+                  : index == 11
+                      ? GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              hidePassword = !hidePassword;
+                            });
+                          },
+                          child: hidePassword
+                              ? const Icon(
+                                  Icons.visibility_off_outlined,
+                                  color: Colors.grey,
+                                )
+                              : const Icon(
+                                  Icons.visibility_outlined,
+                                  color: Colors.grey,
+                                ))
+                      : index == 12
+                          ? GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  hideConfirmPassword = !hideConfirmPassword;
+                                });
+                              },
+                              child: hideConfirmPassword
+                                  ? const Icon(
+                                      Icons.visibility_off_outlined,
+                                      color: Colors.grey,
+                                    )
+                                  : const Icon(
+                                      Icons.visibility_outlined,
+                                      color: Colors.grey,
+                                    ))
+                          : null,
+              contentPadding: EdgeInsets.only(
+                  left: 10.w,
+                  top: index == 3 || index == 12 || index == 11 ? 12.h : 0.h,
+                  right: index == 3 ? 10.w : 5.w),
+              border: InputBorder.none,
+              hintText: hintText,
+              hintStyle: AppTextStyles.josefin(
+                style: TextStyle(
+                  color: const Color(0xFF1F314A).withOpacity(0.31),
+                  fontSize: 14.sp,
+                ),
+              ),
+            ),
           ),
-          child: Column(
-            children: [
-              AuthTextFieldClass(
-                controller: textFieldController[9],
-                hintText: 'Username',
-                last: 0,
-                maxLines: 1,
-              ),
-              AuthTextFieldClass(
-                controller: textFieldController[10],
-                hintText: 'Password',
-                last: 0,
-                maxLines: 1,
-              ),
-              AuthTextFieldClass(
-                controller: textFieldController[11],
-                hintText: 'Confirm Password',
-                last: 0,
-                maxLines: 1,
-              ),
-              CustomSizeBox(20.h),
-            ],
-          ),
-        )
+        ),
+        CustomSizeBox(22.h)
       ],
     );
   }
 }
-
-
-
-//   Future loader() async {
-//     return Timer(
-//         const Duration(seconds: 0),
-//         () => showDialog(
-//             context: context,
-//             builder: (context) {
-//               return const Center(
-//                 child: CircularProgressIndicator(),
-//               );
-//             }));
-//   }
-// }
