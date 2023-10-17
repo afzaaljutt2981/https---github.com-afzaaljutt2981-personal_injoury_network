@@ -4,8 +4,6 @@ import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
-
-import '../../../global/helper/auth_text_field.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../home/view/navigation_view.dart';
 
@@ -509,8 +507,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: TextFormField(
             obscureText: obsecureTerxt,
             readOnly: readOnly,
-            textInputAction:
-                index == 2 ? TextInputAction.next : TextInputAction.done,
+           
             controller: controller,
             style: AppTextStyles.josefin(
               style: TextStyle(
@@ -575,7 +572,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   fontSize: 14.sp,
                 ),
               ),
+               
             ),
+            textInputAction:
+                index == 2 || index == 9 || index == 12  ? TextInputAction.done : TextInputAction.next,
           ),
         ),
         CustomSizeBox(22.h)

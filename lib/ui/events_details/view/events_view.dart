@@ -492,26 +492,29 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: AppColors.kPrimaryColor,
-                                  width: 1.5.sp),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12.sp)),
-                          child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 22.w, vertical: 14.h),
-                              child: Center(
-                                child: Text(
-                                  'Invite Guests',
-                                  style: AppTextStyles.josefin(
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          color: AppColors.kPrimaryColor,
-                                          fontSize: 16.sp)),
-                                ),
-                              )),
+                        GestureDetector(
+                          onTap: () => _showBottomSheet(context),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: AppColors.kPrimaryColor,
+                                    width: 1.5.sp),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12.sp)),
+                            child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 22.w, vertical: 14.h),
+                                child: Center(
+                                  child: Text(
+                                    'Invite Guests',
+                                    style: AppTextStyles.josefin(
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            color: AppColors.kPrimaryColor,
+                                            fontSize: 16.sp)),
+                                  ),
+                                )),
+                          ),
                         ),
                         Container(
                           decoration: BoxDecoration(
@@ -592,6 +595,144 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                   fontWeight: FontWeight.w500)),
         ),
       ],
+    );
+  }
+
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.sp),
+          topRight: Radius.circular(30.sp),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return FractionallySizedBox(
+          heightFactor: 0.9,
+          child: SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.9,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.sp),
+                  topRight: Radius.circular(30.sp),
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomSizeBox(7.h),
+                    Center(
+                      child: Container(
+                        height: 5.h,
+                        width: 25.h,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.sp),
+                            color: const Color(0xFFB2B2B2).withOpacity(0.50)),
+                      ),
+                    ),
+                    CustomSizeBox(20.h),
+                    Text(
+                      'Invite Friend',
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              color: const Color(0xFF120D26),
+                              fontSize: 24.sp,
+                              fontWeight: FontWeight.w500)),
+                    ),
+                    CustomSizeBox(10.h),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: const Color(0xFFF0F0F0)),
+                        borderRadius: BorderRadius.circular(25.sp),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              maxLines: 1,
+                              readOnly: false,
+                              style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      color: const Color(0xFF1F314A),
+                                      fontSize: 16.sp)),
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.only(left: 12.w),
+                                  border: InputBorder.none,
+                                  hintText: "Search",
+                                  hintStyle: AppTextStyles.josefin(
+                                      style: TextStyle(
+                                          color: const Color(0xFF1F314A)
+                                              .withOpacity(0.40),
+                                          fontSize: 13.sp))),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 20.w, left: 5.w),
+                            child: Image(
+                              height: 18.sp,
+                              width: 18.sp,
+                              image: const AssetImage(
+                                  'assets/images/search_icon.png'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    CustomSizeBox(25.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image(
+                          image:
+                              const AssetImage('assets/images/profile_pic.png'),
+                          width: 45.sp,
+                          height: 45.sp,
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        Expanded(
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Micheal Ulasi',
+                              style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      color: const Color(0xFF120D26),
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+                            CustomSizeBox(5.h),
+                            Text(
+                              '2k Follwers',
+                              style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      color: const Color(0xFF747688),
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w400)),
+                            ),
+                          ],
+                        )),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

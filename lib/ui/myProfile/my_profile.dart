@@ -1,12 +1,7 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
-
-import '../../global/helper/text_field.dart';
 import '../../global/utils/app_colors.dart';
 import '../../global/utils/app_text_styles.dart';
 
