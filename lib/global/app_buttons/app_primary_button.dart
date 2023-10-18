@@ -12,7 +12,7 @@ class GetButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: double.infinity,
+        width: MediaQuery.of(context).size.width,
         height: height,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
@@ -31,6 +31,7 @@ class GetButton extends StatelessWidget {
             )),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
+            splashFactory: NoSplash.splashFactory,
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
           ),

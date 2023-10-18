@@ -28,6 +28,7 @@ class GetwhiteButton extends StatelessWidget {
             color: Colors.white),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
+             splashFactory: NoSplash.splashFactory,
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
           ),

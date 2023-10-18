@@ -12,6 +12,7 @@ import '../../drawer/view/drawer_home.dart';
 import '../../events/view/search_events_view.dart';
 import '../../events_details/view/events_view.dart';
 import '../../notifications/view/notification_view.dart';
+import 'navigation_view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -235,8 +236,8 @@ class _HomeScreenState extends State<HomeScreen> {
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20.sp),
-                    topRight: Radius.circular(20.sp),
+                    topLeft: Radius.circular(30.sp),
+                    topRight: Radius.circular(30.sp),
                   )),
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -262,16 +263,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fontWeight: FontWeight.w600),
                               ),
                             ),
-                            Text(
-                              userType == 'user' ? "See All" : "See All Events",
-                              style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    color: userType == 'user'
-                                        ? const Color(0xFF9CA5D6)
-                                        : const Color(0xFF4571E1),
-                                    fontSize: 10.sp,
-                                    fontWeight: FontWeight.w600),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                    childCurrent: widget,
+                                    type: PageTransitionType.rightToLeft,
+                                    alignment: Alignment.center,
+                                    duration: const Duration(milliseconds: 200),
+                                    reverseDuration:
+                                        const Duration(milliseconds: 200),
+                                    child: BottomNavigationScreen(
+                                      selectedIndex: 3,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                userType == 'user'
+                                    ? "See All"
+                                    : "See All Events",
+                                style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: userType == 'user'
+                                          ? const Color(0xFF9CA5D6)
+                                          : const Color(0xFF4571E1),
+                                      fontSize: 10.sp,
+                                      fontWeight: FontWeight.w600),
+                                ),
                               ),
                             ),
                           ],

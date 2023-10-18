@@ -117,13 +117,16 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                             children: [
                               homeFeatures(
                                   'assets/images/home_icon_drawer.png', 'Home',
-                                  onTap: () {}),
+                                  onTap: () {
+                                Navigator.pop(context);
+                              }),
                               CustomSizeBox(28.h),
                               userType == 'user'
                                   ? homeFeatures(
                                       'assets/images/marketer_icon_drawer.png',
-                                      'Become a Marketer',
-                                      onTap: () {})
+                                      'Become a Marketer', onTap: () {
+                                      _showDialogueBox(context);
+                                    })
                                   : homeFeatures(
                                       'assets/images/events_icon_drawer.png',
                                       'Create Event', onTap: () {
@@ -166,7 +169,23 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                               homeFeatures(
                                   'assets/images/messages_icon_drawer.png',
                                   'Messages',
-                                  onTap: () {}),
+                                  onTap: () {
+                                     Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      childCurrent: widget,
+                                      type: PageTransitionType.rightToLeft,
+                                      alignment: Alignment.center,
+                                      duration:
+                                          const Duration(milliseconds: 200),
+                                      reverseDuration:
+                                          const Duration(milliseconds: 200),
+                                      child: BottomNavigationScreen(
+                                        selectedIndex: 1,
+                                      )),
+                                );
+                                  }),
                               CustomSizeBox(28.h),
                               homeFeatures(
                                   'assets/images/friends_icon_drawer.png',
@@ -293,5 +312,68 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
         ],
       ),
     );
+  }
+
+  Future<void> _showDialogueBox(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Center(
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.sp),
+              ),
+              title: Column(
+                children: [
+                  Image(
+                      width: 40.sp,
+                      height: 40.sp,
+                      image: const AssetImage(
+                          'assets/images/question_icon_drawer.png')),
+                  CustomSizeBox(15.h),
+                  Text(
+                    "You are going to become a marketer, Press continue to confirm",
+                    style: AppTextStyles.josefin(
+                        style: TextStyle(
+                            height: 1.3.sp,
+                            color: AppColors.kBlackColor,
+                            fontSize: 14.sp)),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      setState(() {
+                        userType = 'admin';
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            PageTransition(
+                              childCurrent: widget,
+                              type: PageTransitionType.leftToRightJoined,
+                              alignment: Alignment.center,
+                              duration: const Duration(milliseconds: 200),
+                              reverseDuration:
+                                  const Duration(milliseconds: 200),
+                              child: BottomNavigationScreen(
+                                selectedIndex: 0,
+                              ),
+                            ),
+                            (route) => false);
+                      });
+                    },
+                    child: Text(
+                      "Continue",
+                      style: AppTextStyles.josefin(
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.kPrimaryColor,
+                            fontSize: 14.sp),
+                      ),
+                    )),
+              ],
+            ),
+          );
+        });
   }
 }
