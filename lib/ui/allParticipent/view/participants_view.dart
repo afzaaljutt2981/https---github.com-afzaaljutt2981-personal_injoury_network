@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
@@ -9,6 +7,7 @@ import 'package:personal_injury_networking/ui/authentication/model/user_type.dar
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../otherUserProfile/view/create_other_profile_view.dart';
 import '../../otherUserProfile/view/other_user_view.dart';
 
 class AllParticipantsView extends StatefulWidget {
@@ -132,7 +131,7 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                                 duration: const Duration(milliseconds: 200),
                                 reverseDuration:
                                     const Duration(milliseconds: 200),
-                                child: const OtherUserProfileScreen(),
+                                child: const CreateOtherUserProfileView(),
                               ),
                             );
                           },

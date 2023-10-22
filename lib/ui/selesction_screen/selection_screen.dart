@@ -6,6 +6,7 @@ import 'package:personal_injury_networking/global/app_buttons/app_primary_button
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 
+import '../authentication/view/create_auth_view.dart';
 import '../authentication/view/login_view.dart';
 
 class SelectionScreen extends StatefulWidget {
@@ -91,7 +92,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                           alignment: Alignment.center,
                           duration: const Duration(milliseconds: 200),
                           reverseDuration: const Duration(milliseconds: 200),
-                          child: const LoginView(),
+                          child: const CreateAuthenticationView(),
                         ),
                       );
                     },

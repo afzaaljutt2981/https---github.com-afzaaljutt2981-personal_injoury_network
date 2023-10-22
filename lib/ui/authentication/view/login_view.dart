@@ -8,6 +8,7 @@ import 'package:personal_injury_networking/ui/authentication/view/sign_up_screen
 import 'package:personal_injury_networking/ui/home/view/home_screen.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
+import '../../forgetPassword/view/create_forget_pass_controller.dart';
 import '../../forgetPassword/view/forget_view.dart';
 import '../../home/view/navigation_view.dart';
 
@@ -78,7 +79,7 @@ class _LoginViewState extends State<LoginView> {
                       alignment: Alignment.center,
                       duration: const Duration(milliseconds: 200),
                       reverseDuration: const Duration(milliseconds: 200),
-                      child: const ForgetPasswordView(), 
+                      child: const CreateForgetPasswordView(), 
                     ),
                   );
                   },

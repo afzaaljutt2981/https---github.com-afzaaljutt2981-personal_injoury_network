@@ -8,9 +8,12 @@ import '../../../global/app_buttons/app_primary_button.dart';
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../drawer/view/create_drawer_view.dart';
 import '../../drawer/view/drawer_home.dart';
 import '../../events/view/search_events_view.dart';
-import '../../events_details/view/events_view.dart';
+import '../../events_details/view/create_event_details_view.dart';
+import '../../events_details/view/event_details_view.dart';
+import '../../notifications/view/create_notifications_view.dart';
 import '../../notifications/view/notification_view.dart';
 import 'navigation_view.dart';
 
@@ -76,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 duration: const Duration(milliseconds: 200),
                                 reverseDuration:
                                     const Duration(milliseconds: 200),
-                                child: const MyDrawerHome(),
+                                child: const CreateDrawerView(),
                               ),
                             );
                           },
@@ -102,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           const Duration(milliseconds: 200),
                                       reverseDuration:
                                           const Duration(milliseconds: 200),
-                                      child: const NotificationView(),
+                                      child: const CreateNotificationsView(),
                                     ),
                                   );
                                 },
@@ -447,7 +450,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         const Duration(
                                                             milliseconds: 200),
                                                     child:
-                                                        const EventsDetailsView(),
+                                                        const CreateEventDetailsView(),
                                                   ),
                                                 );
                                               },

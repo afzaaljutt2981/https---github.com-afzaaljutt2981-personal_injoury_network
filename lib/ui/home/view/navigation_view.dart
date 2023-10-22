@@ -6,9 +6,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/ui/events/view/all_events_screen.dart';
 import 'package:personal_injury_networking/ui/home/view/home_screen.dart';
-import 'package:personal_injury_networking/ui/scan_screen/view/qr_scan_view.dart';
+import 'package:personal_injury_networking/ui/qr_scan_screen/view/qr_scan_view.dart';
 import '../../chat_screen/view/all_users.dart';
-import '../../myProfile/my_profile.dart';
+import '../../chat_screen/view/create_chat_view.dart';
+import '../../events/view/create_all_events_view.dart';
+import '../../myProfile/view/create_my_profile.dart';
+import '../../myProfile/view/my_profile.dart';
+import '../../qr_scan_screen/view/create_qr_scan_view.dart';
+import 'create_home_view.dart';
 
 // ignore: must_be_immutable
 class BottomNavigationScreen extends StatefulWidget {
@@ -57,11 +62,11 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               setState(() => selectedIndex = index);
             },
             children: const <Widget>[
-              HomeScreen(),
-              AllUsersChat(),
-              HomeQrScanView(),
-              AllEventScreen(),
-              MyProfileInfo()
+              CreateHomeScreenView(),
+              CreateChatView(),
+              CreateQrScanView(),
+              CreateAllEventsView(),
+              CreateMyProfileView()
             ],
           ),
         ), //widgets[selectedIndex],

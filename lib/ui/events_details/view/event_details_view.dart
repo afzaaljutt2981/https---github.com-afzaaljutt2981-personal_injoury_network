@@ -9,6 +9,7 @@ import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
 
+import '../../allParticipent/view/create_all_participants_view.dart';
 import '../../allParticipent/view/participants_view.dart';
 import '../../otherUserProfile/view/other_user_view.dart';
 import 'events_qr_view.dart';
@@ -451,7 +452,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                   duration: const Duration(milliseconds: 200),
                                   reverseDuration:
                                       const Duration(milliseconds: 200),
-                                  child: const AllParticipantsView(),
+                                  child: const CreateAllParticipantsView(),
                                 ),
                               );
                             },
