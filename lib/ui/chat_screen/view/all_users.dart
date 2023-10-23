@@ -49,6 +49,7 @@ class _AllUsersChatState extends State<AllUsersChat> {
                         topRight: Radius.circular(30.sp))),
                 child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
+                    padding: EdgeInsets.zero,
                     shrinkWrap: true,
                     itemCount: 15,
                     itemBuilder: (context, index) {
@@ -69,7 +70,7 @@ class _AllUsersChatState extends State<AllUsersChat> {
                         },
                         child: Container(
                           padding: EdgeInsets.only(
-                              left: 15.w, right: 15.w, top: 0.h, bottom: 20.h),
+                              left: 15.w, right: 15.w, top: 14.h, bottom: 8.h),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
