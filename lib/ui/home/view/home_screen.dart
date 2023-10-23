@@ -234,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
             bottom: 0,
             child: Container(
               height:
-                  userType == 'user' ? screenHeight * 0.49 : screenHeight * 0.6,
+                  userType == 'user' ? screenHeight * 0.50 : screenHeight * 0.6,
               width: screenWidth,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -315,7 +315,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    //  height: 140.sp,
                                     width: 110.sp,
                                     decoration: BoxDecoration(
                                         color: Colors.grey[300],

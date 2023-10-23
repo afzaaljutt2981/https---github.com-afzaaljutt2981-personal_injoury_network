@@ -43,8 +43,8 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                   child: Padding(
                     padding: EdgeInsets.only(top: 45.h),
                     child: Container(
-                      width: 310,
-                      height: 387,
+                      width: 290.w,
+                      height: 300.h,
 
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
