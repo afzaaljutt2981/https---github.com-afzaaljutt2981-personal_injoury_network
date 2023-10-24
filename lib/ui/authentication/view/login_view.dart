@@ -1,11 +1,15 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
+import 'package:personal_injury_networking/global/utils/functions.dart';
+import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:personal_injury_networking/ui/authentication/view/sign_up_screen.dart';
 import 'package:personal_injury_networking/ui/home/view/home_screen.dart';
+import 'package:provider/provider.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../forgetPassword/view/create_forget_pass_controller.dart';
@@ -70,18 +74,18 @@ class _LoginViewState extends State<LoginView> {
               SizedBox(
                 width: screenWidth,
                 child: GestureDetector(
-                  onTap: (){
-                     Navigator.push(
-                    context,
-                    PageTransition(
-                      childCurrent: widget,
-                      type: PageTransitionType.rightToLeft,
-                      alignment: Alignment.center,
-                      duration: const Duration(milliseconds: 200),
-                      reverseDuration: const Duration(milliseconds: 200),
-                      child: const CreateForgetPasswordView(), 
-                    ),
-                  );
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        childCurrent: widget,
+                        type: PageTransitionType.rightToLeft,
+                        alignment: Alignment.center,
+                        duration: const Duration(milliseconds: 200),
+                        reverseDuration: const Duration(milliseconds: 200),
+                        child: const CreateForgetPasswordView(),
+                      ),
+                    );
                   },
                   child: Text(
                     'Forget Password?',
@@ -102,6 +106,15 @@ class _LoginViewState extends State<LoginView> {
                   top: 30.h,
                 ),
                 child: GetwhiteButton(50.h, () {
+                  if(textFieldController[0].text.isEmpty || !(EmailValidator.validate(textFieldController[0].text))){
+                    Functions.showSnackBar(context, "please enter valid email");
+                    return;
+                  }else if(textFieldController[1].text.isEmpty){
+                    Functions.showSnackBar(context, "please enter password");
+                    return;
+                  }else{
+                    context.read<AuthController>().signIn(textFieldController[0].text, textFieldController[1].text,
+                        context);
                   Navigator.push(
                     context,
                     PageTransition(
@@ -110,9 +123,11 @@ class _LoginViewState extends State<LoginView> {
                       alignment: Alignment.center,
                       duration: const Duration(milliseconds: 200),
                       reverseDuration: const Duration(milliseconds: 200),
-                      child:  BottomNavigationScreen( selectedIndex: 0, ),
+                      child: BottomNavigationScreen(
+                        selectedIndex: 0,
+                      ),
                     ),
-                  );
+                  );}
                 },
                     Text(
                       "Login",
@@ -167,7 +182,9 @@ class _LoginViewState extends State<LoginView> {
                             alignment: Alignment.center,
                             duration: const Duration(milliseconds: 200),
                             reverseDuration: const Duration(milliseconds: 200),
-                            child: const SignUpScreen(),
+                            child: ChangeNotifierProvider(
+                                create: (_) => AuthController(),
+                                child: const SignUpScreen()),
                           ),
                         );
                       },

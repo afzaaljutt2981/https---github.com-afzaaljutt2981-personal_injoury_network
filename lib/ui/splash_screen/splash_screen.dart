@@ -1,11 +1,15 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
+import 'package:personal_injury_networking/ui/home/view/navigation_view.dart';
+import 'package:provider/provider.dart';
 
 import '../../global/helper/custom_sized_box.dart';
+import '../authentication/controller/auth_controller.dart';
 import '../selesction_screen/selection_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -17,13 +21,22 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
-  
   void initState() {
     super.initState();
-    Timer(
-        const Duration(seconds: 3),
-        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => const SelectionScreen())));
+    Future.delayed(const Duration(seconds: 3)).then((value) async {
+      if (FirebaseAuth.instance.currentUser != null) {
+       await Provider.of<AuthController>(context,listen: false).getUserData(context);
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) =>
+                BottomNavigationScreen(selectedIndex: 0)));
+      }else{
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) => const SelectionScreen()));
+    }});
+    // Timer(
+    //     const Duration(seconds: 3),
+    //     () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+    //         builder: (BuildContext context) => const SelectionScreen())));
   }
 
   @override

@@ -1,9 +1,13 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
+import 'package:personal_injury_networking/global/utils/functions.dart';
+import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
+import 'package:provider/provider.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../home/view/navigation_view.dart';
 
@@ -15,7 +19,6 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  
   final textFieldController =
       List.generate(13, (i) => TextEditingController(), growable: true);
   int index = 1;
@@ -37,8 +40,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                     // if (index == 1) {
-                        Navigator.pop(context);
+                      // if (index == 1) {
+                      Navigator.pop(context);
                       // } else {
                       //   setState(() {
                       //     index--;
@@ -111,36 +114,104 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   50.sp,
                   () async {
                     if (index == 1) {
-                      setState(() {
-                        index = index + 1;
-                        controller.nextPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                        );
-                      });
+                      if (textFieldController[0].text.isEmpty) {
+                        Functions.showSnackBar(
+                            context, "please enter first name");
+                        return;
+                      } else if (textFieldController[1].text.isEmpty) {
+                        Functions.showSnackBar(
+                            context, "please enter last name");
+                        return;
+                      } else if (textFieldController[2].text.isEmpty) {
+                        Functions.showSnackBar(
+                            context, "please enter company name");
+                        return;
+                      }
+                      // else if (textFieldController[3].text.isEmpty) {
+                      //   Functions.showSnackBar(
+                      //       context, "please enter position or job");
+                      //   return;
+                      // }
+                      else {
+                        setState(() {
+                          index = index + 1;
+                          controller.nextPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                          );
+                        });
+                      }
                     } else if (index == 2) {
-                      setState(() {
-                        index = index + 1;
-                        controller.nextPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                        );
-                      });
+                      if (textFieldController[4].text.isEmpty) {
+                        Functions.showSnackBar(
+                            context, "please enter phone number");
+                        return;
+                      } else if (textFieldController[5].text.isEmpty ||
+                          !(EmailValidator.validate(
+                              textFieldController[5].text))) {
+                        Functions.showSnackBar(
+                            context, "please enter valid email");
+                      } else if (textFieldController[7].text.isEmpty) {
+                        Functions.showSnackBar(
+                            context, "please enter location");
+                        return;
+                      } else if (textFieldController[9].text.isEmpty) {
+                        Functions.showSnackBar(
+                            context, "please enter your reference");
+                        return;
+                      } else {
+                        setState(() {
+                          index = index + 1;
+                          controller.nextPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                          );
+                        });
+                      }
                     }
-                    if (index == 3 && textFieldController[10].text.isNotEmpty) {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                          childCurrent: widget,
-                          type: PageTransitionType.leftToRight,
-                          alignment: Alignment.center,
-                          duration: const Duration(milliseconds: 200),
-                          reverseDuration: const Duration(milliseconds: 200),
-                          child: BottomNavigationScreen(
-                            selectedIndex: 0,
+                    if (index == 3) {
+                      if (textFieldController[10].text.isEmpty) {
+                        Functions.showSnackBar(
+                            context, "please enter user name");
+                        return;
+                      } else if (textFieldController[11].text.isEmpty) {
+                        Functions.showSnackBar(
+                            context, "please enter password");
+                        return;
+                      } else if (textFieldController[12].text.isEmpty ||
+                          (textFieldController[11].text !=
+                              textFieldController[12].text)) {
+                        Functions.showSnackBar(context,
+                            "password and confirm password should be same");
+                        return;
+                      } else {
+                        context.read<AuthController>().signup(context,
+                            firstName: textFieldController[0].text,
+                            lastName: textFieldController[1].text,
+                            companyName: textFieldController[2].text,
+                            website: textFieldController[3].text,
+                            phone: textFieldController[4].text,
+                            email: textFieldController[5].text,
+                            position: textFieldController[6].text,
+                            location: textFieldController[7].text,
+                            password: textFieldController[8].text,
+                            hobbies: textFieldController[9].text,
+                            userName: textFieldController[10].text
+                        );
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            childCurrent: widget,
+                            type: PageTransitionType.leftToRight,
+                            alignment: Alignment.center,
+                            duration: const Duration(milliseconds: 200),
+                            reverseDuration: const Duration(milliseconds: 200),
+                            child: BottomNavigationScreen(
+                              selectedIndex: 0,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     }
                   },
                   Text(
@@ -338,7 +409,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Column(
         children: [
           textField('Cell Phone', '+1 356 786 7865', 4, textFieldController[4],
-              false, false),
+              false, false,
+              inputType: TextInputType.number),
           textField('Email', 'abc@gmail.com', 5, textFieldController[5], false,
               false),
           textField('Website (Optional)', 'Enter Website name', 6,
@@ -348,7 +420,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             'Click here to enter',
             7,
             textFieldController[7],
-            true,
+            false,
             false,
           ),
           textField('Hobbies/Interests (Optional)', 'Click here to enter', 8,
@@ -488,7 +560,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget textField(String identityText, String hintText, int index,
-      TextEditingController controller, bool readOnly, bool obsecureTerxt) {
+      TextEditingController controller, bool readOnly, bool obsecureTerxt,
+      {TextInputType? inputType}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -505,9 +578,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.sp), color: Colors.white),
           child: TextFormField(
+            keyboardType: inputType,
             obscureText: obsecureTerxt,
             readOnly: readOnly,
-           
             controller: controller,
             style: AppTextStyles.josefin(
               style: TextStyle(
@@ -572,10 +645,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   fontSize: 14.sp,
                 ),
               ),
-               
             ),
-            textInputAction:
-                index == 2 || index == 9 || index == 12  ? TextInputAction.done : TextInputAction.next,
+            textInputAction: index == 2 || index == 9 || index == 12
+                ? TextInputAction.done
+                : TextInputAction.next,
           ),
         ),
         CustomSizeBox(22.h)
