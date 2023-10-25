@@ -1,12 +1,23 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/helper/text_field_widget.dart';
+import 'package:personal_injury_networking/ui/create_event/controller/create_event_controller.dart';
+import 'package:personal_injury_networking/ui/events_details/controller/event_details_controller.dart';
+import 'package:personal_injury_networking/ui/home/view/navigation_view.dart';
+import 'package:provider/provider.dart';
 
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../../global/utils/functions.dart';
+import '../models/address_model.dart';
+import 'event_location.dart';
 
 class AddEventView extends StatefulWidget {
   const AddEventView({super.key});
@@ -18,13 +29,26 @@ class AddEventView extends StatefulWidget {
 bool index1 = false;
 bool index2 = false;
 bool index3 = false;
-TextEditingController titleController = TextEditingController();
-TextEditingController locationController = TextEditingController();
-TextEditingController descriptionController = TextEditingController();
 
 class _AddEventViewState extends State<AddEventView> {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController _startTime = TextEditingController();
+  TextEditingController endTime = TextEditingController();
+  DateTime? selectedDate;
+  double latitude = 0.0;
+  double longitude = 0.0;
+  DateTime initialDate = DateTime.now();
+  DateTime? parseTime;
+  DateTime? endParseTime;
+  Uint8List? image1;
   @override
   Widget build(BuildContext context) {
+    String formattedDate = '';
+    if (selectedDate != null) {
+      formattedDate = DateFormat('dd MMM, yyyy').format(selectedDate!);
+    }
     return Scaffold(
         backgroundColor: AppColors.kPrimaryColor,
         appBar: AppBar(
@@ -80,143 +104,156 @@ class _AddEventViewState extends State<AddEventView> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        index1 = true;
-                                        index2 = false;
-                                        index3 = false;
-                                      });
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: index1 == false
-                                              ? Colors.white
-                                              : const Color(0xFF5669FF),
-                                          borderRadius:
-                                              BorderRadius.circular(15.sp)),
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 10.sp, horizontal: 12.sp),
-                                        child: Text(
-                                          'Today',
-                                          style: AppTextStyles.josefin(
-                                              style: TextStyle(
-                                                  color: index1 == false
-                                                      ? AppColors.kBlackColor
-                                                      : Colors.white,
-                                                  fontSize: 12.sp)),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        index1 = false;
-                                        index2 = true;
-                                        index3 = false;
-                                      });
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: index2 == false
-                                              ? Colors.white
-                                              : const Color(0xFF5669FF),
-                                          borderRadius:
-                                              BorderRadius.circular(15.sp)),
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 10.sp, horizontal: 12.sp),
-                                        child: Text(
-                                          'Tomorrow',
-                                          style: AppTextStyles.josefin(
-                                              style: TextStyle(
-                                                  color: index2 == false
-                                                      ? AppColors.kBlackColor
-                                                      : Colors.white,
-                                                  fontSize: 12.sp)),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        index1 = false;
-                                        index2 = false;
-                                        index3 = true;
-                                      });
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: index3 == false
-                                              ? Colors.white
-                                              : const Color(0xFF5669FF),
-                                          borderRadius:
-                                              BorderRadius.circular(15.sp)),
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 10.sp, horizontal: 12.sp),
-                                        child: Text(
-                                          'This week',
-                                          style: AppTextStyles.josefin(
-                                              style: TextStyle(
-                                                  color: index3 == false
-                                                      ? AppColors.kBlackColor
-                                                      : Colors.white,
-                                                  fontSize: 12.sp)),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(right: 50.w, top: 10.h),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius:
-                                          BorderRadius.circular(15.sp)),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 7.sp, horizontal: 12.sp),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Image(
-                                          height: 18.sp,
-                                          width: 18.sp,
-                                          image: const AssetImage(
-                                              'assets/images/calendar_create_event.png'),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8.w),
-                                          child: Text(
-                                            "Choose from calander",
-                                            style: AppTextStyles.josefin(
-                                                style: TextStyle(
-                                                    color:
-                                                        AppColors.kBlackColor,
-                                                    fontSize: 12.sp)),
+                              // Row(
+                              //   mainAxisAlignment:
+                              //       MainAxisAlignment.spaceBetween,
+                              //   children: [
+                              //     GestureDetector(
+                              //       onTap: () {
+                              //         setState(() {
+                              //           index1 = true;
+                              //           index2 = false;
+                              //           index3 = false;
+                              //         });
+                              //       },
+                              //       child: Container(
+                              //         decoration: BoxDecoration(
+                              //             color: index1 == false
+                              //                 ? Colors.white
+                              //                 : const Color(0xFF5669FF),
+                              //             borderRadius:
+                              //                 BorderRadius.circular(15.sp)),
+                              //         child: Padding(
+                              //           padding: EdgeInsets.symmetric(
+                              //               vertical: 10.sp, horizontal: 12.sp),
+                              //           child: Text(
+                              //             'Today',
+                              //             style: AppTextStyles.josefin(
+                              //                 style: TextStyle(
+                              //                     color: index1 == false
+                              //                         ? AppColors.kBlackColor
+                              //                         : Colors.white,
+                              //                     fontSize: 12.sp)),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //     GestureDetector(
+                              //       onTap: () {
+                              //         setState(() {
+                              //           index1 = false;
+                              //           index2 = true;
+                              //           index3 = false;
+                              //         });
+                              //       },
+                              //       child: Container(
+                              //         decoration: BoxDecoration(
+                              //             color: index2 == false
+                              //                 ? Colors.white
+                              //                 : const Color(0xFF5669FF),
+                              //             borderRadius:
+                              //                 BorderRadius.circular(15.sp)),
+                              //         child: Padding(
+                              //           padding: EdgeInsets.symmetric(
+                              //               vertical: 10.sp, horizontal: 12.sp),
+                              //           child: Text(
+                              //             'Tomorrow',
+                              //             style: AppTextStyles.josefin(
+                              //                 style: TextStyle(
+                              //                     color: index2 == false
+                              //                         ? AppColors.kBlackColor
+                              //                         : Colors.white,
+                              //                     fontSize: 12.sp)),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //     GestureDetector(
+                              //       onTap: () {
+                              //         setState(() {
+                              //           index1 = false;
+                              //           index2 = false;
+                              //           index3 = true;
+                              //         });
+                              //       },
+                              //       child: Container(
+                              //         decoration: BoxDecoration(
+                              //             color: index3 == false
+                              //                 ? Colors.white
+                              //                 : const Color(0xFF5669FF),
+                              //             borderRadius:
+                              //                 BorderRadius.circular(15.sp)),
+                              //         child: Padding(
+                              //           padding: EdgeInsets.symmetric(
+                              //               vertical: 10.sp, horizontal: 12.sp),
+                              //           child: Text(
+                              //             'This week',
+                              //             style: AppTextStyles.josefin(
+                              //                 style: TextStyle(
+                              //                     color: index3 == false
+                              //                         ? AppColors.kBlackColor
+                              //                         : Colors.white,
+                              //                     fontSize: 12.sp)),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              InkWell(
+                                onTap: () async {
+                                  DateTime? dt = await _selectDate(context);
+                                  if (dt != null) {
+                                    setState(() {
+                                      selectedDate = dt;
+                                    });
+                                  }
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 10.h),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(15.sp)),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 7.sp, horizontal: 12.sp),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        // crossAxisAlignment:
+                                        //     CrossAxisAlignment.center,
+                                        children: [
+                                          Image(
+                                            height: 18.sp,
+                                            width: 18.sp,
+                                            image: const AssetImage(
+                                                'assets/images/calendar_create_event.png'),
                                           ),
-                                        ),
-                                        Icon(
-                                          Icons.navigate_next,
-                                          color: AppColors.kPrimaryColor,
-                                          size: 22.sp,
-                                        )
-                                      ],
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10.w),
+                                              child: Text(
+                                                (formattedDate != "")
+                                                    ? formattedDate
+                                                    : "Choose from calender",
+                                                style: AppTextStyles.josefin(
+                                                    style: TextStyle(
+                                                        color: AppColors
+                                                            .kBlackColor,
+                                                        fontSize: 12.sp)),
+                                              ),
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.navigate_next,
+                                            color: AppColors.kPrimaryColor,
+                                            size: 22.sp,
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -224,14 +261,18 @@ class _AddEventViewState extends State<AddEventView> {
                             ],
                           ),
                         ),
+                        timeSlot(),
                         CustomSizeBox(20.h),
+                        Text(
+                          'Title',
+                          style: AppTextStyles.josefin(
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 14.sp)),
+                        ),
+                        CustomSizeBox(7.h),
                         textfield(titleController, 'Add title', false, 1,
                             Colors.white),
                         CustomSizeBox(20.h),
-                        TextFieldWidget(
-                            controller: locationController, index: 1,
-                            hintText: "select location", obsecureTerxt: false,
-                            identityText: "Location", readOnly: true),
                         Text(
                           'Location',
                           style: AppTextStyles.josefin(
@@ -239,7 +280,7 @@ class _AddEventViewState extends State<AddEventView> {
                                   color: Colors.white, fontSize: 14.sp)),
                         ),
                         CustomSizeBox(7.h),
-                        locationfield(),
+                        locationField(),
                         CustomSizeBox(20.h),
                         Text(
                           'Event Description',
@@ -256,38 +297,60 @@ class _AddEventViewState extends State<AddEventView> {
                             padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
                             child: textfield(
                                 descriptionController,
-                                'Write event discription here..',
+                                'Write event description here..',
                                 false,
                                 5,
                                 Colors.grey[400]!),
                           ),
                         ),
                         CustomSizeBox(15.h),
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10.sp)),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 20.h),
-                            child: Column(
-                              children: [
-                                Image(
-                                  height: 30.sp,
-                                  width: 30.sp,
-                                  image: const AssetImage(
-                                      'assets/images/add_banner_create_event.png'),
-                                ),
-                                CustomSizeBox(10.h),
-                                Text(
-                                  '+Add banner',
-                                  style: AppTextStyles.josefin(
-                                      style: TextStyle(
-                                          color: const Color(0xFF7E8CA0),
-                                          fontSize: 12.sp)),
-                                ),
-                              ],
-                            ),
+                        InkWell(
+                          onTap: () async {
+                            final ImagePicker _picker = ImagePicker();
+                            final XFile? pickedImage = await _picker.pickImage(
+                                source: ImageSource.gallery);
+                            if (pickedImage != null) {
+                              image1 = await pickedImage.readAsBytes();
+                              setState(() {});
+                            }
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            height: 200.h,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.sp)),
+                            child: (image1 != null)
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.sp),
+                                    child: Image(
+                                      image: MemoryImage(image1!),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 20.h),
+                                    child: Column(
+                                      children: [
+                                        Image(
+                                          height: 30.sp,
+                                          width: 30.sp,
+                                          image: const AssetImage(
+                                              'assets/images/add_banner_create_event.png'),
+                                        ),
+                                        CustomSizeBox(10.h),
+                                        Text(
+                                          '+Add banner',
+                                          style: AppTextStyles.josefin(
+                                              style: TextStyle(
+                                                  color:
+                                                      const Color(0xFF7E8CA0),
+                                                  fontSize: 12.sp)),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                           ),
                         ),
                       ],
@@ -302,7 +365,50 @@ class _AddEventViewState extends State<AddEventView> {
                 children: [
                   SizedBox(
                     width: 230.w,
-                    child: GetwhiteButton(50.sp, () {
+                    child: GetwhiteButton(50.sp, () async {
+                      if (formattedDate == '') {
+                        Functions.showSnackBar(
+                            context, "please select date of event");
+                        return;
+                      } else if (_startTime.text.isEmpty) {
+                        Functions.showSnackBar(
+                            context, "please select start time of event");
+                        return;
+                      } else if (endTime.text.isEmpty) {
+                        Functions.showSnackBar(
+                            context, "please select end time of event");
+                        return;
+                      } else if (titleController.text.isEmpty) {
+                        Functions.showSnackBar(
+                            context, "please add title of event");
+                        return;
+                      } else if (locationController.text.isEmpty) {
+                        Functions.showSnackBar(
+                            context, "please add location of event");
+                        return;
+                      } else if (descriptionController.text.isEmpty) {
+                        Functions.showSnackBar(
+                            context, "please add description of event");
+                        return;
+                      } else if (image1 == null) {
+                        Functions.showSnackBar(
+                            context, "please add image of event");
+                        return;
+                      }
+                      Functions.showLoaderDialog(context);
+                      String url = await Functions.uploadEventPic(image1!);
+                      await context.read<CreateEventController>().addEvent(
+                          endTime: endParseTime!,
+                          startTime: parseTime!,
+                          address: locationController.text,
+                          pImage: url,
+                          description: descriptionController.text,
+                          title: titleController.text,
+                          dateTime: selectedDate!,
+                          latitude: latitude,
+
+                          longitude: longitude);
+                      Navigator.pop(context);
                       eventCreated();
                     },
                         Text(
@@ -327,17 +433,23 @@ class _AddEventViewState extends State<AddEventView> {
   }
 
   Widget textfield(TextEditingController controller, String hintText,
-      bool readonly, int maxlines, Color color) {
+      bool readonly, int maxlines, Color color,
+      {void Function()? onTap,
+      Widget? suffix,
+      TextAlignVertical? textAlignVertical}) {
     return Container(
       decoration: BoxDecoration(
           color: color, borderRadius: BorderRadius.circular(10.sp)),
       child: TextFormField(
+        textAlignVertical: textAlignVertical,
+        onTap: onTap,
         readOnly: readonly,
         maxLines: maxlines,
         controller: controller,
         style: AppTextStyles.josefin(
             style: TextStyle(color: const Color(0xFF1F314A), fontSize: 18.sp)),
         decoration: InputDecoration(
+            suffixIcon: suffix,
             contentPadding: EdgeInsets.only(left: 10.w),
             border: InputBorder.none,
             hintText: hintText,
@@ -349,11 +461,26 @@ class _AddEventViewState extends State<AddEventView> {
     );
   }
 
-  Widget locationfield() {
+  Widget locationField() {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(10.sp)),
       child: TextFormField(
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(
+                  builder: (ctx) =>
+                      SelectLocation(primary: AppColors.kPrimaryColor)))
+              .then((value) {
+            if (value is AddressModel) {
+              locationController.text = value.address;
+              setState(() {
+                latitude = value.latitude;
+                longitude = value.longitude;
+              });
+            }
+          });
+        },
         readOnly: true,
         maxLines: 1,
         controller: locationController,
@@ -415,7 +542,7 @@ class _AddEventViewState extends State<AddEventView> {
                           'assets/images/no_history_orgnaizer_event.png')),
                   CustomSizeBox(28.h),
                   Text(
-                    'Event Name',
+                    titleController.text,
                     style: AppTextStyles.josefin(
                         style: TextStyle(
                             fontSize: 28.sp,
@@ -437,7 +564,14 @@ class _AddEventViewState extends State<AddEventView> {
                 padding: EdgeInsets.only(left: 30.w, right: 30.w, bottom: 25.h),
                 child: GetButton(
                   50.sp,
-                  () {},
+                  () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) =>
+                                BottomNavigationScreen(selectedIndex: 3)),
+                        (route) => false);
+                  },
                   Text(
                     'View Your Events',
                     style: AppTextStyles.josefin(
@@ -452,6 +586,65 @@ class _AddEventViewState extends State<AddEventView> {
           ),
         );
       },
+    );
+  }
+
+  Future<DateTime?> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        firstDate: DateTime(2000),
+        lastDate: DateTime(3000));
+    return picked;
+  }
+
+  Widget timeSlot() {
+    return Row(
+      children: [
+        Expanded(
+            child: textfield(_startTime, "From", true, 1, Colors.white,
+                suffix: const Icon(Icons.timer),
+                textAlignVertical: TextAlignVertical.center, onTap: () async {
+          TimeOfDay? pickedTime = await showTimePicker(
+            initialTime: TimeOfDay.now(),
+            context: context,
+          );
+          if (pickedTime != null) {
+            DateTime now = DateTime.now();
+            parseTime = DateTime(now.year, now.month, now.day, pickedTime.hour,
+                pickedTime.minute);
+            String formattedTime = DateFormat('hh:mm').format(parseTime!);
+            setState(() {
+              _startTime.text = formattedTime; //set the value of text field.
+            });
+          } else {
+            print("Time is not selected");
+          }
+        })),
+        const SizedBox(
+          width: 10,
+        ),
+        Expanded(
+            child: textfield(endTime, "To", true, 1, Colors.white,
+                suffix: const Icon(Icons.timer),
+                textAlignVertical: TextAlignVertical.center, onTap: () async {
+          TimeOfDay? pickedTime = await showTimePicker(
+            initialTime: TimeOfDay.now(),
+            context: context,
+          );
+          if (pickedTime != null) {
+            DateTime now = DateTime.now();
+            endParseTime = DateTime(now.year, now.month, now.day,
+                pickedTime.hour, pickedTime.minute);
+            String formattedTime = DateFormat('hh:mm').format(endParseTime!);
+            setState(() {
+              endTime.text = formattedTime; //set the value of text field.
+            });
+          } else {
+            print("Time is not selected");
+          }
+        })),
+      ],
     );
   }
 }

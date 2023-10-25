@@ -6,6 +6,7 @@ import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_geocoding/google_geocoding.dart' as gc;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:personal_injury_networking/global/utils/app_colors.dart';
 
 import '../../../global/utils/app_strings.dart';
 import '../../../global/utils/constants.dart';
@@ -135,6 +136,7 @@ class _SelectLocationState extends State<SelectLocation> {
             child: Padding(
               padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
               child: Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(12),color: Colors.white,),
                 margin: EdgeInsets.symmetric(
                     horizontal: width * 0.03, vertical: height * 0.01),
                 // decoration: Constants.shadowDecoration(),
@@ -172,7 +174,7 @@ class _SelectLocationState extends State<SelectLocation> {
               padding: EdgeInsets.symmetric(horizontal: width * 0.03),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: widget.primary,
+                  primary: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: height * 0.015),
                   shape: const StadiumBorder(),
                 ),
@@ -196,7 +198,7 @@ class _SelectLocationState extends State<SelectLocation> {
                 child: Text(
                   AppStrings.selectLocation,
                   style: const TextStyle(
-                    color: Colors.black,
+                    color: AppColors.kPrimaryColor,
                     fontFamily: "jr",
                     fontSize: 14,
                   ),
