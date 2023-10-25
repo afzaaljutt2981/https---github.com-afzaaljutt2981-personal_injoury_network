@@ -9,6 +9,7 @@ class UserModel{
   late String location;
   late String userName;
   late String id;
+  late String userType;
   UserModel({
     required this.location,
     required this.position,
@@ -18,6 +19,7 @@ class UserModel{
     required this.id,
     required this.userName,
     required this.phone,
+    required this.userType,
     required this.company,
     required this.website
 });
@@ -32,7 +34,7 @@ class UserModel{
         lastName: json['lastName'],
         phone: json['phone'],
         company: json['company'],
-        website: json['website']);
+        website: json['website'], userType: json['userType']);
   }
   Map<String,dynamic> toJson() {
   return {
@@ -44,6 +46,7 @@ class UserModel{
     "id": id,
     "website":website,
     "email": email,
+    "userType":userType,
     "userName":userName,
     "position":position
   };

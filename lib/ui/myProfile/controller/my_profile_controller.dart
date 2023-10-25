@@ -18,7 +18,8 @@ class MyProfileController extends ChangeNotifier {
         if (event.data() != null) {
           Map<String, dynamic> data = event.data() as Map<String, dynamic>;
           user = UserModel.fromJson(data);
-        }
+           }
+        notifyListeners();
       });
       // Navigator.pushAndRemoveUntil(context,
       //     MaterialPageRoute(builder: (_) => BottomNavigationScreen(selectedIndex: 0)), (route) => false);
@@ -26,5 +27,10 @@ class MyProfileController extends ChangeNotifier {
       // Navigator.pop(context);
       // Functions.showSnackBar(context, "something went wrong");
     }
+  }
+  becomeMarketer() async {
+    await ref.doc(user!.id).update({
+      "userType": "marketer"
+    });
   }
 }

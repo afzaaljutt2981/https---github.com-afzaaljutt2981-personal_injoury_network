@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
+import 'package:personal_injury_networking/global/helper/text_field_widget.dart';
 
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
@@ -227,6 +228,10 @@ class _AddEventViewState extends State<AddEventView> {
                         textfield(titleController, 'Add title', false, 1,
                             Colors.white),
                         CustomSizeBox(20.h),
+                        TextFieldWidget(
+                            controller: locationController, index: 1,
+                            hintText: "select location", obsecureTerxt: false,
+                            identityText: "Location", readOnly: true),
                         Text(
                           'Location',
                           style: AppTextStyles.josefin(

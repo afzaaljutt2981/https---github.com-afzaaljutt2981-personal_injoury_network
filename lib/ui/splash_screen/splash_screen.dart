@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(const Duration(seconds: 3)).then((value) async {
       if (FirebaseAuth.instance.currentUser != null) {
-       await Provider.of<AuthController>(context,listen: false).getUserData(context);
+       // await Provider.of<AuthController>(context,listen: false).getUserData(context);
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) =>
                 BottomNavigationScreen(selectedIndex: 0)));

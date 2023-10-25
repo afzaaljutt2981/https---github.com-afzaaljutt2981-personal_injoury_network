@@ -44,7 +44,7 @@ class AuthController extends ChangeNotifier {
             phone: int.parse(phone),
             company: companyName,
             userName: userName,
-            website: website);
+            website: website, userType: 'user');
         await doc.set(model.toJson());
         getUserData(context);
     }});
@@ -73,6 +73,8 @@ class AuthController extends ChangeNotifier {
         if (event.data() != null) {
           Map<String, dynamic> data = event.data() as Map<String, dynamic>;
           user = UserModel.fromJson(data);
+          print("user Data");
+          print(user?.email);
         }
       });
       Navigator.pushAndRemoveUntil(context,

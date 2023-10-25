@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:personal_injury_networking/ui/drawer/view/drawer_home.dart';
+import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
 import 'package:provider/provider.dart';
 import '../controller/drawer_controller.dart';
 
@@ -14,7 +15,7 @@ class CreateDrawerView extends StatefulWidget {
 class _CreateDrawerViewState extends State<CreateDrawerView> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<MyDrawerController>(
-        create: (_) => MyDrawerController(), child: const MyDrawerHome());
+    return ChangeNotifierProvider<MyProfileController>(
+        create: (_) => MyProfileController(), child: const MyDrawerHome());
   }
 }

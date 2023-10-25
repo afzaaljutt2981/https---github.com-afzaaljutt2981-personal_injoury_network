@@ -21,7 +21,6 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
   @override
   void initState() {
     super.initState();
-    user = Provider.of<MyProfileController>(context, listen: false).user;
     // user = context.watch<AuthController>().user;
     textFieldController[0].text = 'Fiverr LLC';
     textFieldController[1].text = 'Manager';
@@ -39,6 +38,7 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
       List.generate(6, (i) => TextEditingController(), growable: true);
   @override
   Widget build(BuildContext context) {
+    user = context.watch<MyProfileController>().user;
     return Scaffold(
         backgroundColor: const Color(0xFFf5f4ff),
         body: (user != null)
@@ -161,7 +161,7 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                 ),
                                 CustomSizeBox(4.h),
                                 Text(
-                                  'jonathansmith@gmail.com',
+                                  user!.email,
                                   style: AppTextStyles.josefin(
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400,
@@ -203,8 +203,7 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                               ),
                             ],
                           ),
-                          textField(
-                              'Enter Your Company', 0, textFieldController[0]),
+                          subText(user!.company),
                           CustomSizeBox(5.h),
                           Text(
                             'Job/Position',
@@ -214,8 +213,9 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                     color: const Color(0xFF1A1167),
                                     fontSize: 12.sp)),
                           ),
-                          textField(
-                              'Enter Your Job', 1, textFieldController[1]),
+                          subText(user!.position),
+                          // textField(
+                          //     'Enter Your Job', 1, textFieldController[1]),
                           CustomSizeBox(5.h),
                           Text(
                             'Website',
@@ -225,8 +225,9 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                     color: const Color(0xFF1A1167),
                                     fontSize: 12.sp)),
                           ),
-                          textField(
-                              'Enter Your Website', 2, textFieldController[2]),
+                          subText(user!.website),
+                          // textField(
+                          //     'Enter Your Website', 2, textFieldController[2]),
                           CustomSizeBox(5.h),
                           Text(
                             'Cellphone',
@@ -236,8 +237,9 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                     color: const Color(0xFF1A1167),
                                     fontSize: 12.sp)),
                           ),
-                          textField('Enter Your Phone No.', 3,
-                              textFieldController[3]),
+                          subText(user!.phone.toString()),
+                          // textField('Enter Your Phone No.', 3,
+                          //     textFieldController[3]),
                           CustomSizeBox(5.h),
                           Text(
                             'Location',
@@ -247,7 +249,8 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                     color: const Color(0xFF1A1167),
                                     fontSize: 12.sp)),
                           ),
-                          textField('Your Location', 4, textFieldController[4]),
+                          subText(user!.location),
+                          // textField('Your Location', 4, textFieldController[4]),
                           CustomSizeBox(5.h),
                           Text(
                             'Hobby/ Interests',
@@ -428,6 +431,12 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
           ),
         ),
       ),
+    );
+  }
+  Widget subText(String text){
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Text(text,style: TextStyle(color: Colors.deepPurple,fontSize: 11.sp),),
     );
   }
 }
