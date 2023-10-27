@@ -33,4 +33,25 @@ class MyProfileController extends ChangeNotifier {
       "userType": "marketer"
     });
   }
+  updateUser({
+    String? pImage,
+    required String userName,
+    required String company,
+    required String position,
+    required String cellPhone,
+    required String website,
+    required String location,
+}) async {
+    String docId = FirebaseAuth.instance.currentUser!.uid;
+    await ref.doc(docId).update({
+      "userName":userName,
+      "company":company,
+      "position":position,
+      "phone":int.parse(cellPhone),
+      "website":website,
+      "location":location,
+      if(pImage != null)
+      "pImage":pImage
+    });
+  }
 }

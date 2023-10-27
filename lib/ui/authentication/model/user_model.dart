@@ -5,6 +5,7 @@ class UserModel{
   late String position;
   late int phone;
   late String email;
+  String? pImage;
   late String website;
   late String location;
   late String userName;
@@ -17,6 +18,7 @@ class UserModel{
     required this.firstName,
     required this.lastName,
     required this.id,
+    this.pImage,
     required this.userName,
     required this.phone,
     required this.userType,
@@ -30,6 +32,7 @@ class UserModel{
         position: json['position'],
         email: json['email'],
         id : json['id'],
+        pImage: json['pImage'],
         firstName: json['firstName'],
         lastName: json['lastName'],
         phone: json['phone'],
@@ -42,6 +45,7 @@ class UserModel{
     "lastName":lastName,
     "company":company,
     "location":location,
+    "pImage":pImage,
     "phone":phone,
     "id": id,
     "website":website,

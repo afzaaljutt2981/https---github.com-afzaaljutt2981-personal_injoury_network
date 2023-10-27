@@ -11,12 +11,13 @@ import 'package:personal_injury_networking/ui/authentication/model/user_type.dar
 
 import '../../allParticipent/view/create_all_participants_view.dart';
 import '../../allParticipent/view/participants_view.dart';
+import '../../create_event/models/event_model.dart';
 import '../../otherUserProfile/view/other_user_view.dart';
 import 'events_qr_view.dart';
 
 class EventsDetailsView extends StatefulWidget {
-  const EventsDetailsView({super.key});
-
+   EventsDetailsView({super.key,required this.event});
+EventModel event;
   @override
   State<EventsDetailsView> createState() => _EventsDetailsViewState();
 }
@@ -99,17 +100,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10.sp),
                             ),
-                            child: userType == 'user'
-                                ? const Image(
-                                    image: AssetImage(
-                                        'assets/images/background_events.png'),
-                                    fit: BoxFit.contain,
-                                  )
-                                : const Image(
-                                    image: AssetImage(
-                                        'assets/images/background_events_admin.png'),
-                                    fit: BoxFit.contain,
-                                  ),
+                            child: Image(image: NetworkImage(widget.event.pImage),fit: BoxFit.cover,),
                           ),
                           Padding(
                             padding: EdgeInsets.only(
@@ -144,7 +135,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                   child: Padding(
                                     padding: EdgeInsets.only(right: 50.w),
                                     child: Text(
-                                      "The Creative Coffee Talks Pakistan  ",
+                                      widget.event.title,
                                       style: AppTextStyles.josefin(
                                           style: TextStyle(
                                               fontWeight: FontWeight.w700,
@@ -276,8 +267,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         ),
                       ),
                       Text(
-                        'Maecenas faucibus mollis interdum.  urna urna mollis ornare  mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo, lenean eli lacinia bibendum nulla sed consectetur quis risus eget urna urna mollis ornare vel eu..',
-                        style: AppTextStyles.josefin(
+                      widget.event.description,style: AppTextStyles.josefin(
                             style: TextStyle(
                                 color: AppColors.kBlackColor, fontSize: 12.sp)),
                       ),

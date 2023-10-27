@@ -14,12 +14,17 @@ class EventsController extends ChangeNotifier {
   List<EventModel> allEvents = [];
   getAllEvents(){
     allEvents = [];
-   var res =  ref.snapshots().listen((event) {
+    res =  ref.snapshots().listen((event) {
       event.docs.forEach((element) {
         allEvents.add(EventModel.fromJson(element.data() as Map<String,dynamic>));
         notifyListeners();
       });
-      notifyListeners();
     });
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    res?.cancel();
   }
 }
