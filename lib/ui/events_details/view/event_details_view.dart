@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
@@ -26,6 +27,16 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   bool registerFee = false;
   @override
   Widget build(BuildContext context) {
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime);
+    DateTime startTime = DateTime.fromMillisecondsSinceEpoch(widget.event.startTime);
+    DateTime endTime = DateTime.fromMillisecondsSinceEpoch(widget.event.endTime);
+    Duration difference = endTime.difference(startTime);
+    int hours = difference.inHours;
+    int minutes = difference.inMinutes.remainder(60);
+    String formattedDiff = "${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}";
+    String startFormat = DateFormat("HH:MM a").format(startTime);
+    String endFormat = DateFormat("HH:MM a").format(endTime);
+    String formattedDate = DateFormat('d MMM, y').format(dateTime);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -305,10 +316,10 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                               children: [
                                 eventDetails(
                                     'assets/images/calender_red_event.png',
-                                    "Jan 09, 2021"),
+                                    formattedDate),
                                 CustomSizeBox(13.h),
                                 eventDetails('assets/images/time_event.png',
-                                    "11:30 am - 12.15 pm"),
+                                    "$startFormat - $endFormat"),
                               ],
                             ),
                             Column(
@@ -318,7 +329,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                     "Virtual Event"),
                                 CustomSizeBox(13.h),
                                 eventDetails('assets/images/time_event.png',
-                                    "4 Hours Duration")
+                                    "$formattedDiff Hours")
                               ],
                             )
                           ],

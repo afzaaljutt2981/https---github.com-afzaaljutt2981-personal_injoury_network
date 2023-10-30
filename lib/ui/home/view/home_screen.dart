@@ -441,15 +441,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         width: 7.w,
                       ),
-                      Text(
-                        event.address,
-                        style: AppTextStyles.josefin(
-                            style: TextStyle(
-                                color: const Color(
-                                    0xFF585DF9),
-                                fontSize: 12.sp,
-                                fontWeight:
-                                FontWeight.w500)),
+                      Expanded(
+                        child: Text(
+                          event.address,
+                          style: AppTextStyles.josefin(
+                              style: TextStyle(
+                                  color: const Color(
+                                      0xFF585DF9),
+                                  fontSize: 12.sp,
+                                  fontWeight:
+                                  FontWeight.w500)),
+                        ),
                       ),
                     ],
                   ),

@@ -40,7 +40,7 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
   bool readOnlyTextFields = true;
   bool imageEditAble = false;
   final textFieldController =
-      List.generate(6, (i) => TextEditingController(), growable: true);
+      List.generate(7, (i) => TextEditingController(), growable: true);
   @override
   Widget build(BuildContext context) {
     user = context.watch<MyProfileController>().user;
@@ -50,6 +50,7 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
     textFieldController[2].text = user!.website;
     textFieldController[3].text = user!.phone.toString();
     textFieldController[4].text = user!.location;
+    textFieldController[5].text = user!.userName;
     }
     return Scaffold(
         backgroundColor: const Color(0xFFf5f4ff),
@@ -103,18 +104,14 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                         : null;
                                   },
                                   child: (image1 != null)
-                                      ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.sp),
-                                    child: Image(
-                                      height: 90.sp,
-                                      width: 90.sp,
-                                      image: MemoryImage(image1!),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ):Image(
-                                    height: 90.sp,
-                                    width: 90.sp,
-                                    image: const AssetImage(
+                                      ? CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage: MemoryImage(image1!),):(user!.pImage != null)?CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage: NetworkImage(user!.pImage!,),
+                                  ):const CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage:AssetImage(
                                         'assets/images/profile_pic.png'),
                                   ),
                                 ),
@@ -199,7 +196,7 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                               Padding(
                                 padding: EdgeInsets.only(top: 10.h),
                                 child: Text(
-                                  'Company',
+                                  'User Name',
                                   style: AppTextStyles.josefin(
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
@@ -223,6 +220,15 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                 ),
                               ),
                             ],
+                          ),
+                          textField("user name", 5, textFieldController[5]),
+                          Text(
+                            'Company',
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFF1A1167),
+                                    fontSize: 12.sp)),
                           ),
                           textField("company", 0, textFieldController[0]),
                           Text(
@@ -278,32 +284,38 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                     color: const Color(0xFF1A1167),
                                     fontSize: 12.sp)),
                           ),
-                          textField('Your Hobbies', 5, textFieldController[5]),
+                          textField('Your Hobbies', 6, textFieldController[6]),
                           Padding(
                             padding: EdgeInsets.only(
                                 left: 25.w, right: 25.w, bottom: 20.w),
                             child: GetButton(50.h, () async {
-                              Functions.showLoaderDialog(context);
-                              String? url;
-                              if(image1 != null){
-                                url = await Functions.uploadPic(image1!,"users");
-                              }
-                              await context.read<MyProfileController>().updateUser(
-                                  userName: "user Name",
-                                  company: textFieldController[0].text,
-                                  position: textFieldController[1].text,
-                                  cellPhone: textFieldController[3].text,
-                                  website: textFieldController[2].text,
-                                  location: textFieldController[4].text,
-                                 pImage: url
-                              );
-                              Navigator.pop(context);
-                              Functions.showSnackBar(context, "user profile updated successfully");
-                              setState(() {
-                                readOnlyTextFields = !readOnlyTextFields;
-                                imageEditAble = !imageEditAble;
-                              });
-                            },
+                              if(!readOnlyTextFields || imageEditAble) {
+                                Functions.showLoaderDialog(context);
+                                String? url;
+                                if (image1 != null) {
+                                  url =
+                                  await Functions.uploadPic(image1!, "users");
+                                }
+                                await context.read<MyProfileController>()
+                                    .updateUser(
+                                    userName: textFieldController[5].text,
+                                    company: textFieldController[0].text,
+                                    position: textFieldController[1].text,
+                                    cellPhone: textFieldController[3].text,
+                                    website: textFieldController[2].text,
+                                    location: textFieldController[4].text,
+                                    pImage: url
+                                );
+                                Navigator.pop(context);
+                                Functions.showSnackBar(context,
+                                    "user profile updated successfully");
+                                setState(() {
+                                  readOnlyTextFields = !readOnlyTextFields;
+                                  imageEditAble = !imageEditAble;
+                                });
+                              }else{
+                                Functions.showSnackBar(context, "please edit profile");
+                              }},
                                 Text(
                                   'Save',
                                   style: AppTextStyles.josefin(
@@ -450,7 +462,7 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.sp), color: Colors.white),
       child: TextFormField(
-        maxLines: index == 5 ? 4 : 1,
+        maxLines: index == 6 ? 4 : 1,
         readOnly: (readOnlyTextFields)?true:false,
         textInputAction:
             index == 5 ? TextInputAction.done : TextInputAction.next,
