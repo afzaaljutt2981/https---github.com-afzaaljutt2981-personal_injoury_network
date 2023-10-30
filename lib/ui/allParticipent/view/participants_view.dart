@@ -124,17 +124,17 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              PageTransition(
-                                childCurrent: widget,
-                                type: PageTransitionType.rightToLeft,
-                                duration: const Duration(milliseconds: 200),
-                                reverseDuration:
-                                    const Duration(milliseconds: 200),
-                                child: const CreateOtherUserProfileView(),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   PageTransition(
+                            //     childCurrent: widget,
+                            //     type: PageTransitionType.rightToLeft,
+                            //     duration: const Duration(milliseconds: 200),
+                            //     reverseDuration:
+                            //         const Duration(milliseconds: 200),
+                            //     child: const CreateOtherUserProfileView(),
+                            //   ),
+                            // );
                           },
                           child: Column(
                             children: [

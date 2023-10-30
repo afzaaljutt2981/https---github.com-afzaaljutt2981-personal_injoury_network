@@ -15,6 +15,6 @@ class _CreateEventDetailsViewState extends State<CreateEventDetailsView> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<EventDetailsController>(
-        create: (_) => EventDetailsController(), child: EventsDetailsView(event: widget.event,));
+        create: (_) => EventDetailsController(widget.event.id), child: EventsDetailsView(event: widget.event,));
   }
 }

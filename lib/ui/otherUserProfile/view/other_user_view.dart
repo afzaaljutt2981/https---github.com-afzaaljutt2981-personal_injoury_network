@@ -3,14 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
+import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/view/about_view.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/view/events_view.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/view/reviews_view.dart';
 import '../../../global/utils/app_text_styles.dart';
 
 class OtherUserProfileScreen extends StatefulWidget {
-  const OtherUserProfileScreen({super.key});
-
+   OtherUserProfileScreen({super.key,required this.user});
+UserModel user;
   @override
   State<OtherUserProfileScreen> createState() => _OtherUserProfileScreenState();
 }
@@ -47,15 +48,20 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
       body: Column(
         children: [
           CustomSizeBox(10.h),
+          if(widget.user.pImage == null)...[
           Center(
               child: Image(
             height: 90.sp,
             width: 90.sp,
             image: const AssetImage('assets/images/profile_pic.png'),
-          )),
+          ))]else...[
+            CircleAvatar(
+              radius: 20,
+              backgroundImage: NetworkImage(widget.user.pImage!),)
+          ],
           CustomSizeBox(20.h),
           Text(
-            "David  Silbia",
+            widget.user.userName,
             style: AppTextStyles.josefin(
                 style: TextStyle(
                     color: Colors.black,
