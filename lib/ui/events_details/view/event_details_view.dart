@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +9,12 @@ import 'package:personal_injury_networking/global/app_buttons/app_primary_button
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
+import 'package:personal_injury_networking/global/utils/constants.dart';
+import 'package:personal_injury_networking/global/utils/functions.dart';
+import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
+import 'package:personal_injury_networking/ui/events_details/controller/event_details_controller.dart';
+import 'package:provider/provider.dart';
 
 import '../../allParticipent/view/create_all_participants_view.dart';
 import '../../allParticipent/view/participants_view.dart';
@@ -22,7 +28,7 @@ EventModel event;
   @override
   State<EventsDetailsView> createState() => _EventsDetailsViewState();
 }
-
+CollectionReference ref = FirebaseFirestore.instance.collection("users");
 class _EventsDetailsViewState extends State<EventsDetailsView> {
   bool registerFee = false;
   @override
@@ -37,6 +43,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
     String startFormat = DateFormat("HH:MM a").format(startTime);
     String endFormat = DateFormat("HH:MM a").format(endTime);
     String formattedDate = DateFormat('d MMM, y').format(dateTime);
+    print(Constants.userType);
+    print("user type");
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -66,8 +74,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
           ),
           actions: [
             Padding(
-              padding: EdgeInsets.only(right: userType == 'user' ? 60.w : 30.w),
-              child: userType == 'user'
+              padding: EdgeInsets.only(right: Constants.userType == 'user' ? 60.w : 30.w),
+              child: Constants.userType == 'user'
                   ? Container()
                   : GestureDetector(
                       onTap: () {
@@ -111,7 +119,17 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10.sp),
                             ),
-                            child: Image(image: NetworkImage(widget.event.pImage),fit: BoxFit.cover,),
+                            child: Constants.userType == 'user'
+                                ? const Image(
+                              image: AssetImage(
+                                  'assets/images/background_events.png'),
+                              fit: BoxFit.contain,
+                            )
+                                : const Image(
+                              image: AssetImage(
+                                  'assets/images/background_events_admin.png'),
+                              fit: BoxFit.contain,
+                            ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(
@@ -130,7 +148,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                     Padding(
                                       padding: EdgeInsets.only(
                                           left: 50.w,
-                                          top: userType == 'user' ? 15.h : 25.h,
+                                          top: Constants.userType == 'user' ? 15.h : 25.h,
                                           bottom: 15.h),
                                       child: Image(
                                         height: 34.sp,
@@ -146,7 +164,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                   child: Padding(
                                     padding: EdgeInsets.only(right: 50.w),
                                     child: Text(
-                                      widget.event.title,
+                                        "The Creative Coffee Talks Club",
                                       style: AppTextStyles.josefin(
                                           style: TextStyle(
                                               fontWeight: FontWeight.w700,
@@ -155,84 +173,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                     ),
                                   ),
                                 ),
-                                userType == 'user'
-                                    ? Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Row(
-                                          children: [
-                                            Image(
-                                              height: 35.sp,
-                                              width: 35.sp,
-                                              image: const AssetImage(
-                                                  'assets/images/profile_pic.png'),
-                                            ),
-                                            SizedBox(
-                                              width: 15.w,
-                                            ),
-                                            Expanded(
-                                                child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "John Smith ",
-                                                  style: AppTextStyles.josefin(
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: Colors.white,
-                                                          fontSize: 13.sp)),
-                                                ),
-                                                CustomSizeBox(5.h),
-                                                Text(
-                                                  "Organizer ",
-                                                  style: AppTextStyles.josefin(
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color: const Color(
-                                                              0xFF706E8F),
-                                                          fontSize: 10.sp)),
-                                                ),
-                                              ],
-                                            )),
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(right: 30.w),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.sp),
-                                                    color: //Colors.purple.shade400
-
-                                                        const Color(0xFF3C4784)
-                                                            .withOpacity(
-                                                                0.818)),
-                                                child: Padding(
-                                                  padding:
-                                                      EdgeInsets.all(10.sp),
-                                                  child: Center(
-                                                    child: Text(
-                                                      "Follow",
-                                                      style:
-                                                          AppTextStyles.josefin(
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                      11.sp)),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      )
+                                Constants.userType == 'user'
+                                    ? marketerInfo()
                                     : const SizedBox()
                               ],
                             ),
@@ -473,13 +415,20 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                 ),
               ),
             ),
-            userType == 'user'
+            Constants.userType == 'user'
                 ? Padding(
                     padding:
                         EdgeInsets.only(left: 40.w, right: 40.w, bottom: 20.h),
                     child: GetButton(
                         50.sp,
-                        () {},
+                        () async {
+                          Functions.showLoaderDialog(context);
+                          await context.read<EventDetailsController>().addEventTicket(widget.event.id);
+                          await context.read<EventDetailsController>().addUserTicket(widget.event.id);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Functions.showSnackBar(context, "Event register successfully");
+                          },
                         Text(
                           "Register",
                           style: AppTextStyles.josefin(
@@ -816,6 +765,102 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
           );
         });
       },
+    );
+  }
+  Widget marketerInfo(){
+    return StreamBuilder(
+    stream: ref.doc(widget.event.uId).snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+      if(snapshot.hasData){
+        UserModel user = UserModel.fromJson(snapshot.data.data());
+      return Align(
+        alignment: Alignment.bottomLeft,
+        child: Row(
+          children: [
+            if(user.pImage != null)...[
+            CircleAvatar(
+              radius: 18,
+              backgroundImage:  NetworkImage(user.pImage!),
+            )]else...[
+            Image(
+              height: 35.sp,
+              width: 35.sp,
+              image: const AssetImage(
+                  'assets/images/profile_pic.png'),
+            )],
+            SizedBox(
+              width: 15.w,
+            ),
+            Expanded(
+                child: Column(
+                  crossAxisAlignment:
+                  CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "John Smith ",
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              fontWeight:
+                              FontWeight.w600,
+                              color: Colors.white,
+                              fontSize: 13.sp)),
+                    ),
+                    CustomSizeBox(5.h),
+                    Text(
+                      "Organizer ",
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              fontWeight:
+                              FontWeight.w400,
+                              color: const Color(
+                                  0xFF706E8F),
+                              fontSize: 10.sp)),
+                    ),
+                  ],
+                )),
+            Padding(
+              padding:
+              EdgeInsets.only(right: 30.w),
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius:
+                    BorderRadius.circular(
+                        10.sp),
+                    color: //Colors.purple.shade400
+
+                    const Color(0xFF3C4784)
+                        .withOpacity(
+                        0.818)),
+                child: Padding(
+                  padding:
+                  EdgeInsets.all(10.sp),
+                  child: Center(
+                    child: Text(
+                      "Follow",
+                      style:
+                      AppTextStyles.josefin(
+                          style: TextStyle(
+                              fontWeight:
+                              FontWeight
+                                  .w600,
+                              color: Colors
+                                  .white,
+                              fontSize:
+                              11.sp)),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      );}
+    else{
+      return const Align(
+          alignment: Alignment.bottomLeft,
+          child: CircularProgressIndicator());
+      }
+    }
     );
   }
 }
