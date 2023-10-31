@@ -87,4 +87,12 @@ class AuthController extends ChangeNotifier {
       Functions.showSnackBar(context, "something went wrong");
     }
   }
+
+
+bool saveChagesButton = false;
+  setSaveChangesButtonStatus(bool value) {
+    saveChagesButton = value;
+    notifyListeners();
+  }
+
 }

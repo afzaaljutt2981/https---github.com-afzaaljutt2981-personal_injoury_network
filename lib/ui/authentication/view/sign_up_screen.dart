@@ -1,6 +1,16 @@
+import 'package:country_state_city/utils/city_utils.dart';
+import 'package:country_state_city/utils/country_utils.dart';
+import 'package:country_state_city/utils/state_utils.dart';
+import 'package:country_state_picker/components/index.dart';
+import 'package:country_state_picker/country_state_picker.dart';
+import 'package:csc_picker/csc_picker.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
@@ -9,9 +19,11 @@ import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:provider/provider.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../../global/utils/custom_snackbar.dart';
 import '../../create_event/models/address_model.dart';
 import '../../create_event/view/event_location.dart';
 import '../../home/view/navigation_view.dart';
+import '../model/job_position_model.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -21,6 +33,31 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  get shortestSide => MediaQuery.of(context).size.shortestSide;
+  loadUserPositions() {
+    JobPositionModel.dropdownItems = [];
+    for (int i = 0; i < JobPositionModel.jobList.length; i++) {
+      JobPositionModel.dropdownItems.add(PopupMenuItem<String>(
+          value: JobPositionModel.jobList[i],
+          child: Text(
+            JobPositionModel.jobList[i],
+            style: AppTextStyles.josefin(
+              style: TextStyle(
+                  color: const Color(0xFF000000),
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400),
+            ),
+          )));
+    }
+  }
+
+  @override
+  void initState() {
+    loadUserPositions();
+    //getLoadData();
+    super.initState();
+  }
+
   final textFieldController =
       List.generate(13, (i) => TextEditingController(), growable: true);
   int index = 1;
@@ -29,8 +66,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool hideConfirmPassword = true;
   double latitude = 0.0;
   double longitude = 0.0;
+  var liveLocation;
+  var first, second, third;
   @override
   Widget build(BuildContext context) {
+    bool saveChagesButton = context.watch<AuthController>().saveChagesButton;
     return Scaffold(
       backgroundColor: AppColors.kPrimaryColor,
       body: Padding(
@@ -118,25 +158,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   50.sp,
                   () async {
                     if (index == 1) {
-                      if (textFieldController[0].text.isEmpty) {
-                        Functions.showSnackBar(
-                            context, "please enter first name");
-                        return;
-                      } else if (textFieldController[1].text.isEmpty) {
-                        Functions.showSnackBar(
-                            context, "please enter last name");
-                        return;
-                      } else if (textFieldController[2].text.isEmpty) {
-                        Functions.showSnackBar(
-                            context, "please enter company name");
-                        return;
-                      }
-                      // else if (textFieldController[3].text.isEmpty) {
-                      //   Functions.showSnackBar(
-                      //       context, "please enter position or job");
-                      //   return;
-                      // }
-                      else {
+                      if (textFieldController[0].text.isEmpty ||
+                          textFieldController[1].text.isEmpty ||
+                          textFieldController[2].text.isEmpty ||
+                          textFieldController[3].text.isEmpty) {
+                        CustomSnackBar(false)
+                            .showInSnackBar('Some fields are empty!', context);
+                      } else {
                         setState(() {
                           index = index + 1;
                           controller.nextPage(
@@ -146,23 +174,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         });
                       }
                     } else if (index == 2) {
-                      if (textFieldController[4].text.isEmpty) {
-                        Functions.showSnackBar(
-                            context, "please enter phone number");
-                        return;
-                      } else if (textFieldController[5].text.isEmpty ||
-                          !(EmailValidator.validate(
-                              textFieldController[5].text))) {
-                        Functions.showSnackBar(
-                            context, "please enter valid email");
-                      } else if (textFieldController[7].text.isEmpty) {
-                        Functions.showSnackBar(
-                            context, "please enter location");
-                        return;
-                      } else if (textFieldController[9].text.isEmpty) {
-                        Functions.showSnackBar(
-                            context, "please enter your reference");
-                        return;
+                      if (textFieldController[4].text.isEmpty ||
+                          textFieldController[5].text.isEmpty ||
+                          textFieldController[7].text.isEmpty ||
+                          textFieldController[9].text.isEmpty) {
+                        CustomSnackBar(false)
+                            .showInSnackBar('Some fields are empty!', context);
                       } else {
                         setState(() {
                           index = index + 1;
@@ -174,21 +191,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       }
                     }
                     if (index == 3) {
-                      if (textFieldController[10].text.isEmpty) {
-                        Functions.showSnackBar(
-                            context, "please enter user name");
-                        return;
-                      } else if (textFieldController[11].text.isEmpty) {
-                        Functions.showSnackBar(
-                            context, "please enter password");
-                        return;
-                      } else if (textFieldController[12].text.isEmpty ||
-                          (textFieldController[11].text !=
-                              textFieldController[12].text)) {
-                        Functions.showSnackBar(context,
-                            "password and confirm password should be same");
-                        return;
+                      if (textFieldController[10].text.isEmpty ||
+                          textFieldController[11].text.isEmpty ||
+                          textFieldController[12].text.isEmpty) {
+                        CustomSnackBar(false)
+                            .showInSnackBar('Some fields are empty!', context);
+                      } else if (textFieldController[11].text.length < 6) {
+                        CustomSnackBar(false).showInSnackBar(
+                            'Password is too short! must be greter than 6 digits',
+                            context);
+                      } else if (textFieldController[11].text !=
+                          textFieldController[12].text) {
+                        CustomSnackBar(false).showInSnackBar(
+                            'Both passwords are not same!', context);
                       } else {
+                        context
+                            .read<AuthController>()
+                            .setSaveChangesButtonStatus(true);
                         context.read<AuthController>().signup(context,
                             firstName: textFieldController[0].text,
                             lastName: textFieldController[1].text,
@@ -200,8 +219,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             location: textFieldController[7].text,
                             password: textFieldController[8].text,
                             hobbies: textFieldController[9].text,
-                            userName: textFieldController[10].text
-                        );
+                            userName: textFieldController[10].text);
                         Navigator.push(
                           context,
                           PageTransition(
@@ -219,7 +237,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                   },
                   Text(
-                    index < 3 ? "Next" : "Save",
+                    saveChagesButton == false && index < 3 ? "Next" : "Save",
                     style: AppTextStyles.josefin(
                       style: TextStyle(
                         color: AppColors.kPrimaryColor,
@@ -271,28 +289,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             CustomSizeBox(20.h),
                           ],
                         ),
-                        // child: Text.rich(
-                        //   TextSpan(
-                        //     children: [
-                        //       TextSpan(
-                        //         text: 'By click Save you are agree with \nour',
-                        // style: AppTextStyles.josefin(
-                        //     style: TextStyle(
-                        //         color: Colors.white,
-                        //         fontWeight: FontWeight.w400,
-                        //         fontSize: 10.sp)),
-                        //       ),
-                        //       TextSpan(
-                        //           text: ' Terms and Condition',
-
-                        //           style: AppTextStyles.josefin(
-                        // style: TextStyle(
-                        //     color: const Color(0xFFF63636),
-                        //     fontWeight: FontWeight.w700,
-                        //     fontSize: 10.sp))),
-                        //     ],
-                        //   ),
-                        // ),
                       ),
                     )
                   : const SizedBox(),
@@ -407,10 +403,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  String countryValue = "";
+  String stateValue = "";
+  String cityValue = "";
+  String address = "";
+
   Widget process2() {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           textField('Cell Phone', '+1 356 786 7865', 4, textFieldController[4],
               false, false,
@@ -419,7 +421,80 @@ class _SignUpScreenState extends State<SignUpScreen> {
               false),
           textField('Website (Optional)', 'Enter Website name', 6,
               textFieldController[6], false, false),
-          locationField(),
+          Text(
+            'Location',
+            style: AppTextStyles.josefin(
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w500)),
+          ),
+          CustomSizeBox(5.h),
+          CSCPicker(
+            showStates: true,
+            flagState: CountryFlag.DISABLE,
+            dropdownDecoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10.sp)),
+                color: Colors.white,
+                border: Border.all(color: Colors.grey.shade300, width: 1)),
+            disabledDropdownDecoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10.sp)),
+                color: Colors.grey.shade300,
+                border: Border.all(color: Colors.grey.shade300, width: 1)),
+
+            ///placeholders for dropdown search field
+            countrySearchPlaceholder: "Country",
+            stateSearchPlaceholder: "State",
+
+            ///labels for dropdown
+            // countryDropdownLabel: "Country",
+            // stateDropdownLabel: "State",
+
+            selectedItemStyle: TextStyle(
+              color: Colors.black,
+              fontSize: 12.sp,
+            ),
+
+            ///DropdownDialog Heading style [OPTIONAL PARAMETER]
+            dropdownHeadingStyle: TextStyle(
+                color: Colors.black,
+                fontSize: 12.sp,
+                fontWeight: FontWeight.bold),
+
+            ///DropdownDialog Item style [OPTIONAL PARAMETER]
+            dropdownItemStyle: TextStyle(
+              color: Colors.black,
+              fontSize: 12.sp,
+            ),
+
+            ///Dialog box radius [OPTIONAL PARAMETER]
+            dropdownDialogRadius: 10.0,
+
+            ///Search bar radius [OPTIONAL PARAMETER]
+            searchBarRadius: 10.0,
+
+            ///triggers once country selected in dropdown
+            onCountryChanged: (value) {
+              print(value.toString());
+              print("cccc" + countryValue.toString());
+
+              setState(() {
+                countryValue = value;
+                //  countryDropdownLabel = value;
+              });
+            },
+
+            ///triggers once state selected in dropdown
+            onStateChanged: (value) {
+              if (value != null) {
+                setState(() {
+                  stateValue = value;
+                });
+              }
+            },
+          ),
+          // locationField(),
+          CustomSizeBox(22.h),
           textField('Hobbies/Interests (Optional)', 'Click here to enter', 8,
               textFieldController[8], false, false),
           textField('What brings you here?', 'Connecting people?', 9,
@@ -428,81 +503,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ],
       ),
     );
-    // return Column(
-    //   children: [
-    //     CustomSizeBox(10.h),
-    //     Container(
-    //       decoration: BoxDecoration(
-    //         borderRadius: BorderRadius.circular(15.sp),
-    //         color: Colors.white,
-    //       ),
-    //       child: Column(
-    //         children: [
-    //           AuthTextFieldClass(
-    //             controller: textFieldController[4],
-    //             hintText: 'Cellphone',
-    //             last: 0,
-    //             maxLines: 1,
-    //           ),
-    //           AuthTextFieldClass(
-    //             controller: textFieldController[5],
-    //             hintText: 'Email',
-    //             last: 0,
-    //             maxLines: 1,
-    //           ),
-    //           AuthTextFieldClass(
-    //             controller: textFieldController[6],
-    //             hintText: 'Location',
-    //             last: 0,
-    //             maxLines: 1,
-    //           ),
-    //           Padding(
-    //             padding: EdgeInsets.only(
-    //               top: 13.h,
-    //               left: 15.w,
-    //               bottom: 3.h,
-    //               right: 15.w,
-    //             ),
-    //             child: Column(
-    //               children: [
-    //                 Text(
-    //                   'Describe what you look for in Networking events:',
-    //                   style: AppTextStyles.josefin(
-    //                     style: TextStyle(
-    //                       color: const Color(0xFF1F314A).withOpacity(0.40),
-    //                       fontSize: 11.sp,
-    //                     ),
-    //                   ),
-    //                 ),
-    //                 Container(
-    //                   height: 80.h,
-    //                   decoration: BoxDecoration(
-    //                     color: const Color(0xFFD9D9D9).withOpacity(0.35),
-    //                     borderRadius: BorderRadius.circular(10.sp),
-    //                   ),
-    //                   child: AuthTextFieldClass(
-    //                     controller: textFieldController[7],
-    //                     hintText: ' ',
-    //                     last: 0,
-    //                     maxLines: 4,
-    //                   ),
-    //                 ),
-    //                 CustomSizeBox(10.h)
-    //               ],
-    //             ),
-    //           ),
-    //           AuthTextFieldClass(
-    //             controller: textFieldController[8],
-    //             hintText: 'Hobbies/ Interests',
-    //             last: 0,
-    //             maxLines: 1,
-    //           ),
-    //           CustomSizeBox(20.h)
-    //         ],
-    //       ),
-    //     )
-    //   ],
-    // );
   }
 
   Widget process3() {
@@ -520,40 +520,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ],
       ),
     );
-    // return Column(
-    //   children: [
-    //     CustomSizeBox(10.h),
-    //     Container(
-    //       decoration: BoxDecoration(
-    //         borderRadius: BorderRadius.circular(15.sp),
-    //         color: Colors.white,
-    //       ),
-    //       child: Column(
-    //         children: [
-    //           AuthTextFieldClass(
-    //             controller: textFieldController[9],
-    //             hintText: 'Username',
-    //             last: 0,
-    //             maxLines: 1,
-    //           ),
-    //           AuthTextFieldClass(
-    //             controller: textFieldController[10],
-    //             hintText: 'Password',
-    //             last: 0,
-    //             maxLines: 1,
-    //           ),
-    //           AuthTextFieldClass(
-    //             controller: textFieldController[11],
-    //             hintText: 'Confirm Password',
-    //             last: 0,
-    //             maxLines: 1,
-    //           ),
-    //           CustomSizeBox(20.h),
-    //         ],
-    //       ),
-    //     )
-    //   ],
-    // );
   }
 
   Widget textField(String identityText, String hintText, int index,
@@ -585,10 +551,62 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   fontSize: 17.sp,
                   fontWeight: FontWeight.w400),
             ),
+            onTap: () {
+              if (index == 3) {
+                showMenu(
+                  context: context,
+                  position: RelativeRect.fromLTRB(
+                      shortestSide > 600 ? 100 : 50.w,
+                      shortestSide > 600 ? 0 : 100,
+                      shortestSide > 600 ? 100 : 10.w,
+                      shortestSide > 600 ? 100 : 100),
+                  items: [...JobPositionModel.dropdownItems],
+                ).then((value) {
+                  if (value != null) {
+                    textFieldController[3].text = value.toString().substring(2);
+
+                    for (int i = 0; i < JobPositionModel.jobList.length; i++) {
+                      if (value
+                          .toString()
+                          .contains(JobPositionModel.jobList[i])) {
+                        JobPositionModel.selectedJob =
+                            JobPositionModel.jobList[i].substring(2);
+                      }
+                    }
+                  }
+                });
+              }
+            },
             decoration: InputDecoration(
               suffixIcon: index == 3
                   ? GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        showMenu(
+                          context: context,
+                          position: RelativeRect.fromLTRB(
+                              shortestSide > 600 ? 100 : 50.w,
+                              shortestSide > 600 ? 0 : 100,
+                              shortestSide > 600 ? 100 : 10.w,
+                              shortestSide > 600 ? 100 : 100),
+                          items: [...JobPositionModel.dropdownItems],
+                        ).then((value) {
+                          if (value != null) {
+                            textFieldController[3].text =
+                                value.toString().substring(2);
+
+                            for (int i = 0;
+                                i < JobPositionModel.jobList.length;
+                                i++) {
+                              if (value
+                                  .toString()
+                                  .contains(JobPositionModel.jobList[i])) {
+                                JobPositionModel.selectedJob =
+                                    JobPositionModel.jobList[i].substring(2);
+                              }
+                            }
+                          }
+                        });
+                      },
                       child: Padding(
                         padding: EdgeInsets.all(14.sp),
                         child: Image(
@@ -652,55 +670,157 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ],
     );
   }
+
+  String? state;
+  String? country;
   Widget locationField() {
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(10.sp)),
-      child: TextFormField(
-        onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(
-              builder: (ctx) =>
-                  SelectLocation(primary: AppColors.kPrimaryColor)))
-              .then((value) {
-            if (value is AddressModel) {
-              textFieldController[7].text = value.address;
-              setState(() {
-                latitude = value.latitude;
-                longitude = value.longitude;
-              });
-            }
-          });
-        },
-        readOnly: true,
-        maxLines: 1,
-        controller: textFieldController[7],
-        style: AppTextStyles.josefin(
-            style: TextStyle(color: const Color(0xFF1F314A), fontSize: 15.sp)),
-        decoration: InputDecoration(
-            suffixIcon: Icon(
-              Icons.navigate_next,
-              color: AppColors.kPrimaryColor,
-              size: 22.sp,
-            ),
-            prefixIcon: Padding(
-              padding: EdgeInsets.only(
-                  left: 7.sp, right: 5.sp, top: 5.sp, bottom: 5.sp),
-              child: Image(
-                height: 10.sp,
-                width: 10.sp,
-                image: const AssetImage(
-                    'assets/images/location_map_create_event.png'),
-              ),
-            ),
-            contentPadding: EdgeInsets.only(left: 10.w, top: 13.h),
-            border: InputBorder.none,
-            hintText: 'New york, USA',
-            hintStyle: AppTextStyles.josefin(
-                style: TextStyle(
-                    color: const Color(0xFF1F314A).withOpacity(0.40),
-                    fontSize: 15.sp))),
-      ),
+    return Flex(
+      direction: Axis.horizontal,
+      children: <Widget>[
+        Flexible(
+            child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(15.sp)),
+          child: TextFormField(
+            onTap: () {
+              CountryStatePicker(
+                countryLabel: const Label(title: "País"),
+                stateLabel: const Label(title: "Estado"),
+                onCountryTap: () {
+                  print(country.toString());
+                },
+                onCountryChanged: (ct) => setState(() {
+                  print('ads');
+                  country = ct;
+                  print(country.toString());
+                  state = null;
+                }),
+                onStateChanged: (st) => setState(() {
+                  state = st;
+                }),
+                // A little Spanish hint
+                countryHintText: "Elige País",
+                stateHintText: "Elige Estado",
+                noStateFoundText: "Ningún Estado",
+              );
+              // getContries();
+            },
+            readOnly: true,
+            maxLines: 1,
+            controller: textFieldController[7],
+            style: AppTextStyles.josefin(
+                style:
+                    TextStyle(color: const Color(0xFF1F314A), fontSize: 15.sp)),
+            decoration: InputDecoration(
+                suffixIcon: Padding(
+                  padding: EdgeInsets.all(14.sp),
+                  child: Image(
+                      width: 10.sp,
+                      height: 10.sp,
+                      image: const AssetImage(
+                          'assets/images/arrow_down_signup.png')),
+                ),
+                contentPadding: EdgeInsets.only(left: 10.w, top: 13.h),
+                border: InputBorder.none,
+                hintText: 'Country',
+                hintStyle: AppTextStyles.josefin(
+                    style: TextStyle(
+                        color: const Color(0xFF1F314A).withOpacity(0.40),
+                        fontSize: 15.sp))),
+          ),
+        )),
+        SizedBox(
+          width: 18.w,
+        ),
+        Flexible(
+            child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(15.sp)),
+          child: TextFormField(
+            onTap: () {},
+            readOnly: true,
+            maxLines: 1,
+            controller: textFieldController[7],
+            style: AppTextStyles.josefin(
+                style:
+                    TextStyle(color: const Color(0xFF1F314A), fontSize: 15.sp)),
+            decoration: InputDecoration(
+                suffixIcon: Padding(
+                  padding: EdgeInsets.all(14.sp),
+                  child: Image(
+                      width: 10.sp,
+                      height: 10.sp,
+                      image: const AssetImage(
+                          'assets/images/arrow_down_signup.png')),
+                ),
+                contentPadding: EdgeInsets.only(left: 10.w, top: 13.h),
+                border: InputBorder.none,
+                hintText: 'State',
+                hintStyle: AppTextStyles.josefin(
+                    style: TextStyle(
+                        color: const Color(0xFF1F314A).withOpacity(0.40),
+                        fontSize: 15.sp))),
+          ),
+        )),
+      ],
     );
+  }
+
+  void getContries() async {
+    // Get all countries
+    var countries = await getAllCountries();
+    for (var i = 0; i < countries.length; i++) {
+      print(countries[0].toString());
+    }
+    // Get all states
+    final states = await getAllStates();
+    for (var i = 0; i < states.length; i++) {
+      print(states[0].toString());
+    }
+
+    // Get a country
+    final country = await getCountryFromCode('AF');
+    if (country != null) {
+      final countryStates = await getStatesOfCountry(country.isoCode);
+
+      final countryCitis = await getCountryCities(country.isoCode);
+    }
+
+    // double? lat;
+    // double? long;
+    // final List<Marker> _markers = <Marker>[];
+    // GoogleMapController? _mapController;
+    // // get user current location
+    // Future<Position> getUserCurrentLocation() async {
+    //   print("called");
+    //   await Geolocator.requestPermission()
+    //       .then((value) {})
+    //       .onError((error, stackTrace) {
+    //     print("error" + error.toString());
+    //   });
+    //   return await Geolocator.getCurrentPosition();
+    // }
+
+    // getLoadData() {
+    //   getUserCurrentLocation().then((value) async {
+    //     lat = value.latitude;
+    //     long = value.longitude;
+
+    //     List<Placemark> placemark =
+    //         await placemarkFromCoordinates(value.latitude, value.longitude);
+
+    //     print(placemark.toString());
+    //     setState(() {
+    //       first = placemark[0].street;
+    //       second = placemark[3].street;
+    //       third = placemark[0].locality;
+    //       print("object");
+    //       print(first.toString() + second.toString() + third.toString());
+    //       textFieldController[7].text = first + second + third;
+    //     });
+    //     liveLocation = placemark;
+    //     return placemark;
+    //   });
+    // }
   }
 }
