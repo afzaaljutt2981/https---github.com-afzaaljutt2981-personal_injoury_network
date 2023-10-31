@@ -1,13 +1,19 @@
+import 'dart:typed_data';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
+import 'package:personal_injury_networking/ui/authentication/view/login_view.dart';
 import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
 import 'package:provider/provider.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../../global/utils/functions.dart';
 
 class MyProfileInfo extends StatefulWidget {
   const MyProfileInfo({super.key});
@@ -32,13 +38,22 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
   }
 
   UserModel? user;
-  bool readOnlyTextFields = false;
+  Uint8List? image1;
+  bool readOnlyTextFields = true;
   bool imageEditAble = false;
   final textFieldController =
-      List.generate(6, (i) => TextEditingController(), growable: true);
+      List.generate(7, (i) => TextEditingController(), growable: true);
   @override
   Widget build(BuildContext context) {
     user = context.watch<MyProfileController>().user;
+    if(user != null){
+    textFieldController[0].text = user!.company;
+    textFieldController[1].text = user!.position;
+    textFieldController[2].text = user!.website;
+    textFieldController[3].text = user!.phone.toString();
+    textFieldController[4].text = user!.location;
+    textFieldController[5].text = user!.userName;
+    }
     return Scaffold(
         backgroundColor: const Color(0xFFf5f4ff),
         body: (user != null)
@@ -90,10 +105,15 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                         ? showBottomModelSheetWidget()
                                         : null;
                                   },
-                                  child: Image(
-                                    height: 90.sp,
-                                    width: 90.sp,
-                                    image: const AssetImage(
+                                  child: (image1 != null)
+                                      ? CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage: MemoryImage(image1!),):(user!.pImage != null)?CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage: NetworkImage(user!.pImage!,),
+                                  ):const CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage:AssetImage(
                                         'assets/images/profile_pic.png'),
                                   ),
                                 ),
@@ -178,7 +198,7 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                               Padding(
                                 padding: EdgeInsets.only(top: 10.h),
                                 child: Text(
-                                  'Company',
+                                  'User Name',
                                   style: AppTextStyles.josefin(
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
@@ -203,8 +223,16 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                               ),
                             ],
                           ),
-                          subText(user!.company),
-                          CustomSizeBox(5.h),
+                          textField("user name", 5, textFieldController[5]),
+                          Text(
+                            'Company',
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFF1A1167),
+                                    fontSize: 12.sp)),
+                          ),
+                          textField("company", 0, textFieldController[0]),
                           Text(
                             'Job/Position',
                             style: AppTextStyles.josefin(
@@ -213,9 +241,8 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                     color: const Color(0xFF1A1167),
                                     fontSize: 12.sp)),
                           ),
-                          subText(user!.position),
-                          // textField(
-                          //     'Enter Your Job', 1, textFieldController[1]),
+                          textField(
+                              'Enter Your Job', 1, textFieldController[1]),
                           CustomSizeBox(5.h),
                           Text(
                             'Website',
@@ -225,9 +252,8 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                     color: const Color(0xFF1A1167),
                                     fontSize: 12.sp)),
                           ),
-                          subText(user!.website),
-                          // textField(
-                          //     'Enter Your Website', 2, textFieldController[2]),
+                          textField(
+                              'Enter Your Website', 2, textFieldController[2]),
                           CustomSizeBox(5.h),
                           Text(
                             'Cellphone',
@@ -237,9 +263,9 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                     color: const Color(0xFF1A1167),
                                     fontSize: 12.sp)),
                           ),
-                          subText(user!.phone.toString()),
-                          // textField('Enter Your Phone No.', 3,
-                          //     textFieldController[3]),
+                          // subText(user!.phone.toString()),
+                          textField('Enter Your Phone No.', 3,
+                              textFieldController[3]),
                           CustomSizeBox(5.h),
                           Text(
                             'Location',
@@ -249,8 +275,8 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                     color: const Color(0xFF1A1167),
                                     fontSize: 12.sp)),
                           ),
-                          subText(user!.location),
-                          // textField('Your Location', 4, textFieldController[4]),
+                          // subText(user!.location),
+                          textField('Your Location', 4, textFieldController[4]),
                           CustomSizeBox(5.h),
                           Text(
                             'Hobby/ Interests',
@@ -260,16 +286,38 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                     color: const Color(0xFF1A1167),
                                     fontSize: 12.sp)),
                           ),
-                          textField('Your Hobbies', 5, textFieldController[5]),
+                          textField('Your Hobbies', 6, textFieldController[6]),
                           Padding(
                             padding: EdgeInsets.only(
                                 left: 25.w, right: 25.w, bottom: 20.w),
-                            child: GetButton(50.h, () {
-                              setState(() {
-                                readOnlyTextFields = !readOnlyTextFields;
-                                imageEditAble = !imageEditAble;
-                              });
-                            },
+                            child: GetButton(50.h, () async {
+                              if(!readOnlyTextFields || imageEditAble) {
+                                Functions.showLoaderDialog(context);
+                                String? url;
+                                if (image1 != null) {
+                                  url =
+                                  await Functions.uploadPic(image1!, "users");
+                                }
+                                await context.read<MyProfileController>()
+                                    .updateUser(
+                                    userName: textFieldController[5].text,
+                                    company: textFieldController[0].text,
+                                    position: textFieldController[1].text,
+                                    cellPhone: textFieldController[3].text,
+                                    website: textFieldController[2].text,
+                                    location: textFieldController[4].text,
+                                    pImage: url
+                                );
+                                Navigator.pop(context);
+                                Functions.showSnackBar(context,
+                                    "user profile updated successfully");
+                                setState(() {
+                                  readOnlyTextFields = !readOnlyTextFields;
+                                  imageEditAble = !imageEditAble;
+                                });
+                              }else{
+                                Functions.showSnackBar(context, "please edit profile");
+                              }},
                                 Text(
                                   'Save',
                                   style: AppTextStyles.josefin(
@@ -278,7 +326,11 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700)),
                                 )),
-                          )
+                          ),
+                          GetButton(50.h, () async {
+                           await FirebaseAuth.instance.signOut();
+                           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_)=>const LoginView()), (route) => false);
+                          }, const Text("Log Out"))
                         ],
                       ),
                     ),
@@ -330,11 +382,15 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
               children: [
                 selectPicCatagory(
                     "Camera", Icons.camera_alt_outlined, Colors.white,
-                    onTap: () {
-                  // print("object");
-                  //  pickImageFromCamera()
-
-                  // .then((value) => Navigator.of(context).pop());
+                    onTap: () async {
+                      Navigator.pop(context);
+                      final ImagePicker _picker = ImagePicker();
+                      final XFile? pickedImage = await _picker.pickImage(
+                          source: ImageSource.camera);
+                      if (pickedImage != null) {
+                        image1 = await pickedImage.readAsBytes();
+                        setState(() {});
+                      }
                 }),
                 selectPicCatagory("Files", Icons.folder, Colors.blue,
                     onTap: () {
@@ -342,9 +398,15 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                   //     .then((value) => Navigator.of(context).pop());
                 }),
                 selectPicCatagory("Gallery", Icons.image_outlined, Colors.white,
-                    onTap: () {
-                  // pickImageFromGallery()
-                  //     .then((value) => Navigator.of(context).pop());
+                    onTap: () async {
+                      Navigator.pop(context);
+                      final ImagePicker _picker = ImagePicker();
+                      final XFile? pickedImage = await _picker.pickImage(
+                          source: ImageSource.gallery);
+                      if (pickedImage != null) {
+                        image1 = await pickedImage.readAsBytes();
+                        setState(() {});
+                      }
                 }),
               ],
             ),
@@ -406,8 +468,8 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.sp), color: Colors.white),
       child: TextFormField(
-        maxLines: index == 5 ? 4 : 1,
-        readOnly: readOnlyTextFields == true ? false : true,
+        maxLines: index == 6 ? 4 : 1,
+        readOnly: (readOnlyTextFields)?true:false,
         textInputAction:
             index == 5 ? TextInputAction.done : TextInputAction.next,
         controller: controller,

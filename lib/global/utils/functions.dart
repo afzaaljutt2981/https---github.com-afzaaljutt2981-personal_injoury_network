@@ -56,7 +56,7 @@ class Functions {
     );
   }
 
-  static Future<String> uploadEventPic(Uint8List file) async {
+  static Future<String> uploadPic(Uint8List file,String name) async {
     try {
       final firebasestorage.FirebaseStorage _storage =
           firebasestorage.FirebaseStorage.instance;
@@ -64,7 +64,7 @@ class Functions {
 
       int mills = DateTime.now().millisecondsSinceEpoch;
       String mils = '$mills';
-      var reference = _storage.ref().child("gigImages").child(uid).child(mils);
+      var reference = _storage.ref().child(name).child(uid).child(mils);
       var r = await reference.putData(
           file, SettableMetadata(contentType: 'image/jpeg'));
       if (r.state == firebasestorage.TaskState.success) {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:provider/provider.dart';
@@ -98,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        userType == 'user'
+                        Constants.userType == 'user'
                             ? GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -135,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   CustomSizeBox(10.h),
                   Text(
-                    userType == 'user'
+                    Constants.userType == 'user'
                         ? "Find Amazing Events Near You"
                         : "Create Amazing Events for audience",
                     style: AppTextStyles.josefin(
@@ -144,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: 28.sp,
                             fontWeight: FontWeight.w700)),
                   ),
-                  userType == 'user'
+                  Constants.userType == 'user'
                       ? Padding(
                           padding: EdgeInsets.only(
                             top: 20.h,
@@ -174,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         )
                       : const SizedBox(),
-                  userType == 'user'
+                  Constants.userType == 'user'
                       ? Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -239,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
             bottom: 0,
             child: Container(
               height:
-                  userType == 'user' ? screenHeight * 0.50 : screenHeight * 0.6,
+                  Constants.userType == 'user' ? screenHeight * 0.49 : screenHeight * 0.6,
               width: screenWidth,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -261,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              userType == 'user'
+                              Constants.userType == 'user'
                                   ? "Nearest Events"
                                   : "Upcoming Events",
                               style: AppTextStyles.josefin(
@@ -289,13 +291,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               },
                               child: Text(
-                                userType == 'user'
+                                Constants.userType == 'user'
                                     ? "See All"
                                     : "See All Events",
                                 style: AppTextStyles.josefin(
                                   style: TextStyle(
                                       decoration: TextDecoration.underline,
-                                      color: userType == 'user'
+                                      color: Constants.userType == 'user'
                                           ? const Color(0xFF9CA5D6)
                                           : const Color(0xFF4571E1),
                                       fontSize: 10.sp,
@@ -320,6 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
+                                    //  height: 140.sp,
                                     width: 110.sp,
                                     decoration: BoxDecoration(
                                         color: Colors.grey[300],
@@ -453,7 +456,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         const Duration(
                                                             milliseconds: 200),
                                                     child:
-                                                        const CreateEventDetailsView(),
+                                                         CreateEventDetailsView(event:  events[index],),
                                                   ),
                                                 );
                                               },

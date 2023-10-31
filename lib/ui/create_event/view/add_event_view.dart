@@ -396,7 +396,7 @@ class _AddEventViewState extends State<AddEventView> {
                         return;
                       }
                       Functions.showLoaderDialog(context);
-                      String url = await Functions.uploadEventPic(image1!);
+                      String url = await Functions.uploadPic(image1!,"events");
                       await context.read<CreateEventController>().addEvent(
                           endTime: endParseTime!,
                           startTime: parseTime!,

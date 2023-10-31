@@ -7,6 +7,7 @@ import 'package:personal_injury_networking/ui/authentication/model/user_type.dar
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../../global/utils/constants.dart';
 import '../../otherUserProfile/view/create_other_profile_view.dart';
 import '../../otherUserProfile/view/other_user_view.dart';
 
@@ -22,13 +23,13 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-          userType == 'user' ? Colors.white : const Color(0xFFF5F4FF),
+      Constants.userType == 'user' ? Colors.white : const Color(0xFFF5F4FF),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomSizeBox(userType == 'user' ? 40.h : 50.h),
+            CustomSizeBox(Constants.userType == 'user' ? 40.h : 50.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -40,7 +41,7 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                     size: 18.sp,
                   ),
                 ),
-                userType == 'user'
+                Constants.userType == 'user'
                     ? const SizedBox()
                     : Padding(
                         padding: EdgeInsets.only(
@@ -60,7 +61,7 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
               ],
             ),
             CustomSizeBox(25.h),
-            userType == 'user'
+            Constants.userType == 'user'
                 ? Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Center(
@@ -112,7 +113,7 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                     ],
                   ),
             Expanded(
-              child: userType == 'user'
+              child: Constants.userType == 'user'
                   ? GridView.builder(
                       physics: const BouncingScrollPhysics(),
                       itemCount: 15,
@@ -123,17 +124,17 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              PageTransition(
-                                childCurrent: widget,
-                                type: PageTransitionType.rightToLeft,
-                                duration: const Duration(milliseconds: 200),
-                                reverseDuration:
-                                    const Duration(milliseconds: 200),
-                                child: const CreateOtherUserProfileView(),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   PageTransition(
+                            //     childCurrent: widget,
+                            //     type: PageTransitionType.rightToLeft,
+                            //     duration: const Duration(milliseconds: 200),
+                            //     reverseDuration:
+                            //         const Duration(milliseconds: 200),
+                            //     child: const CreateOtherUserProfileView(),
+                            //   ),
+                            // );
                           },
                           child: Column(
                             children: [

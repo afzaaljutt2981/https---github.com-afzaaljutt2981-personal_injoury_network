@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:personal_injury_networking/global/utils/constants.dart';
 
 import '../../authentication/model/user_model.dart';
 
@@ -18,6 +19,9 @@ class MyProfileController extends ChangeNotifier {
         if (event.data() != null) {
           Map<String, dynamic> data = event.data() as Map<String, dynamic>;
           user = UserModel.fromJson(data);
+          if(user != null){
+            Constants.userType = user!.userType;
+          }
            }
         notifyListeners();
       });
@@ -31,6 +35,28 @@ class MyProfileController extends ChangeNotifier {
   becomeMarketer() async {
     await ref.doc(user!.id).update({
       "userType": "marketer"
+    });
+    Constants.userType = "marketer";
+  }
+  updateUser({
+    String? pImage,
+    required String userName,
+    required String company,
+    required String position,
+    required String cellPhone,
+    required String website,
+    required String location,
+}) async {
+    String docId = FirebaseAuth.instance.currentUser!.uid;
+    await ref.doc(docId).update({
+      "userName":userName,
+      "company":company,
+      "position":position,
+      "phone":int.parse(cellPhone),
+      "website":website,
+      "location":location,
+      if(pImage != null)
+      "pImage":pImage
     });
   }
 }

@@ -9,6 +9,8 @@ import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:provider/provider.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../create_event/models/address_model.dart';
+import '../../create_event/view/event_location.dart';
 import '../../home/view/navigation_view.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -25,6 +27,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final controller = PageController(initialPage: 0);
   bool hidePassword = true;
   bool hideConfirmPassword = true;
+  double latitude = 0.0;
+  double longitude = 0.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -415,14 +419,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               false),
           textField('Website (Optional)', 'Enter Website name', 6,
               textFieldController[6], false, false),
-          textField(
-            'Location',
-            'Click here to enter',
-            7,
-            textFieldController[7],
-            false,
-            false,
-          ),
+          locationField(),
           textField('Hobbies/Interests (Optional)', 'Click here to enter', 8,
               textFieldController[8], false, false),
           textField('What brings you here?', 'Connecting people?', 9,
@@ -653,6 +650,57 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
         CustomSizeBox(22.h)
       ],
+    );
+  }
+  Widget locationField() {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(10.sp)),
+      child: TextFormField(
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(
+              builder: (ctx) =>
+                  SelectLocation(primary: AppColors.kPrimaryColor)))
+              .then((value) {
+            if (value is AddressModel) {
+              textFieldController[7].text = value.address;
+              setState(() {
+                latitude = value.latitude;
+                longitude = value.longitude;
+              });
+            }
+          });
+        },
+        readOnly: true,
+        maxLines: 1,
+        controller: textFieldController[7],
+        style: AppTextStyles.josefin(
+            style: TextStyle(color: const Color(0xFF1F314A), fontSize: 15.sp)),
+        decoration: InputDecoration(
+            suffixIcon: Icon(
+              Icons.navigate_next,
+              color: AppColors.kPrimaryColor,
+              size: 22.sp,
+            ),
+            prefixIcon: Padding(
+              padding: EdgeInsets.only(
+                  left: 7.sp, right: 5.sp, top: 5.sp, bottom: 5.sp),
+              child: Image(
+                height: 10.sp,
+                width: 10.sp,
+                image: const AssetImage(
+                    'assets/images/location_map_create_event.png'),
+              ),
+            ),
+            contentPadding: EdgeInsets.only(left: 10.w, top: 13.h),
+            border: InputBorder.none,
+            hintText: 'New york, USA',
+            hintStyle: AppTextStyles.josefin(
+                style: TextStyle(
+                    color: const Color(0xFF1F314A).withOpacity(0.40),
+                    fontSize: 15.sp))),
+      ),
     );
   }
 }

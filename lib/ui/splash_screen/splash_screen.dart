@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/ui/home/view/navigation_view.dart';
+import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
 import 'package:provider/provider.dart';
 
 import '../../global/helper/custom_sized_box.dart';
@@ -25,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(const Duration(seconds: 3)).then((value) async {
       if (FirebaseAuth.instance.currentUser != null) {
-       // await Provider.of<AuthController>(context,listen: false).getUserData(context);
+       await Provider.of<MyProfileController>(context,listen: false).getUserData();
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) =>
                 BottomNavigationScreen(selectedIndex: 0)));

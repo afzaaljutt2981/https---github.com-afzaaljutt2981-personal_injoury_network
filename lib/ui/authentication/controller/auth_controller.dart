@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/home/view/home_screen.dart';
 import 'package:personal_injury_networking/ui/home/view/navigation_view.dart';
 
@@ -75,7 +76,9 @@ class AuthController extends ChangeNotifier {
           user = UserModel.fromJson(data);
           print("user Data");
           print(user?.email);
-        }
+          if(user != null){
+          Constants.userType = user!.userType;
+        }}
       });
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (_) => BottomNavigationScreen(selectedIndex: 0)), (route) => false);

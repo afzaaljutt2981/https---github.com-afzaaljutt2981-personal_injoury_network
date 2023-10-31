@@ -7,6 +7,7 @@ import 'package:personal_injury_networking/ui/authentication/model/user_type.dar
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../../global/utils/constants.dart';
 import '../model/events_history_model.dart';
 
 class OtherUserReviewScreen extends StatefulWidget {
@@ -58,7 +59,7 @@ class _OtherUserReviewScreenState extends State<OtherUserReviewScreen> {
             itemCount: eventsReviewList.length,
             itemBuilder: (context, index) {
               var model = eventsReviewList[index];
-              return userType == 'user'
+              return Constants.userType == 'user'
                   ? Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: 15.w, vertical: 10.h),
