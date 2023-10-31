@@ -79,7 +79,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
             ],
           ),
-          height: 65.h,
+          height: Platform.isIOS ? null : 65.h,
           child: ClipRRect(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20.sp),
