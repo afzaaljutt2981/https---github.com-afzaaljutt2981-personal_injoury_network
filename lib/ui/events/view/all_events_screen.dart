@@ -3,11 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/ui/create_event/view/add_event_view.dart';
+import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:personal_injury_networking/ui/events/view/past_events.dart';
 import 'package:personal_injury_networking/ui/events/view/up_coming_events.dart';
+import 'package:provider/provider.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../create_event/models/event_model.dart';
 import '../model/all_events_model.dart';
 
 class AllEventScreen extends StatefulWidget {
@@ -47,7 +50,7 @@ class _AllEventScreenState extends State<AllEventScreen>
         'Longboard Margarita Bar '),
   ];
   late TabController tabController;
-
+  List<EventModel> events = [];
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
@@ -62,6 +65,7 @@ class _AllEventScreenState extends State<AllEventScreen>
 
   @override
   Widget build(BuildContext context) {
+    events = context.watch<EventsController>().allEvents;
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -129,9 +133,9 @@ class _AllEventScreenState extends State<AllEventScreen>
                     child: ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: allEventsList.length,
+                        itemCount: events.length,
                         itemBuilder: (context, index) {
-                          var model = allEventsList[index];
+                          var model = events[index];
                           return Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 15.w, vertical: 8.h),
@@ -162,7 +166,7 @@ class _AllEventScreenState extends State<AllEventScreen>
                                           borderRadius:
                                               BorderRadius.circular(10.sp),
                                           image: DecorationImage(
-                                              image: AssetImage(model.image),
+                                              image: NetworkImage(model.pImage),
                                               fit: BoxFit.cover)),
                                     ),
                                     Expanded(
@@ -177,7 +181,7 @@ class _AllEventScreenState extends State<AllEventScreen>
                                           children: [
                                             CustomSizeBox(3.h),
                                             Text(
-                                              model.time,
+                                              model.title,
                                               style: AppTextStyles.josefin(
                                                   style: TextStyle(
                                                       color: const Color(
@@ -188,7 +192,7 @@ class _AllEventScreenState extends State<AllEventScreen>
                                             ),
                                             CustomSizeBox(10.h),
                                             Text(
-                                              model.eventName,
+                                              model.title,
                                               style: AppTextStyles.josefin(
                                                   style: TextStyle(
                                                       color: const Color(
@@ -210,7 +214,7 @@ class _AllEventScreenState extends State<AllEventScreen>
                                                 ),
                                                 Expanded(
                                                   child: Text(
-                                                    model.location,
+                                                    model.address,
                                                     style: AppTextStyles.josefin(
                                                         style: TextStyle(
                                                             color: const Color(

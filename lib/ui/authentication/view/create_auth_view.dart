@@ -17,7 +17,7 @@ class CreateAuthenticationView extends StatefulWidget {
 class _CreateAuthenticationViewState extends State<CreateAuthenticationView> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AuthenticationController>(
-        create: (_) => AuthenticationController(), child: const LoginView());
+    return ChangeNotifierProvider<AuthController>(
+        create: (_) => AuthController(), child: const LoginView());
   }
 }

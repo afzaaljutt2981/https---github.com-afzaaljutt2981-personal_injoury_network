@@ -4,6 +4,7 @@ import 'package:personal_injury_networking/ui/authentication/model/user_type.dar
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../../global/utils/constants.dart';
 import '../model/events_history_model.dart';
 
 class OrgnaizerEvents extends StatefulWidget {
@@ -113,7 +114,7 @@ class _OrgnaizerEventsState extends State<OrgnaizerEvents> {
                                           fontSize: 18.sp,
                                           fontWeight: FontWeight.w500)),
                                 ),
-                                userType == 'user'
+                                Constants.userType == 'user'
                                     ? const SizedBox()
                                     : Row(
                                         mainAxisAlignment:
