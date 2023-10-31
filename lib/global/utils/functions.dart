@@ -36,7 +36,7 @@ class Functions {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         width: double.infinity,
-        child: const Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
