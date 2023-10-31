@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Image(
               height: 130.sp,
               width: 130.sp,
-              image: const AssetImage('assets/images/primary_icon.png'),
+              image: const AssetImage('assets/images/logo_gif.gif'),
             ),
           ),
           CustomSizeBox(25.h),

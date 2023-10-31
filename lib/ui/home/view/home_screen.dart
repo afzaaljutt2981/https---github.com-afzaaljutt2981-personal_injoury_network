@@ -240,8 +240,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Positioned(
             bottom: 0,
             child: Container(
-              height:
-                  Constants.userType == 'user' ? screenHeight * 0.49 : screenHeight * 0.6,
+              height: Constants.userType == 'user'
+                  ? screenHeight * 0.49
+                  : screenHeight * 0.6,
               width: screenWidth,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -328,8 +329,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         color: Colors.grey[300],
                                         borderRadius:
                                             BorderRadius.circular(20.sp),
-                                        image:  DecorationImage(
-                                            image: NetworkImage(events[index].pImage),
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                                events[index].pImage),
                                             fit: BoxFit.cover)),
                                     child: Padding(
                                       padding: EdgeInsets.only(
@@ -424,15 +426,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                               SizedBox(
                                                 width: 7.w,
                                               ),
-                                              Text(
-                                                events[index].address,
-                                                style: AppTextStyles.josefin(
-                                                    style: TextStyle(
-                                                        color: const Color(
-                                                            0xFF585DF9),
-                                                        fontSize: 12.sp,
-                                                        fontWeight:
-                                                            FontWeight.w500)),
+                                              Expanded(
+                                                child: Text(
+                                                  events[index].address,
+                                                  style: AppTextStyles.josefin(
+                                                      style: TextStyle(
+                                                          color: const Color(
+                                                              0xFF585DF9),
+                                                          fontSize: 12.sp,
+                                                          fontWeight:
+                                                              FontWeight.w500)),
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -456,7 +460,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         const Duration(
                                                             milliseconds: 200),
                                                     child:
-                                                         CreateEventDetailsView(event:  events[index],),
+                                                        CreateEventDetailsView(
+                                                      event: events[index],
+                                                    ),
                                                   ),
                                                 );
                                               },

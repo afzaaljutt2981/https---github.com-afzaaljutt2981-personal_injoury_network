@@ -36,4 +36,31 @@ class JobPositionModel {
   ];
   static String? selectedJob;
   static List<PopupMenuItem<String>> dropdownItems = [];
+
+  static var hobbiesList = [
+    '- Golf',
+    '- Tennis',
+    '- Pickleball',
+    '- wine and food testing',
+    '- Reading ',
+    '- Traveling ',
+    '- Car show',
+    '- NBA games ',
+    '- Super Bowl games',
+    '- Boating',
+    '- Any sport activités',
+    '- Any type of shows',
+    '- Painting',
+    '- Art & Pottery',
+    '- Chess',
+    '- Yoga',
+    '- Singing/ Karaoke ',
+    '- Bowling',
+    '- Concert',
+    '- Biking',
+    '- Casino'
+  ];
+
+  
+  static List<PopupMenuItem<String>> hobbiesDropDown = [];
 }

@@ -1,27 +1,14 @@
-import 'package:country_state_city/utils/city_utils.dart';
-import 'package:country_state_city/utils/country_utils.dart';
-import 'package:country_state_city/utils/state_utils.dart';
-import 'package:country_state_picker/components/index.dart';
-import 'package:country_state_picker/country_state_picker.dart';
 import 'package:csc_picker/csc_picker.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
-import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:provider/provider.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../../global/utils/custom_snackbar.dart';
-import '../../create_event/models/address_model.dart';
-import '../../create_event/view/event_location.dart';
 import '../../home/view/navigation_view.dart';
 import '../model/job_position_model.dart';
 
@@ -51,10 +38,42 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
+  int hobbiesCount = 0;
+  List<String> selectedHobbies = [];
+
+  void addItem(String item) {
+    setState(() {
+      selectedHobbies.add(item);
+    });
+  }
+
+  void removeItem(String item) {
+    setState(() {
+      selectedHobbies.remove(item);
+    });
+  }
+
+  loadUserHobbies() {
+    JobPositionModel.hobbiesDropDown = [];
+    for (int i = 0; i < JobPositionModel.hobbiesList.length; i++) {
+      JobPositionModel.hobbiesDropDown.add(PopupMenuItem<String>(
+          value: JobPositionModel.hobbiesList[i],
+          child: Text(
+            JobPositionModel.hobbiesList[i],
+            style: AppTextStyles.josefin(
+              style: TextStyle(
+                  color: const Color(0xFF000000),
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400),
+            ),
+          )));
+    }
+  }
+
   @override
   void initState() {
     loadUserPositions();
-    //getLoadData();
+    loadUserHobbies();
     super.initState();
   }
 
@@ -64,10 +83,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final controller = PageController(initialPage: 0);
   bool hidePassword = true;
   bool hideConfirmPassword = true;
-  double latitude = 0.0;
-  double longitude = 0.0;
-  var liveLocation;
-  var first, second, third;
   @override
   Widget build(BuildContext context) {
     bool saveChagesButton = context.watch<AuthController>().saveChagesButton;
@@ -176,7 +191,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     } else if (index == 2) {
                       if (textFieldController[4].text.isEmpty ||
                           textFieldController[5].text.isEmpty ||
-                          textFieldController[7].text.isEmpty ||
                           textFieldController[9].text.isEmpty) {
                         CustomSnackBar(false)
                             .showInSnackBar('Some fields are empty!', context);
@@ -496,7 +510,66 @@ class _SignUpScreenState extends State<SignUpScreen> {
           // locationField(),
           CustomSizeBox(22.h),
           textField('Hobbies/Interests (Optional)', 'Click here to enter', 8,
-              textFieldController[8], false, false),
+              textFieldController[8], true, false),
+
+          hobbiesCount != 0
+              ? SizedBox(
+                  height: 40.h,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: selectedHobbies.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.only(right: 20.w),
+                        child: Container(
+                          height: 40.h,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.sp),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 5.h, right: 0.h),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        hobbiesCount--;
+                                        removeItem(selectedHobbies[index]);
+                                      },
+                                      child: Icon(
+                                        Icons.cancel_outlined,
+                                        size: 15.sp,
+                                        color: AppColors.kPrimaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: 10.w, right: 10.w, bottom: 5.h),
+                                child: Text(
+                                  selectedHobbies[index].toString(),
+                                  style: AppTextStyles.josefin(
+                                      style: TextStyle(
+                                          color: AppColors.kPrimaryColor,
+                                          fontSize: 12.sp)),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                )
+              : const SizedBox(),
+          hobbiesCount > 0 ? CustomSizeBox(22.h) : SizedBox(),
           textField('What brings you here?', 'Connecting people?', 9,
               textFieldController[9], false, false),
           CustomSizeBox(20.h)
@@ -575,6 +648,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                   }
                 });
+              } else if (index == 8 && hobbiesCount < 3) {
+                showMenu(
+                  context: context,
+                  position: RelativeRect.fromLTRB(
+                      shortestSide > 600 ? 100 : 50.w,
+                      shortestSide > 600 ? 0 : 100,
+                      shortestSide > 600 ? 100 : 10.w,
+                      shortestSide > 600 ? 100 : 100),
+                  items: [...JobPositionModel.hobbiesDropDown],
+                ).then((value) {
+                  if (value != null) {
+                    textFieldController[8].text = value.toString().substring(2);
+
+                    for (int i = 0;
+                        i < JobPositionModel.hobbiesList.length;
+                        i++) {
+                      if (value
+                          .toString()
+                          .contains(JobPositionModel.hobbiesList[i])) {
+                        setState(() {
+                          hobbiesCount++;
+                          addItem(JobPositionModel.hobbiesList[i]
+                              .substring(2)
+                              .toString());
+                        });
+                      }
+                    }
+                  }
+                });
               }
             },
             decoration: InputDecoration(
@@ -647,11 +749,61 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       Icons.visibility_outlined,
                                       color: Colors.grey,
                                     ))
-                          : null,
+                          : (index == 8)
+                              ? GestureDetector(
+                                  onTap: () {
+                                    if (hobbiesCount < 3) {
+                                      showMenu(
+                                        context: context,
+                                        position: RelativeRect.fromLTRB(
+                                            shortestSide > 600 ? 100 : 50.w,
+                                            shortestSide > 600 ? 0 : 100,
+                                            shortestSide > 600 ? 100 : 10.w,
+                                            shortestSide > 600 ? 100 : 100),
+                                        items: [
+                                          ...JobPositionModel.hobbiesDropDown
+                                        ],
+                                      ).then((value) {
+                                        if (value != null) {
+                                          textFieldController[8].text =
+                                              value.toString().substring(2);
+
+                                          for (int i = 0;
+                                              i <
+                                                  JobPositionModel
+                                                      .hobbiesList.length;
+                                              i++) {
+                                            if (value.toString().contains(
+                                                JobPositionModel
+                                                    .hobbiesList[i])) {
+                                              setState(() {
+                                                hobbiesCount++;
+                                              });
+                                            }
+                                          }
+                                        }
+                                      });
+                                    }
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.all(14.sp),
+                                    child: Image(
+                                      width: 10.sp,
+                                      height: 10.sp,
+                                      image: const AssetImage(
+                                          'assets/images/arrow_down_signup.png'),
+                                      color: hobbiesCount < 3
+                                          ? AppColors.kPrimaryColor
+                                          : Colors.grey[400],
+                                    ),
+                                  ))
+                              : null,
               contentPadding: EdgeInsets.only(
                   left: 10.w,
-                  top: index == 3 || index == 12 || index == 11 ? 12.h : 0.h,
-                  right: index == 3 ? 10.w : 5.w),
+                  top: index == 3 || index == 12 || index == 11 || index == 8
+                      ? 12.h
+                      : 0.h,
+                  right: index == 3 || index == 8 ? 10.w : 5.w),
               border: InputBorder.none,
               hintText: hintText,
               hintStyle: AppTextStyles.josefin(
@@ -683,26 +835,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               color: Colors.white, borderRadius: BorderRadius.circular(15.sp)),
           child: TextFormField(
             onTap: () {
-              CountryStatePicker(
-                countryLabel: const Label(title: "País"),
-                stateLabel: const Label(title: "Estado"),
-                onCountryTap: () {
-                  print(country.toString());
-                },
-                onCountryChanged: (ct) => setState(() {
-                  print('ads');
-                  country = ct;
-                  print(country.toString());
-                  state = null;
-                }),
-                onStateChanged: (st) => setState(() {
-                  state = st;
-                }),
-                // A little Spanish hint
-                countryHintText: "Elige País",
-                stateHintText: "Elige Estado",
-                noStateFoundText: "Ningún Estado",
-              );
               // getContries();
             },
             readOnly: true,
@@ -764,63 +896,5 @@ class _SignUpScreenState extends State<SignUpScreen> {
         )),
       ],
     );
-  }
-
-  void getContries() async {
-    // Get all countries
-    var countries = await getAllCountries();
-    for (var i = 0; i < countries.length; i++) {
-      print(countries[0].toString());
-    }
-    // Get all states
-    final states = await getAllStates();
-    for (var i = 0; i < states.length; i++) {
-      print(states[0].toString());
-    }
-
-    // Get a country
-    final country = await getCountryFromCode('AF');
-    if (country != null) {
-      final countryStates = await getStatesOfCountry(country.isoCode);
-
-      final countryCitis = await getCountryCities(country.isoCode);
-    }
-
-    // double? lat;
-    // double? long;
-    // final List<Marker> _markers = <Marker>[];
-    // GoogleMapController? _mapController;
-    // // get user current location
-    // Future<Position> getUserCurrentLocation() async {
-    //   print("called");
-    //   await Geolocator.requestPermission()
-    //       .then((value) {})
-    //       .onError((error, stackTrace) {
-    //     print("error" + error.toString());
-    //   });
-    //   return await Geolocator.getCurrentPosition();
-    // }
-
-    // getLoadData() {
-    //   getUserCurrentLocation().then((value) async {
-    //     lat = value.latitude;
-    //     long = value.longitude;
-
-    //     List<Placemark> placemark =
-    //         await placemarkFromCoordinates(value.latitude, value.longitude);
-
-    //     print(placemark.toString());
-    //     setState(() {
-    //       first = placemark[0].street;
-    //       second = placemark[3].street;
-    //       third = placemark[0].locality;
-    //       print("object");
-    //       print(first.toString() + second.toString() + third.toString());
-    //       textFieldController[7].text = first + second + third;
-    //     });
-    //     liveLocation = placemark;
-    //     return placemark;
-    //   });
-    // }
   }
 }
