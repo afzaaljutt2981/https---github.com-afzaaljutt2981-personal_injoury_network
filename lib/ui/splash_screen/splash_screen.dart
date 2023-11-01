@@ -26,14 +26,18 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(const Duration(seconds: 3)).then((value) async {
       if (FirebaseAuth.instance.currentUser != null) {
-       await Provider.of<MyProfileController>(context,listen: false).getUserData();
+        await Provider.of<MyProfileController>(context, listen: false)
+            .getUserData();
+
+        // ignore: use_build_context_synchronously
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) =>
                 BottomNavigationScreen(selectedIndex: 0)));
-      }else{
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (BuildContext context) => const SelectionScreen()));
-    }});
+      } else {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => const SelectionScreen()));
+      }
+    });
     // Timer(
     //     const Duration(seconds: 3),
     //     () => Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -52,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Image(
               height: 130.sp,
               width: 130.sp,
-              image: const AssetImage('assets/images/primary_icon.png'),
+              image: const AssetImage('assets/images/logo_gif.gif'),
             ),
           ),
           CustomSizeBox(25.h),
