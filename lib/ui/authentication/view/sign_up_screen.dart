@@ -1,12 +1,15 @@
-import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
+import 'package:personal_injury_networking/ui/authentication/model/country_state_model.dart'
+    as cs_model;
 import 'package:provider/provider.dart';
+import '../../../global/helper/api_functions.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../../global/utils/custom_snackbar.dart';
 import '../../home/view/navigation_view.dart';
@@ -21,24 +24,9 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   get shortestSide => MediaQuery.of(context).size.shortestSide;
-  loadUserPositions() {
-    JobPositionModel.dropdownItems = [];
-    for (int i = 0; i < JobPositionModel.jobList.length; i++) {
-      JobPositionModel.dropdownItems.add(PopupMenuItem<String>(
-          value: JobPositionModel.jobList[i],
-          child: Text(
-            JobPositionModel.jobList[i],
-            style: AppTextStyles.josefin(
-              style: TextStyle(
-                  color: const Color(0xFF000000),
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w400),
-            ),
-          )));
-    }
-  }
 
   int hobbiesCount = 0;
+  bool disableStateDropdown = true;
   List<String> selectedHobbies = [];
 
   void addItem(String item) {
@@ -53,6 +41,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
   }
 
+  cs_model.CountryStateModel countryStateModel =
+      cs_model.CountryStateModel(error: false, msg: '', data: []);
   loadUserHobbies() {
     JobPositionModel.hobbiesDropDown = [];
     for (int i = 0; i < JobPositionModel.hobbiesList.length; i++) {
@@ -74,7 +64,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void initState() {
     loadUserPositions();
     loadUserHobbies();
+    getCountries();
     super.initState();
+  }
+
+  final CountryStateCityRepo _countryStateCityRepo = CountryStateCityRepo();
+  getCountries() async {
+    //
+    countryStateModel = await _countryStateCityRepo.getCountriesStates();
+    countries.add('Select Country');
+    states.add('Select State');
+    for (var element in countryStateModel.data) {
+      countries.add(element.name);
+    }
+    setState(() {});
+  }
+
+  getStates() async {
+    //
+    for (var element in countryStateModel.data) {
+      if (selectedCountry == element.name) {
+        //
+        setState(() {
+          // resetCities();
+        });
+        //
+        for (var state in element.states) {
+          states.add(state.name);
+        }
+      }
+    }
+    //
   }
 
   final textFieldController =
@@ -83,6 +103,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final controller = PageController(initialPage: 0);
   bool hidePassword = true;
   bool hideConfirmPassword = true;
+  List<String> countries = [];
+  List<String> states = [];
+
+  String selectedCountry = 'Select Country';
+  String selectedState = 'Select State';
   @override
   Widget build(BuildContext context) {
     bool saveChagesButton = context.watch<AuthController>().saveChagesButton;
@@ -99,13 +124,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      // if (index == 1) {
                       Navigator.pop(context);
-                      // } else {
-                      //   setState(() {
-                      //     index--;
-                      //   });
-                      // }
                     },
                     child: Icon(
                       Icons.arrow_back_ios,
@@ -207,7 +226,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     if (index == 3) {
                       if (textFieldController[10].text.isEmpty ||
                           textFieldController[11].text.isEmpty ||
-                          textFieldController[12].text.isEmpty) {
+                          textFieldController[12].text.isEmpty ||textFieldController[0].text.isEmpty) {
                         CustomSnackBar(false)
                             .showInSnackBar('Some fields are empty!', context);
                       } else if (textFieldController[11].text.length < 6) {
@@ -250,15 +269,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       }
                     }
                   },
-                  Text(
-                    saveChagesButton == false && index < 3 ? "Next" : "Save",
+                  saveChagesButton == false? Text(
+                    index < 3 ? "Next" : "Save" ,
                     style: AppTextStyles.josefin(
                       style: TextStyle(
                         color: AppColors.kPrimaryColor,
                         fontSize: 18.sp,
                       ),
                     ),
-                  ),
+                  ) : SpinKitCircle(
+                                color: Colors.white,
+                                size: shortestSide > 600 ? 16.sp : 20,
+                              ),
                 ),
               ),
               index == 3
@@ -444,74 +466,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     fontWeight: FontWeight.w500)),
           ),
           CustomSizeBox(5.h),
-          CSCPicker(
-            showStates: true,
-            flagState: CountryFlag.DISABLE,
-            dropdownDecoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10.sp)),
-                color: Colors.white,
-                border: Border.all(color: Colors.grey.shade300, width: 1)),
-            disabledDropdownDecoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10.sp)),
-                color: Colors.grey.shade300,
-                border: Border.all(color: Colors.grey.shade300, width: 1)),
-
-            ///placeholders for dropdown search field
-            countrySearchPlaceholder: "Country",
-            stateSearchPlaceholder: "State",
-
-            ///labels for dropdown
-            // countryDropdownLabel: "Country",
-            // stateDropdownLabel: "State",
-
-            selectedItemStyle: TextStyle(
-              color: Colors.black,
-              fontSize: 12.sp,
-            ),
-
-            ///DropdownDialog Heading style [OPTIONAL PARAMETER]
-            dropdownHeadingStyle: TextStyle(
-                color: Colors.black,
-                fontSize: 12.sp,
-                fontWeight: FontWeight.bold),
-
-            ///DropdownDialog Item style [OPTIONAL PARAMETER]
-            dropdownItemStyle: TextStyle(
-              color: Colors.black,
-              fontSize: 12.sp,
-            ),
-
-            ///Dialog box radius [OPTIONAL PARAMETER]
-            dropdownDialogRadius: 10.0,
-
-            ///Search bar radius [OPTIONAL PARAMETER]
-            searchBarRadius: 10.0,
-
-            ///triggers once country selected in dropdown
-            onCountryChanged: (value) {
-              print(value.toString());
-              print("cccc" + countryValue.toString());
-
-              setState(() {
-                countryValue = value;
-                //  countryDropdownLabel = value;
-              });
-            },
-
-            ///triggers once state selected in dropdown
-            onStateChanged: (value) {
-              if (value != null) {
-                setState(() {
-                  stateValue = value;
-                });
-              }
-            },
-          ),
-          // locationField(),
+          locationField(),
           CustomSizeBox(22.h),
           textField('Hobbies/Interests (Optional)', 'Click here to enter', 8,
               textFieldController[8], true, false),
-
           hobbiesCount != 0
               ? SizedBox(
                   height: 40.h,
@@ -569,7 +527,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 )
               : const SizedBox(),
-          hobbiesCount > 0 ? CustomSizeBox(22.h) : SizedBox(),
+          hobbiesCount > 0 ? CustomSizeBox(22.h) : const SizedBox(),
           textField('What brings you here?', 'Connecting people?', 9,
               textFieldController[9], false, false),
           CustomSizeBox(20.h)
@@ -823,78 +781,109 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  String? state;
-  String? country;
   Widget locationField() {
     return Flex(
       direction: Axis.horizontal,
       children: <Widget>[
         Flexible(
-            child: Container(
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(15.sp)),
-          child: TextFormField(
-            onTap: () {
-              // getContries();
-            },
-            readOnly: true,
-            maxLines: 1,
-            controller: textFieldController[7],
-            style: AppTextStyles.josefin(
-                style:
-                    TextStyle(color: const Color(0xFF1F314A), fontSize: 15.sp)),
-            decoration: InputDecoration(
-                suffixIcon: Padding(
-                  padding: EdgeInsets.all(14.sp),
-                  child: Image(
-                      width: 10.sp,
-                      height: 10.sp,
-                      image: const AssetImage(
-                          'assets/images/arrow_down_signup.png')),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15.sp),
+            ),
+            child: Padding(
+              padding: EdgeInsets.only(left: 5.w),
+              child: DropdownButton<String>(
+                isExpanded: true,
+                value: selectedCountry,
+                items: countries
+                    .map((String country) =>
+                        DropdownMenuItem(value: country, child: Text(country)))
+                    .toList(),
+                onChanged: (selectedValue) {
+                  if (selectedValue != null) {
+                    setState(() {
+                      selectedCountry = selectedValue;
+                      disableStateDropdown = false;
+                      resetStates();
+                    });
+                    if (selectedCountry != 'Select Country') {
+                      getStates();
+                    }
+                  }
+                },
+                underline: Container(),
+                style: AppTextStyles.josefin(
+                  style: TextStyle(
+                    color: const Color(0xFF1F314A),
+                    fontSize: 15.sp,
+                  ),
                 ),
-                contentPadding: EdgeInsets.only(left: 10.w, top: 13.h),
-                border: InputBorder.none,
-                hintText: 'Country',
-                hintStyle: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: const Color(0xFF1F314A).withOpacity(0.40),
-                        fontSize: 15.sp))),
+              ),
+            ),
           ),
-        )),
+        ),
         SizedBox(
           width: 18.w,
         ),
         Flexible(
+          child: IgnorePointer(
+            ignoring: disableStateDropdown,
             child: Container(
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(15.sp)),
-          child: TextFormField(
-            onTap: () {},
-            readOnly: true,
-            maxLines: 1,
-            controller: textFieldController[7],
-            style: AppTextStyles.josefin(
-                style:
-                    TextStyle(color: const Color(0xFF1F314A), fontSize: 15.sp)),
-            decoration: InputDecoration(
-                suffixIcon: Padding(
-                  padding: EdgeInsets.all(14.sp),
-                  child: Image(
-                      width: 10.sp,
-                      height: 10.sp,
-                      image: const AssetImage(
-                          'assets/images/arrow_down_signup.png')),
-                ),
-                contentPadding: EdgeInsets.only(left: 10.w, top: 13.h),
-                border: InputBorder.none,
-                hintText: 'State',
-                hintStyle: AppTextStyles.josefin(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15.sp),
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(left: 5.w),
+                child: DropdownButton<String>(
+                  isExpanded: true,
+                  value: selectedState,
+                  items: states
+                      .map((String state) =>
+                          DropdownMenuItem(value: state, child: Text(state)))
+                      .toList(),
+                  onChanged: (selectedValue) {
+                    setState(() {
+                      selectedState = selectedValue!;
+                    });
+                  },
+                  underline: Container(),
+                  style: AppTextStyles.josefin(
                     style: TextStyle(
-                        color: const Color(0xFF1F314A).withOpacity(0.40),
-                        fontSize: 15.sp))),
+                      color: const Color(0xFF1F314A),
+                      fontSize: 15.sp,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
-        )),
+        ),
       ],
     );
+  }
+
+  loadUserPositions() {
+    JobPositionModel.dropdownItems = [];
+    for (int i = 0; i < JobPositionModel.jobList.length; i++) {
+      JobPositionModel.dropdownItems.add(PopupMenuItem<String>(
+          value: JobPositionModel.jobList[i],
+          child: Text(
+            JobPositionModel.jobList[i],
+            style: AppTextStyles.josefin(
+              style: TextStyle(
+                  color: const Color(0xFF000000),
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400),
+            ),
+          )));
+    }
+  }
+
+  resetStates() {
+    states = [];
+    states.add('Select State');
+    selectedState = 'Select State';
   }
 }
