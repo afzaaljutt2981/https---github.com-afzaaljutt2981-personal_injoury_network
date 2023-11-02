@@ -19,8 +19,8 @@ List<TicketModel> userTickets = [];
   getUserData(String userId){
     user.doc(userId).snapshots().listen((event) {
       userModel = UserModel.fromJson(event.data() as Map<String,dynamic>);
-      notifyListeners();
     });
+    notifyListeners();
   }
   getUserEvents(String userId){
     user.doc(userId).collection("tickets").snapshots().listen((event) {
@@ -33,11 +33,10 @@ List<TicketModel> userTickets = [];
   }
   followTap(
       UserModel userModel,
-      String id,
       ) {
     String cId = FirebaseAuth.instance.currentUser!.uid;
     final collectionRef =
-    FirebaseFirestore.instance.collection("users").doc(id);
+    FirebaseFirestore.instance.collection("users").doc(userModel.id);
     var fList = userModel.followers;
 
     if (fList.contains(cId)) {
@@ -63,16 +62,17 @@ List<TicketModel> userTickets = [];
 
   followingTap(
       UserModel userModel,
-      String id,
+      String uId
       ) {
+    String id = FirebaseAuth.instance.currentUser!.uid;
     final collectionRef =
     FirebaseFirestore.instance.collection("users").doc(id);
-    var fList = userModel.followers;
+    var fList = userModel.followings;
 
-    if (fList.contains(id)) {
-      fList.remove(id);
+    if (fList.contains(uId)) {
+      fList.remove(uId);
     } else {
-      fList.add(id);
+      fList.add(uId);
     }
     collectionRef.update(
       {

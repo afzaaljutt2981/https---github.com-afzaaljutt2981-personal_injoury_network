@@ -45,15 +45,15 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   @override
   Widget build(BuildContext context) {
     allUsers = context.watch<EventDetailsController>().allUsers;
+    eventTickets = context.watch<EventDetailsController>().eventTickets;
     if(allUsers.isNotEmpty){
     currentUser = allUsers.firstWhere((element) => element.id == FirebaseAuth.instance.currentUser!.uid);
     eventCreater = allUsers.firstWhere((element) => element.id == widget.event.uId);
-    }
-    eventTickets = context.watch<EventDetailsController>().eventTickets;
     eventParticipants = [];
     for (var element1 in eventTickets) {
       eventParticipants
           .add(allUsers.firstWhere((element) => element.id == element1.uId));
+    }
     }
     for (var element in eventParticipants) {
       if(element.id == currentUser!.id){
@@ -772,7 +772,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                 const Duration(milliseconds: 200),
                 reverseDuration:
                 const Duration(milliseconds: 200),
-                child:  CreateOtherUserProfileView(user: user,),
+                child:  CreateOtherUserProfileView(participant: user,currentUser: currentUser!,),
               ),
             );
           },

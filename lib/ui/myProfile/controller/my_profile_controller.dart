@@ -23,8 +23,8 @@ class MyProfileController extends ChangeNotifier {
             Constants.userType = user!.userType;
           }
            }
-        notifyListeners();
       });
+      // notifyListeners();
       // Navigator.pushAndRemoveUntil(context,
       //     MaterialPageRoute(builder: (_) => BottomNavigationScreen(selectedIndex: 0)), (route) => false);
     }else{

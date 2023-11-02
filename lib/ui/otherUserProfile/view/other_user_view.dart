@@ -16,8 +16,8 @@ import '../../create_event/models/event_model.dart';
 import '../../events_details/models/ticket_model.dart';
 
 class OtherUserProfileScreen extends StatefulWidget {
-  OtherUserProfileScreen({super.key, required this.user});
-  UserModel user;
+  OtherUserProfileScreen({super.key, required this.currentUser});
+  UserModel currentUser;
   @override
   State<OtherUserProfileScreen> createState() => _OtherUserProfileScreenState();
 }
@@ -51,6 +51,8 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
     if(user != null){
     if(user!.followers.contains(FirebaseAuth.instance.currentUser!.uid)){
       isFollow = true;
+    }else{
+      isFollow = false;
     }}
     return Scaffold(
       backgroundColor: Colors.white,
@@ -175,12 +177,10 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                               setState(() {
                                 context.read<OtherUserProfileController>().followTap(
                                   user!,
-                                  user!.id,
                                 );
 
                                 context.read<OtherUserProfileController>().followingTap(
-                                 user!,
-                                  FirebaseAuth.instance.currentUser!.uid,
+                                 widget.currentUser,user!.id
                                 );
                               });
                             },
