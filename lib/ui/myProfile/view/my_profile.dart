@@ -327,10 +327,6 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                           fontWeight: FontWeight.w700)),
                                 )),
                           ),
-                          GetButton(50.h, () async {
-                           await FirebaseAuth.instance.signOut();
-                           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_)=>const LoginView()), (route) => false);
-                          }, const Text("Log Out"))
                         ],
                       ),
                     ),

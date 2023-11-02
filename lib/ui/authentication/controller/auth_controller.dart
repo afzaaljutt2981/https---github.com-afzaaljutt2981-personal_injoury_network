@@ -10,7 +10,7 @@ import '../model/user_model.dart';
 
 class AuthController extends ChangeNotifier {
   List<CountryStateModel> employesList = [];
-  bool saveChagesButton = false;
+  bool saveChangesButton = false;
   CollectionReference ref = FirebaseFirestore.instance.collection("users");
   UserModel? user;
   void signup(
@@ -24,7 +24,8 @@ class AuthController extends ChangeNotifier {
     required String position,
     required String location,
     required String password,
-    required String hobbies,
+        required String reference,
+    required List<String> hobbies,
     required String userName,
   }) {
     try {
@@ -46,9 +47,10 @@ class AuthController extends ChangeNotifier {
               lastName: lastName,
               phone: int.parse(phone),
               company: companyName,
+              reference: reference,
               userName: userName,
               website: website,
-              userType: 'user');
+              userType: 'user', hobbies: hobbies, followers: [], followings: []);
           await doc.set(model.toJson());
           getUserData(context);
           setSaveChangesButtonStatus(false);
@@ -108,7 +110,7 @@ class AuthController extends ChangeNotifier {
   }
 
   setSaveChangesButtonStatus(bool value) {
-    saveChagesButton = value;
+    saveChangesButton = value;
     notifyListeners();
   }
 }

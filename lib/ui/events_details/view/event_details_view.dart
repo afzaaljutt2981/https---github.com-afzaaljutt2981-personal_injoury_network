@@ -15,6 +15,7 @@ import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
 import 'package:personal_injury_networking/ui/events_details/controller/event_details_controller.dart';
+import 'package:personal_injury_networking/ui/otherUserProfile/view/create_other_profile_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../allParticipent/view/create_all_participants_view.dart';
@@ -39,12 +40,15 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   List<UserModel> allUsers = [];
   List<TicketModel> eventTickets = [];
   UserModel? currentUser;
+  UserModel? eventCreater;
   String buttonName = "Register";
   @override
   Widget build(BuildContext context) {
     allUsers = context.watch<EventDetailsController>().allUsers;
     if(allUsers.isNotEmpty){
-    currentUser = allUsers.firstWhere((element) => element.id == FirebaseAuth.instance.currentUser!.uid);}
+    currentUser = allUsers.firstWhere((element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+    eventCreater = allUsers.firstWhere((element) => element.id == widget.event.uId);
+    }
     eventTickets = context.watch<EventDetailsController>().eventTickets;
     eventParticipants = [];
     for (var element1 in eventTickets) {
@@ -681,15 +685,15 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   }
 
   Widget marketerInfo() {
-    return  (currentUser != null) ?
+    return  (eventCreater != null) ?
     Align(
               alignment: Alignment.bottomLeft,
               child: Row(
                 children: [
-                  if (currentUser!.pImage != null) ...[
+                  if (eventCreater!.pImage != null) ...[
                     CircleAvatar(
                       radius: 18,
-                      backgroundImage: NetworkImage(currentUser!.pImage!),
+                      backgroundImage: NetworkImage(eventCreater!.pImage!),
                     )
                   ] else ...[
                     Image(
@@ -706,7 +710,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        currentUser!.userName,
+                        eventCreater!.userName,
                         style: AppTextStyles.josefin(
                             style: TextStyle(
                                 fontWeight: FontWeight.w600,
@@ -752,6 +756,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
         ):const SizedBox();
   }
   Widget participant(UserModel user){
+    print("participant");
+    print(user.userName);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: GestureDetector(
@@ -766,7 +772,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                 const Duration(milliseconds: 200),
                 reverseDuration:
                 const Duration(milliseconds: 200),
-                child:  OtherUserProfileScreen(user: user,),
+                child:  CreateOtherUserProfileView(user: user,),
               ),
             );
           },

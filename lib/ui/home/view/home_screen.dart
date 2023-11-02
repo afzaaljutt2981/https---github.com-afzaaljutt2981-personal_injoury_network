@@ -310,6 +310,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       CustomSizeBox(13.h),
+                      if(events.isEmpty)...[
+                        CustomSizeBox(100.h),
+                        const Center(child: Text("No Event Found!"))
+                      ]else...[
                       ListView.builder(
                           physics: const ClampingScrollPhysics(),
                           itemCount: events.length,
@@ -484,7 +488,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                             );
-                          })
+                          })]
                     ],
                   ),
                 ),

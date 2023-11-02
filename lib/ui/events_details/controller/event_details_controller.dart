@@ -20,8 +20,8 @@ class EventDetailsController extends ChangeNotifier {
         allUsers
             .add(UserModel.fromJson(element.data() as Map<String, dynamic>));
       }
-      notifyListeners();
     });
+    notifyListeners();
   }
 
   getEventTickets(String eventId) {
@@ -37,13 +37,20 @@ class EventDetailsController extends ChangeNotifier {
 
   addEventTicket(String eventId) async {
     var tickDoc = events.doc(eventId).collection("tickets").doc();
-    await tickDoc
-        .set({"uId": FirebaseAuth.instance.currentUser!.uid, "id": tickDoc.id});
+    await tickDoc.set(TicketModel(
+            id: tickDoc.id,
+            eId: eventId,
+            uId: FirebaseAuth.instance.currentUser!.uid)
+        .toJson());
   }
 
   addUserTicket(String eventId) async {
     var uId = FirebaseAuth.instance.currentUser!.uid;
     var tickDoc = users.doc(uId).collection("tickets").doc();
-    await tickDoc.set({"eId": eventId, "id": tickDoc.id});
+    await tickDoc.set(TicketModel(
+            id: tickDoc.id,
+            eId: eventId,
+            uId: FirebaseAuth.instance.currentUser!.uid)
+        .toJson());
   }
 }
