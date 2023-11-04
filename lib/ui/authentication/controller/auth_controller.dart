@@ -71,7 +71,7 @@ class AuthController extends ChangeNotifier {
     try {
       UserCredential user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      if (user.user != null) {
+      if (user.user != null && FirebaseAuth.instance.currentUser != null) {
         print("user data");
         print(user.user!.email);
         getUserData(context);

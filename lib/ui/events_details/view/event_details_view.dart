@@ -47,17 +47,19 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   Widget build(BuildContext context) {
     allUsers = context.watch<EventsController>().allUsers;
     eventTickets = context.watch<EventDetailsController>().eventTickets;
-    if(allUsers.isNotEmpty){
-    currentUser = allUsers.firstWhere((element) => element.id == FirebaseAuth.instance.currentUser!.uid);
-    eventCreater = allUsers.firstWhere((element) => element.id == widget.event.uId);
-    eventParticipants = [];
-    for (var element1 in eventTickets) {
-      eventParticipants
-          .add(allUsers.firstWhere((element) => element.id == element1.uId));
-    }
+    if (allUsers.isNotEmpty) {
+      currentUser = allUsers.firstWhere(
+          (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+      eventCreater =
+          allUsers.firstWhere((element) => element.id == widget.event.uId);
+      eventParticipants = [];
+      for (var element1 in eventTickets) {
+        eventParticipants
+            .add(allUsers.firstWhere((element) => element.id == element1.uId));
+      }
     }
     for (var element in eventParticipants) {
-      if(element.id == currentUser!.id){
+      if (element.id == currentUser!.id) {
         buttonName = "Registered";
       }
     }
@@ -312,18 +314,21 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         ),
                       ),
                       CustomSizeBox(25.h),
-                      if(eventParticipants.length > 4)...[
+                      if (eventParticipants.length > 4) ...[
+                        Row(
+                          children: [
+                            for (var i = 0; i < 4; i++)
+                              participant(eventParticipants[i]),
+                            Text(
+                                "+${eventParticipants.length - 4} Participants")
+                          ],
+                        )
+                      ] else ...[
                         Row(children: [
-                        for(var i=0; i<4 ; i++)
-                         participant(eventParticipants[i]),
-                          Text("+${eventParticipants.length - 4} Participants")
-                          ],)
-                      ]else...[
-                      Row(
-                        children: [
-                          for (var e in eventParticipants)
-                            participant(e)])],
-                        ],
+                          for (var e in eventParticipants) participant(e)
+                        ])
+                      ],
+                    ],
                   ),
                 ),
               ),
@@ -333,19 +338,20 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                     padding:
                         EdgeInsets.only(left: 40.w, right: 40.w, bottom: 20.h),
                     child: GetButton(50.sp, () async {
-                      if(buttonName != "Registered"){
-                      Functions.showLoaderDialog(context);
-                      await context
-                          .read<EventDetailsController>()
-                          .addEventTicket(widget.event.id);
-                      await context
-                          .read<EventDetailsController>()
-                          .addUserTicket(widget.event.id);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      Functions.showSnackBar(
-                          context, "Event register successfully");
-                    }},
+                      if (buttonName != "Registered") {
+                        Functions.showLoaderDialog(context);
+                        await context
+                            .read<EventDetailsController>()
+                            .addEventTicket(widget.event.id);
+                        await context
+                            .read<EventDetailsController>()
+                            .addUserTicket(widget.event.id);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Functions.showSnackBar(
+                            context, "Event register successfully");
+                      }
+                    },
                         Text(
                           buttonName,
                           style: AppTextStyles.josefin(
@@ -353,63 +359,65 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                   color: Colors.white, fontSize: 18.sp)),
                         )),
                   )
-                : Padding(
-                    padding: EdgeInsets.only(
-                      left: 29.w,
-                      right: 29.w,
-                      bottom: 25.h,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () => _showBottomSheet(context),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: AppColors.kPrimaryColor,
-                                    width: 1.5.sp),
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12.sp)),
-                            child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 22.w, vertical: 14.h),
-                                child: Center(
-                                  child: Text(
-                                    'Invite Guests',
-                                    style: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color: AppColors.kPrimaryColor,
-                                            fontSize: 16.sp)),
-                                  ),
-                                )),
-                          ),
+                : (currentUser!.id != widget.event.uId)
+                    ? const SizedBox()
+                    : Padding(
+                        padding: EdgeInsets.only(
+                          left: 29.w,
+                          right: 29.w,
+                          bottom: 25.h,
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xFFD70E0E),
-                                  width: 1.5.sp),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12.sp)),
-                          child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 22.w, vertical: 14.h),
-                              child: Center(
-                                child: Text(
-                                  'Cancel Event',
-                                  style: AppTextStyles.josefin(
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          color: const Color(0xFFD70E0E),
-                                          fontSize: 16.sp)),
-                                ),
-                              )),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () => _showBottomSheet(context),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: AppColors.kPrimaryColor,
+                                        width: 1.5.sp),
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12.sp)),
+                                child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 22.w, vertical: 14.h),
+                                    child: Center(
+                                      child: Text(
+                                        'Invite Guests',
+                                        style: AppTextStyles.josefin(
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                color: AppColors.kPrimaryColor,
+                                                fontSize: 16.sp)),
+                                      ),
+                                    )),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0xFFD70E0E),
+                                      width: 1.5.sp),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12.sp)),
+                              child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 22.w, vertical: 14.h),
+                                  child: Center(
+                                    child: Text(
+                                      'Cancel Event',
+                                      style: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color: const Color(0xFFD70E0E),
+                                              fontSize: 16.sp)),
+                                    ),
+                                  )),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
           ],
         ));
   }
@@ -686,77 +694,79 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   }
 
   Widget marketerInfo() {
-    return  (eventCreater != null) ?
-    Align(
-              alignment: Alignment.bottomLeft,
-              child: Row(
-                children: [
-                  if (eventCreater!.pImage != null) ...[
-                    CircleAvatar(
-                      radius: 18,
-                      backgroundImage: NetworkImage(eventCreater!.pImage!),
-                    )
-                  ] else ...[
-                    Image(
-                      height: 35.sp,
-                      width: 35.sp,
-                      image: const AssetImage('assets/images/profile_pic.png'),
-                    )
+    return (eventCreater != null)
+        ? Align(
+            alignment: Alignment.bottomLeft,
+            child: Row(
+              children: [
+                if (eventCreater!.pImage != null) ...[
+                  CircleAvatar(
+                    radius: 18,
+                    backgroundImage: NetworkImage(eventCreater!.pImage!),
+                  )
+                ] else ...[
+                  Image(
+                    height: 35.sp,
+                    width: 35.sp,
+                    image: const AssetImage('assets/images/profile_pic.png'),
+                  )
+                ],
+                SizedBox(
+                  width: 15.w,
+                ),
+                Expanded(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      eventCreater!.userName,
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontSize: 13.sp)),
+                    ),
+                    CustomSizeBox(5.h),
+                    Text(
+                      "Organizer ",
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xFF706E8F),
+                              fontSize: 10.sp)),
+                    ),
                   ],
-                  SizedBox(
-                    width: 15.w,
-                  ),
-                  Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        eventCreater!.userName,
-                        style: AppTextStyles.josefin(
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                                fontSize: 13.sp)),
-                      ),
-                      CustomSizeBox(5.h),
-                      Text(
-                        "Organizer ",
-                        style: AppTextStyles.josefin(
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                color: const Color(0xFF706E8F),
-                                fontSize: 10.sp)),
-                      ),
-                    ],
-                  )),
-                  Padding(
-                    padding: EdgeInsets.only(right: 30.w),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.sp),
-                          color: //Colors.purple.shade400
+                )),
+                Padding(
+                  padding: EdgeInsets.only(right: 30.w),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.sp),
+                        color: //Colors.purple.shade400
 
-                              const Color(0xFF3C4784).withOpacity(0.818)),
-                      child: Padding(
-                        padding: EdgeInsets.all(10.sp),
-                        child: Center(
-                          child: Text(
-                            "Follow",
-                            style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                    fontSize: 11.sp)),
-                          ),
+                            const Color(0xFF3C4784).withOpacity(0.818)),
+                    child: Padding(
+                      padding: EdgeInsets.all(10.sp),
+                      child: Center(
+                        child: Text(
+                          "Follow",
+                          style: AppTextStyles.josefin(
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                  fontSize: 11.sp)),
                         ),
                       ),
                     ),
-                  )
-                ],
-              ),
-        ):const SizedBox();
+                  ),
+                )
+              ],
+            ),
+          )
+        : const SizedBox();
   }
-  Widget participant(UserModel user){
+
+  Widget participant(UserModel user) {
     print("participant");
     print(user.userName);
     return Padding(
@@ -769,24 +779,23 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                 childCurrent: widget,
                 type: PageTransitionType.rightToLeft,
                 alignment: Alignment.center,
-                duration:
-                const Duration(milliseconds: 200),
-                reverseDuration:
-                const Duration(milliseconds: 200),
-                child:  CreateOtherUserProfileView(participant: user,currentUser: currentUser!,),
+                duration: const Duration(milliseconds: 200),
+                reverseDuration: const Duration(milliseconds: 200),
+                child: CreateOtherUserProfileView(
+                  participant: user,
+                  currentUser: currentUser!,
+                ),
               ),
             );
           },
           child: (user.pImage != null)
               ? CircleAvatar(
-            radius: 20,
-            backgroundImage:
-            NetworkImage(user.pImage!),
-          )
-              :  Image(
-              width: 40.sp,
-              image: const AssetImage(
-                  "assets/images/profile_pic.png"))),
+                  radius: 20,
+                  backgroundImage: NetworkImage(user.pImage!),
+                )
+              : Image(
+                  width: 40.sp,
+                  image: const AssetImage("assets/images/profile_pic.png"))),
     );
   }
 }

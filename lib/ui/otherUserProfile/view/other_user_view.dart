@@ -36,14 +36,14 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
   String followButton = "Follow";
   List<EventModel> userEvents = [];
   List<TicketModel> userTickets = [];
+  String notifyId = "";
   @override
   Widget build(BuildContext context) {
     userEvents = [];
     List<EventModel> allEvents =
         Provider.of<EventsController>(context, listen: false).allEvents;
     List<NotificationsModel> notifications =
-        Provider.of<OtherUserProfileController>(context, listen: false)
-            .notifications;
+        context.watch<OtherUserProfileController>().notifications;
     user = context.watch<OtherUserProfileController>().userModel;
     userTickets = context.watch<OtherUserProfileController>().userTickets;
     if (allEvents.isNotEmpty) {
@@ -56,8 +56,15 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
       }
     }
     for (var element in notifications) {
-      if (element.senderId == FirebaseAuth.instance.currentUser!.uid) {
-        followButton = element.status;
+      if (element.senderId == FirebaseAuth.instance.currentUser!.uid &&
+          element.status != "Rejected" &&
+          element.status != "unFollowed") {
+        if (element.status == "Accepted") {
+          followButton = "Following";
+          notifyId = element.id;
+        } else {
+          followButton = element.status;
+        }
       }
     }
     return Scaffold(
@@ -179,17 +186,25 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             GestureDetector(
-                              onTap: () {
-                                if (followButton != "Follow") {
+                              onTap: () async {
+                                if (followButton == "Follow") {
                                   context
                                       .read<OtherUserProfileController>()
                                       .sendFollowRequest(
                                         user!.id,
                                       );
+                                } else if (followButton == "Following") {
+                                  await context
+                                      .read<OtherUserProfileController>()
+                                      .followTap(user!);
+                                  await context
+                                      .read<OtherUserProfileController>()
+                                      .followingTap(
+                                          widget.currentUser, user!.id);
+                                  await context
+                                      .read<OtherUserProfileController>()
+                                      .unFollow(user!.id, notifyId);
                                 }
-                                // context.read<OtherUserProfileController>().followingTap(
-                                //  widget.currentUser,user!.id
-                                // );
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -312,7 +327,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                     ),
                   ),
                 ),
-                if (followButton == "Approved") ...[
+                if (followButton == "Following") ...[
                   Expanded(
                       child: TabBarView(controller: tabController, children: [
                     OrganizerAbout(
