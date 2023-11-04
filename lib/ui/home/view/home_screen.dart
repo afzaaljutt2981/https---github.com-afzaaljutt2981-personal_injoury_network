@@ -100,8 +100,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        Constants.userType == 'user'
-                            ? GestureDetector(
+                        // Constants.userType == 'marketer'
+                        //     ?
+                        GestureDetector (
                                 onTap: () {
                                   Navigator.push(
                                     context,
@@ -123,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       'assets/images/notification.png'),
                                 ),
                               )
-                            : const SizedBox(),
+                            // : const SizedBox(),
                       ],
                     ),
                   ),

@@ -14,6 +14,7 @@ import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
+import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:personal_injury_networking/ui/events_details/controller/event_details_controller.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/view/create_other_profile_view.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +45,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   String buttonName = "Register";
   @override
   Widget build(BuildContext context) {
-    allUsers = context.watch<EventDetailsController>().allUsers;
+    allUsers = context.watch<EventsController>().allUsers;
     eventTickets = context.watch<EventDetailsController>().eventTickets;
     if(allUsers.isNotEmpty){
     currentUser = allUsers.firstWhere((element) => element.id == FirebaseAuth.instance.currentUser!.uid);

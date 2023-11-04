@@ -45,6 +45,7 @@ class OrganizerEvents extends StatelessWidget {
               return eventBox(userEvents[index]);
             });
   }
+
   Widget eventBox(EventModel event){
     DateTime date = DateTime.fromMillisecondsSinceEpoch(event.dateTime);
     String fDate = DateFormat("d MMM- EEEE").format(date);

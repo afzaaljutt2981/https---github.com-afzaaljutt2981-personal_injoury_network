@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
+import 'package:personal_injury_networking/ui/notifications/model/nitofications_model.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/controller/other_user_profile_controller.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/view/about_view.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/view/events_view.dart';
@@ -33,27 +33,33 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
 
   bool isFollow = false;
   UserModel? user;
+  String followButton = "Follow";
   List<EventModel> userEvents = [];
   List<TicketModel> userTickets = [];
   @override
   Widget build(BuildContext context) {
-    List<EventModel> allEvents = Provider.of<EventsController>(context,listen: false).allEvents;
+    userEvents = [];
+    List<EventModel> allEvents =
+        Provider.of<EventsController>(context, listen: false).allEvents;
+    List<NotificationsModel> notifications =
+        Provider.of<OtherUserProfileController>(context, listen: false)
+            .notifications;
     user = context.watch<OtherUserProfileController>().userModel;
     userTickets = context.watch<OtherUserProfileController>().userTickets;
-    if(allEvents.isNotEmpty){
-    for (var element in userTickets) {
-      for (var element1 in allEvents) {
-        if(element1.id == element.eId){
-          userEvents.add(element1);
+    if (allEvents.isNotEmpty) {
+      for (var element in userTickets) {
+        for (var element1 in allEvents) {
+          if (element1.id == element.eId) {
+            userEvents.add(element1);
+          }
         }
       }
-    }}
-    if(user != null){
-    if(user!.followers.contains(FirebaseAuth.instance.currentUser!.uid)){
-      isFollow = true;
-    }else{
-      isFollow = false;
-    }}
+    }
+    for (var element in notifications) {
+      if (element.senderId == FirebaseAuth.instance.currentUser!.uid) {
+        followButton = element.status;
+      }
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -163,102 +169,105 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                     ),
                   ],
                 ),
-                if(user!.id != FirebaseAuth.instance.currentUser!.uid)
-                Column(
-                  children: [
-                    CustomSizeBox(15.h),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                context.read<OtherUserProfileController>().followTap(
-                                  user!,
-                                );
-
-                                context.read<OtherUserProfileController>().followingTap(
-                                 widget.currentUser,user!.id
-                                );
-                              });
-                            },
-                            child: Container(
+                if (user!.id != FirebaseAuth.instance.currentUser!.uid)
+                  Column(
+                    children: [
+                      CustomSizeBox(15.h),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                if (followButton != "Follow") {
+                                  context
+                                      .read<OtherUserProfileController>()
+                                      .sendFollowRequest(
+                                        user!.id,
+                                      );
+                                }
+                                // context.read<OtherUserProfileController>().followingTap(
+                                //  widget.currentUser,user!.id
+                                // );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: AppColors.kPrimaryColor,
+                                    borderRadius: BorderRadius.circular(7.sp)),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal:
+                                          isFollow == false ? 34.w : 23.w,
+                                      vertical: 12.h),
+                                  child: Row(
+                                    children: [
+                                      isFollow == false
+                                          ? Image(
+                                              height: 20.sp,
+                                              width: 20.sp,
+                                              image: const AssetImage(
+                                                  'assets/images/follow_orgnizer_screen.png'),
+                                            )
+                                          : Image(
+                                              height: 20.sp,
+                                              width: 20.sp,
+                                              image: const AssetImage(
+                                                  'assets/images/followed_other_user.png'),
+                                            ),
+                                      SizedBox(
+                                        width: 15.w,
+                                      ),
+                                      Text(
+                                        followButton,
+                                        style: AppTextStyles.josefin(
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16.sp)),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
                               decoration: BoxDecoration(
-                                  color: AppColors.kPrimaryColor,
+                                  border: Border.all(
+                                      color: AppColors.kPrimaryColor,
+                                      width: 1.5.sp),
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(7.sp)),
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: isFollow == false ? 34.w : 23.w,
-                                    vertical: 12.h),
+                                    horizontal: 24.w, vertical: 10.h),
                                 child: Row(
                                   children: [
-                                    isFollow == false
-                                        ? Image(
-                                            height: 20.sp,
-                                            width: 20.sp,
-                                            image: const AssetImage(
-                                                'assets/images/follow_orgnizer_screen.png'),
-                                          )
-                                        : Image(
-                                            height: 20.sp,
-                                            width: 20.sp,
-                                            image: const AssetImage(
-                                                'assets/images/followed_other_user.png'),
-                                          ),
+                                    Image(
+                                      height: 20.sp,
+                                      width: 20.sp,
+                                      image: const AssetImage(
+                                          'assets/images/message_orgnizer_screen.png'),
+                                    ),
                                     SizedBox(
-                                      width: 15.w,
+                                      width: 5.w,
                                     ),
                                     Text(
-                                      isFollow ? 'Followed ' : 'Follow',
+                                      'Messages',
                                       style: AppTextStyles.josefin(
                                           style: TextStyle(
-                                              color: Colors.white,
+                                              color: AppColors.kPrimaryColor,
                                               fontSize: 16.sp)),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: AppColors.kPrimaryColor, width: 1.5.sp),
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(7.sp)),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 24.w, vertical: 10.h),
-                              child: Row(
-                                children: [
-                                  Image(
-                                    height: 20.sp,
-                                    width: 20.sp,
-                                    image: const AssetImage(
-                                        'assets/images/message_orgnizer_screen.png'),
-                                  ),
-                                  SizedBox(
-                                    width: 5.w,
-                                  ),
-                                  Text(
-                                    'Messages',
-                                    style: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                            color: AppColors.kPrimaryColor,
-                                            fontSize: 16.sp)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    CustomSizeBox(20.h),
-                  ],
-                ),
+                      CustomSizeBox(20.h),
+                    ],
+                  ),
                 SizedBox(
                   height: 45.h,
                   child: AppBar(
@@ -303,14 +312,26 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                     ),
                   ),
                 ),
-                Expanded(
-                    child: TabBarView(
-                        controller: tabController,
-                        children:  [
-                      OrganizerAbout(user: user!,),
-                      OrganizerEvents(userEvents : userEvents),
-                      const OtherUserReviewScreen()
-                    ]))
+                if (followButton == "Approved") ...[
+                  Expanded(
+                      child: TabBarView(controller: tabController, children: [
+                    OrganizerAbout(
+                      user: user!,
+                    ),
+                    OrganizerEvents(userEvents: userEvents),
+                    const OtherUserReviewScreen()
+                  ]))
+                ] else if (followButton == "Follow") ...[
+                  const Expanded(
+                      child: Center(
+                          child:
+                              Text("Send a follow req to view hidden content")))
+                ] else ...[
+                  const Expanded(
+                      child: Center(
+                          child: Text(
+                              "Wait for user response to view hidden content")))
+                ]
               ],
             )
           : const Center(child: CircularProgressIndicator()),

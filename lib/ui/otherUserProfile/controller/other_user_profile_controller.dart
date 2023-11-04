@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,18 +7,30 @@ import 'package:personal_injury_networking/ui/authentication/model/user_model.da
 import 'package:personal_injury_networking/ui/create_event/models/event_model.dart';
 
 import '../../events_details/models/ticket_model.dart';
+import '../../notifications/model/nitofications_model.dart';
 
 class OtherUserProfileController extends ChangeNotifier {
   OtherUserProfileController({String? userId}){
     if(userId != null){
-    getUserData(userId);
+    getOtherUserData(userId);
     getUserEvents(userId);
+    getOtherUserNotifications(userId);
     }
   }
 CollectionReference user = FirebaseFirestore.instance.collection("users");
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? notificationsStream;
 UserModel? userModel;
+List<NotificationsModel> notifications = [];
 List<TicketModel> userTickets = [];
-  getUserData(String userId){
+getOtherUserNotifications(String userId){
+  notificationsStream  = user.doc(userId).collection("notifications").snapshots().listen((event) {
+    for (var element in event.docs) {
+      notifications.add(NotificationsModel.fromJson(element.data()));
+    }
+  });
+  notifyListeners();
+}
+  getOtherUserData(String userId){
     user.doc(userId).snapshots().listen((event) {
       userModel = UserModel.fromJson(event.data() as Map<String,dynamic>);
     });
@@ -30,6 +44,18 @@ List<TicketModel> userTickets = [];
       notifyListeners();
     });
 
+  }
+  sendFollowRequest(String userId) {
+    var doc = user.doc(userId).collection("notifications").doc();
+    var senderId = FirebaseAuth.instance.currentUser!.uid;
+    doc.set(NotificationsModel(
+        id: doc.id,
+        senderId: senderId,
+        image: "",
+        notificationContent: "",
+        time: DateTime.now().millisecondsSinceEpoch,
+        notificationType: "Follow", status: 'Pending')
+        .toJson());
   }
   followTap(
       UserModel userModel,
