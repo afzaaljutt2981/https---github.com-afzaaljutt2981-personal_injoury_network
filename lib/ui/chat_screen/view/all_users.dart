@@ -55,18 +55,18 @@ class _AllUsersChatState extends State<AllUsersChat> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              childCurrent: widget,
-                              type: PageTransitionType.rightToLeftJoined,
-                              alignment: Alignment.center,
-                              duration: const Duration(milliseconds: 200),
-                              reverseDuration:
-                                  const Duration(milliseconds: 200),
-                              child: const ChatScreen(),
-                            ),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   PageTransition(
+                          //     childCurrent: widget,
+                          //     type: PageTransitionType.rightToLeftJoined,
+                          //     alignment: Alignment.center,
+                          //     duration: const Duration(milliseconds: 200),
+                          //     reverseDuration:
+                          //         const Duration(milliseconds: 200),
+                          //     child: const ChatScreen(),
+                          //   ),
+                          // );
                         },
                         child: Container(
                           padding: EdgeInsets.only(

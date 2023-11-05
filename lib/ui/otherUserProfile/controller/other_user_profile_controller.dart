@@ -27,8 +27,8 @@ getOtherUserNotifications(String userId){
     for (var element in event.docs) {
       notifications.add(NotificationsModel.fromJson(element.data()));
     }
+    notifyListeners();
   });
-  notifyListeners();
 }
   getOtherUserData(String userId){
     user.doc(userId).snapshots().listen((event) {
@@ -56,6 +56,12 @@ getOtherUserNotifications(String userId){
         time: DateTime.now().millisecondsSinceEpoch,
         notificationType: "Follow", status: 'Pending')
         .toJson());
+  }
+  unFollow(String userId,String notificationId) async {
+   await user.doc(userId).collection("notifications").doc(notificationId).update(
+        {
+          "status":"unFollowed"
+        });
   }
   followTap(
       UserModel userModel,
@@ -92,7 +98,7 @@ getOtherUserNotifications(String userId){
       ) {
     String id = FirebaseAuth.instance.currentUser!.uid;
     final collectionRef =
-    FirebaseFirestore.instance.collection("users").doc(id);
+    user.doc(id);
     var fList = userModel.followings;
 
     if (fList.contains(uId)) {
@@ -102,7 +108,7 @@ getOtherUserNotifications(String userId){
     }
     collectionRef.update(
       {
-        "following": fList,
+        "followings": fList,
       },
     ).then((value) {
       fList = [];

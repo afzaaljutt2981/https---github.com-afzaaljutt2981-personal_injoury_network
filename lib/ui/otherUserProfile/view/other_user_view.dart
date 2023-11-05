@@ -4,6 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
+import 'package:personal_injury_networking/ui/chat_screen/view/chat_view.dart';
+import 'package:personal_injury_networking/ui/chat_screen/view/create_chat_view.dart';
+import 'package:personal_injury_networking/ui/chat_screen/view/single_chat_screen_view.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:personal_injury_networking/ui/notifications/model/nitofications_model.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/controller/other_user_profile_controller.dart';
@@ -36,14 +39,14 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
   String followButton = "Follow";
   List<EventModel> userEvents = [];
   List<TicketModel> userTickets = [];
+  String notifyId = "";
   @override
   Widget build(BuildContext context) {
     userEvents = [];
     List<EventModel> allEvents =
         Provider.of<EventsController>(context, listen: false).allEvents;
     List<NotificationsModel> notifications =
-        Provider.of<OtherUserProfileController>(context, listen: false)
-            .notifications;
+        context.watch<OtherUserProfileController>().notifications;
     user = context.watch<OtherUserProfileController>().userModel;
     userTickets = context.watch<OtherUserProfileController>().userTickets;
     if (allEvents.isNotEmpty) {
@@ -56,8 +59,15 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
       }
     }
     for (var element in notifications) {
-      if (element.senderId == FirebaseAuth.instance.currentUser!.uid) {
-        followButton = element.status;
+      if (element.senderId == FirebaseAuth.instance.currentUser!.uid &&
+          element.status != "Rejected" &&
+          element.status != "unFollowed") {
+        if (element.status == "Accepted") {
+          followButton = "Following";
+          notifyId = element.id;
+        } else {
+          followButton = element.status;
+        }
       }
     }
     return Scaffold(
@@ -179,17 +189,25 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             GestureDetector(
-                              onTap: () {
-                                if (followButton != "Follow") {
+                              onTap: () async {
+                                if (followButton == "Follow") {
                                   context
                                       .read<OtherUserProfileController>()
                                       .sendFollowRequest(
                                         user!.id,
                                       );
+                                } else if (followButton == "Following") {
+                                  await context
+                                      .read<OtherUserProfileController>()
+                                      .followTap(user!);
+                                  await context
+                                      .read<OtherUserProfileController>()
+                                      .followingTap(
+                                          widget.currentUser, user!.id);
+                                  await context
+                                      .read<OtherUserProfileController>()
+                                      .unFollow(user!.id, notifyId);
                                 }
-                                // context.read<OtherUserProfileController>().followingTap(
-                                //  widget.currentUser,user!.id
-                                // );
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -230,35 +248,44 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                 ),
                               ),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: AppColors.kPrimaryColor,
-                                      width: 1.5.sp),
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(7.sp)),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 24.w, vertical: 10.h),
-                                child: Row(
-                                  children: [
-                                    Image(
-                                      height: 20.sp,
-                                      width: 20.sp,
-                                      image: const AssetImage(
-                                          'assets/images/message_orgnizer_screen.png'),
-                                    ),
-                                    SizedBox(
-                                      width: 5.w,
-                                    ),
-                                    Text(
-                                      'Messages',
-                                      style: AppTextStyles.josefin(
-                                          style: TextStyle(
-                                              color: AppColors.kPrimaryColor,
-                                              fontSize: 16.sp)),
-                                    ),
-                                  ],
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) =>
+                                             SingleChatScreenView(user: user!,)));
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: AppColors.kPrimaryColor,
+                                        width: 1.5.sp),
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(7.sp)),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 24.w, vertical: 10.h),
+                                  child: Row(
+                                    children: [
+                                      Image(
+                                        height: 20.sp,
+                                        width: 20.sp,
+                                        image: const AssetImage(
+                                            'assets/images/message_orgnizer_screen.png'),
+                                      ),
+                                      SizedBox(
+                                        width: 5.w,
+                                      ),
+                                      Text(
+                                        'Messages',
+                                        style: AppTextStyles.josefin(
+                                            style: TextStyle(
+                                                color: AppColors.kPrimaryColor,
+                                                fontSize: 16.sp)),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -312,7 +339,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                     ),
                   ),
                 ),
-                if (followButton == "Approved") ...[
+                if (followButton == "Following") ...[
                   Expanded(
                       child: TabBarView(controller: tabController, children: [
                     OrganizerAbout(

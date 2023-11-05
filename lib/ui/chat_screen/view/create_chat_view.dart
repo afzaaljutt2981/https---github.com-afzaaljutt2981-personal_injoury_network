@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controller/chat_controller.dart';
@@ -15,6 +14,6 @@ class _CreateChatViewState extends State<CreateChatView> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ChatController>(
-        create: (_) => ChatController(), child: const AllUsersChat());
+        create: (_) => ChatController(""), child: const AllUsersChat());
   }
 }
