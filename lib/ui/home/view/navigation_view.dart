@@ -1,24 +1,25 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
-import 'package:personal_injury_networking/ui/events/view/all_events_screen.dart';
-import 'package:personal_injury_networking/ui/home/view/home_screen.dart';
-import 'package:personal_injury_networking/ui/qr_scan_screen/view/qr_scan_view.dart';
-import '../../chat_screen/view/all_users.dart';
+
+import '../../../global/utils/constants.dart';
+import '../../admin/admin_home/admin_home_controller/view/admin_create_home_view.dart';
 import '../../chat_screen/view/create_chat_view.dart';
 import '../../events/view/create_all_events_view.dart';
 import '../../myProfile/view/create_my_profile.dart';
-import '../../myProfile/view/my_profile.dart';
 import '../../qr_scan_screen/view/create_qr_scan_view.dart';
 import 'create_home_view.dart';
 
 // ignore: must_be_immutable
 class BottomNavigationScreen extends StatefulWidget {
   BottomNavigationScreen({required this.selectedIndex, super.key});
+
   int selectedIndex;
+
   @override
   State<BottomNavigationScreen> createState() => _BottomNavigationScreenState();
 }
@@ -26,6 +27,7 @@ class BottomNavigationScreen extends StatefulWidget {
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   PageController? _pageController;
   int? selectedIndex;
+
   @override
   void initState() {
     super.initState();
@@ -61,9 +63,13 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
             onPageChanged: (index) {
               setState(() => selectedIndex = index);
             },
-            children: const <Widget>[
-              CreateHomeScreenView(),
-              CreateChatView(),
+            children: <Widget>[
+              FirebaseAuth.instance.currentUser?.email != Constants.adminEmail
+                  ? CreateAdminHomeScreenView()
+                  : CreateHomeScreenView(),
+              if (FirebaseAuth.instance.currentUser?.email !=
+                  Constants.adminEmail)
+                CreateChatView(),
               CreateQrScanView(),
               CreateAllEventsView(),
               CreateMyProfileView()
@@ -91,13 +97,15 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                   color: AppColors.kPrimaryColor, fontSize: 12.sp),
               showUnselectedLabels: true,
               elevation: 2,
-              items: const <BottomNavigationBarItem>[
+              items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
                   icon: ImageIcon(
                       AssetImage('assets/images/home_icon_home_b.png')),
                   label: "Home",
                 ),
-                BottomNavigationBarItem(
+                if (FirebaseAuth.instance.currentUser?.email !=
+                    Constants.adminEmail)
+                  BottomNavigationBarItem(
                   icon: ImageIcon(
                       AssetImage('assets/images/chat_icon_home_b.png')),
                   label: "Messages",

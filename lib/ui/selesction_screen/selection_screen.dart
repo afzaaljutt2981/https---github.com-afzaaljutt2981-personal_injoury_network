@@ -41,13 +41,28 @@ class _SelectionScreenState extends State<SelectionScreen> {
             child: SizedBox(
               width: screenWidth,
               child: Text(
-                "A Venue for hosting \nOnline and Hybrid Events",
+                "Let's Get",
                 textAlign: TextAlign.center,
                 style: AppTextStyles.josefin(
                     style: TextStyle(
                         height: 1.5,
                         color: Colors.white,
                         fontSize: 20.sp,
+                        fontWeight: FontWeight.w600)),
+              ),
+            )),
+        Positioned(
+            top: (screenHeight * 0.3) + 30,
+            child: SizedBox(
+              width: screenWidth,
+              child: Text(
+                "Connected!",
+                textAlign: TextAlign.center,
+                style: AppTextStyles.josefin(
+                    style: TextStyle(
+                        height: 1.5,
+                        color: Colors.white,
+                        fontSize: 30.sp,
                         fontWeight: FontWeight.w600)),
               ),
             )),
@@ -71,15 +86,15 @@ class _SelectionScreenState extends State<SelectionScreen> {
                   Image(
                     image:
                         const AssetImage('assets/images/intro_screen_logo.png'),
-                    height: 65.sp,
-                    width: 65.sp,
+                    height: 80.sp,
+                    width: 80.sp,
                   ),
                   CustomSizeBox(10.h),
-                  Text('Let’s get Started to get amazing features',
-                      style: GoogleFonts.poppins(
-                          color: Colors.black.withOpacity(0.56),
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13.sp)),
+                  // Text('Let’s get Started to get amazing features',
+                  //     style: GoogleFonts.poppins(
+                  //         color: Colors.black.withOpacity(0.56),
+                  //         fontWeight: FontWeight.w500,
+                  //         fontSize: 13.sp)),
                   CustomSizeBox(40.h),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30.sp),
