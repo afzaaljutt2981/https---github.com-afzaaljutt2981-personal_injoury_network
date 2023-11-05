@@ -1,7 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
@@ -11,12 +11,14 @@ import '../../../../../global/app_buttons/app_primary_button.dart';
 import '../../../../../global/helper/custom_sized_box.dart';
 import '../../../../../global/utils/app_colors.dart';
 import '../../../../../global/utils/app_text_styles.dart';
+import '../../../../authentication/model/user_model.dart';
 import '../../../../create_event/models/event_model.dart';
 import '../../../../drawer/view/create_drawer_view.dart';
 import '../../../../events/view/search_events_view.dart';
 import '../../../../events_details/view/create_event_details_view.dart';
 import '../../../../home/view/navigation_view.dart';
 import '../../../../notifications/view/create_notifications_view.dart';
+
 
 
 class AdminHomeScreen extends StatefulWidget {
@@ -28,13 +30,30 @@ class AdminHomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<AdminHomeScreen> {
   List<EventModel> events = [];
+  UserModel? user;
+  List<UserModel> allUsers = [];
   @override
   Widget build(BuildContext context) {
-    events = context.watch<EventsController>().allEvents;
+    events = [];
+    allUsers = context.watch<EventsController>().allUsers;
+    if(allUsers.isNotEmpty && FirebaseAuth.instance.currentUser != null){
+     user = allUsers.firstWhere((element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+    }
+    if (Constants.userType == "user") {
+      events = context.watch<EventsController>().allEvents;
+    } else if(FirebaseAuth.instance.currentUser != null){
+      events = context
+          .watch<EventsController>()
+          .allEvents
+          .where((element) =>
+              element.uId == FirebaseAuth.instance.currentUser!.uid)
+          .toList();
+    }
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Stack(
+      body: (user != null)?
+      Stack(
         children: [
           Container(color: Colors.white, height: screenHeight),
           Positioned(
@@ -99,34 +118,33 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                         ),
                         // Constants.userType == 'marketer'
                         //     ?
-                        GestureDetector (
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    PageTransition(
-                                      childCurrent: widget,
-                                      type: PageTransitionType.rightToLeft,
-                                      duration:
-                                          const Duration(milliseconds: 200),
-                                      reverseDuration:
-                                          const Duration(milliseconds: 200),
-                                      child: const CreateNotificationsView(),
-                                    ),
-                                  );
-                                },
-                                child: Image(
-                                  height: 20.sp,
-                                  width: 20.sp,
-                                  image: const AssetImage(
-                                      'assets/images/notification.png'),
-                                ),
-                              )
-                            // : const SizedBox(),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                childCurrent: widget,
+                                type: PageTransitionType.rightToLeft,
+                                duration: const Duration(milliseconds: 200),
+                                reverseDuration:
+                                    const Duration(milliseconds: 200),
+                                child: const CreateNotificationsView(),
+                              ),
+                            );
+                          },
+                          child: Image(
+                            height: 20.sp,
+                            width: 20.sp,
+                            image: const AssetImage(
+                                'assets/images/notification.png'),
+                          ),
+                        )
+                        // : const SizedBox(),
                       ],
                     ),
                   ),
                   Text(
-                    "Welcome Afzaal",
+                    "Welcome ${user!.userName}",
                     style: AppTextStyles.josefin(
                         style: TextStyle(
                             color: const Color(0xFFB2E5F5),
@@ -163,7 +181,7 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                 width: 7.w,
                               ),
                               Text(
-                                "258 events around you",
+                                "${events.length} events around you",
                                 style: AppTextStyles.josefin(
                                     style: TextStyle(
                                         color: Colors.white,
@@ -195,7 +213,7 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                             const Duration(milliseconds: 200),
                                         reverseDuration:
                                             const Duration(milliseconds: 200),
-                                        child: const SearchEventScreen(),
+                                        child: SearchEventScreen(events: events,),
                                       ),
                                     );
                                   },
@@ -308,185 +326,190 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                         ),
                       ),
                       CustomSizeBox(13.h),
-                      if(events.isEmpty)...[
+                      if (events.isEmpty) ...[
                         CustomSizeBox(100.h),
                         const Center(child: Text("No Event Found!"))
-                      ]else...[
-                      ListView.builder(
-                          physics: const ClampingScrollPhysics(),
-                          itemCount: events.length,
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.only(bottom: 25.h),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    //  height: 140.sp,
-                                    width: 110.sp,
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[300],
-                                        borderRadius:
-                                            BorderRadius.circular(20.sp),
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                events[index].pImage),
-                                            fit: BoxFit.cover)),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 8.w,
-                                          top: 8.h,
-                                          bottom: 70.h,
-                                          right: 55.w),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(20.sp)),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            CustomSizeBox(5.h),
-                                            Text("21",
-                                                style:
-                                                    GoogleFonts.sourceCodePro(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.black,
-                                                        fontSize: 15.sp)),
-                                            Text("MAR",
-                                                style:
-                                                    GoogleFonts.sourceCodePro(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.black,
-                                                        fontSize: 9.sp)),
-                                            CustomSizeBox(5.h),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 20.w),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                "1.4 KM AWAY",
-                                                style: AppTextStyles.josefin(
-                                                    style: TextStyle(
-                                                        fontSize: 10.sp,
-                                                        color: const Color(
-                                                            0xFFACB1D9))),
-                                              ),
-                                              SizedBox(
-                                                width: 10.w,
-                                              ),
-                                              Container(
-                                                height: 2,
-                                                width: 100.w,
-                                                color: const Color(0xFFF0F1FA),
-                                              )
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                right: 10.w,
-                                                top: 10.h,
-                                                bottom: 7.h),
-                                            child: Text(
-                                              events[index].title,
-                                              style: AppTextStyles.josefin(
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 20.sp,
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                            ),
-                                          ),
-                                          Row(
+                      ] else ...[
+                        ListView.builder(
+                            physics: const ClampingScrollPhysics(),
+                            itemCount: events.length,
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 25.h),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      //  height: 140.sp,
+                                      width: 110.sp,
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius:
+                                              BorderRadius.circular(20.sp),
+                                          image: DecorationImage(
+                                              image: NetworkImage(
+                                                  events[index].pImage),
+                                              fit: BoxFit.cover)),
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 8.w,
+                                            top: 8.h,
+                                            bottom: 70.h,
+                                            right: 55.w),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(20.sp)),
+                                          child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: [
-                                              Image(
-                                                height: 18.sp,
-                                                width: 18.sp,
-                                                image: const AssetImage(
-                                                    'assets/images/location_blue.png'),
-                                              ),
-                                              SizedBox(
-                                                width: 7.w,
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  events[index].address,
-                                                  style: AppTextStyles.josefin(
-                                                      style: TextStyle(
-                                                          color: const Color(
-                                                              0xFF585DF9),
-                                                          fontSize: 12.sp,
+                                              CustomSizeBox(5.h),
+                                              Text("21",
+                                                  style:
+                                                      GoogleFonts.sourceCodePro(
                                                           fontWeight:
-                                                              FontWeight.w500)),
-                                                ),
-                                              ),
+                                                              FontWeight.w600,
+                                                          color: Colors.black,
+                                                          fontSize: 15.sp)),
+                                              Text("MAR",
+                                                  style:
+                                                      GoogleFonts.sourceCodePro(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.black,
+                                                          fontSize: 9.sp)),
+                                              CustomSizeBox(5.h),
                                             ],
                                           ),
-                                          CustomSizeBox(12.h),
-                                          Padding(
-                                            padding:
-                                                EdgeInsets.only(right: 60.w),
-                                            child: GetButton(
-                                              40.sp,
-                                              () {
-                                                Navigator.push(
-                                                  context,
-                                                  PageTransition(
-                                                    childCurrent: widget,
-                                                    type: PageTransitionType
-                                                        .leftToRightWithFade,
-                                                    alignment: Alignment.center,
-                                                    duration: const Duration(
-                                                        milliseconds: 200),
-                                                    reverseDuration:
-                                                        const Duration(
-                                                            milliseconds: 200),
-                                                    child:
-                                                        CreateEventDetailsView(
-                                                      event: events[index],
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              Text(
-                                                "View Event",
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 20.w),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  "1.4 KM AWAY",
+                                                  style: AppTextStyles.josefin(
+                                                      style: TextStyle(
+                                                          fontSize: 10.sp,
+                                                          color: const Color(
+                                                              0xFFACB1D9))),
+                                                ),
+                                                SizedBox(
+                                                  width: 10.w,
+                                                ),
+                                                Container(
+                                                  height: 2,
+                                                  width: 100.w,
+                                                  color:
+                                                      const Color(0xFFF0F1FA),
+                                                )
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  right: 10.w,
+                                                  top: 10.h,
+                                                  bottom: 7.h),
+                                              child: Text(
+                                                events[index].title,
                                                 style: AppTextStyles.josefin(
                                                     style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 14.sp,
+                                                        color: Colors.black,
+                                                        fontSize: 20.sp,
                                                         fontWeight:
                                                             FontWeight.w500)),
                                               ),
                                             ),
-                                          )
-                                        ],
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Image(
+                                                  height: 18.sp,
+                                                  width: 18.sp,
+                                                  image: const AssetImage(
+                                                      'assets/images/location_blue.png'),
+                                                ),
+                                                SizedBox(
+                                                  width: 7.w,
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    events[index].address,
+                                                    style: AppTextStyles.josefin(
+                                                        style: TextStyle(
+                                                            color: const Color(
+                                                                0xFF585DF9),
+                                                            fontSize: 12.sp,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500)),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            CustomSizeBox(12.h),
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 60.w),
+                                              child: GetButton(
+                                                40.sp,
+                                                () {
+                                                  Navigator.push(
+                                                    context,
+                                                    PageTransition(
+                                                      childCurrent: widget,
+                                                      type: PageTransitionType
+                                                          .leftToRightWithFade,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      duration: const Duration(
+                                                          milliseconds: 200),
+                                                      reverseDuration:
+                                                          const Duration(
+                                                              milliseconds:
+                                                                  200),
+                                                      child:
+                                                          CreateEventDetailsView(
+                                                        event: events[index],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                Text(
+                                                  "View Event",
+                                                  style: AppTextStyles.josefin(
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 14.sp,
+                                                          fontWeight:
+                                                              FontWeight.w500)),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            );
-                          })]
+                                    )
+                                  ],
+                                ),
+                              );
+                            })
+                      ]
                     ],
                   ),
                 ),
@@ -494,7 +517,7 @@ class _HomeScreenState extends State<AdminHomeScreen> {
             ),
           ),
         ],
-      ),
+      ):const CircularProgressIndicator(),
     );
   }
 }
