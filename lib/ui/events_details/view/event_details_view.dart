@@ -45,6 +45,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   String buttonName = "Register";
   @override
   Widget build(BuildContext context) {
+    eventTickets = [];
     allUsers = context.watch<EventsController>().allUsers;
     eventTickets = context.watch<EventDetailsController>().eventTickets;
     if (allUsers.isNotEmpty) {
@@ -320,7 +321,9 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                             for (var i = 0; i < 4; i++)
                               participant(eventParticipants[i]),
                             Text(
-                                "+${eventParticipants.length - 4} Participants")
+                              "+${eventParticipants.length - 4} Participants",
+                              style: const TextStyle(color: Colors.black),
+                            )
                           ],
                         )
                       ] else ...[

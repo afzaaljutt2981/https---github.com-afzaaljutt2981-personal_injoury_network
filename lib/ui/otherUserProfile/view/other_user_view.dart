@@ -4,6 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
+import 'package:personal_injury_networking/ui/chat_screen/view/chat_view.dart';
+import 'package:personal_injury_networking/ui/chat_screen/view/create_chat_view.dart';
+import 'package:personal_injury_networking/ui/chat_screen/view/single_chat_screen_view.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:personal_injury_networking/ui/notifications/model/nitofications_model.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/controller/other_user_profile_controller.dart';
@@ -245,35 +248,44 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                 ),
                               ),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: AppColors.kPrimaryColor,
-                                      width: 1.5.sp),
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(7.sp)),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 24.w, vertical: 10.h),
-                                child: Row(
-                                  children: [
-                                    Image(
-                                      height: 20.sp,
-                                      width: 20.sp,
-                                      image: const AssetImage(
-                                          'assets/images/message_orgnizer_screen.png'),
-                                    ),
-                                    SizedBox(
-                                      width: 5.w,
-                                    ),
-                                    Text(
-                                      'Messages',
-                                      style: AppTextStyles.josefin(
-                                          style: TextStyle(
-                                              color: AppColors.kPrimaryColor,
-                                              fontSize: 16.sp)),
-                                    ),
-                                  ],
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) =>
+                                             SingleChatScreenView(user: user!,)));
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: AppColors.kPrimaryColor,
+                                        width: 1.5.sp),
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(7.sp)),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 24.w, vertical: 10.h),
+                                  child: Row(
+                                    children: [
+                                      Image(
+                                        height: 20.sp,
+                                        width: 20.sp,
+                                        image: const AssetImage(
+                                            'assets/images/message_orgnizer_screen.png'),
+                                      ),
+                                      SizedBox(
+                                        width: 5.w,
+                                      ),
+                                      Text(
+                                        'Messages',
+                                        style: AppTextStyles.josefin(
+                                            style: TextStyle(
+                                                color: AppColors.kPrimaryColor,
+                                                fontSize: 16.sp)),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
