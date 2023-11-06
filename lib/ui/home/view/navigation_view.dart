@@ -64,7 +64,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               setState(() => selectedIndex = index);
             },
             children: <Widget>[
-              FirebaseAuth.instance.currentUser?.email != Constants.adminEmail
+              FirebaseAuth.instance.currentUser?.email == Constants.adminEmail
                   ? CreateAdminHomeScreenView()
                   : CreateHomeScreenView(),
               if (FirebaseAuth.instance.currentUser?.email !=

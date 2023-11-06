@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3)).then((value) async {
+    Future.delayed(const Duration(seconds: 7)).then((value) async {
       if (FirebaseAuth.instance.currentUser != null) {
         await Provider.of<MyProfileController>(context, listen: false)
             .getUserData();
@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Image(
               height: 130.sp,
               width: 130.sp,
-              image: const AssetImage('assets/images/logo_gif.gif'),
+              image: const AssetImage('assets/images/logo_gif_v2.gif'),
             ),
           ),
           CustomSizeBox(25.h),

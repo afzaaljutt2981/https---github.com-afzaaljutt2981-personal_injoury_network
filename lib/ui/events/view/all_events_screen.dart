@@ -1,9 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
-import 'package:personal_injury_networking/ui/create_event/view/add_event_view.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:personal_injury_networking/ui/events/view/past_events.dart';
 import 'package:personal_injury_networking/ui/events/view/up_coming_events.dart';
@@ -53,6 +52,7 @@ class _AllEventScreenState extends State<AllEventScreen>
   ];
   late TabController tabController;
   List<EventModel> events = [];
+
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
@@ -67,7 +67,8 @@ class _AllEventScreenState extends State<AllEventScreen>
 
   @override
   Widget build(BuildContext context) {
-    if (Constants.userType == "user") {
+    if (Constants.userType == "user" &&
+        FirebaseAuth.instance.currentUser?.email != Constants.adminEmail) {
       List<TicketModel> tickets =
           context.watch<EventsController>().userBookedEvents;
       tickets.forEach((element) {
@@ -78,6 +79,7 @@ class _AllEventScreenState extends State<AllEventScreen>
       });
     } else {
       events = context.watch<EventsController>().allEvents;
+      print("all events --> $events");
     }
     return Scaffold(
         backgroundColor: Colors.white,
@@ -139,7 +141,8 @@ class _AllEventScreenState extends State<AllEventScreen>
           //   ),
           // ],
         ),
-        body: allEventsList.isNotEmpty
+        body:
+        allEventsList.isNotEmpty
             ? Column(
                 children: [
                   Expanded(
@@ -167,85 +170,127 @@ class _AllEventScreenState extends State<AllEventScreen>
                                   ]),
                               child: Padding(
                                 padding: EdgeInsets.all(10.sp),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                child: Column(
                                   children: [
-                                    Container(
-                                      height: 100.sp,
-                                      width: 100.sp,
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey[300],
-                                          borderRadius:
-                                              BorderRadius.circular(10.sp),
-                                          image: DecorationImage(
-                                              image: NetworkImage(model.pImage),
-                                              fit: BoxFit.cover)),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 20.w, right: 10.w, top: 5.h),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            CustomSizeBox(3.h),
-                                            Text(
-                                              model.title,
-                                              style: AppTextStyles.josefin(
-                                                  style: TextStyle(
-                                                      color: const Color(
-                                                          0xFF3A51C8),
-                                                      fontSize: 13.sp,
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                            ),
-                                            CustomSizeBox(10.h),
-                                            Text(
-                                              model.title,
-                                              style: AppTextStyles.josefin(
-                                                  style: TextStyle(
-                                                      color: const Color(
-                                                          0xFF120D26),
-                                                      fontSize: 18.sp,
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                            ),
-                                            CustomSizeBox(8.h),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.place,
-                                                  color: Colors.grey,
-                                                  size: 15.sp,
-                                                ),
-                                                SizedBox(
-                                                  width: 8.w,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    model.address,
-                                                    style: AppTextStyles.josefin(
-                                                        style: TextStyle(
-                                                            color: const Color(
-                                                                0xFF747688),
-                                                            fontSize: 11.sp,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500)),
+                                    Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        height: 100.sp,
+                                        width: 100.sp,
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey[300],
+                                            borderRadius:
+                                                BorderRadius.circular(10.sp),
+                                            image: DecorationImage(
+                                                image: NetworkImage(model.pImage),
+                                                fit: BoxFit.cover)),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 20.w, right: 10.w, top: 5.h),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              CustomSizeBox(3.h),
+                                              Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      model.title,
+                                                      style: AppTextStyles.josefin(
+                                                          style: TextStyle(
+                                                              color: const Color(
+                                                                  0xFF3A51C8),
+                                                              fontSize: 13.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500)),
+                                                    ),
+                                                    if (FirebaseAuth.instance
+                                                            .currentUser?.email ==
+                                                        Constants.adminEmail)
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          print(
+                                                              "Delete should be initiated");
+                                                        },
+                                                        child: Image(
+                                                          height: 20.sp,
+                                                          width: 20.sp,
+                                                          image: const AssetImage(
+                                                              'assets/images/delete.png'),
+                                                        ),
+                                                      ),
+                                                  ]),
+                                              CustomSizeBox(10.h),
+                                              Text(
+                                                model.title,
+                                                style: AppTextStyles.josefin(
+                                                    style: TextStyle(
+                                                        color: const Color(
+                                                            0xFF120D26),
+                                                        fontSize: 18.sp,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                              ),
+                                              CustomSizeBox(8.h),
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.place,
+                                                    color: Colors.grey,
+                                                    size: 15.sp,
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            CustomSizeBox(3.h),
-                                          ],
+                                                  SizedBox(
+                                                    width: 8.w,
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      model.address,
+                                                      style: AppTextStyles.josefin(
+                                                          style: TextStyle(
+                                                              color: const Color(
+                                                                  0xFF747688),
+                                                              fontSize: 11.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500)),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              CustomSizeBox(3.h),
+
+                                            ],
+                                          ),
                                         ),
                                       ),
+                                    ],
+                                  ),
+                                    CustomSizeBox(5),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children:[ Text(
+                                        "Organized by: ${model.title}",
+                                        style: AppTextStyles.josefin(
+                                            style: TextStyle(
+                                                color: const Color(0xFF9C8AEB),
+                                                fontSize: 12.sp,
+                                                fontWeight:
+                                                FontWeight
+                                                    .w500)),
+                                      )],
                                     )
-                                  ],
+                                ]
                                 ),
                               ),
                             ),
