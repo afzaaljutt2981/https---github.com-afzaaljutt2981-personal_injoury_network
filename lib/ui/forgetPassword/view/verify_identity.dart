@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../../../global/app_buttons/white_background_button.dart';
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../authentication/view/create_auth_view.dart';
 
+// ignore: must_be_immutable
 class VerifyIdentity extends StatefulWidget {
-  const VerifyIdentity({super.key});
-
+   VerifyIdentity({
+    required this.email,
+    super.key,
+  });
+  String email;
   @override
   State<VerifyIdentity> createState() => _VerifyIdentityState();
 }
@@ -79,7 +85,7 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                               text('Email', FontWeight.w700, 16,
                                   color: AppColors.kPrimaryColor),
                               CustomSizeBox(7.h),
-                              text('afzaal@gmail.com', FontWeight.w500, 12,
+                              text(widget.email.toString(), FontWeight.w500, 12,
                                   color: const Color(0xFF6B7280)),
                             ],
                           )),
@@ -99,7 +105,17 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
               child: GetwhiteButton(50.sp, () {
-                //on Tap Function
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                      childCurrent: widget,
+                      type: PageTransitionType.rightToLeft,
+                      alignment: Alignment.center,
+                      duration: const Duration(milliseconds: 200),
+                      reverseDuration: const Duration(milliseconds: 200),
+                      child: const CreateAuthenticationView(),
+                    ),
+                  );
               },
                   Text(
                     'Done',

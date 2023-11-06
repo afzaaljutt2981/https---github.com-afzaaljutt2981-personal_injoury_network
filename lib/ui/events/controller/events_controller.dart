@@ -22,6 +22,7 @@ class EventsController extends ChangeNotifier {
   List<UserModel> allUsers = [];
   getAllUsers() {
     users.snapshots().listen((event) {
+      allUsers = [];
       for (var element in event.docs) {
         allUsers
             .add(UserModel.fromJson(element.data() as Map<String, dynamic>));

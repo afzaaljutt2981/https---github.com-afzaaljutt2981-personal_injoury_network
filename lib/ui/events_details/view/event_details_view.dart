@@ -46,7 +46,9 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   String buttonName = "Register";
   @override
   Widget build(BuildContext context) {
+   // print(widget.event.id.toString());
     eventTickets = [];
+    weekDates = [];
     allUsers = context.watch<EventsController>().allUsers;
     eventTickets = context.watch<EventDetailsController>().eventTickets;
     if (allUsers.isNotEmpty) {
@@ -71,6 +73,10 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
         DateTime.fromMillisecondsSinceEpoch(widget.event.startTime);
     DateTime endTime =
         DateTime.fromMillisecondsSinceEpoch(widget.event.endTime);
+    DateTime tempDate = dateTime.subtract(const Duration(days: 3));
+    for(var i=0; i<6;  i++){
+      weekDates.add(tempDate.add(Duration(days: i)));
+    }
     Duration difference = endTime.difference(startTime);
     int hours = difference.inHours;
     int minutes = difference.inMinutes.remainder(60);
@@ -122,7 +128,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                             alignment: Alignment.center,
                             duration: const Duration(milliseconds: 200),
                             reverseDuration: const Duration(milliseconds: 200),
-                            child: const EventsQrView(),
+                            child:  EventsQrView(eventId: widget.event.id,),
                           ),
                         );
                       },
@@ -270,13 +276,9 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            calenderView('Mo', 7, false),
-                            calenderView('Tu', 8, false),
-                            calenderView('We', 9, false),
-                            calenderView('Th', 10, true),
-                            calenderView('Fr', 11, false),
-                            calenderView('Sa', 12, false),
-                          ],
+                            for(var e in weekDates)
+                            calenderView(e,dateTime),
+                             ],
                         ),
                       ),
                       CustomSizeBox(15.h),
@@ -437,16 +439,21 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
         ));
   }
 
-  Widget calenderView(String day, int date, bool eventDay) {
+  Widget calenderView(DateTime date,DateTime eventDate) {
+    String dayName = DateFormat("MMM").format(date);
+    bool eventDay = false;
+    if(date == eventDate){
+      eventDay = true;
+    }
     return Container(
       decoration: BoxDecoration(
           color: eventDay == false ? null : const Color(0xFFD70E0E),
           borderRadius: BorderRadius.circular(15.sp)),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
         child: Column(
           children: [
-            Text(day,
+            Text(date.day.toString(),
                 style: GoogleFonts.montserrat(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
@@ -454,7 +461,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         ? AppColors.kPrimaryColor
                         : Colors.white)),
             CustomSizeBox(7.h),
-            Text(date.toString(),
+            Text(dayName,
                 style: GoogleFonts.montserrat(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,

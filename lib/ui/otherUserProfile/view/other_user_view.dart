@@ -217,7 +217,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
                                         horizontal:
-                                            isFollow == false ? 34.w : 23.w,
+                                            isFollow == false ? 30.w : 23.w,
                                         vertical: 12.h),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -236,7 +236,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                                     'assets/images/followed_other_user.png'),
                                               ),
                                         SizedBox(
-                                          width: 15.w,
+                                          width: 7.w,
                                         ),
                                         Text(
                                           followButton,
@@ -251,7 +251,10 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                 ),
                               ),
                             ),
-                            if(followButton == "Following")
+                            if(followButton == "Following")...[
+                              SizedBox(
+                                width: 7.w,
+                              ),
                             Expanded(
                               child: GestureDetector(
                                 onTap: () {
@@ -294,7 +297,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                   ),
                                 ),
                               ),
-                            ),
+                            ),],
                           ],
                         ),
                       ),

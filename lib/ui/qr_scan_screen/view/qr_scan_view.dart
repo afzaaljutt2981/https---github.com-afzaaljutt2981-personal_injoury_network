@@ -1,4 +1,4 @@
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
-
+import 'package:qr_flutter/qr_flutter.dart';
 import '../../../global/helper/custom_sized_box.dart';
 
 class HomeQrScanView extends StatefulWidget {
@@ -34,7 +34,7 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                 image: const AssetImage('assets/images/primary_icon.png'),
               ),
             ),
-            CustomSizeBox(20.h),
+            CustomSizeBox(30.h),
             // Stack
             Stack(
               children: [
@@ -75,13 +75,21 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                                 fontSize: 12.sp,
                               )),
                             ),
-                            CustomSizeBox(35.h),
-                            Image(
-                              height: 150.sp,
-                              width: 150.sp,
-                              image: const AssetImage(
-                                  'assets/images/qr_screen_blue.png'),
+                            CustomSizeBox(15.h),
+                            QrImage(
+                              foregroundColor: AppColors.kPrimaryColor,
+                              data: FirebaseAuth.instance.currentUser!.uid
+                                  .toString(),
+                              version: QrVersions.auto,
+                              size: 180.sp,
+                              gapless: false,
                             )
+                            // Image(
+                            //   height: 150.sp,
+                            //   width: 150.sp,
+                            //   image: const AssetImage(
+                            //       'assets/images/qr_screen_blue.png'),
+                            // )
                           ],
                         ),
                       ),
