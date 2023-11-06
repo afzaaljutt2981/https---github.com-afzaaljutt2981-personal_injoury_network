@@ -345,7 +345,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                     ),
                   ),
                 ),
-                if (followButton == "Following") ...[
+                if (followButton == "Following" || widget.currentUser.id==FirebaseAuth.instance.currentUser!.uid) ...[
                   Expanded(
                       child: TabBarView(controller: tabController, children: [
                     OrganizerAbout(

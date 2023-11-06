@@ -169,7 +169,7 @@ class _AllUsersChatState extends State<AllUsersChat> {
                     ),
                   ] else ...[
                     const Expanded(
-                        child: Center(child: CircularProgressIndicator()))
+                        child: Center(child: Text("No Chat Found",style: TextStyle(fontWeight: FontWeight.bold),)))
                   ]
                 ],
               ));

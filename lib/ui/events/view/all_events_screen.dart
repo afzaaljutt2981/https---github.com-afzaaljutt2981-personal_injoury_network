@@ -139,7 +139,7 @@ class _AllEventScreenState extends State<AllEventScreen>
           //   ),
           // ],
         ),
-        body: allEventsList.isNotEmpty
+        body: events.isNotEmpty
             ? Column(
                 children: [
                   Expanded(
