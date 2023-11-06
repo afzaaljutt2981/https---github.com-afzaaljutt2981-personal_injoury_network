@@ -66,48 +66,60 @@ class AuthController extends ChangeNotifier {
   }
 
   Future<void> signIn(
-      String email, String password, BuildContext context) async {
-    Functions.showLoaderDialog(context);
+      String email, String password,BuildContext context) async {
     try {
-      UserCredential user = await FirebaseAuth.instance
+      Functions.showLoaderDialog(context);
+      await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      if (user.user != null && FirebaseAuth.instance.currentUser != null) {
-        print("user data");
-        print(user.user!.email);
-        getUserData(context);
-      }
+      ref
+          .doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) async {
+        if(value.exists){
+          Map<String, dynamic> data = value.data() as Map<String, dynamic>;
+          user = UserModel.fromJson(data);
+          if(user != null){
+            Constants.userType = user!.userType;
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+                    (route) => false);
+          }
+        }else{
+          await FirebaseAuth.instance.signOut();
+          Navigator.of(context).pop();
+          CustomSnackBar(false).showInSnackBar("Login Failed", context);
+        }
+      });
     } catch (e) {
+      // Navigator.pop(context);
+      Navigator.pop(context);
+      CustomSnackBar(false).showInSnackBar("Invalid Credentials", context);
       print(e.toString());
       print("error is here");
     }
   }
 
-  getUserData(BuildContext context) {
-    if (FirebaseAuth.instance.currentUser != null) {
-      ref
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .snapshots()
-          .listen((event) {
-        if (event.data() != null) {
-          Map<String, dynamic> data = event.data() as Map<String, dynamic>;
-          user = UserModel.fromJson(data);
-          print("user Data");
-          print(user?.email);
-          if (user != null) {
-            Constants.userType = user!.userType;
-          }
-        }
+  getUserData(context) {
+    ref
+          .doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) async {
+            if(value.exists){
+              Map<String, dynamic> data = value.data() as Map<String, dynamic>;
+              user = UserModel.fromJson(data);
+              if(user != null){
+                Constants.userType = user!.userType;
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+                        (route) => false);
+              }
+            }else{
+              await FirebaseAuth.instance.signOut();
+              Navigator.of(context).pop();
+              CustomSnackBar(false).showInSnackBar("Login Failed", context);
+            }
       });
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-          (route) => false);
-    } else {
-      Navigator.pop(context);
-      Functions.showSnackBar(context, "something went wrong");
     }
-  }
 
   setSaveChangesButtonStatus(bool value) {
     saveChangesButton = value;
