@@ -21,32 +21,12 @@ class NotificationView extends StatefulWidget {
 
 class _NotificationViewState extends State<NotificationView> {
   List<UserModel> allUsers = [];
-  List<NotificationsModel> notiList = [
-    // NotificationsModel('assets/images/profile_pic.png',
-    //     'David Silbia Invite Jo Malone London’s Mother’s ', 'Just now', '1'),
-    // NotificationsModel('assets/images/profile_pic.png',
-    //     'Adnan Safi  Started following you', '5 min ago', '0'),
-    // NotificationsModel(
-    //     'assets/images/profile_pic.png',
-    //     'Joan Baker Invite A virtual Evening of Smooth Jazz',
-    //     '15 min ago',
-    //     '1'),
-    // NotificationsModel('assets/images/profile_pic.png',
-    //     'Ronald C. Kinch Like you events', '25 min ago', '0'),
-    // NotificationsModel('assets/images/profile_pic.png',
-    //     'Clara Tolson Join your Event Gala Music Festival', 'Just now', '0'),
-    // NotificationsModel(
-    //     'assets/images/profile_pic.png',
-    //     'Jennifer Fritz Invite you International Kids Safe ',
-    //     'Tue, 5:10pm',
-    //     '1'),
-    // NotificationsModel('assets/images/profile_pic.png',
-    //     'Eric G. Prickett Started following you', 'Wed, 3:30 pm', '0'),
-  ];
+  List<NotificationsModel> notiList = [];
   String formatDateTime(DateTime dateTime) {
     final dateFormat = DateFormat('E, h:mm a');
     return dateFormat.format(dateTime);
   }
+
   UserModel? currentUser;
   @override
   Widget build(BuildContext context) {
@@ -83,45 +63,51 @@ class _NotificationViewState extends State<NotificationView> {
             ),
           ),
         ),
-        body: notiList.isEmpty
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CustomSizeBox(100.h),
-                  Center(
-                    child: Image(
-                      height: 300.sp,
-                      width: 250.sp,
-                      image: const AssetImage(
-                          'assets/images/no_notification_screen.png'),
-                    ),
-                  ),
-                ],
+        body: (allUsers.isEmpty)
+            ? const Center(
+                child: CircularProgressIndicator(),
               )
-            : Column(
-                children: [
-                  Expanded(
-                      child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: notiList.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            var model = notiList[index];
-                            return item(model);
-                          })),
-                ],
-              ));
+            : notiList.isEmpty
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CustomSizeBox(100.h),
+                      Center(
+                        child: Image(
+                          height: 300.sp,
+                          width: 250.sp,
+                          image: const AssetImage(
+                              'assets/images/no_notification_screen.png'),
+                        ),
+                      ),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      Expanded(
+                          child: ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: notiList.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                var model = notiList[index];
+                                return item(model);
+                              })),
+                    ],
+                  ));
   }
-  Widget item(NotificationsModel model){
-    UserModel? user = allUsers.firstWhere((element) => element.id == model.senderId);
-    currentUser = allUsers.firstWhere((element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+
+  Widget item(NotificationsModel model) {
+    UserModel? user =
+        allUsers.firstWhere((element) => element.id == model.senderId);
+    currentUser = allUsers.firstWhere(
+        (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
     DateTime time = DateTime.fromMillisecondsSinceEpoch(model.time);
     String formattedDate = formatDateTime(time);
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: 15.w, vertical: 12.h),
+          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 12.h),
           child: Row(
             // mainAxisAlignment:
             //     MainAxisAlignment.spaceBetween,
@@ -129,14 +115,12 @@ class _NotificationViewState extends State<NotificationView> {
             children: [
               (user.pImage != null)
                   ? CircleAvatar(
-                radius: 20,
-                backgroundImage:
-                NetworkImage(user.pImage!),
-              )
-                  :  Image(
-                  width: 40.sp,
-                  image: const AssetImage(
-                      "assets/images/profile_pic.png")),
+                      radius: 20,
+                      backgroundImage: NetworkImage(user.pImage!),
+                    )
+                  : Image(
+                      width: 40.sp,
+                      image: const AssetImage("assets/images/profile_pic.png")),
               // Image(
               //   height: 45.sp,
               //   width: 45.sp,
@@ -144,26 +128,23 @@ class _NotificationViewState extends State<NotificationView> {
               // ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 15.w),
+                  padding: EdgeInsets.symmetric(horizontal: 10.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment:
-                    MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
                         user.userName,
                         style: AppTextStyles.josefin(
                             style: TextStyle(
-                                color:
-                                AppColors.kBlackColor,
-                                fontSize: 18.sp,fontWeight: FontWeight.w500)),
+                                color: AppColors.kBlackColor,
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w500)),
                       ),
                       CustomSizeBox(5.h),
                       const Text("Started following you"),
                       CustomSizeBox(10.h),
-                      if(model.status == "Pending")
-                        buttonRow(model,user)
+                      if (model.status == "Pending") buttonRow(model, user)
                     ],
                   ),
                 ),
@@ -174,8 +155,7 @@ class _NotificationViewState extends State<NotificationView> {
                   formattedDate,
                   style: AppTextStyles.josefin(
                       style: TextStyle(
-                          fontSize: 11.sp,
-                          color: AppColors.kBlackColor)),
+                          fontSize: 11.sp, color: AppColors.kBlackColor)),
                 ),
               )
             ],
@@ -185,72 +165,57 @@ class _NotificationViewState extends State<NotificationView> {
       ],
     );
   }
-  Widget buttonRow(NotificationsModel model,UserModel user){
+
+  Widget buttonRow(NotificationsModel model, UserModel user) {
     return Row(
       children: [
         GestureDetector(
           onTap: () async {
-            context.read<NotificationsController>().respondRequest(model.id, "Rejected",context);
+            context
+                .read<NotificationsController>()
+                .respondRequest(model.id, "Rejected", context);
           },
           child: Container(
             decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(
-                    color: const Color(
-                        0xFFEEEEEE)),
-                borderRadius:
-                BorderRadius
-                    .circular(
-                    7.sp)),
+                border: Border.all(color: const Color(0xFFEEEEEE)),
+                borderRadius: BorderRadius.circular(7.sp)),
             child: Padding(
-              padding: EdgeInsets
-                  .symmetric(
-                  horizontal:
-                  27.w,
-                  vertical: 9.h),
+              padding: EdgeInsets.symmetric(horizontal: 27.w, vertical: 9.h),
               child: Text(
                 'Reject',
                 style: AppTextStyles.josefin(
                     style: TextStyle(
-                        color: const Color(
-                            0xFF706D6D),
-                        fontSize:
-                        12.sp)),
+                        color: const Color(0xFF706D6D), fontSize: 12.sp)),
               ),
             ),
           ),
         ),
         SizedBox(
-          width: 8.w,
+          width: 5.w,
         ),
         GestureDetector(
           onTap: () async {
-           await context.read<NotificationsController>().respondRequest(model.id, "Accepted", context);
-           await context.read<NotificationsController>().followTap(currentUser!,user.id, context);
-           await context.read<NotificationsController>().followingTap(user, context);
+            await context
+                .read<NotificationsController>()
+                .respondRequest(model.id, "Accepted", context);
+            await context
+                .read<NotificationsController>()
+                .followTap(currentUser!, user.id, context);
+            await context
+                .read<NotificationsController>()
+                .followingTap(user, context);
           },
           child: Container(
             decoration: BoxDecoration(
-                color: AppColors
-                    .kPrimaryColor,
-                borderRadius:
-                BorderRadius
-                    .circular(
-                    7.sp)),
+                color: AppColors.kPrimaryColor,
+                borderRadius: BorderRadius.circular(7.sp)),
             child: Padding(
-              padding: EdgeInsets
-                  .symmetric(
-                  horizontal:
-                  27.w,
-                  vertical: 9.h),
+              padding: EdgeInsets.symmetric(horizontal: 27.w, vertical: 9.h),
               child: Text(
                 'Accept',
                 style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: Colors
-                            .white,
-                        fontSize:
-                        12.sp)),
+                    style: TextStyle(color: Colors.white, fontSize: 12.sp)),
               ),
             ),
           ),
@@ -259,8 +224,6 @@ class _NotificationViewState extends State<NotificationView> {
     );
   }
 }
-
-
 
 // Row(
 //           mainAxisAlignment: MainAxisAlignment.spaceBetween,

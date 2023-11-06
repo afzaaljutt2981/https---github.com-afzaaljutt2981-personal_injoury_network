@@ -54,6 +54,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                               right: 35.sp),
                           child: Row(
                             children: [
+                              if(user!.pImage == null)...[
                               Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10.sp)),
@@ -64,7 +65,11 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                       'assets/images/profile_pic.png'),
                                   fit: BoxFit.cover,
                                 ),
-                              ),
+                              )]else...[
+                  CircleAvatar(
+                  radius: 20,
+                  backgroundImage: NetworkImage(user!.pImage!,),),
+                              ],
                               SizedBox(
                                 width: 16.w,
                               ),
@@ -220,7 +225,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                               const Duration(milliseconds: 200),
                                           reverseDuration:
                                               const Duration(milliseconds: 200),
-                                          child: const CreateAllFriendsView(),
+                                          child: CreateAllFriendsView(user: user!,),
                                         ),
                                       );
                                     }),

@@ -2,12 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../authentication/model/user_model.dart';
 import '../controller/allFriendsController.dart';
 import 'all_friends_view.dart';
 
 class CreateAllFriendsView extends StatefulWidget {
-  const CreateAllFriendsView({super.key});
-
+   CreateAllFriendsView({super.key,required this.user});
+UserModel user;
   @override
   State<CreateAllFriendsView> createState() => _CreateAllFriendsViewState();
 }
@@ -16,6 +17,6 @@ class _CreateAllFriendsViewState extends State<CreateAllFriendsView> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<AllFriendsController>(
-        create: (_) => AllFriendsController(), child: const AllFriendsScreen());
+        create: (_) => AllFriendsController(), child: AllFriendsScreen(user: widget.user,));
   }
 }

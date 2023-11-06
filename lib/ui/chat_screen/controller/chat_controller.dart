@@ -7,6 +7,9 @@ import 'package:personal_injury_networking/ui/chat_screen/model/chat_data.dart';
 import 'package:personal_injury_networking/ui/chat_screen/model/chat_model.dart';
 
 class ChatController extends ChangeNotifier {
+  ChatController(String otherUserId){
+    getUserMessages(otherUserId);
+  }
   CollectionReference messages =
       FirebaseFirestore.instance.collection("messages");
   List<ChatMessage> currentChat = [];
