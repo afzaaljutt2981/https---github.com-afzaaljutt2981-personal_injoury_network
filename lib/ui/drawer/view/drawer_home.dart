@@ -225,7 +225,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                               const Duration(milliseconds: 200),
                                           reverseDuration:
                                               const Duration(milliseconds: 200),
-                                          child: const CreateAllFriendsView(),
+                                          child: CreateAllFriendsView(user: user!,),
                                         ),
                                       );
                                     }),
