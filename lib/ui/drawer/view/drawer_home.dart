@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,11 +6,13 @@ import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
+import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/allFriends/view/create_all_freinds_view.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
 import 'package:personal_injury_networking/ui/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
+import '../../authentication/view/login_view.dart';
 import '../../create_event/view/add_event_view.dart';
 import '../../create_event/view/create_add_event_view.dart';
 import '../../home/view/navigation_view.dart';
@@ -27,9 +30,9 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
   @override
   Widget build(BuildContext context) {
     user = context.watch<MyProfileController>().user;
-    return (user != null)
-        ? Scaffold(
-            body: Column(
+    return Scaffold(
+      body: (user != null)
+          ? Column(
               children: [
                 CustomSizeBox(50.h),
                 Row(
@@ -51,6 +54,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                               right: 35.sp),
                           child: Row(
                             children: [
+                              if(user!.pImage == null)...[
                               Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10.sp)),
@@ -61,7 +65,11 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                       'assets/images/profile_pic.png'),
                                   fit: BoxFit.cover,
                                 ),
-                              ),
+                              )]else...[
+                  CircleAvatar(
+                  radius: 20,
+                  backgroundImage: NetworkImage(user!.pImage!,),),
+                              ],
                               SizedBox(
                                 width: 16.w,
                               ),
@@ -130,11 +138,15 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                     user!.userType == 'user'
                                         ? homeFeatures(
                                             'assets/images/marketer_icon_drawer.png',
-                                            'Become a Marketer', onTap: () async {
-                                           String? res = await  _showDialogueBox(context);
-                                           if(res != null){
-                                             context.read<MyProfileController>().becomeMarketer();
-                                           }
+                                            'Become a Marketer',
+                                            onTap: () async {
+                                            String? res =
+                                                await _showDialogueBox(context);
+                                            if (res != null) {
+                                              context
+                                                  .read<MyProfileController>()
+                                                  .becomeMarketer();
+                                            }
                                           })
                                         : homeFeatures(
                                             'assets/images/events_icon_drawer.png',
@@ -213,7 +225,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                               const Duration(milliseconds: 200),
                                           reverseDuration:
                                               const Duration(milliseconds: 200),
-                                          child: const CreateAllFriendsView(),
+                                          child: CreateAllFriendsView(user: user!,),
                                         ),
                                       );
                                     }),
@@ -232,12 +244,14 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                 ),
                               ),
                               GestureDetector(
-                                onTap: () {
-                                  Navigator.pushReplacement(
+                                onTap: () async {
+                                  Functions.showLoaderDialog(context);
+                                  await FirebaseAuth.instance.signOut();
+                                  Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              const SplashScreen()));
+                                          builder: (_) => const LoginView()),
+                                      (route) => false);
                                 },
                                 child: Align(
                                   alignment: Alignment.bottomCenter,
@@ -299,9 +313,11 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                   ),
                 )
               ],
+            )
+          : const Center(
+              child: CircularProgressIndicator(),
             ),
-          )
-        : const Center(child: CircularProgressIndicator());
+    );
   }
 
   Widget homeFeatures(String image, String text, {required Function onTap}) {
@@ -359,7 +375,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
               actions: [
                 TextButton(
                     onPressed: () {
-                      Navigator.pop(context,"ok");
+                      Navigator.pop(context, "ok");
                       // context.read<MyProfileController>().becomeMarketer();
                       // Navigator.pushAndRemoveUntil(
                       //     context,

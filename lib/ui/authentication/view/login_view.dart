@@ -115,19 +115,20 @@ class _LoginViewState extends State<LoginView> {
                   }else{
                     context.read<AuthController>().signIn(textFieldController[0].text, textFieldController[1].text,
                         context);
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      childCurrent: widget,
-                      type: PageTransitionType.rightToLeft,
-                      alignment: Alignment.center,
-                      duration: const Duration(milliseconds: 200),
-                      reverseDuration: const Duration(milliseconds: 200),
-                      child: BottomNavigationScreen(
-                        selectedIndex: 0,
-                      ),
-                    ),
-                  );}
+                  // Navigator.push(
+                  //   context,
+                  //   PageTransition(
+                  //     childCurrent: widget,
+                  //     type: PageTransitionType.rightToLeft,
+                  //     alignment: Alignment.center,
+                  //     duration: const Duration(milliseconds: 200),
+                  //     reverseDuration: const Duration(milliseconds: 200),
+                  //     child: BottomNavigationScreen(
+                  //       selectedIndex: 0,
+                  //     ),
+                  //   ),
+                  // );
+                  }
                 },
                     Text(
                       "Login",

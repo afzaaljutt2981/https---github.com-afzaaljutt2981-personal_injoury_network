@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
+import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/create_event/view/add_event_view.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:personal_injury_networking/ui/events/view/past_events.dart';
 import 'package:personal_injury_networking/ui/events/view/up_coming_events.dart';
+import 'package:personal_injury_networking/ui/events_details/models/ticket_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
@@ -65,7 +67,18 @@ class _AllEventScreenState extends State<AllEventScreen>
 
   @override
   Widget build(BuildContext context) {
-    events = context.watch<EventsController>().allEvents;
+    if (Constants.userType == "user") {
+      List<TicketModel> tickets =
+          context.watch<EventsController>().userBookedEvents;
+      tickets.forEach((element) {
+        events.add(context
+            .watch<EventsController>()
+            .allEvents
+            .firstWhere((element1) => element.eId == element1.id));
+      });
+    } else {
+      events = context.watch<EventsController>().allEvents;
+    }
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -126,7 +139,7 @@ class _AllEventScreenState extends State<AllEventScreen>
           //   ),
           // ],
         ),
-        body: allEventsList.isNotEmpty
+        body: events.isNotEmpty
             ? Column(
                 children: [
                   Expanded(

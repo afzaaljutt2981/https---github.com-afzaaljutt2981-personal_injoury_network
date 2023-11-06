@@ -14,7 +14,9 @@ import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
+import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:personal_injury_networking/ui/events_details/controller/event_details_controller.dart';
+import 'package:personal_injury_networking/ui/otherUserProfile/view/create_other_profile_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../allParticipent/view/create_all_participants_view.dart';
@@ -39,20 +41,29 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   List<UserModel> allUsers = [];
   List<TicketModel> eventTickets = [];
   UserModel? currentUser;
+  UserModel? eventCreater;
+  List<DateTime> weekDates = [];
   String buttonName = "Register";
   @override
   Widget build(BuildContext context) {
-    allUsers = context.watch<EventDetailsController>().allUsers;
-    if(allUsers.isNotEmpty){
-    currentUser = allUsers.firstWhere((element) => element.id == FirebaseAuth.instance.currentUser!.uid);}
+   // print(widget.event.id.toString());
+    eventTickets = [];
+    weekDates = [];
+    allUsers = context.watch<EventsController>().allUsers;
     eventTickets = context.watch<EventDetailsController>().eventTickets;
-    eventParticipants = [];
-    for (var element1 in eventTickets) {
-      eventParticipants
-          .add(allUsers.firstWhere((element) => element.id == element1.uId));
+    if (allUsers.isNotEmpty) {
+      currentUser = allUsers.firstWhere(
+          (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+      eventCreater =
+          allUsers.firstWhere((element) => element.id == widget.event.uId);
+      eventParticipants = [];
+      for (var element1 in eventTickets) {
+        eventParticipants
+            .add(allUsers.firstWhere((element) => element.id == element1.uId));
+      }
     }
     for (var element in eventParticipants) {
-      if(element.id == currentUser!.id){
+      if (element.id == currentUser!.id) {
         buttonName = "Registered";
       }
     }
@@ -62,6 +73,10 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
         DateTime.fromMillisecondsSinceEpoch(widget.event.startTime);
     DateTime endTime =
         DateTime.fromMillisecondsSinceEpoch(widget.event.endTime);
+    DateTime tempDate = dateTime.subtract(const Duration(days: 3));
+    for(var i=0; i<6;  i++){
+      weekDates.add(tempDate.add(Duration(days: i)));
+    }
     Duration difference = endTime.difference(startTime);
     int hours = difference.inHours;
     int minutes = difference.inMinutes.remainder(60);
@@ -113,7 +128,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                             alignment: Alignment.center,
                             duration: const Duration(milliseconds: 200),
                             reverseDuration: const Duration(milliseconds: 200),
-                            child: const EventsQrView(),
+                            child:  EventsQrView(eventId: widget.event.id,),
                           ),
                         );
                       },
@@ -261,13 +276,9 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            calenderView('Mo', 7, false),
-                            calenderView('Tu', 8, false),
-                            calenderView('We', 9, false),
-                            calenderView('Th', 10, true),
-                            calenderView('Fr', 11, false),
-                            calenderView('Sa', 12, false),
-                          ],
+                            for(var e in weekDates)
+                            calenderView(e,dateTime),
+                             ],
                         ),
                       ),
                       CustomSizeBox(15.h),
@@ -307,18 +318,34 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         ),
                       ),
                       CustomSizeBox(25.h),
-                      if(eventParticipants.length > 4)...[
+                      if (eventParticipants.length > 3) ...[
+                        Row(
+                          children: [
+                            for (var i = 0; i < 3; i++)
+                              participant(eventParticipants[i]),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => AllParticipantsView(
+                                              users: eventParticipants,
+                                              currentUser: currentUser!,
+                                            )));
+                              },
+                              child: Text(
+                                "+${eventParticipants.length - 3} Participants",
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                            )
+                          ],
+                        )
+                      ] else ...[
                         Row(children: [
-                        for(var i=0; i<4 ; i++)
-                         participant(eventParticipants[i]),
-                          Text("+${eventParticipants.length - 4} Participants")
-                          ],)
-                      ]else...[
-                      Row(
-                        children: [
-                          for (var e in eventParticipants)
-                            participant(e)])],
-                        ],
+                          for (var e in eventParticipants) participant(e)
+                        ])
+                      ],
+                    ],
                   ),
                 ),
               ),
@@ -328,19 +355,20 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                     padding:
                         EdgeInsets.only(left: 40.w, right: 40.w, bottom: 20.h),
                     child: GetButton(50.sp, () async {
-                      if(buttonName != "Registered"){
-                      Functions.showLoaderDialog(context);
-                      await context
-                          .read<EventDetailsController>()
-                          .addEventTicket(widget.event.id);
-                      await context
-                          .read<EventDetailsController>()
-                          .addUserTicket(widget.event.id);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      Functions.showSnackBar(
-                          context, "Event register successfully");
-                    }},
+                      if (buttonName != "Registered") {
+                        Functions.showLoaderDialog(context);
+                        await context
+                            .read<EventDetailsController>()
+                            .addEventTicket(widget.event.id);
+                        await context
+                            .read<EventDetailsController>()
+                            .addUserTicket(widget.event.id);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Functions.showSnackBar(
+                            context, "Event register successfully");
+                      }
+                    },
                         Text(
                           buttonName,
                           style: AppTextStyles.josefin(
@@ -348,77 +376,84 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                   color: Colors.white, fontSize: 18.sp)),
                         )),
                   )
-                : Padding(
-                    padding: EdgeInsets.only(
-                      left: 29.w,
-                      right: 29.w,
-                      bottom: 25.h,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () => _showBottomSheet(context),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: AppColors.kPrimaryColor,
-                                    width: 1.5.sp),
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12.sp)),
-                            child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 22.w, vertical: 14.h),
-                                child: Center(
-                                  child: Text(
-                                    'Invite Guests',
-                                    style: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color: AppColors.kPrimaryColor,
-                                            fontSize: 16.sp)),
-                                  ),
-                                )),
-                          ),
+                : (currentUser!.id != widget.event.uId)
+                    ? const SizedBox()
+                    : Padding(
+                        padding: EdgeInsets.only(
+                          left: 29.w,
+                          right: 29.w,
+                          bottom: 25.h,
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xFFD70E0E),
-                                  width: 1.5.sp),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12.sp)),
-                          child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 22.w, vertical: 14.h),
-                              child: Center(
-                                child: Text(
-                                  'Cancel Event',
-                                  style: AppTextStyles.josefin(
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          color: const Color(0xFFD70E0E),
-                                          fontSize: 16.sp)),
-                                ),
-                              )),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () => _showBottomSheet(context),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: AppColors.kPrimaryColor,
+                                        width: 1.5.sp),
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12.sp)),
+                                child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 22.w, vertical: 14.h),
+                                    child: Center(
+                                      child: Text(
+                                        'Invite Guests',
+                                        style: AppTextStyles.josefin(
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                color: AppColors.kPrimaryColor,
+                                                fontSize: 16.sp)),
+                                      ),
+                                    )),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0xFFD70E0E),
+                                      width: 1.5.sp),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12.sp)),
+                              child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 22.w, vertical: 14.h),
+                                  child: Center(
+                                    child: Text(
+                                      'Cancel Event',
+                                      style: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color: const Color(0xFFD70E0E),
+                                              fontSize: 16.sp)),
+                                    ),
+                                  )),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
           ],
         ));
   }
 
-  Widget calenderView(String day, int date, bool eventDay) {
+  Widget calenderView(DateTime date,DateTime eventDate) {
+    String dayName = DateFormat("MMM").format(date);
+    bool eventDay = false;
+    if(date == eventDate){
+      eventDay = true;
+    }
     return Container(
       decoration: BoxDecoration(
           color: eventDay == false ? null : const Color(0xFFD70E0E),
           borderRadius: BorderRadius.circular(15.sp)),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
         child: Column(
           children: [
-            Text(day,
+            Text(date.day.toString(),
                 style: GoogleFonts.montserrat(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
@@ -426,7 +461,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         ? AppColors.kPrimaryColor
                         : Colors.white)),
             CustomSizeBox(7.h),
-            Text(date.toString(),
+            Text(dayName,
                 style: GoogleFonts.montserrat(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
@@ -681,77 +716,81 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   }
 
   Widget marketerInfo() {
-    return  (currentUser != null) ?
-    Align(
-              alignment: Alignment.bottomLeft,
-              child: Row(
-                children: [
-                  if (currentUser!.pImage != null) ...[
-                    CircleAvatar(
-                      radius: 18,
-                      backgroundImage: NetworkImage(currentUser!.pImage!),
-                    )
-                  ] else ...[
-                    Image(
-                      height: 35.sp,
-                      width: 35.sp,
-                      image: const AssetImage('assets/images/profile_pic.png'),
-                    )
+    return (eventCreater != null)
+        ? Align(
+            alignment: Alignment.bottomLeft,
+            child: Row(
+              children: [
+                if (eventCreater!.pImage != null) ...[
+                  CircleAvatar(
+                    radius: 18,
+                    backgroundImage: NetworkImage(eventCreater!.pImage!),
+                  )
+                ] else ...[
+                  Image(
+                    height: 35.sp,
+                    width: 35.sp,
+                    image: const AssetImage('assets/images/profile_pic.png'),
+                  )
+                ],
+                SizedBox(
+                  width: 15.w,
+                ),
+                Expanded(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      eventCreater!.userName,
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontSize: 13.sp)),
+                    ),
+                    CustomSizeBox(5.h),
+                    Text(
+                      "Organizer ",
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xFF706E8F),
+                              fontSize: 10.sp)),
+                    ),
                   ],
-                  SizedBox(
-                    width: 15.w,
-                  ),
-                  Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        currentUser!.userName,
-                        style: AppTextStyles.josefin(
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                                fontSize: 13.sp)),
-                      ),
-                      CustomSizeBox(5.h),
-                      Text(
-                        "Organizer ",
-                        style: AppTextStyles.josefin(
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                color: const Color(0xFF706E8F),
-                                fontSize: 10.sp)),
-                      ),
-                    ],
-                  )),
-                  Padding(
-                    padding: EdgeInsets.only(right: 30.w),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.sp),
-                          color: //Colors.purple.shade400
+                )),
+                Padding(
+                  padding: EdgeInsets.only(right: 30.w),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.sp),
+                        color: //Colors.purple.shade400
 
-                              const Color(0xFF3C4784).withOpacity(0.818)),
-                      child: Padding(
-                        padding: EdgeInsets.all(10.sp),
-                        child: Center(
-                          child: Text(
-                            "Follow",
-                            style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                    fontSize: 11.sp)),
-                          ),
+                            const Color(0xFF3C4784).withOpacity(0.818)),
+                    child: Padding(
+                      padding: EdgeInsets.all(10.sp),
+                      child: Center(
+                        child: Text(
+                          "Follow",
+                          style: AppTextStyles.josefin(
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                  fontSize: 11.sp)),
                         ),
                       ),
                     ),
-                  )
-                ],
-              ),
-        ):const SizedBox();
+                  ),
+                )
+              ],
+            ),
+          )
+        : const SizedBox();
   }
-  Widget participant(UserModel user){
+
+  Widget participant(UserModel user) {
+    print("participant");
+    print(user.userName);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: GestureDetector(
@@ -762,24 +801,23 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                 childCurrent: widget,
                 type: PageTransitionType.rightToLeft,
                 alignment: Alignment.center,
-                duration:
-                const Duration(milliseconds: 200),
-                reverseDuration:
-                const Duration(milliseconds: 200),
-                child:  OtherUserProfileScreen(user: user,),
+                duration: const Duration(milliseconds: 200),
+                reverseDuration: const Duration(milliseconds: 200),
+                child: CreateOtherUserProfileView(
+                  participant: user,
+                  currentUser: currentUser!,
+                ),
               ),
             );
           },
           child: (user.pImage != null)
               ? CircleAvatar(
-            radius: 20,
-            backgroundImage:
-            NetworkImage(user.pImage!),
-          )
-              :  Image(
-              width: 40.sp,
-              image: const AssetImage(
-                  "assets/images/profile_pic.png"))),
+                  radius: 20,
+                  backgroundImage: NetworkImage(user.pImage!),
+                )
+              : Image(
+                  width: 40.sp,
+                  image: const AssetImage("assets/images/profile_pic.png"))),
     );
   }
 }

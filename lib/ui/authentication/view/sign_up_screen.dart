@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -110,7 +111,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String selectedState = 'Select State';
   @override
   Widget build(BuildContext context) {
-    bool saveChagesButton = context.watch<AuthController>().saveChagesButton;
+    bool saveChangesButton = context.watch<AuthController>().saveChangesButton;
     return Scaffold(
       backgroundColor: AppColors.kPrimaryColor,
       body: Padding(
@@ -192,13 +193,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   50.sp,
                   () async {
                     if (index == 1) {
-                      if (textFieldController[0].text.isEmpty ||
-                          textFieldController[1].text.isEmpty ||
-                          textFieldController[2].text.isEmpty ||
-                          textFieldController[3].text.isEmpty) {
+                      if (textFieldController[0].text.isEmpty) {
                         CustomSnackBar(false)
-                            .showInSnackBar('Some fields are empty!', context);
-                      } else {
+                            .showInSnackBar('please enter first name', context);
+                        return;
+                      }else if(textFieldController[1].text.isEmpty){
+                        CustomSnackBar(false).showInSnackBar("please enter last name", context);
+                        return;
+                      } else if(textFieldController[2].text.isEmpty){
+                        CustomSnackBar(false).showInSnackBar("please enter company name", context);
+                        return;
+                      } else if(textFieldController[3].text.isEmpty){
+                        CustomSnackBar(false).showInSnackBar("please select your position or job", context);
+                        return;
+                      }else {
                         setState(() {
                           index = index + 1;
                           controller.nextPage(
@@ -208,12 +216,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         });
                       }
                     } else if (index == 2) {
-                      if (textFieldController[4].text.isEmpty ||
-                          textFieldController[5].text.isEmpty ||
-                          textFieldController[9].text.isEmpty) {
+                      if (textFieldController[4].text.isEmpty) {
                         CustomSnackBar(false)
-                            .showInSnackBar('Some fields are empty!', context);
-                      } else {
+                            .showInSnackBar('please enter cell phone', context);
+                        return;
+                      } else if(textFieldController[5].text.isEmpty || !EmailValidator.validate(textFieldController[5].text)){
+                        CustomSnackBar(false).showInSnackBar("please enter valid email", context);
+                        return;
+                      } else if(selectedCountry == "Select Country"){
+                        CustomSnackBar(false).showInSnackBar("please select your country", context);
+                        return;
+                      } else if(selectedState == "Select State"){
+                        CustomSnackBar(false).showInSnackBar("please select your state", context);
+                        return;
+                      }else if(textFieldController[9].text.isEmpty){
+                        CustomSnackBar(false).showInSnackBar("please enter your reference", context);
+                        return;
+                      }else {
                         setState(() {
                           index = index + 1;
                           controller.nextPage(
@@ -224,19 +243,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       }
                     }
                     if (index == 3) {
-                      if (textFieldController[10].text.isEmpty ||
-                          textFieldController[11].text.isEmpty ||
-                          textFieldController[12].text.isEmpty ||textFieldController[0].text.isEmpty) {
+                      if (textFieldController[10].text.isEmpty) {
                         CustomSnackBar(false)
-                            .showInSnackBar('Some fields are empty!', context);
+                            .showInSnackBar('please enter user name', context);
+                        return;
                       } else if (textFieldController[11].text.length < 6) {
                         CustomSnackBar(false).showInSnackBar(
-                            'Password is too short! must be greter than 6 digits',
+                            'Password is too short! must be greater than 6 digits',
                             context);
+                        return;
                       } else if (textFieldController[11].text !=
                           textFieldController[12].text) {
                         CustomSnackBar(false).showInSnackBar(
-                            'Both passwords are not same!', context);
+                            'password and confirm password should be same!', context);
+                        return;
                       } else {
                         context
                             .read<AuthController>()
@@ -245,13 +265,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             firstName: textFieldController[0].text,
                             lastName: textFieldController[1].text,
                             companyName: textFieldController[2].text,
-                            website: textFieldController[3].text,
+                            position: textFieldController[3].text,
                             phone: textFieldController[4].text,
                             email: textFieldController[5].text,
-                            position: textFieldController[6].text,
-                            location: textFieldController[7].text,
-                            password: textFieldController[8].text,
-                            hobbies: textFieldController[9].text,
+                            website: textFieldController[6].text,
+                            location: "$selectedState,$selectedCountry",
+                            reference: textFieldController[9].text,
+                            password: textFieldController[11].text,
+                            hobbies: selectedHobbies,
                             userName: textFieldController[10].text);
                         Navigator.push(
                           context,
@@ -269,7 +290,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       }
                     }
                   },
-                  saveChagesButton == false? Text(
+                  saveChangesButton == false? Text(
                     index < 3 ? "Next" : "Save" ,
                     style: AppTextStyles.josefin(
                       style: TextStyle(

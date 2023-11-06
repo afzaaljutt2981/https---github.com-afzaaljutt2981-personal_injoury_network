@@ -6,9 +6,13 @@ import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/ui/forgetPassword/view/verify_identity.dart';
+import 'package:provider/provider.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../../global/utils/custom_snackbar.dart';
+import '../../../global/utils/functions.dart';
+import '../controller/forget_password_controller.dart';
 
 class ForgetPasswordView extends StatefulWidget {
   const ForgetPasswordView({super.key});
@@ -19,6 +23,13 @@ class ForgetPasswordView extends StatefulWidget {
 
 class _ForgetPasswordViewState extends State<ForgetPasswordView> {
   TextEditingController emailController = TextEditingController();
+
+  @override
+  void initState() {
+    emailController.text = '';
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,18 +78,25 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
             )),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
-              child: GetwhiteButton(50.sp, () {
-                Navigator.push(
-                  context,
-                  PageTransition(
-                    childCurrent: widget,
-                    type: PageTransitionType.rightToLeft,
-                    alignment: Alignment.center,
-                    duration: const Duration(milliseconds: 200),
-                    reverseDuration: const Duration(milliseconds: 200),
-                    child: const VerifyIdentity(),
-                  ),
-                );
+              child: GetwhiteButton(50.sp, () async {
+               if (emailController.text == ' '  || emailController.text.isEmpty) {
+                  CustomSnackBar(false)
+                      .showInSnackBar('Email field is empty!', context);
+               }
+
+               else {
+                Functions.showLoaderDialog(context);
+                bool isEmailValid = validateEmail(emailController.text);
+
+                if (isEmailValid == false) {
+                  Navigator.pop(context);
+                  CustomSnackBar(false)
+                      .showInSnackBar('Invalid email!', context);
+                } else {
+                  await context
+                      .read<ForgetPasswordController>()
+                      .resetPassword(emailController.text, context);
+                }}
               },
                   Text(
                     'Send me email',
@@ -156,5 +174,12 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
         ),
       ],
     );
+  }
+
+  bool validateEmail(String email) {
+    String pattern =
+        r'^[\w-]+(\.[\w-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$';
+    RegExp regex = RegExp(pattern);
+    return regex.hasMatch(email);
   }
 }

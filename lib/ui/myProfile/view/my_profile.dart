@@ -278,15 +278,15 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                           // subText(user!.location),
                           textField('Your Location', 4, textFieldController[4]),
                           CustomSizeBox(5.h),
-                          Text(
-                            'Hobby/ Interests',
-                            style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xFF1A1167),
-                                    fontSize: 12.sp)),
-                          ),
-                          textField('Your Hobbies', 6, textFieldController[6]),
+                          // Text(
+                          //   'Hobby/ Interests',
+                          //   style: AppTextStyles.josefin(
+                          //       style: TextStyle(
+                          //           fontWeight: FontWeight.w600,
+                          //           color: const Color(0xFF1A1167),
+                          //           fontSize: 12.sp)),
+                          // ),
+                          // textField('Your Hobbies', 6, textFieldController[6]),
                           Padding(
                             padding: EdgeInsets.only(
                                 left: 25.w, right: 25.w, bottom: 20.w),
@@ -327,10 +327,6 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                           fontWeight: FontWeight.w700)),
                                 )),
                           ),
-                          GetButton(50.h, () async {
-                           await FirebaseAuth.instance.signOut();
-                           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_)=>const LoginView()), (route) => false);
-                          }, const Text("Log Out"))
                         ],
                       ),
                     ),

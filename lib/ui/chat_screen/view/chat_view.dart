@@ -1,12 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
+import 'package:personal_injury_networking/ui/chat_screen/controller/chat_controller.dart';
+import 'package:provider/provider.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../model/chat_model.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
-
+  ChatScreen({super.key, required this.user});
+  UserModel user;
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
@@ -15,26 +19,18 @@ TextEditingController textController = TextEditingController();
 bool emplyList = false;
 
 class _ChatScreenState extends State<ChatScreen> {
-  List<ChatMessage> messages = [
-    ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Hey Kriss, I am doing fine dude. wbu?",
-        messageType: "sender"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-    ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Hey Kriss, I am doing fine dude. wbu?",
-        messageType: "sender"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-  ];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // context.read<ChatController>().getUserMessages(widget.user.id);
+  }
+
+  List<ChatMessage> chats = [];
   @override
   Widget build(BuildContext context) {
+    chats = [];
+    chats = context.watch<ChatController>().currentChat;
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -53,24 +49,24 @@ class _ChatScreenState extends State<ChatScreen> {
           title: Row(
             children: [
               Text(
-                "Creative Talks",
+                widget.user.userName,
                 style: AppTextStyles.josefin(
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w700)),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 5.w, top: 5.h),
-                child: Text(
-                  "(56 Members)",
-                  style: AppTextStyles.josefin(
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 8.sp,
-                          fontWeight: FontWeight.w700)),
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.only(left: 5.w, top: 5.h),
+              //   child: Text(
+              //     "(56 Members)",
+              //     style: AppTextStyles.josefin(
+              //         style: TextStyle(
+              //             color: Colors.black,
+              //             fontSize: 8.sp,
+              //             fontWeight: FontWeight.w700)),
+              //   ),
+              // ),
             ],
           ),
           actions: [
@@ -92,42 +88,45 @@ class _ChatScreenState extends State<ChatScreen> {
         body: Column(children: [
           Expanded(
               child: ListView.builder(
-            itemCount: messages.length,
-            shrinkWrap: true,
+            itemCount: chats.length,
             padding: const EdgeInsets.only(top: 10, bottom: 10),
             physics: const ClampingScrollPhysics(),
             itemBuilder: (context, index) {
+              Alignment alignment = Alignment.topLeft;
+              bool match = false;
+              if(chats[index].senderId == FirebaseAuth.instance.currentUser!.uid){
+                alignment = Alignment.topRight;
+                match = true;
+              }
               return Container(
                 padding: const EdgeInsets.only(
                     left: 14, right: 14, top: 0, bottom: 10),
                 child: Align(
-                  alignment: (messages[index].messageType == "receiver"
-                      ? Alignment.topLeft
-                      : Alignment.topRight),
+                  alignment: alignment,
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(
-                            (messages[index].messageType == "receiver"
+                            (!match
                                 ? 0.sp
                                 : 20.sp)),
                         topRight: Radius.circular(
-                            (messages[index].messageType == "sender"
+                            (match
                                 ? 0.sp
                                 : 20.sp)),
                         bottomLeft: Radius.circular(20.sp),
                         bottomRight: Radius.circular(20.sp),
                       ),
-                      color: (messages[index].messageType == "receiver"
+                      color: (!match
                           ? const Color(0xFFF5F5F5)
                           : AppColors.kPrimaryColor),
                     ),
                     padding: EdgeInsets.all(18.sp),
                     child: Text(
-                      messages[index].messageContent,
+                      chats[index].messageContent,
                       style: TextStyle(
                         fontSize: 12.sp,
-                        color: (messages[index].messageType == "receiver"
+                        color: (!match
                             ? Colors.black
                             : Colors.white),
                       ),
@@ -228,7 +227,13 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        await context.read<ChatController>().sendMessage(
+                            widget.user.id, textController.text);
+                        setState(() {
+                          textController.clear();
+                        });
+                      },
                       child: Container(
                         height: 40.sp,
                         width: 40.sp,

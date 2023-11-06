@@ -10,7 +10,7 @@ import '../model/user_model.dart';
 
 class AuthController extends ChangeNotifier {
   List<CountryStateModel> employesList = [];
-  bool saveChagesButton = false;
+  bool saveChangesButton = false;
   CollectionReference ref = FirebaseFirestore.instance.collection("users");
   UserModel? user;
   void signup(
@@ -24,7 +24,8 @@ class AuthController extends ChangeNotifier {
     required String position,
     required String location,
     required String password,
-    required String hobbies,
+        required String reference,
+    required List<String> hobbies,
     required String userName,
   }) {
     try {
@@ -46,9 +47,10 @@ class AuthController extends ChangeNotifier {
               lastName: lastName,
               phone: int.parse(phone),
               company: companyName,
+              reference: reference,
               userName: userName,
               website: website,
-              userType: 'user');
+              userType: 'user', hobbies: hobbies, followers: [], followings: []);
           await doc.set(model.toJson());
           getUserData(context);
           setSaveChangesButtonStatus(false);
@@ -64,51 +66,63 @@ class AuthController extends ChangeNotifier {
   }
 
   Future<void> signIn(
-      String email, String password, BuildContext context) async {
-    Functions.showLoaderDialog(context);
+      String email, String password,BuildContext context) async {
     try {
-      UserCredential user = await FirebaseAuth.instance
+      Functions.showLoaderDialog(context);
+      await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      if (user.user != null) {
-        print("user data");
-        print(user.user!.email);
-        getUserData(context);
-      }
+      ref
+          .doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) async {
+        if(value.exists){
+          Map<String, dynamic> data = value.data() as Map<String, dynamic>;
+          user = UserModel.fromJson(data);
+          if(user != null){
+            Constants.userType = user!.userType;
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+                    (route) => false);
+          }
+        }else{
+          await FirebaseAuth.instance.signOut();
+          Navigator.of(context).pop();
+          CustomSnackBar(false).showInSnackBar("Login Failed", context);
+        }
+      });
     } catch (e) {
+      // Navigator.pop(context);
+      Navigator.pop(context);
+      CustomSnackBar(false).showInSnackBar("Invalid Credentials", context);
       print(e.toString());
       print("error is here");
     }
   }
 
-  getUserData(BuildContext context) {
-    if (FirebaseAuth.instance.currentUser != null) {
-      ref
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .snapshots()
-          .listen((event) {
-        if (event.data() != null) {
-          Map<String, dynamic> data = event.data() as Map<String, dynamic>;
-          user = UserModel.fromJson(data);
-          print("user Data");
-          print(user?.email);
-          if (user != null) {
-            Constants.userType = user!.userType;
-          }
-        }
+  getUserData(context) {
+    ref
+          .doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) async {
+            if(value.exists){
+              Map<String, dynamic> data = value.data() as Map<String, dynamic>;
+              user = UserModel.fromJson(data);
+              if(user != null){
+                Constants.userType = user!.userType;
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+                        (route) => false);
+              }
+            }else{
+              await FirebaseAuth.instance.signOut();
+              Navigator.of(context).pop();
+              CustomSnackBar(false).showInSnackBar("Login Failed", context);
+            }
       });
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-          (route) => false);
-    } else {
-      Navigator.pop(context);
-      Functions.showSnackBar(context, "something went wrong");
     }
-  }
 
   setSaveChangesButtonStatus(bool value) {
-    saveChagesButton = value;
+    saveChangesButton = value;
     notifyListeners();
   }
 }
