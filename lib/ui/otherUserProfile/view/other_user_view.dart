@@ -186,105 +186,111 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20.w),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            GestureDetector(
-                              onTap: () async {
-                                if (followButton == "Follow") {
-                                  context
-                                      .read<OtherUserProfileController>()
-                                      .sendFollowRequest(
-                                        user!.id,
-                                      );
-                                } else if (followButton == "Following") {
-                                  await context
-                                      .read<OtherUserProfileController>()
-                                      .followTap(user!);
-                                  await context
-                                      .read<OtherUserProfileController>()
-                                      .followingTap(
-                                          widget.currentUser, user!.id);
-                                  await context
-                                      .read<OtherUserProfileController>()
-                                      .unFollow(user!.id, notifyId);
-                                }
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: AppColors.kPrimaryColor,
-                                    borderRadius: BorderRadius.circular(7.sp)),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          isFollow == false ? 34.w : 23.w,
-                                      vertical: 12.h),
-                                  child: Row(
-                                    children: [
-                                      isFollow == false
-                                          ? Image(
-                                              height: 20.sp,
-                                              width: 20.sp,
-                                              image: const AssetImage(
-                                                  'assets/images/follow_orgnizer_screen.png'),
-                                            )
-                                          : Image(
-                                              height: 20.sp,
-                                              width: 20.sp,
-                                              image: const AssetImage(
-                                                  'assets/images/followed_other_user.png'),
-                                            ),
-                                      SizedBox(
-                                        width: 15.w,
-                                      ),
-                                      Text(
-                                        followButton,
-                                        style: AppTextStyles.josefin(
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16.sp)),
-                                      ),
-                                    ],
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () async {
+                                  if (followButton == "Follow") {
+                                    context
+                                        .read<OtherUserProfileController>()
+                                        .sendFollowRequest(
+                                          user!.id,
+                                        );
+                                  } else if (followButton == "Following") {
+                                    await context
+                                        .read<OtherUserProfileController>()
+                                        .followTap(user!);
+                                    await context
+                                        .read<OtherUserProfileController>()
+                                        .followingTap(
+                                            widget.currentUser, user!.id);
+                                    await context
+                                        .read<OtherUserProfileController>()
+                                        .unFollow(user!.id, notifyId);
+                                  }
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: AppColors.kPrimaryColor,
+                                      borderRadius: BorderRadius.circular(7.sp)),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            isFollow == false ? 34.w : 23.w,
+                                        vertical: 12.h),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        isFollow == false
+                                            ? Image(
+                                                height: 20.sp,
+                                                width: 20.sp,
+                                                image: const AssetImage(
+                                                    'assets/images/follow_orgnizer_screen.png'),
+                                              )
+                                            : Image(
+                                                height: 20.sp,
+                                                width: 20.sp,
+                                                image: const AssetImage(
+                                                    'assets/images/followed_other_user.png'),
+                                              ),
+                                        SizedBox(
+                                          width: 15.w,
+                                        ),
+                                        Text(
+                                          followButton,
+                                          style: AppTextStyles.josefin(
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16.sp)),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) =>
-                                             SingleChatScreenView(user: user!,)));
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: AppColors.kPrimaryColor,
-                                        width: 1.5.sp),
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(7.sp)),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 24.w, vertical: 10.h),
-                                  child: Row(
-                                    children: [
-                                      Image(
-                                        height: 20.sp,
-                                        width: 20.sp,
-                                        image: const AssetImage(
-                                            'assets/images/message_orgnizer_screen.png'),
-                                      ),
-                                      SizedBox(
-                                        width: 5.w,
-                                      ),
-                                      Text(
-                                        'Messages',
-                                        style: AppTextStyles.josefin(
-                                            style: TextStyle(
-                                                color: AppColors.kPrimaryColor,
-                                                fontSize: 16.sp)),
-                                      ),
-                                    ],
+                            if(followButton == "Following")
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                               SingleChatScreenView(user: user!,)));
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: AppColors.kPrimaryColor,
+                                          width: 1.5.sp),
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(7.sp)),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 24.w, vertical: 10.h),
+                                    child: Row(
+                                      children: [
+                                        Image(
+                                          height: 20.sp,
+                                          width: 20.sp,
+                                          image: const AssetImage(
+                                              'assets/images/message_orgnizer_screen.png'),
+                                        ),
+                                        SizedBox(
+                                          width: 5.w,
+                                        ),
+                                        Text(
+                                          'Messages',
+                                          style: AppTextStyles.josefin(
+                                              style: TextStyle(
+                                                  color: AppColors.kPrimaryColor,
+                                                  fontSize: 16.sp)),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

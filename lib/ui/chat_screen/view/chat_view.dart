@@ -23,7 +23,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<ChatController>().getUserMessages(widget.user.id);
+    // context.read<ChatController>().getUserMessages(widget.user.id);
   }
 
   List<ChatMessage> chats = [];
@@ -56,17 +56,17 @@ class _ChatScreenState extends State<ChatScreen> {
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w700)),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 5.w, top: 5.h),
-                child: Text(
-                  "(56 Members)",
-                  style: AppTextStyles.josefin(
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 8.sp,
-                          fontWeight: FontWeight.w700)),
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.only(left: 5.w, top: 5.h),
+              //   child: Text(
+              //     "(56 Members)",
+              //     style: AppTextStyles.josefin(
+              //         style: TextStyle(
+              //             color: Colors.black,
+              //             fontSize: 8.sp,
+              //             fontWeight: FontWeight.w700)),
+              //   ),
+              // ),
             ],
           ),
           actions: [

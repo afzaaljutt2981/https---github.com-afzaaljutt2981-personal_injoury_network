@@ -3,11 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_injury_networking/global/utils/custom_snackbar.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
+import 'package:personal_injury_networking/ui/chat_screen/model/chat_data.dart';
 import 'package:personal_injury_networking/ui/chat_screen/model/chat_model.dart';
 
 class ChatController extends ChangeNotifier {
-  ChatController(String otherUserId) {
-    print("start");
+  ChatController(String otherUserId){
     getUserMessages(otherUserId);
   }
   CollectionReference messages =
@@ -63,8 +63,21 @@ class ChatController extends ChangeNotifier {
               senderId: uId,
               messageType: "text")
           .toJson());
+      await saveUserChatData(uId, receiverId,messageContent);
     } catch (e) {
       print(e);
     }
+  }
+
+  saveUserChatData(String uId, String receiverId,String messageContent) async {
+   await messages.doc(uId).collection("chats").doc(receiverId).set(ChatData(
+     lastMessage: messageContent,
+            name: "name", dateTime: DateTime.now(), image: "", to: receiverId,)
+        .toJson());
+   await messages.doc(receiverId).collection("chats").doc(uId).set(ChatData(
+        name: "name",
+       lastMessage: messageContent,
+       dateTime: DateTime.now(), image: "", to: uId)
+        .toJson());
   }
 }
