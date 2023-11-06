@@ -150,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          "Welcome ${user!.userName}",
+                          "Welcome ${user!.firstName}",
                           style: AppTextStyles.josefin(
                               style: TextStyle(
                                   color: const Color(0xFFB2E5F5),
@@ -423,14 +423,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 children: [
                                                   Row(
                                                     children: [
-                                                      Text(
-                                                        "1.4 KM AWAY",
-                                                        style: AppTextStyles.josefin(
-                                                            style: TextStyle(
-                                                                fontSize: 10.sp,
-                                                                color: const Color(
-                                                                    0xFFACB1D9))),
-                                                      ),
+                                                      // Text(
+                                                      //   "1.4 KM AWAY",
+                                                      //   style: AppTextStyles.josefin(
+                                                      //       style: TextStyle(
+                                                      //           fontSize: 10.sp,
+                                                      //           color: const Color(
+                                                      //               0xFFACB1D9))),
+                                                      // ),
                                                       SizedBox(
                                                         width: 10.w,
                                                       ),
