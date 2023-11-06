@@ -45,6 +45,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   String buttonName = "Register";
   @override
   Widget build(BuildContext context) {
+   // print(widget.event.id.toString());
     eventTickets = [];
     allUsers = context.watch<EventsController>().allUsers;
     eventTickets = context.watch<EventDetailsController>().eventTickets;
@@ -121,7 +122,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                             alignment: Alignment.center,
                             duration: const Duration(milliseconds: 200),
                             reverseDuration: const Duration(milliseconds: 200),
-                            child: const EventsQrView(),
+                            child:  EventsQrView(eventId: widget.event.id,),
                           ),
                         );
                       },
