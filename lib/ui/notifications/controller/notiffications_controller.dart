@@ -21,7 +21,7 @@ class NotificationsController extends ChangeNotifier {
     var uId = FirebaseAuth.instance.currentUser!.uid;
     print(uId);
     print("object");
-    notificationsStream  = user.doc(uId).collection("notifications").snapshots().listen((event) {
+    notificationsStream  = user.doc(uId).collection("notifications").orderBy("time",descending: true).snapshots().listen((event) {
       notifications = [];
       for (var element in event.docs) {
         notifications.add(NotificationsModel.fromJson(element.data()));
