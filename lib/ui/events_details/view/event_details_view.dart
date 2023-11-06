@@ -42,6 +42,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   List<TicketModel> eventTickets = [];
   UserModel? currentUser;
   UserModel? eventCreater;
+  List<DateTime> weekDates = [];
   String buttonName = "Register";
   @override
   Widget build(BuildContext context) {
@@ -315,14 +316,25 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         ),
                       ),
                       CustomSizeBox(25.h),
-                      if (eventParticipants.length > 4) ...[
+                      if (eventParticipants.length > 3) ...[
                         Row(
                           children: [
-                            for (var i = 0; i < 4; i++)
+                            for (var i = 0; i < 3; i++)
                               participant(eventParticipants[i]),
-                            Text(
-                              "+${eventParticipants.length - 4} Participants",
-                              style: const TextStyle(color: Colors.black),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => AllParticipantsView(
+                                              users: eventParticipants,
+                                              currentUser: currentUser!,
+                                            )));
+                              },
+                              child: Text(
+                                "+${eventParticipants.length - 3} Participants",
+                                style: const TextStyle(color: Colors.black),
+                              ),
                             )
                           ],
                         )

@@ -8,12 +8,14 @@ import 'package:personal_injury_networking/ui/authentication/model/user_type.dar
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../../global/utils/constants.dart';
+import '../../authentication/model/user_model.dart';
 import '../../otherUserProfile/view/create_other_profile_view.dart';
 import '../../otherUserProfile/view/other_user_view.dart';
 
 class AllParticipantsView extends StatefulWidget {
-  const AllParticipantsView({super.key});
-
+  AllParticipantsView({super.key, required this.users,required this.currentUser});
+  List<UserModel> users;
+  UserModel currentUser;
   @override
   State<AllParticipantsView> createState() => _AllParticipantsViewState();
 }
@@ -23,7 +25,7 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-      Constants.userType == 'user' ? Colors.white : const Color(0xFFF5F4FF),
+          Constants.userType == 'user' ? Colors.white : const Color(0xFFF5F4FF),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
@@ -98,7 +100,7 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                     children: [
                       CustomSizeBox(25.h),
                       Text(
-                        'No 0f Registered Users : 100',
+                        'No 0f Registered Users : ${widget.users.length}',
                         textAlign: TextAlign.end,
                         style: AppTextStyles.josefin(
                           style: TextStyle(
@@ -116,51 +118,71 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
               child: Constants.userType == 'user'
                   ? GridView.builder(
                       physics: const BouncingScrollPhysics(),
-                      itemCount: 15,
+                      itemCount: widget.users.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
-                        mainAxisExtent: 120.h,
+                        mainAxisExtent: 80.h,
                       ),
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   PageTransition(
-                            //     childCurrent: widget,
-                            //     type: PageTransitionType.rightToLeft,
-                            //     duration: const Duration(milliseconds: 200),
-                            //     reverseDuration:
-                            //         const Duration(milliseconds: 200),
-                            //     child: const CreateOtherUserProfileView(),
-                            //   ),
-                            // );
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                childCurrent: widget,
+                                type: PageTransitionType.rightToLeft,
+                                duration: const Duration(milliseconds: 200),
+                                reverseDuration:
+                                    const Duration(milliseconds: 200),
+                                child: CreateOtherUserProfileView(
+                                  participant: widget.users[index],
+                                  currentUser: widget.users[index],
+                                ),
+                              ),
+                            );
                           },
                           child: Column(
                             children: [
-                              Container(
-                                height: 100.sp,
-                                width: 100.sp,
-                                decoration: const BoxDecoration(
-                                    // color: Colors.red,
-                                    image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/bc_all_participants_screen.png'),
-                                        fit: BoxFit.contain),
-                                    shape: BoxShape.circle),
-                                child: Padding(
-                                  padding: EdgeInsets.all(17.sp),
-                                  child: const Image(
-                                    image: AssetImage(
-                                      'assets/images/profile_pic.png',
-                                    ),
-                                    fit: BoxFit.contain,
+                              if (widget.users[index].pImage != null) ...[
+                                CircleAvatar(
+                                  radius: 25,
+                                  backgroundImage: NetworkImage(
+                                    widget.users[index].pImage!,
                                   ),
+                                )
+                              ] else ...[
+                                const CircleAvatar(
+                                  radius: 25,
+                                  backgroundImage: AssetImage(
+                                      'assets/images/profile_pic.png'),
                                 ),
+                                // Container(
+                                //   height: 100.sp,
+                                //   width: 100.sp,
+                                //   decoration: const BoxDecoration(
+                                //       // color: Colors.red,
+                                //       image: DecorationImage(
+                                //           image: AssetImage(
+                                //               'assets/images/bc_all_participants_screen.png'),
+                                //           fit: BoxFit.contain),
+                                //       shape: BoxShape.circle),
+                                //   child: Padding(
+                                //     padding: EdgeInsets.all(17.sp),
+                                //     child: const Image(
+                                //       image: AssetImage(
+                                //         'assets/images/profile_pic.png',
+                                //       ),
+                                //       fit: BoxFit.contain,
+                                //     ),
+                                //   ),
+                                // ),
+                              ],
+                              const SizedBox(
+                                height: 10,
                               ),
                               Expanded(
                                 child: Text(
-                                  'Afzaal Afzaal ',
+                                  widget.users[index].userName,
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.montserrat(
                                       color: const Color(0xFF1A1167),
@@ -175,7 +197,7 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                     )
                   : ListView.builder(
                       physics: const BouncingScrollPhysics(),
-                      itemCount: 10,
+                      itemCount: 1,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return Padding(
