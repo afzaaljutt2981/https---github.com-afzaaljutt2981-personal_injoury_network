@@ -10,6 +10,7 @@ getUserChats();
   CollectionReference messages =
   FirebaseFirestore.instance.collection("messages");
   List<ChatData> userChatsData = [];
+  //comment
   getUserChats(){
     var uId = FirebaseAuth.instance.currentUser!.uid;
     messages.doc(uId).collection("chats").snapshots().listen((event) {
