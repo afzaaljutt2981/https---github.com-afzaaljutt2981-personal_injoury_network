@@ -141,8 +141,7 @@ class _AllEventScreenState extends State<AllEventScreen>
           //   ),
           // ],
         ),
-        body:
-        allEventsList.isNotEmpty
+        body: allEventsList.isNotEmpty
             ? Column(
                 children: [
                   Expanded(
@@ -170,11 +169,11 @@ class _AllEventScreenState extends State<AllEventScreen>
                                   ]),
                               child: Padding(
                                 padding: EdgeInsets.all(10.sp),
-                                child: Column(
-                                  children: [
-                                    Row(
+                                child: Column(children: [
+                                  Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Container(
                                         height: 100.sp,
@@ -184,13 +183,16 @@ class _AllEventScreenState extends State<AllEventScreen>
                                             borderRadius:
                                                 BorderRadius.circular(10.sp),
                                             image: DecorationImage(
-                                                image: NetworkImage(model.pImage),
+                                                image:
+                                                    NetworkImage(model.pImage),
                                                 fit: BoxFit.cover)),
                                       ),
                                       Expanded(
                                         child: Padding(
                                           padding: EdgeInsets.only(
-                                              left: 20.w, right: 10.w, top: 5.h),
+                                              left: 20.w,
+                                              right: 10.w,
+                                              top: 5.h),
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
@@ -214,8 +216,10 @@ class _AllEventScreenState extends State<AllEventScreen>
                                                                   FontWeight
                                                                       .w500)),
                                                     ),
-                                                    if (FirebaseAuth.instance
-                                                            .currentUser?.email ==
+                                                    if (FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.email ==
                                                         Constants.adminEmail)
                                                       GestureDetector(
                                                         onTap: () {
@@ -268,30 +272,29 @@ class _AllEventScreenState extends State<AllEventScreen>
                                                 ],
                                               ),
                                               CustomSizeBox(3.h),
-
                                             ],
                                           ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                    CustomSizeBox(5),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children:[ Text(
+                                  CustomSizeBox(5),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
                                         "Organized by: ${model.title}",
                                         style: AppTextStyles.josefin(
                                             style: TextStyle(
                                                 color: const Color(0xFF9C8AEB),
                                                 fontSize: 12.sp,
-                                                fontWeight:
-                                                FontWeight
-                                                    .w500)),
-                                      )],
-                                    )
-                                ]
-                                ),
+                                                fontWeight: FontWeight.w500)),
+                                      )
+                                    ],
+                                  )
+                                ]),
                               ),
                             ),
                           );

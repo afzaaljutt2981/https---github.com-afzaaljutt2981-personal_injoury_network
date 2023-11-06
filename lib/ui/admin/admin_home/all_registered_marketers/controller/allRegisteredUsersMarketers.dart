@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 
 import '../../../../authentication/model/user_model.dart';
 
-
 class AllRegisteredMarketersController extends ChangeNotifier {
-  AllRegisteredMarketersController(){
+  AllRegisteredMarketersController() {
     getAllUsers();
   }
+
   CollectionReference users = FirebaseFirestore.instance.collection("users");
 
   List<UserModel> allUsers = [];
+
   getAllUsers() {
     users.snapshots().listen((event) {
       for (var element in event.docs) {

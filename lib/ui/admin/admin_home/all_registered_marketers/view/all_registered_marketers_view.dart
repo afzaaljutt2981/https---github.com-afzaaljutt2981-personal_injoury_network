@@ -18,7 +18,8 @@ class AllRegisteredMarketersScreen extends StatefulWidget {
       _AllRegisteredUsersScreenState();
 }
 
-class _AllRegisteredUsersScreenState extends State<AllRegisteredMarketersScreen> {
+class _AllRegisteredUsersScreenState
+    extends State<AllRegisteredMarketersScreen> {
   List<UserModel> allUsers = [];
   bool isDropdownOpen = false;
   DropListModel dropListModel = DropListModel([
@@ -29,11 +30,15 @@ class _AllRegisteredUsersScreenState extends State<AllRegisteredMarketersScreen>
 
   @override
   Widget build(BuildContext context) {
-    allUsers = context.watch<AllRegisteredMarketersController>().allUsers.where((element) => optionItemSelected.id == "1"
-        ? element.userType == Constants.userType
-        : optionItemSelected.id == "2"
-        ? element.userType != Constants.userType
-        : element.userType == Constants.userType).toList();
+    allUsers = context
+        .watch<AllRegisteredMarketersController>()
+        .allUsers
+        .where((element) => optionItemSelected.id == "1"
+            ? element.userType == Constants.userType
+            : optionItemSelected.id == "2"
+                ? element.userType != Constants.userType
+                : element.userType == Constants.userType)
+        .toList();
     return Scaffold(
         backgroundColor: const Color(0xFFf5f4ff),
         appBar: AppBar(
@@ -70,7 +75,7 @@ class _AllRegisteredUsersScreenState extends State<AllRegisteredMarketersScreen>
                   SelectDropList(
                     this.optionItemSelected,
                     this.dropListModel,
-                        (optionItem) {
+                    (optionItem) {
                       optionItemSelected = optionItem;
 
                       // context
@@ -117,8 +122,10 @@ class _AllRegisteredUsersScreenState extends State<AllRegisteredMarketersScreen>
                                           CrossAxisAlignment.end,
                                       children: [
                                         Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               "${model.firstName} ${model.lastName}",
@@ -128,16 +135,17 @@ class _AllRegisteredUsersScreenState extends State<AllRegisteredMarketersScreen>
                                                       color: const Color(
                                                           0xFF1A1167),
                                                       fontWeight:
-                                                      FontWeight.w500)),
+                                                          FontWeight.w500)),
                                             ),
                                             Text(
                                               model.position,
                                               style: AppTextStyles.josefin(
                                                   style: TextStyle(
                                                       fontSize: 10.sp,
-                                                      color: const  Color(0xFF847FB3),
+                                                      color: const Color(
+                                                          0xFF847FB3),
                                                       fontWeight:
-                                                      FontWeight.w400)),
+                                                          FontWeight.w400)),
                                             ),
                                           ],
                                         ),

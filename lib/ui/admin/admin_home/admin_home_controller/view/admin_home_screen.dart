@@ -7,10 +7,8 @@ import 'package:personal_injury_networking/ui/admin/admin_home/all_registered_ma
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../global/helper/custom_sized_box.dart';
 import '../../../../../global/utils/app_colors.dart';
 import '../../../../../global/utils/app_text_styles.dart';
-import '../../../../allFriends/view/create_all_freinds_view.dart';
 import '../../../../authentication/model/user_model.dart';
 import '../../../../create_event/models/event_model.dart';
 import '../../../../drawer/view/create_drawer_view.dart';

@@ -1,5 +1,3 @@
 import 'package:flutter/material.dart';
 
-class AdminHomeScreenController extends ChangeNotifier {
-
-}
+class AdminHomeScreenController extends ChangeNotifier {}

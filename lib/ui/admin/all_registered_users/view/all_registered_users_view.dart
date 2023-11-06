@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../global/utils/CustDropDown.dart';
 import '../../../../global/utils/app_colors.dart';
 import '../../../../global/utils/app_text_styles.dart';
 import '../../../../global/utils/drop_list_model.dart';

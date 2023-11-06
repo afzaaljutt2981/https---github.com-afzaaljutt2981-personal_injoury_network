@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,13 +8,16 @@ class CreateAllRegisteredMarketersView extends StatefulWidget {
   const CreateAllRegisteredMarketersView({super.key});
 
   @override
-  State<CreateAllRegisteredMarketersView> createState() => _CreateAllRegisteredMarketersViewState();
+  State<CreateAllRegisteredMarketersView> createState() =>
+      _CreateAllRegisteredMarketersViewState();
 }
 
-class _CreateAllRegisteredMarketersViewState extends State<CreateAllRegisteredMarketersView> {
+class _CreateAllRegisteredMarketersViewState
+    extends State<CreateAllRegisteredMarketersView> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<AllRegisteredMarketersController>(
-        create: (_) => AllRegisteredMarketersController(), child: const AllRegisteredMarketersScreen());
+        create: (_) => AllRegisteredMarketersController(),
+        child: const AllRegisteredMarketersScreen());
   }
 }
