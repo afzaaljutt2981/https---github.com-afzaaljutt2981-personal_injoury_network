@@ -26,8 +26,8 @@ class EventsController extends ChangeNotifier {
         allUsers
             .add(UserModel.fromJson(element.data() as Map<String, dynamic>));
       }
+      notifyListeners();
     });
-    notifyListeners();
   }
   getAllEvents(){
     allEvents = [];

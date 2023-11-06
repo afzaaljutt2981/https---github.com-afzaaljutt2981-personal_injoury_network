@@ -3,9 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
+import 'package:personal_injury_networking/ui/chat_screen/controller/user_chat_data.dart';
+import 'package:personal_injury_networking/ui/chat_screen/model/chat_data.dart';
 import 'package:personal_injury_networking/ui/chat_screen/view/chat_view.dart';
+import 'package:personal_injury_networking/ui/chat_screen/view/single_chat_screen_view.dart';
+import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
+import 'package:provider/provider.dart';
 
 import '../../../global/utils/app_text_styles.dart';
+import '../../authentication/model/user_model.dart';
 import '../model/chat_model.dart';
 
 class AllUsersChat extends StatefulWidget {
@@ -16,9 +22,14 @@ class AllUsersChat extends StatefulWidget {
 }
 
 class _AllUsersChatState extends State<AllUsersChat> {
-  List<ChatUsers> chatUsers = [];
+  List<ChatData> chatUsers = [];
+  List<UserModel> allUsers = [];
   @override
   Widget build(BuildContext context) {
+    chatUsers = [];
+    allUsers = [];
+    chatUsers = context.watch<UserChatData>().userChatsData;
+    allUsers = context.watch<EventsController>().allUsers;
     return Scaffold(
         backgroundColor: const Color(0xFFf5f4ff),
         body: Column(
@@ -40,6 +51,7 @@ class _AllUsersChatState extends State<AllUsersChat> {
                 ),
               ),
             ),
+            if(chatUsers.isEmpty)...[
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -48,25 +60,26 @@ class _AllUsersChatState extends State<AllUsersChat> {
                         topLeft: Radius.circular(30.sp),
                         topRight: Radius.circular(30.sp))),
                 child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
+                    // physics: const BouncingScrollPhysics(),
                     padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemCount: 15,
+                    // shrinkWrap: true,
+                    itemCount:chatUsers.length,
                     itemBuilder: (context, index) {
+                      UserModel user = allUsers.firstWhere((element) => element.id == chatUsers[index].to);
                       return GestureDetector(
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   PageTransition(
-                          //     childCurrent: widget,
-                          //     type: PageTransitionType.rightToLeftJoined,
-                          //     alignment: Alignment.center,
-                          //     duration: const Duration(milliseconds: 200),
-                          //     reverseDuration:
-                          //         const Duration(milliseconds: 200),
-                          //     child: const ChatScreen(),
-                          //   ),
-                          // );
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              childCurrent: widget,
+                              type: PageTransitionType.rightToLeftJoined,
+                              alignment: Alignment.center,
+                              duration: const Duration(milliseconds: 200),
+                              reverseDuration:
+                                  const Duration(milliseconds: 200),
+                              child: SingleChatScreenView(user: user,),
+                            ),
+                          );
                         },
                         child: Container(
                           padding: EdgeInsets.only(
@@ -136,7 +149,9 @@ class _AllUsersChatState extends State<AllUsersChat> {
                       );
                     }),
               ),
-            ),
+            ),]else...[
+              const Expanded(child: Center(child: CircularProgressIndicator()))
+            ]
           ],
         ));
   }
