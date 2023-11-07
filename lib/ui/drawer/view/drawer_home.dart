@@ -77,7 +77,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    user!.userName,
+                                    user!.firstName,
                                     style: AppTextStyles.josefin(
                                         style: TextStyle(
                                             color: AppColors.kBlackColor,
