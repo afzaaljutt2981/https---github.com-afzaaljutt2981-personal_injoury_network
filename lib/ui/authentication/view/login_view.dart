@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:page_transition/page_transition.dart';
@@ -14,6 +15,7 @@ import 'package:personal_injury_networking/ui/authentication/controller/auth_con
 import 'package:personal_injury_networking/ui/authentication/view/sign_up_screen.dart';
 import 'package:personal_injury_networking/ui/home/view/home_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/custom_snackbar.dart';
@@ -113,14 +115,12 @@ class _LoginViewState extends State<LoginView> {
                 child: GetwhiteButton(50.h, () {
                   if (textFieldController[0].text.isEmpty ||
                       !(EmailValidator.validate(textFieldController[0].text))) {
-                    CustomSnackBar(false).showInSnackBar(
-                              'Please enter valid email!',
-                              context);
+                    CustomSnackBar(false)
+                        .showInSnackBar('Please enter valid email!', context);
                     return;
                   } else if (textFieldController[1].text.isEmpty) {
-                      CustomSnackBar(false).showInSnackBar(
-                              'Password field is empty!',
-                              context);
+                    CustomSnackBar(false)
+                        .showInSnackBar('Password field is empty!', context);
                     return;
                   } else {
                     context.read<AuthController>().signIn(
@@ -166,8 +166,9 @@ class _LoginViewState extends State<LoginView> {
                   loginGoogleApple('assets/images/google_login.png', onTap: () {
                     signInWithGoogle();
                   }),
-                  loginGoogleApple('assets/images/apple_login.png',
-                      onTap: () {})
+                  loginGoogleApple('assets/images/apple_login.png', onTap: () {
+                    signInWithApple();
+                  })
                 ],
               ),
               CustomSizeBox(24.h),
@@ -198,7 +199,9 @@ class _LoginViewState extends State<LoginView> {
                             reverseDuration: const Duration(milliseconds: 200),
                             child: ChangeNotifierProvider(
                                 create: (_) => AuthController(),
-                                child:  SignUpScreen(screenType: 0,)),
+                                child: SignUpScreen(
+                                  screenType: 0,
+                                )),
                           ),
                         );
                       },
@@ -333,27 +336,82 @@ class _LoginViewState extends State<LoginView> {
         Constants.userDisplayName = user.displayName!;
         Constants.userEmail = user.email!;
         Constants.uId = user.uid;
-       // ignore: use_build_context_synchronously
-       Navigator.push(
-                          context,
-                          PageTransition(
-                            childCurrent: widget,
-                            type: PageTransitionType.rightToLeft,
-                            alignment: Alignment.center,
-                            duration: const Duration(milliseconds: 200),
-                            reverseDuration: const Duration(milliseconds: 200),
-                            child: ChangeNotifierProvider(
-                                create: (_) => AuthController(),
-                                child:  SignUpScreen(screenType: 1,)),
-                          ),
-                        );
+        // ignore: use_build_context_synchronously
+        Navigator.push(
+          context,
+          PageTransition(
+            childCurrent: widget,
+            type: PageTransitionType.rightToLeft,
+            alignment: Alignment.center,
+            duration: const Duration(milliseconds: 200),
+            reverseDuration: const Duration(milliseconds: 200),
+            child: ChangeNotifierProvider(
+                create: (_) => AuthController(),
+                child: SignUpScreen(
+                  screenType: 1,
+                )),
+          ),
+        );
       }
       return user;
     } catch (error) {
-      CustomSnackBar(false).showInSnackBar(
-                              error.toString(),
-                              context);
+      CustomSnackBar(false).showInSnackBar(error.toString(), context);
       return null;
+    }
+  }
+
+  Future<User> signInWithApple({List<Scope> scopes = const []}) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final result = await TheAppleSignIn.performRequests(
+        [AppleIdRequest(requestedScopes: scopes)]);
+
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+        final AppleIdCredential = result.credential!;
+        final oAuthProvider = OAuthProvider('apple.com');
+        final credential = oAuthProvider.credential(
+            idToken: String.fromCharCodes(AppleIdCredential.identityToken!));
+        final UserCredential = await auth.signInWithCredential(credential);
+        final firebaseUser = UserCredential.user!;
+        if (scopes.contains(Scope.fullName)) {
+          final fullName = AppleIdCredential.fullName;
+          if (fullName != null &&
+              fullName.givenName != null &&
+              fullName.familyName != null) {
+            final displayName = '${fullName.givenName} ${fullName.familyName}';
+
+            Constants.userDisplayName = displayName;
+            Constants.userEmail = '';
+            // ignore: use_build_context_synchronously
+            Navigator.push(
+              context,
+              PageTransition(
+                childCurrent: widget,
+                type: PageTransitionType.rightToLeft,
+                alignment: Alignment.center,
+                duration: const Duration(milliseconds: 200),
+                reverseDuration: const Duration(milliseconds: 200),
+                child: ChangeNotifierProvider(
+                    create: (_) => AuthController(),
+                    child: SignUpScreen(
+                      screenType: 1,
+                    )),
+              ),
+            );
+          }
+        }
+        return firebaseUser;
+      case AuthorizationStatus.error:
+        throw PlatformException(
+            code: 'ERROR_AUTHORIZATION_DENIED',
+            message: result.error.toString());
+
+      case AuthorizationStatus.cancelled:
+        throw PlatformException(
+            code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
+
+      default:
+        throw UnimplementedError();
     }
   }
 }
