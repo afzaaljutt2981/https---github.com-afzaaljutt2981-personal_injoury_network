@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:personal_injury_networking/ui/qr_scan_screen/view/qr_scan_view.dart';
 import 'package:provider/provider.dart';
 
-import '../controller/qr_scan_controller.dart';
+import '../../authentication/controller/auth_controller.dart';
+
 class CreateQrScanView extends StatefulWidget {
   const CreateQrScanView({super.key});
 
@@ -14,7 +14,7 @@ class CreateQrScanView extends StatefulWidget {
 class _CreateQrScanViewState extends State<CreateQrScanView> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<QrScanController>(
-        create: (_) => QrScanController(), child: const HomeQrScanView());
+    return ChangeNotifierProvider<AuthController>(
+        create: (_) => AuthController(), child: const HomeQrScanView());
   }
 }

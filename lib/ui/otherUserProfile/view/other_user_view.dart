@@ -58,18 +58,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
         }
       }
     }
-    for (var element in notifications) {
-      if (element.senderId == FirebaseAuth.instance.currentUser!.uid &&
-          element.status != "Rejected" &&
-          element.status != "unFollowed") {
-        if (element.status == "Accepted") {
-          followButton = "Following";
-          notifyId = element.id;
-        } else {
-          followButton = element.status;
-        }
-      }
-    }
+    setFollowButton(notifications);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -372,5 +361,19 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
             )
           : const Center(child: CircularProgressIndicator()),
     );
+  }
+  setFollowButton(List<NotificationsModel> notifications){
+    for (var element in notifications) {
+      if (element.senderId == FirebaseAuth.instance.currentUser!.uid &&
+          element.status != "Rejected" &&
+          element.status != "unFollowed") {
+        if (element.status == "Accepted") {
+          followButton = "Following";
+          notifyId = element.id;
+        } else {
+          followButton = element.status;
+        }
+      }
+    }
   }
 }

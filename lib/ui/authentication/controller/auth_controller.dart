@@ -24,7 +24,7 @@ class AuthController extends ChangeNotifier {
     required String position,
     required String location,
     required String password,
-        required String reference,
+    required String reference,
     required List<String> hobbies,
     required String userName,
   }) {
@@ -50,11 +50,14 @@ class AuthController extends ChangeNotifier {
               reference: reference,
               userName: userName,
               website: website,
-              userType: 'user', hobbies: hobbies, followers: [], followings: []);
+              userType: 'user',
+              hobbies: hobbies,
+              followers: [],
+              followings: []);
           await doc.set(model.toJson());
           getUserData(context);
           setSaveChangesButtonStatus(false);
-           notifyListeners();
+          notifyListeners();
         }
       });
     } on Exception catch (error) {
@@ -62,29 +65,29 @@ class AuthController extends ChangeNotifier {
       CustomSnackBar(false).showInSnackBar(error.toString(), context);
       notifyListeners();
     }
-   
   }
 
   Future<void> signIn(
-      String email, String password,BuildContext context) async {
+      String email, String password, BuildContext context) async {
     try {
       Functions.showLoaderDialog(context);
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      ref
-          .doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) async {
-        if(value.exists){
+      ref.doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) async {
+        if (value.exists) {
           Map<String, dynamic> data = value.data() as Map<String, dynamic>;
           user = UserModel.fromJson(data);
-          if(user != null){
+          if (user != null) {
             Constants.userType = user!.userType;
+            Constants.userName = user!.firstName;
+            Constants.userPosition = user!.position;
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
                     builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-                    (route) => false);
+                (route) => false);
           }
-        }else{
+        } else {
           await FirebaseAuth.instance.signOut();
           Navigator.of(context).pop();
           CustomSnackBar(false).showInSnackBar("Login Failed", context);
@@ -100,26 +103,25 @@ class AuthController extends ChangeNotifier {
   }
 
   getUserData(context) {
-    ref
-          .doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) async {
-            if(value.exists){
-              Map<String, dynamic> data = value.data() as Map<String, dynamic>;
-              user = UserModel.fromJson(data);
-              if(user != null){
-                Constants.userType = user!.userType;
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-                        (route) => false);
-              }
-            }else{
-              await FirebaseAuth.instance.signOut();
-              Navigator.of(context).pop();
-              CustomSnackBar(false).showInSnackBar("Login Failed", context);
-            }
-      });
-    }
+    ref.doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) async {
+      if (value.exists) {
+        Map<String, dynamic> data = value.data() as Map<String, dynamic>;
+        user = UserModel.fromJson(data);
+        if (user != null) {
+          Constants.userType = user!.userType;
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+              (route) => false);
+        }
+      } else {
+        await FirebaseAuth.instance.signOut();
+        Navigator.of(context).pop();
+        CustomSnackBar(false).showInSnackBar("Login Failed", context);
+      }
+    });
+  }
 
   setSaveChangesButtonStatus(bool value) {
     saveChangesButton = value;

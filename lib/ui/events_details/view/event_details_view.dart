@@ -22,6 +22,8 @@ import 'package:provider/provider.dart';
 import '../../allParticipent/view/create_all_participants_view.dart';
 import '../../allParticipent/view/participants_view.dart';
 import '../../create_event/models/event_model.dart';
+import '../../notifications/model/nitofications_model.dart';
+import '../../otherUserProfile/controller/other_user_profile_controller.dart';
 import '../../otherUserProfile/view/other_user_view.dart';
 import '../models/ticket_model.dart';
 import 'events_qr_view.dart';
@@ -37,112 +39,106 @@ CollectionReference ref = FirebaseFirestore.instance.collection("users");
 
 class _EventsDetailsViewState extends State<EventsDetailsView> {
   bool registerFee = false;
+  String followButton = "Follow";
+  List<EventModel> userEvents = [];
+  List<TicketModel> userTickets = [];
   List<UserModel> eventParticipants = [];
   List<UserModel> allUsers = [];
   List<TicketModel> eventTickets = [];
   UserModel? currentUser;
   UserModel? eventCreater;
+  String notifyId = "";
   List<DateTime> weekDates = [];
   String buttonName = "Register";
   @override
   Widget build(BuildContext context) {
-   // print(widget.event.id.toString());
+    // print(widget.event.id.toString());
     eventTickets = [];
     weekDates = [];
+    eventParticipants = [];
     allUsers = context.watch<EventsController>().allUsers;
     eventTickets = context.watch<EventDetailsController>().eventTickets;
-    if (allUsers.isNotEmpty) {
-      currentUser = allUsers.firstWhere(
-          (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
-      eventCreater =
-          allUsers.firstWhere((element) => element.id == widget.event.uId);
-      eventParticipants = [];
-      for (var element1 in eventTickets) {
-        eventParticipants
-            .add(allUsers.firstWhere((element) => element.id == element1.uId));
-      }
-    }
-    for (var element in eventParticipants) {
-      if (element.id == currentUser!.id) {
-        buttonName = "Registered";
-      }
-    }
+    List<NotificationsModel> notifications =
+        context.watch<OtherUserProfileController>().notifications;
+    setData(notifications);
+    setRegisterButton();
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime);
     DateTime startTime =
         DateTime.fromMillisecondsSinceEpoch(widget.event.startTime);
     DateTime endTime =
         DateTime.fromMillisecondsSinceEpoch(widget.event.endTime);
-    DateTime tempDate = dateTime.subtract(const Duration(days: 3));
-    for(var i=0; i<6;  i++){
-      weekDates.add(tempDate.add(Duration(days: i)));
-    }
-    Duration difference = endTime.difference(startTime);
-    int hours = difference.inHours;
-    int minutes = difference.inMinutes.remainder(60);
-    String formattedDiff =
-        "${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}";
+    addWeekDates(dateTime);
+    String formattedDiff = calculateDiff(endTime,startTime);
     String startFormat = DateFormat("HH:MM a").format(startTime);
     String endFormat = DateFormat("HH:MM a").format(endTime);
     String formattedDate = DateFormat('d MMM, y').format(dateTime);
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: Padding(
-            padding: EdgeInsets.all(19.sp),
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: AppColors.kPrimaryColor,
-                size: 18.sp,
-              ),
+        elevation: 0,
+        leading: Padding(
+          padding: EdgeInsets.all(19.sp),
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: AppColors.kPrimaryColor,
+              size: 18.sp,
             ),
           ),
-          title: Center(
-            child: Text(
-              "Event",
-              style: AppTextStyles.josefin(
-                  style: TextStyle(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w800,
-                color: AppColors.kPrimaryColor,
-              )),
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(
-                  right: Constants.userType == 'user' ? 60.w : 30.w),
-              child: Constants.userType == 'user'
-                  ? Container()
-                  : GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            childCurrent: widget,
-                            type: PageTransitionType.rightToLeft,
-                            alignment: Alignment.center,
-                            duration: const Duration(milliseconds: 200),
-                            reverseDuration: const Duration(milliseconds: 200),
-                            child:  EventsQrView(eventId: widget.event.id,),
-                          ),
-                        );
-                      },
-                      child: Image(
-                        height: 22.sp,
-                        width: 22.sp,
-                        image: const AssetImage('assets/images/qr_events.png'),
-                      ),
-                    ),
-            ),
-          ],
         ),
-        body: Column(
-          children: [
+        title: Center(
+          child: Text(
+            "Event",
+            style: AppTextStyles.josefin(
+                style: TextStyle(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w800,
+              color: AppColors.kPrimaryColor,
+            )),
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(
+                right: Constants.userType == 'user' ? 60.w : 30.w),
+            child: Constants.userType == 'user'
+                ? Container()
+                : GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          childCurrent: widget,
+                          type: PageTransitionType.rightToLeft,
+                          alignment: Alignment.center,
+                          duration: const Duration(milliseconds: 200),
+                          reverseDuration: const Duration(milliseconds: 200),
+                          child: EventsQrView(
+                            eventId: widget.event.id,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Image(
+                      height: 22.sp,
+                      width: 22.sp,
+                      image: const AssetImage('assets/images/qr_events.png'),
+                    ),
+                  ),
+          ),
+        ],
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (currentUser == null) ...[
+            const Center(
+              child: CircularProgressIndicator(),
+            )
+          ] else ...[
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -242,7 +238,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                       fontSize: 15.sp)),
                             ),
                             RatingStars(
-                              value: 3,
+                              value: 0,
                               starBuilder: (index, color) {
                                 return Icon(
                                   Icons.star_sharp,
@@ -276,9 +272,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            for(var e in weekDates)
-                            calenderView(e,dateTime),
-                             ],
+                            for (var e in weekDates) calenderView(e, dateTime),
+                          ],
                         ),
                       ),
                       CustomSizeBox(15.h),
@@ -419,30 +414,33 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(12.sp)),
                               child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 22.w, vertical: 14.h),
-                                  child: Center(
-                                    child: Text(
-                                      'Cancel Event',
-                                      style: AppTextStyles.josefin(
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              color: const Color(0xFFD70E0E),
-                                              fontSize: 16.sp)),
-                                    ),
-                                  )),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 22.w, vertical: 14.h),
+                                child: Center(
+                                  child: Text(
+                                    'Cancel Event',
+                                    style: AppTextStyles.josefin(
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            color: const Color(0xFFD70E0E),
+                                            fontSize: 16.sp)),
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
                       ),
           ],
-        ));
+        ],
+      ),
+    );
   }
 
-  Widget calenderView(DateTime date,DateTime eventDate) {
+  Widget calenderView(DateTime date, DateTime eventDate) {
     String dayName = DateFormat("MMM").format(date);
     bool eventDay = false;
-    if(date == eventDate){
+    if (date == eventDate) {
       eventDay = true;
     }
     return Container(
@@ -759,24 +757,45 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                     ),
                   ],
                 )),
-                Padding(
-                  padding: EdgeInsets.only(right: 30.w),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.sp),
-                        color: //Colors.purple.shade400
+                GestureDetector(
+                  onTap: () async {
+                    if (followButton == "Follow") {
+                      context
+                          .read<OtherUserProfileController>()
+                          .sendFollowRequest(
+                            eventCreater!.id,
+                          );
+                    } else if (followButton == "Following") {
+                      await context
+                          .read<OtherUserProfileController>()
+                          .followTap(eventCreater!);
+                      await context
+                          .read<OtherUserProfileController>()
+                          .followingTap(currentUser!, eventCreater!.id);
+                      await context
+                          .read<OtherUserProfileController>()
+                          .unFollow(eventCreater!.id, notifyId);
+                    }
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 30.w),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.sp),
+                          color: //Colors.purple.shade400
 
-                            const Color(0xFF3C4784).withOpacity(0.818)),
-                    child: Padding(
-                      padding: EdgeInsets.all(10.sp),
-                      child: Center(
-                        child: Text(
-                          "Follow",
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                  fontSize: 11.sp)),
+                              const Color(0xFF3C4784).withOpacity(0.818)),
+                      child: Padding(
+                        padding: EdgeInsets.all(10.sp),
+                        child: Center(
+                          child: Text(
+                            followButton,
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                    fontSize: 11.sp)),
+                          ),
                         ),
                       ),
                     ),
@@ -789,8 +808,6 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   }
 
   Widget participant(UserModel user) {
-    print("participant");
-    print(user.userName);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: GestureDetector(
@@ -819,5 +836,53 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                   width: 40.sp,
                   image: const AssetImage("assets/images/profile_pic.png"))),
     );
+  }
+  setRegisterButton(){
+    for (var element in eventParticipants) {
+      if (element.id == currentUser!.id) {
+        buttonName = "Registered";
+      }
+    }
+  }
+  String calculateDiff(DateTime endTime,DateTime startTime){
+    Duration difference = endTime.difference(startTime);
+    int hours = difference.inHours;
+    int minutes = difference.inMinutes.remainder(60);
+    String formattedDiff =
+        "${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}";
+    return formattedDiff;
+  }
+  addWeekDates(DateTime dateTime){
+    DateTime tempDate = dateTime.subtract(const Duration(days: 3));
+    for (var i = 0; i < 6; i++) {
+      weekDates.add(tempDate.add(Duration(days: i)));
+    }
+  }
+  setData(List<NotificationsModel> notifications){
+    if (allUsers.isNotEmpty) {
+      currentUser = allUsers.firstWhere(
+              (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+      eventCreater =
+          allUsers.firstWhere((element) => element.id == widget.event.uId);
+      setFollowButton(notifications);
+      for (var element1 in eventTickets) {
+        eventParticipants
+            .add(allUsers.firstWhere((element) => element.id == element1.uId));
+      }
+    }
+  }
+  setFollowButton(List<NotificationsModel> notifications) {
+    for (var element in notifications) {
+      if (element.senderId == FirebaseAuth.instance.currentUser!.uid &&
+          element.status != "Rejected" &&
+          element.status != "unFollowed") {
+        if (element.status == "Accepted") {
+          followButton = "Following";
+          notifyId = element.id;
+        } else {
+          followButton = element.status;
+        }
+      }
+    }
   }
 }

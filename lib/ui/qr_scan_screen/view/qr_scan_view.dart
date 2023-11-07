@@ -8,6 +8,7 @@ import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../../../global/helper/custom_sized_box.dart';
+import '../../../global/utils/constants.dart';
 import '../../authentication/model/user_model.dart';
 
 class HomeQrScanView extends StatefulWidget {
@@ -29,28 +30,31 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
         child: Column(
           children: [
             CustomSizeBox(65.h),
-            
-                if(user?.pImage == null)...[
-                               Center(
-                                 child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.sp)),
-                                  child: Image(
-                                    height: 50.sp,
-                                    width: 50.sp,
-                                    image: const AssetImage(
-                                        'assets/images/profile_pic.png'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                                             ),
-                               )]else...[
-                  Center(
-                    child: CircleAvatar(
-                    radius: 20,
-                    backgroundImage: NetworkImage(user!.pImage!,),),
+
+            if (user?.pImage == null) ...[
+              Center(
+                child: Container(
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(10.sp)),
+                  child: Image(
+                    height: 50.sp,
+                    width: 50.sp,
+                    image: const AssetImage('assets/images/profile_pic.png'),
+                    fit: BoxFit.cover,
                   ),
-                              ],
-          
+                ),
+              )
+            ] else ...[
+              Center(
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundImage: NetworkImage(
+                    user!.pImage!,
+                  ),
+                ),
+              ),
+            ],
+
             CustomSizeBox(30.h),
             // Stack
             Stack(
@@ -76,7 +80,7 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                           children: [
                             CustomSizeBox(50.h),
                             Text(
-                              user?.firstName ?? '',
+                              Constants.userName,
                               style: AppTextStyles.josefin(
                                   style: TextStyle(
                                       color: Colors.black,
@@ -85,7 +89,7 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                             ),
                             CustomSizeBox(5.h),
                             Text(
-                              user?.position ?? '',
+                              Constants.userPosition ,
                               style: AppTextStyles.josefin(
                                   style: TextStyle(
                                 color: const Color(0xFFA1A1A1),
@@ -101,7 +105,6 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                               size: 180.sp,
                               gapless: false,
                             )
-                            
                           ],
                         ),
                       ),

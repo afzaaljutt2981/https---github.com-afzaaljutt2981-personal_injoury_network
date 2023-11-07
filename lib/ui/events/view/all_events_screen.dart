@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:personal_injury_networking/global/helper/single_event_widget.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
@@ -9,9 +11,11 @@ import 'package:personal_injury_networking/ui/events/view/up_coming_events.dart'
 import 'package:personal_injury_networking/ui/events_details/models/ticket_model.dart';
 import 'package:provider/provider.dart';
 
+import '../../../global/app_buttons/app_primary_button.dart';
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../create_event/models/event_model.dart';
+import '../../events_details/view/create_event_details_view.dart';
 import '../model/all_events_model.dart';
 
 class AllEventScreen extends StatefulWidget {
@@ -23,33 +27,6 @@ class AllEventScreen extends StatefulWidget {
 
 class _AllEventScreenState extends State<AllEventScreen>
     with SingleTickerProviderStateMixin {
-  List<AllEventsModel> allEventsList = [
-    AllEventsModel(
-        'assets/images/intro_background_image.png',
-        'A virtual evening of smooth jazz',
-        '1st  May- Sat -2:00 PM',
-        'Radius Gallery • Santa Cruz, CA'),
-    AllEventsModel(
-        'assets/images/intro_background_image.png',
-        'Jo malone london’s mother’s day ',
-        '1st  May- Sat -2:00 PM',
-        'Lot 13 • Oakland, CA'),
-    AllEventsModel(
-        'assets/images/intro_background_image.png',
-        "Women's leadership conference",
-        '1st  May- Sat -2:00 PM',
-        '53 Bush St • San Francisco, CA'),
-    AllEventsModel(
-        'assets/images/intro_background_image.png',
-        'International kids safe parents night out',
-        '1st  May- Sat -2:00 PM',
-        'Lot 13 • Oakland, CA'),
-    AllEventsModel(
-        'assets/images/intro_background_image.png',
-        'International gala music festival',
-        '1st  May- Sat -2:00 PM',
-        'Longboard Margarita Bar '),
-  ];
   late TabController tabController;
   List<EventModel> events = [];
 
@@ -67,16 +44,15 @@ class _AllEventScreenState extends State<AllEventScreen>
 
   @override
   Widget build(BuildContext context) {
-    if (Constants.userType == "user" &&
-        FirebaseAuth.instance.currentUser?.email != Constants.adminEmail) {
+    if (FirebaseAuth.instance.currentUser?.email != Constants.adminEmail) {
       List<TicketModel> tickets =
           context.watch<EventsController>().userBookedEvents;
-      tickets.forEach((element) {
+      for (var element in tickets) {
         events.add(context
             .watch<EventsController>()
             .allEvents
             .firstWhere((element1) => element.eId == element1.id));
-      });
+      }
     } else {
       events = context.watch<EventsController>().allEvents;
       print("all events --> $events");
@@ -87,17 +63,6 @@ class _AllEventScreenState extends State<AllEventScreen>
           backgroundColor: Colors.white,
           elevation: 0,
           automaticallyImplyLeading: false,
-          // leading: Padding(
-          //   padding: EdgeInsets.all(19.sp),
-          //   child: GestureDetector(
-          //     onTap: () => Navigator.pop(context),
-          //     child: Image(
-          //       height: 10.sp,
-          //       width: 10.sp,
-          //       image: const AssetImage('assets/images/back_arrow_events.png'),
-          //     ),
-          //   ),
-          // ),
           title: Center(
             child: Text(
               "All Events",
@@ -108,38 +73,6 @@ class _AllEventScreenState extends State<AllEventScreen>
                       color: AppColors.kPrimaryColor)),
             ),
           ),
-          // actions: [
-          //   allEventsList.isEmpty
-          //       ? const SizedBox()
-          //       : Image(
-          //           height: 18.sp,
-          //           width: 18.sp,
-          //           image: const AssetImage('assets/images/search_icon.png'),
-          //         ),
-          //   Padding(
-          //     padding: EdgeInsets.only(right: 20.w, left: 10.w),
-          //     child: GestureDetector(
-          //       onTap: () {
-          //         Navigator.push(
-          //           context,
-          //           PageTransition(
-          //             childCurrent: widget,
-          //             type: PageTransitionType.rightToLeft,
-          //             alignment: Alignment.center,
-          //             duration: const Duration(milliseconds: 200),
-          //             reverseDuration: const Duration(milliseconds: 200),
-          //             child: const AddEventView(),
-          //           ),
-          //         );
-          //       },
-          //       child: Icon(
-          //         Icons.more_vert_outlined,
-          //         color: Colors.black,
-          //         size: 22.sp,
-          //       ),
-          //     ),
-          //   ),
-          // ],
         ),
         body: events.isNotEmpty
             ? Column(
@@ -147,157 +80,10 @@ class _AllEventScreenState extends State<AllEventScreen>
                   Expanded(
                     child: ListView.builder(
                         physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: events.length,
+                       itemCount: events.length,
                         itemBuilder: (context, index) {
                           var model = events[index];
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15.w, vertical: 8.h),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.sp),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: const Color(0xFF535990)
-                                          .withOpacity(0.1),
-                                      spreadRadius: 6,
-                                      blurRadius: 6,
-                                      offset: Offset(0, 10.sp),
-                                    )
-                                  ]),
-                              child: Padding(
-                                padding: EdgeInsets.all(10.sp),
-                                child: Column(children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        height: 100.sp,
-                                        width: 100.sp,
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey[300],
-                                            borderRadius:
-                                                BorderRadius.circular(10.sp),
-                                            image: DecorationImage(
-                                                image:
-                                                    NetworkImage(model.pImage),
-                                                fit: BoxFit.cover)),
-                                      ),
-                                      Expanded(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 20.w,
-                                              right: 10.w,
-                                              top: 5.h),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              CustomSizeBox(3.h),
-                                              Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      model.title,
-                                                      style: AppTextStyles.josefin(
-                                                          style: TextStyle(
-                                                              color: const Color(
-                                                                  0xFF3A51C8),
-                                                              fontSize: 13.sp,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500)),
-                                                    ),
-                                                    if (FirebaseAuth
-                                                            .instance
-                                                            .currentUser
-                                                            ?.email ==
-                                                        Constants.adminEmail)
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          print(
-                                                              "Delete should be initiated");
-                                                        },
-                                                        child: Image(
-                                                          height: 20.sp,
-                                                          width: 20.sp,
-                                                          image: const AssetImage(
-                                                              'assets/images/delete.png'),
-                                                        ),
-                                                      ),
-                                                  ]),
-                                              CustomSizeBox(10.h),
-                                              Text(
-                                                model.title,
-                                                style: AppTextStyles.josefin(
-                                                    style: TextStyle(
-                                                        color: const Color(
-                                                            0xFF120D26),
-                                                        fontSize: 18.sp,
-                                                        fontWeight:
-                                                            FontWeight.w500)),
-                                              ),
-                                              CustomSizeBox(8.h),
-                                              Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.place,
-                                                    color: Colors.grey,
-                                                    size: 15.sp,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 8.w,
-                                                  ),
-                                                  Expanded(
-                                                    child: Text(
-                                                      model.address,
-                                                      style: AppTextStyles.josefin(
-                                                          style: TextStyle(
-                                                              color: const Color(
-                                                                  0xFF747688),
-                                                              fontSize: 11.sp,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500)),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              CustomSizeBox(3.h),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  CustomSizeBox(5),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Organized by: ${model.title}",
-                                        style: AppTextStyles.josefin(
-                                            style: TextStyle(
-                                                color: const Color(0xFF9C8AEB),
-                                                fontSize: 12.sp,
-                                                fontWeight: FontWeight.w500)),
-                                      )
-                                    ],
-                                  )
-                                ]),
-                              ),
-                            ),
-                          );
+                          return SingleEventWidget(event: model);
                         }),
                   ),
                 ],
