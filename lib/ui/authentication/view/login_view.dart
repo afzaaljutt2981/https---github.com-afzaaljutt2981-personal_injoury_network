@@ -22,6 +22,7 @@ import '../../../global/utils/custom_snackbar.dart';
 import '../../forgetPassword/view/create_forget_pass_controller.dart';
 import '../../forgetPassword/view/forget_view.dart';
 import '../../home/view/navigation_view.dart';
+import '../model/user_model.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -331,28 +332,37 @@ class _LoginViewState extends State<LoginView> {
       final UserCredential authResult =
           await _auth.signInWithCredential(credential);
       final User? user = authResult.user;
-
       if (user != null) {
-        Constants.userDisplayName = user.displayName!;
-        Constants.userEmail = user.email!;
-        Constants.uId = user.uid;
-        // ignore: use_build_context_synchronously
-        Navigator.push(
-          context,
-          PageTransition(
-            childCurrent: widget,
-            type: PageTransitionType.rightToLeft,
-            alignment: Alignment.center,
-            duration: const Duration(milliseconds: 200),
-            reverseDuration: const Duration(milliseconds: 200),
-            child: ChangeNotifierProvider(
-                create: (_) => AuthController(),
-                child: SignUpScreen(
-                  screenType: 1,
-                )),
-          ),
-        );
+        getUserData(user);
       }
+      //  await FirebaseFirestore.instance.collection("users").doc(user.uid).set(
+      //       UserModel(location: "", position: "", email: user.email!,
+      //           firstName: user.displayName??"", lastName: "", id: user.uid, reference: "",
+      //           hobbies: [],
+      //           followers: [],
+      //           followings: [],
+      //           userName: '', phone: 0, userType: "user", company: "", website: "").toJson());
+      //   Constants.userDisplayName = user.displayName!;
+      //   Constants.userEmail = user.email!;
+      //   Constants.uId = user.uid;
+      //   // ignore: use_build_context_synchronously
+      //   Navigator.push(
+      //     context,
+      //     PageTransition(
+      //       childCurrent: widget,
+      //       type: PageTransitionType.rightToLeft,
+      //       alignment: Alignment.center,
+      //       duration: const Duration(milliseconds: 200),
+      //       reverseDuration: const Duration(milliseconds: 200),
+      //       child: ChangeNotifierProvider(
+      //           create: (_) => AuthController(),
+      //           child: SignUpScreen(
+      //             screenType: 1,
+      //             isUpdate: true,
+      //           )),
+      //     ),
+      //   );
+      // }
       return user;
     } catch (error) {
       CustomSnackBar(false).showInSnackBar(error.toString(), context);
@@ -414,4 +424,50 @@ class _LoginViewState extends State<LoginView> {
         throw UnimplementedError();
     }
   }
-}
+  getUserData(User user) async {
+   var res = await  FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid).get();
+   if(res.exists){
+     UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
+      //   .snapshots()
+      //   .listen((event) {
+      // UserModel user = UserModel.fromJson(event.data() as Map<String, dynamic>);
+      if (user.userName == "") {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (_) => SignUpScreen(
+                  screenType: 1,
+                  isUpdate: true,
+                )),
+                (route) => false);
+      } else {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+                (route) => false);
+      }
+    // });
+  }else{
+     await FirebaseFirestore.instance.collection("users").doc(user.uid).set(
+         UserModel(location: "", position: "", email: user.email!,
+             firstName: user.displayName??"", lastName: "", id: user.uid, reference: "",
+             hobbies: [],
+             followers: [],
+             followings: [],
+             userName: '', phone: 0, userType: "user", company: "", website: "").toJson());
+     Constants.userDisplayName = user.displayName!;
+     Constants.userEmail = user.email!;
+     Constants.uId = user.uid;
+     Navigator.pushAndRemoveUntil(
+         context,
+         MaterialPageRoute(
+             builder: (_) => SignUpScreen(
+               screenType: 1,
+               isUpdate: true,
+             )),
+             (route) => false);
+   }
+}}
