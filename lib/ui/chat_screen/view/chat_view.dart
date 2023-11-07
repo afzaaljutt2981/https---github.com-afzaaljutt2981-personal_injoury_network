@@ -1,8 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/chat_screen/controller/chat_controller.dart';
+import 'package:personal_injury_networking/ui/chat_screen/view/create-picked_image_view.dart';
+import 'package:personal_injury_networking/ui/chat_screen/view/show_picked_image.dart';
 import 'package:provider/provider.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
@@ -23,9 +28,10 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-     }
+  }
 
   List<ChatMessage> chats = [];
+  Uint8List? image1;
   @override
   Widget build(BuildContext context) {
     chats = [];
@@ -82,46 +88,49 @@ class _ChatScreenState extends State<ChatScreen> {
             itemBuilder: (context, index) {
               Alignment alignment = Alignment.topLeft;
               bool match = false;
-              if(chats[index].senderId == FirebaseAuth.instance.currentUser!.uid){
+              if (chats[index].senderId ==
+                  FirebaseAuth.instance.currentUser!.uid) {
                 alignment = Alignment.topRight;
                 match = true;
               }
               return Container(
-                padding: const EdgeInsets.only(
-                    left: 14, right: 14, top: 0, bottom: 10),
-                child: Align(
-                  alignment: alignment,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(
-                            (!match
-                                ? 0.sp
-                                : 20.sp)),
-                        topRight: Radius.circular(
-                            (match
-                                ? 0.sp
-                                : 20.sp)),
-                        bottomLeft: Radius.circular(20.sp),
-                        bottomRight: Radius.circular(20.sp),
-                      ),
-                      color: (!match
-                          ? const Color(0xFFF5F5F5)
-                          : AppColors.kPrimaryColor),
+                  padding: const EdgeInsets.only(
+                      left: 14, right: 14, top: 0, bottom: 10),
+                  child: Align(
+                    alignment: alignment,
+                    child: (chats[index].messageType == "text")
+                        ? Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft:
+                                    Radius.circular((!match ? 0.sp : 20.sp)),
+                                topRight:
+                                    Radius.circular((match ? 0.sp : 20.sp)),
+                                bottomLeft: Radius.circular(20.sp),
+                                bottomRight: Radius.circular(20.sp),
+                              ),
+                              color: (!match
+                                  ? const Color(0xFFF5F5F5)
+                                  : AppColors.kPrimaryColor),
+                            ),
+                            padding: EdgeInsets.all(18.sp),
+                            child: Text(
+                              chats[index].messageContent,
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: (!match ? Colors.black : Colors.white),
+                              ),
+                            ))
+                        : ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image(
+                              image: NetworkImage(chats[index].messageContent),
+                              width: 100,
+                              height: 100,
+                          fit: BoxFit.cover,
                     ),
-                    padding: EdgeInsets.all(18.sp),
-                    child: Text(
-                      chats[index].messageContent,
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        color: (!match
-                            ? Colors.black
-                            : Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-              );
+                        ),
+                  ));
             },
           )),
           Align(
@@ -200,7 +209,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           emplyList == false
                               ? GestureDetector(
                                   onTap: () {
-
+                                    pickImage();
                                   },
                                   child: Image(
                                     height: 20.sp,
@@ -219,7 +228,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     GestureDetector(
                       onTap: () async {
                         context.read<ChatController>().sendMessage(
-                            widget.user.id, textController.text);
+                            widget.user.id, textController.text, "text");
                         setState(() {
                           textController.clear();
                           emplyList = false;
@@ -263,6 +272,21 @@ class _ChatScreenState extends State<ChatScreen> {
         ]));
   }
 
+  pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? pickedImage =
+        await _picker.pickImage(source: ImageSource.camera);
+    if (pickedImage != null) {
+      image1 = await pickedImage.readAsBytes();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => CreatePickedImageView(
+                    image: image1!,
+                    chatUser: widget.user,
+                  )));
+    }
+  }
   // Future emojiesPicker() async {
   //   EmojiPicker(
   //     textEditingController: textController,
