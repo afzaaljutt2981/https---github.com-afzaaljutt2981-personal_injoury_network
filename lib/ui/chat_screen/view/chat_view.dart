@@ -23,8 +23,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // context.read<ChatController>().getUserMessages(widget.user.id);
-  }
+     }
 
   List<ChatMessage> chats = [];
   @override
@@ -56,17 +55,6 @@ class _ChatScreenState extends State<ChatScreen> {
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w700)),
               ),
-              // Padding(
-              //   padding: EdgeInsets.only(left: 5.w, top: 5.h),
-              //   child: Text(
-              //     "(56 Members)",
-              //     style: AppTextStyles.josefin(
-              //         style: TextStyle(
-              //             color: Colors.black,
-              //             fontSize: 8.sp,
-              //             fontWeight: FontWeight.w700)),
-              //   ),
-              // ),
             ],
           ),
           actions: [
@@ -211,7 +199,9 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                           emplyList == false
                               ? GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+
+                                  },
                                   child: Image(
                                     height: 20.sp,
                                     width: 20.sp,
@@ -228,10 +218,11 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        await context.read<ChatController>().sendMessage(
+                        context.read<ChatController>().sendMessage(
                             widget.user.id, textController.text);
                         setState(() {
                           textController.clear();
+                          emplyList = false;
                         });
                       },
                       child: Container(
