@@ -1,11 +1,13 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
+import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:personal_injury_networking/ui/authentication/model/country_state_model.dart'
     as cs_model;
@@ -17,8 +19,8 @@ import '../../home/view/navigation_view.dart';
 import '../model/job_position_model.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
-
+  SignUpScreen({required this.screenType, Key? key}) : super(key: key);
+  int screenType;
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
@@ -63,6 +65,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void initState() {
+    widget.screenType == 1
+        ? textFieldController[0].text = Constants.userDisplayName.toString()
+        : textFieldController[0].text = '';
+    widget.screenType == 1
+        ? textFieldController[5].text = Constants.userEmail.toString()
+        : textFieldController[5].text = '';
     loadUserPositions();
     loadUserHobbies();
     getCountries();
@@ -82,20 +90,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   getStates() async {
-    //
     for (var element in countryStateModel.data) {
       if (selectedCountry == element.name) {
-        //
-        setState(() {
-          // resetCities();
-        });
-        //
+        setState(() {});
         for (var state in element.states) {
           states.add(state.name);
         }
       }
     }
-    //
   }
 
   final textFieldController =
@@ -109,247 +111,280 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   String selectedCountry = 'Select Country';
   String selectedState = 'Select State';
+
+  willPopCalled() {
+    if (index > 1) {
+      setState(() {
+        index = index - 1;
+      });
+      controller.previousPage(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.ease,
+      );
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     bool saveChangesButton = context.watch<AuthController>().saveChangesButton;
-    return Scaffold(
-      backgroundColor: AppColors.kPrimaryColor,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomSizeBox(40.h),
-              Column(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.white,
-                      size: 18.sp,
-                    ),
-                  ),
-                ],
-              ),
-              CustomSizeBox(10.h),
-              Center(
-                child: Image(
-                  height: 90.sp,
-                  width: 90.sp,
-                  image: const AssetImage('assets/images/primary_icon.png'),
-                ),
-              ),
-              CustomSizeBox(20.h),
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30.sp),
-                  child: Text(
-                    'Create Account',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.josefin(
-                      style: TextStyle(
-                        height: 1.1.sp,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w700,
+    return WillPopScope(
+      onWillPop: () {
+        return willPopCalled();
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.kPrimaryColor,
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomSizeBox(40.h),
+                Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        willPopCalled();
+                      },
+                      child: Icon(
+                        Icons.arrow_back_ios,
                         color: Colors.white,
+                        size: 18.sp,
                       ),
                     ),
+                  ],
+                ),
+                CustomSizeBox(10.h),
+                Center(
+                  child: Image(
+                    height: 90.sp,
+                    width: 90.sp,
+                    image: const AssetImage('assets/images/primary_icon.png'),
                   ),
                 ),
-              ),
-              CustomSizeBox(15.h),
-              processStagesCount(index),
-              CustomSizeBox(25.h),
-              SizedBox(
-                height: index == 2 ? 350.h : 320.h,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w),
-                  child: PageView(
-                    controller: controller,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      process1(),
-                      process2(),
-                      process3(),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: 10.w,
-                    right: 10.w,
-                    bottom: index == 3 ? 15.h : 30.h, //0.h,
-                    top: index == 3
-                        ? 15.h
-                        : index == 2
-                            ? 10.h
-                            : 25.h),
-                child: GetwhiteButton(
-                  50.sp,
-                  () async {
-                    if (index == 1) {
-                      if (textFieldController[0].text.isEmpty) {
-                        CustomSnackBar(false)
-                            .showInSnackBar('please enter first name', context);
-                        return;
-                      }else if(textFieldController[1].text.isEmpty){
-                        CustomSnackBar(false).showInSnackBar("please enter last name", context);
-                        return;
-                      } else if(textFieldController[2].text.isEmpty){
-                        CustomSnackBar(false).showInSnackBar("please enter company name", context);
-                        return;
-                      } else if(textFieldController[3].text.isEmpty){
-                        CustomSnackBar(false).showInSnackBar("please select your position or job", context);
-                        return;
-                      }else {
-                        setState(() {
-                          index = index + 1;
-                          controller.nextPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.easeInOut,
-                          );
-                        });
-                      }
-                    } else if (index == 2) {
-                      if (textFieldController[4].text.isEmpty) {
-                        CustomSnackBar(false)
-                            .showInSnackBar('please enter cell phone', context);
-                        return;
-                      } else if(textFieldController[5].text.isEmpty || !EmailValidator.validate(textFieldController[5].text)){
-                        CustomSnackBar(false).showInSnackBar("please enter valid email", context);
-                        return;
-                      } else if(selectedCountry == "Select Country"){
-                        CustomSnackBar(false).showInSnackBar("please select your country", context);
-                        return;
-                      } else if(selectedState == "Select State"){
-                        CustomSnackBar(false).showInSnackBar("please select your state", context);
-                        return;
-                      }else if(textFieldController[9].text.isEmpty){
-                        CustomSnackBar(false).showInSnackBar("please enter your reference", context);
-                        return;
-                      }else {
-                        setState(() {
-                          index = index + 1;
-                          controller.nextPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.easeInOut,
-                          );
-                        });
-                      }
-                    }
-                    if (index == 3) {
-                      if (textFieldController[10].text.isEmpty) {
-                        CustomSnackBar(false)
-                            .showInSnackBar('please enter user name', context);
-                        return;
-                      } else if (textFieldController[11].text.length < 6) {
-                        CustomSnackBar(false).showInSnackBar(
-                            'Password is too short! must be greater than 6 digits',
-                            context);
-                        return;
-                      } else if (textFieldController[11].text !=
-                          textFieldController[12].text) {
-                        CustomSnackBar(false).showInSnackBar(
-                            'password and confirm password should be same!', context);
-                        return;
-                      } else {
-                        context
-                            .read<AuthController>()
-                            .setSaveChangesButtonStatus(true);
-                        context.read<AuthController>().signup(context,
-                            firstName: textFieldController[0].text,
-                            lastName: textFieldController[1].text,
-                            companyName: textFieldController[2].text,
-                            position: textFieldController[3].text,
-                            phone: textFieldController[4].text,
-                            email: textFieldController[5].text,
-                            website: textFieldController[6].text,
-                            location: "$selectedState,$selectedCountry",
-                            reference: textFieldController[9].text,
-                            password: textFieldController[11].text,
-                            hobbies: selectedHobbies,
-                            userName: textFieldController[10].text);
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            childCurrent: widget,
-                            type: PageTransitionType.leftToRight,
-                            alignment: Alignment.center,
-                            duration: const Duration(milliseconds: 200),
-                            reverseDuration: const Duration(milliseconds: 200),
-                            child: BottomNavigationScreen(
-                              selectedIndex: 0,
-                            ),
-                          ),
-                        );
-                      }
-                    }
-                  },
-                  saveChangesButton == false? Text(
-                    index < 3 ? "Next" : "Save" ,
-                    style: AppTextStyles.josefin(
-                      style: TextStyle(
-                        color: AppColors.kPrimaryColor,
-                        fontSize: 18.sp,
-                      ),
-                    ),
-                  ) : SpinKitCircle(
-                                color: Colors.white,
-                                size: shortestSide > 600 ? 16.sp : 20,
-                              ),
-                ),
-              ),
-              index == 3
-                  ? Center(
-                      child: SizedBox(
-                        width: 250.w,
-                        child: Column(
-                          children: [
-                            Text(
-                              'By click Save you are agree with ',
-                              textAlign: TextAlign.center,
-                              style: AppTextStyles.josefin(
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 10.sp)),
-                            ),
-                            CustomSizeBox(5.h),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'our ',
-                                  textAlign: TextAlign.center,
-                                  style: AppTextStyles.josefin(
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 10.sp)),
-                                ),
-                                Text(
-                                  'Terms and Condition ',
-                                  textAlign: TextAlign.center,
-                                  style: AppTextStyles.josefin(
-                                      style: TextStyle(
-                                          color: const Color(0xFFF63636),
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 10.sp)),
-                                )
-                              ],
-                            ),
-                            CustomSizeBox(20.h),
-                          ],
+                CustomSizeBox(20.h),
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30.sp),
+                    child: Text(
+                      'Create Account',
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.josefin(
+                        style: TextStyle(
+                          height: 1.1.sp,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
                         ),
                       ),
-                    )
-                  : const SizedBox(),
-            ],
+                    ),
+                  ),
+                ),
+                CustomSizeBox(15.h),
+                processStagesCount(index),
+                CustomSizeBox(25.h),
+                SizedBox(
+                  height: index == 2 ? 350.h : 320.h,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    child: PageView(
+                      controller: controller,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        process1(),
+                        process2(),
+                        process3(),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: 10.w,
+                      right: 10.w,
+                      bottom: index == 3 ? 15.h : 30.h, //0.h,
+                      top: index == 3
+                          ? 15.h
+                          : index == 2
+                              ? 10.h
+                              : 25.h),
+                  child: GetwhiteButton(
+                    50.sp,
+                    () async {
+                      if (index == 1) {
+                        if (textFieldController[0].text.isEmpty) {
+                          CustomSnackBar(false).showInSnackBar(
+                              'please enter first name', context);
+                          return;
+                        } else if (textFieldController[1].text.isEmpty) {
+                          CustomSnackBar(false).showInSnackBar(
+                              "please enter last name", context);
+                          return;
+                        } else if (textFieldController[2].text.isEmpty) {
+                          CustomSnackBar(false).showInSnackBar(
+                              "please enter company name", context);
+                          return;
+                        } else if (textFieldController[3].text.isEmpty) {
+                          CustomSnackBar(false).showInSnackBar(
+                              "please select your position or job", context);
+                          return;
+                        } else {
+                          setState(() {
+                            index = index + 1;
+                            controller.nextPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeInOut,
+                            );
+                          });
+                        }
+                      } else if (index == 2) {
+                        if (textFieldController[4].text.isEmpty) {
+                          CustomSnackBar(false).showInSnackBar(
+                              'please enter cell phone', context);
+                          return;
+                        } else if (textFieldController[5].text.isEmpty ||
+                            !EmailValidator.validate(
+                                textFieldController[5].text)) {
+                          CustomSnackBar(false).showInSnackBar(
+                              "please enter valid email", context);
+                          return;
+                        } else if (selectedCountry == "Select Country") {
+                          CustomSnackBar(false).showInSnackBar(
+                              "please select your country", context);
+                          return;
+                        } else if (selectedState == "Select State") {
+                          CustomSnackBar(false).showInSnackBar(
+                              "please select your state", context);
+                          return;
+                        } else if (textFieldController[9].text.isEmpty) {
+                          CustomSnackBar(false).showInSnackBar(
+                              "please enter your reference", context);
+                          return;
+                        } else {
+                          setState(() {
+                            index = index + 1;
+                            controller.nextPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeInOut,
+                            );
+                          });
+                        }
+                      }
+                      if (index == 3) {
+                        if (textFieldController[10].text.isEmpty) {
+                          CustomSnackBar(false).showInSnackBar(
+                              'please enter user name', context);
+                          return;
+                        } else if (textFieldController[11].text.length < 6) {
+                          CustomSnackBar(false).showInSnackBar(
+                              'Password is too short! must be greater than 6 digits',
+                              context);
+                          return;
+                        } else if (textFieldController[11].text !=
+                            textFieldController[12].text) {
+                          CustomSnackBar(false).showInSnackBar(
+                              'password and confirm password should be same!',
+                              context);
+                          return;
+                        } else {
+                          context
+                              .read<AuthController>()
+                              .setSaveChangesButtonStatus(true);
+                          context.read<AuthController>().signup(context,
+                              firstName: textFieldController[0].text,
+                              lastName: textFieldController[1].text,
+                              companyName: textFieldController[2].text,
+                              position: textFieldController[3].text,
+                              phone: textFieldController[4].text,
+                              email: textFieldController[5].text,
+                              website: textFieldController[6].text,
+                              location: "$selectedState,$selectedCountry",
+                              reference: textFieldController[9].text,
+                              password: textFieldController[11].text,
+                              hobbies: selectedHobbies,
+                              userName: textFieldController[10].text);
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              childCurrent: widget,
+                              type: PageTransitionType.leftToRight,
+                              alignment: Alignment.center,
+                              duration: const Duration(milliseconds: 200),
+                              reverseDuration:
+                                  const Duration(milliseconds: 200),
+                              child: BottomNavigationScreen(
+                                selectedIndex: 0,
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    saveChangesButton == false
+                        ? Text(
+                            index < 3 ? "Next" : "Save",
+                            style: AppTextStyles.josefin(
+                              style: TextStyle(
+                                color: AppColors.kPrimaryColor,
+                                fontSize: 18.sp,
+                              ),
+                            ),
+                          )
+                        : SpinKitCircle(
+                            color: Colors.white,
+                            size: shortestSide > 600 ? 16.sp : 20,
+                          ),
+                  ),
+                ),
+                index == 3
+                    ? Center(
+                        child: SizedBox(
+                          width: 250.w,
+                          child: Column(
+                            children: [
+                              Text(
+                                'By click Save you are agree with ',
+                                textAlign: TextAlign.center,
+                                style: AppTextStyles.josefin(
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 10.sp)),
+                              ),
+                              CustomSizeBox(5.h),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'our ',
+                                    textAlign: TextAlign.center,
+                                    style: AppTextStyles.josefin(
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 10.sp)),
+                                  ),
+                                  Text(
+                                    'Terms and Condition ',
+                                    textAlign: TextAlign.center,
+                                    style: AppTextStyles.josefin(
+                                        style: TextStyle(
+                                            color: const Color(0xFFF63636),
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 10.sp)),
+                                  )
+                                ],
+                              ),
+                              CustomSizeBox(20.h),
+                            ],
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
+              ],
+            ),
           ),
         ),
       ),
@@ -473,7 +508,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         children: [
           textField('Cell Phone', '+1 356 786 7865', 4, textFieldController[4],
               false, false,
-              inputType: TextInputType.number),
+              inputType: TextInputType.number, maxLength: 12),
           textField('Email', 'abc@gmail.com', 5, textFieldController[5], false,
               false),
           textField('Website (Optional)', 'Enter Website name', 6,
@@ -489,7 +524,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           CustomSizeBox(5.h),
           locationField(),
           CustomSizeBox(22.h),
-          textField('Hobbies/Interests (Optional)', 'Click here to enter', 8,
+          textField('Hobbies/Interests', 'Click here to enter', 8,
               textFieldController[8], true, false),
           hobbiesCount != 0
               ? SizedBox(
@@ -576,7 +611,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget textField(String identityText, String hintText, int index,
       TextEditingController controller, bool readOnly, bool obsecureTerxt,
-      {TextInputType? inputType}) {
+      {TextInputType? inputType, int? maxLength}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -593,6 +628,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.sp), color: Colors.white),
           child: TextFormField(
+            inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
+            maxLength: maxLength,
             keyboardType: inputType,
             obscureText: obsecureTerxt,
             readOnly: readOnly,
@@ -627,6 +664,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                   }
                 });
+              } else if (index == 4 && textFieldController[4].text.isEmpty) {
+                textFieldController[4].text = '+1';
               } else if (index == 8 && hobbiesCount < 3) {
                 showMenu(
                   context: context,
@@ -639,7 +678,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ).then((value) {
                   if (value != null) {
                     textFieldController[8].text = value.toString().substring(2);
-
                     for (int i = 0;
                         i < JobPositionModel.hobbiesList.length;
                         i++) {
@@ -659,6 +697,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               }
             },
             decoration: InputDecoration(
+              counterText: "",
               suffixIcon: index == 3
                   ? GestureDetector(
                       onTap: () {

@@ -270,7 +270,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                           ],
                                           borderRadius:
                                               BorderRadius.circular(15.sp),
-                                          color: const Color(0xFFFE613D)
+                                          color: const Color(0xFFD70E0E)
                                               .withOpacity(0.8)),
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
