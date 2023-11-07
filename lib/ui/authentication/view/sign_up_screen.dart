@@ -261,22 +261,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           CustomSnackBar(false).showInSnackBar(
                               "please select your state", context);
                           return;
-                        } 
-                        else if (textFieldController[8].text.isEmpty ||
-                            hobbiesCount < 3) {
+                        } else if (textFieldController[8].text.isEmpty ||
+                            selectedHobbies.length < 3) {
                           CustomSnackBar(false).showInSnackBar(
                               "Please select atleast 3 hobbies!", context);
                           return;
-                        }
-                        
-                        else if (textFieldController[9].text.isEmpty) {
+                        } else if (textFieldController[9].text.isEmpty) {
                           CustomSnackBar(false).showInSnackBar(
                               "please enter your reference", context);
                           return;
-                        }
-                         
-                        
-                         else {
+                        } else {
                           setState(() {
                             index = index + 1;
                             controller.nextPage(
@@ -702,6 +696,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           addItem(JobPositionModel.hobbiesList[i]
                               .substring(2)
                               .toString());
+                          if (hobbiesCount == 0) {
+                            hobbiesCount++;
+                          }
                         });
                       }
                     }
