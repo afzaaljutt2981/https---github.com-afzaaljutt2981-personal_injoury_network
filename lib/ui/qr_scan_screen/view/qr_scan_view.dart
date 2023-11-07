@@ -30,7 +30,7 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
           children: [
             CustomSizeBox(65.h),
             
-                if(user!.pImage == null)...[
+                if(user?.pImage == null)...[
                                Center(
                                  child: Container(
                                   decoration: BoxDecoration(

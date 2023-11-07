@@ -10,7 +10,7 @@ import 'package:personal_injury_networking/ui/authentication/controller/auth_con
 import 'package:personal_injury_networking/ui/authentication/model/country_state_model.dart'
     as cs_model;
 import 'package:provider/provider.dart';
-import '../../../global/helper/api_functions.dart';
+
 import '../../../global/utils/app_text_styles.dart';
 import '../../../global/utils/custom_snackbar.dart';
 import '../../home/view/navigation_view.dart';
@@ -44,6 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   cs_model.CountryStateModel countryStateModel =
       cs_model.CountryStateModel(error: false, msg: '', data: []);
+
   loadUserHobbies() {
     JobPositionModel.hobbiesDropDown = [];
     for (int i = 0; i < JobPositionModel.hobbiesList.length; i++) {
@@ -65,38 +66,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void initState() {
     loadUserPositions();
     loadUserHobbies();
-    getCountries();
+    // getCountries();
     super.initState();
   }
 
-  final CountryStateCityRepo _countryStateCityRepo = CountryStateCityRepo();
-  getCountries() async {
-    //
-    countryStateModel = await _countryStateCityRepo.getCountriesStates();
-    countries.add('Select Country');
-    states.add('Select State');
-    for (var element in countryStateModel.data) {
-      countries.add(element.name);
-    }
-    setState(() {});
-  }
-
-  getStates() async {
-    //
-    for (var element in countryStateModel.data) {
-      if (selectedCountry == element.name) {
-        //
-        setState(() {
-          // resetCities();
-        });
-        //
-        for (var state in element.states) {
-          states.add(state.name);
-        }
-      }
-    }
-    //
-  }
+  // final CountryStateCityRepo _countryStateCityRepo = CountryStateCityRepo();
+  // getCountries() async {
+  //   //
+  //   countryStateModel = await _countryStateCityRepo.getCountriesStates();
+  //   countries.add('Select Country');
+  //   states.add('Select State');
+  //   for (var element in countryStateModel.data) {
+  //     countries.add(element.name);
+  //   }
+  //   setState(() {});
+  // }
+  //
+  // getStates() async {
+  //   //
+  //   for (var element in countryStateModel.data) {
+  //     if (selectedCountry == element.name) {
+  //       //
+  //       setState(() {
+  //         // resetCities();
+  //       });
+  //       //
+  //       for (var state in element.states) {
+  //         states.add(state.name);
+  //       }
+  //     }
+  //   }
+  //   //
+  // }
 
   final textFieldController =
       List.generate(13, (i) => TextEditingController(), growable: true);
@@ -104,11 +105,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final controller = PageController(initialPage: 0);
   bool hidePassword = true;
   bool hideConfirmPassword = true;
-  List<String> countries = [];
-  List<String> states = [];
+  List<String> countries = ["Select Country", "United States"];
+  List<String> states = ["Select State", "California"];
 
-  String selectedCountry = 'Select Country';
-  String selectedState = 'Select State';
+  String selectedCountry = 'United States';
+  String selectedState = 'California';
+
   @override
   Widget build(BuildContext context) {
     bool saveChangesButton = context.watch<AuthController>().saveChangesButton;
@@ -197,16 +199,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         CustomSnackBar(false)
                             .showInSnackBar('please enter first name', context);
                         return;
-                      }else if(textFieldController[1].text.isEmpty){
-                        CustomSnackBar(false).showInSnackBar("please enter last name", context);
+                      } else if (textFieldController[1].text.isEmpty) {
+                        CustomSnackBar(false)
+                            .showInSnackBar("please enter last name", context);
                         return;
-                      } else if(textFieldController[2].text.isEmpty){
-                        CustomSnackBar(false).showInSnackBar("please enter company name", context);
+                      } else if (textFieldController[2].text.isEmpty) {
+                        CustomSnackBar(false).showInSnackBar(
+                            "please enter company name", context);
                         return;
-                      } else if(textFieldController[3].text.isEmpty){
-                        CustomSnackBar(false).showInSnackBar("please select your position or job", context);
+                      } else if (textFieldController[3].text.isEmpty) {
+                        CustomSnackBar(false).showInSnackBar(
+                            "please select your position or job", context);
                         return;
-                      }else {
+                      } else {
                         setState(() {
                           index = index + 1;
                           controller.nextPage(
@@ -220,19 +225,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         CustomSnackBar(false)
                             .showInSnackBar('please enter cell phone', context);
                         return;
-                      } else if(textFieldController[5].text.isEmpty || !EmailValidator.validate(textFieldController[5].text)){
-                        CustomSnackBar(false).showInSnackBar("please enter valid email", context);
+                      } else if (textFieldController[5].text.isEmpty ||
+                          !EmailValidator.validate(
+                              textFieldController[5].text)) {
+                        CustomSnackBar(false).showInSnackBar(
+                            "please enter valid email", context);
                         return;
-                      } else if(selectedCountry == "Select Country"){
-                        CustomSnackBar(false).showInSnackBar("please select your country", context);
+                      } else if (selectedCountry == "Select Country") {
+                        CustomSnackBar(false).showInSnackBar(
+                            "please select your country", context);
                         return;
-                      } else if(selectedState == "Select State"){
-                        CustomSnackBar(false).showInSnackBar("please select your state", context);
+                      } else if (selectedState == "Select State") {
+                        CustomSnackBar(false).showInSnackBar(
+                            "please select your state", context);
                         return;
-                      }else if(textFieldController[9].text.isEmpty){
-                        CustomSnackBar(false).showInSnackBar("please enter your reference", context);
+                      } else if (textFieldController[9].text.isEmpty) {
+                        CustomSnackBar(false).showInSnackBar(
+                            "please enter your reference", context);
                         return;
-                      }else {
+                      } else {
                         setState(() {
                           index = index + 1;
                           controller.nextPage(
@@ -255,7 +266,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       } else if (textFieldController[11].text !=
                           textFieldController[12].text) {
                         CustomSnackBar(false).showInSnackBar(
-                            'password and confirm password should be same!', context);
+                            'password and confirm password should be same!',
+                            context);
                         return;
                       } else {
                         context
@@ -290,18 +302,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       }
                     }
                   },
-                  saveChangesButton == false? Text(
-                    index < 3 ? "Next" : "Save" ,
-                    style: AppTextStyles.josefin(
-                      style: TextStyle(
-                        color: AppColors.kPrimaryColor,
-                        fontSize: 18.sp,
-                      ),
-                    ),
-                  ) : SpinKitCircle(
-                                color: Colors.white,
-                                size: shortestSide > 600 ? 16.sp : 20,
-                              ),
+                  saveChangesButton == false
+                      ? Text(
+                          index < 3 ? "Next" : "Save",
+                          style: AppTextStyles.josefin(
+                            style: TextStyle(
+                              color: AppColors.kPrimaryColor,
+                              fontSize: 18.sp,
+                            ),
+                          ),
+                        )
+                      : SpinKitCircle(
+                          color: Colors.white,
+                          size: shortestSide > 600 ? 16.sp : 20,
+                        ),
                 ),
               ),
               index == 3
@@ -826,11 +840,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     setState(() {
                       selectedCountry = selectedValue;
                       disableStateDropdown = false;
-                      resetStates();
+                      // resetStates();
                     });
-                    if (selectedCountry != 'Select Country') {
-                      getStates();
-                    }
+                    // if (selectedCountry != 'Select Country') {
+                    //   getStates();
+                    // }
                   }
                 },
                 underline: Container(),
