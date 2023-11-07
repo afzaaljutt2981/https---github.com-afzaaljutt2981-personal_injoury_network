@@ -316,7 +316,7 @@ class _AddEventViewState extends State<AddEventView> {
                           },
                           child: Container(
                             width: double.infinity,
-                            height: 200.h,
+                            height: 110.h,
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10.sp)),
@@ -364,7 +364,7 @@ class _AddEventViewState extends State<AddEventView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: 230.w,
+                    width: MediaQuery.of(context).size.width * 0.85,
                     child: GetwhiteButton(50.sp, () async {
                       if (formattedDate == '') {
                         Functions.showSnackBar(
@@ -396,7 +396,7 @@ class _AddEventViewState extends State<AddEventView> {
                         return;
                       }
                       Functions.showLoaderDialog(context);
-                      String url = await Functions.uploadPic(image1!,"events");
+                      String url = await Functions.uploadPic(image1!, "events");
                       await context.read<CreateEventController>().addEvent(
                           endTime: endParseTime!,
                           startTime: parseTime!,
@@ -406,7 +406,6 @@ class _AddEventViewState extends State<AddEventView> {
                           title: titleController.text,
                           dateTime: selectedDate!,
                           latitude: latitude,
-
                           longitude: longitude);
                       Navigator.pop(context);
                       eventCreated();
@@ -419,12 +418,12 @@ class _AddEventViewState extends State<AddEventView> {
                                   fontSize: 17.sp)),
                         )),
                   ),
-                  Image(
-                    height: 45.sp,
-                    width: 45.sp,
-                    image: const AssetImage(
-                        'assets/images/frame_create_event.png'),
-                  ),
+                  // Image(
+                  //   height: 45.sp,
+                  //   width: 45.sp,
+                  //   image: const AssetImage(
+                  //       'assets/images/frame_create_event.png'),
+                  // ),
                 ],
               ),
             ),
