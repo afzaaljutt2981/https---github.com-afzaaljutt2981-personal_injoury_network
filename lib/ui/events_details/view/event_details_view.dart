@@ -69,7 +69,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
     DateTime endTime =
         DateTime.fromMillisecondsSinceEpoch(widget.event.endTime);
     addWeekDates(dateTime);
-    String formattedDiff = calculateDiff(endTime,startTime);
+    String formattedDiff = calculateDiff(endTime, startTime);
     String startFormat = DateFormat("HH:MM a").format(startTime);
     String endFormat = DateFormat("HH:MM a").format(endTime);
     String formattedDate = DateFormat('d MMM, y').format(dateTime);
@@ -203,7 +203,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                   child: Padding(
                                     padding: EdgeInsets.only(right: 50.w),
                                     child: Text(
-                                      "The Creative Coffee Talks Club",
+                                      widget.event.title,
                                       style: AppTextStyles.josefin(
                                           style: TextStyle(
                                               fontWeight: FontWeight.w700,
@@ -355,6 +355,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         await context
                             .read<EventDetailsController>()
                             .addEventTicket(widget.event.id);
+                        // ignore: use_build_context_synchronously
                         await context
                             .read<EventDetailsController>()
                             .addUserTicket(widget.event.id);
@@ -769,9 +770,11 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                       await context
                           .read<OtherUserProfileController>()
                           .followTap(eventCreater!);
+                      // ignore: use_build_context_synchronously
                       await context
                           .read<OtherUserProfileController>()
                           .followingTap(currentUser!, eventCreater!.id);
+                      // ignore: use_build_context_synchronously
                       await context
                           .read<OtherUserProfileController>()
                           .unFollow(eventCreater!.id, notifyId);
@@ -837,14 +840,16 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                   image: const AssetImage("assets/images/profile_pic.png"))),
     );
   }
-  setRegisterButton(){
+
+  setRegisterButton() {
     for (var element in eventParticipants) {
       if (element.id == currentUser!.id) {
         buttonName = "Registered";
       }
     }
   }
-  String calculateDiff(DateTime endTime,DateTime startTime){
+
+  String calculateDiff(DateTime endTime, DateTime startTime) {
     Duration difference = endTime.difference(startTime);
     int hours = difference.inHours;
     int minutes = difference.inMinutes.remainder(60);
@@ -852,16 +857,18 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
         "${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}";
     return formattedDiff;
   }
-  addWeekDates(DateTime dateTime){
+
+  addWeekDates(DateTime dateTime) {
     DateTime tempDate = dateTime.subtract(const Duration(days: 3));
     for (var i = 0; i < 6; i++) {
       weekDates.add(tempDate.add(Duration(days: i)));
     }
   }
-  setData(List<NotificationsModel> notifications){
+
+  setData(List<NotificationsModel> notifications) {
     if (allUsers.isNotEmpty) {
       currentUser = allUsers.firstWhere(
-              (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+          (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
       eventCreater =
           allUsers.firstWhere((element) => element.id == widget.event.uId);
       setFollowButton(notifications);
@@ -871,6 +878,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
       }
     }
   }
+
   setFollowButton(List<NotificationsModel> notifications) {
     for (var element in notifications) {
       if (element.senderId == FirebaseAuth.instance.currentUser!.uid &&

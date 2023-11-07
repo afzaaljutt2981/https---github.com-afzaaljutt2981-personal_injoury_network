@@ -30,30 +30,13 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
         child: Column(
           children: [
             CustomSizeBox(65.h),
-
-            if (user?.pImage == null) ...[
-              Center(
-                child: Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(10.sp)),
-                  child: Image(
-                    height: 50.sp,
-                    width: 50.sp,
-                    image: const AssetImage('assets/images/profile_pic.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              )
-            ] else ...[
-              Center(
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundImage: NetworkImage(
-                    user!.pImage!,
-                  ),
-                ),
+            Center(
+              child: Image(
+                height: 60.sp,
+                width: 60.sp,
+                image: const AssetImage('assets/images/primary_icon.png'),
               ),
-            ],
+            ),
 
             CustomSizeBox(30.h),
             // Stack
@@ -89,7 +72,7 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                             ),
                             CustomSizeBox(5.h),
                             Text(
-                              Constants.userPosition ,
+                              Constants.userPosition,
                               style: AppTextStyles.josefin(
                                   style: TextStyle(
                                 color: const Color(0xFFA1A1A1),
@@ -111,14 +94,35 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                     ),
                   ),
                 ),
-                Positioned(
+                if (user?.pImage == null) ...[
+                  Positioned(
                     top: screenHeight * 0.01,
                     left: screenWidth * 0.38,
-                    child: Image(
-                      height: 80.sp,
-                      width: 80.sp,
-                      image: const AssetImage('assets/images/profile_pic.png'),
-                    ))
+                    // child: if (user?.pImage == null) ...[
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.sp)),
+                      child: Image(
+                        height: 80.sp,
+                        width: 80.sp,
+                        image:
+                            const AssetImage('assets/images/profile_pic.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  )
+                ] else ...[
+                  Positioned(
+                    top: screenHeight * 0.01,
+                    left: screenWidth * 0.38,
+                    child: CircleAvatar(
+                      radius: 50.sp,
+                      backgroundImage: NetworkImage(
+                        user!.pImage!,
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ],

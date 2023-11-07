@@ -33,9 +33,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   List<String> selectedHobbies = [];
 
   void addItem(String item) {
-    setState(() {
-      selectedHobbies.add(item);
-    });
+    if (!selectedHobbies.contains(item)) {
+      setState(() {
+        selectedHobbies.add(item);
+        hobbiesCount++;
+      });
+    }
   }
 
   void removeItem(String item) {
@@ -258,11 +261,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           CustomSnackBar(false).showInSnackBar(
                               "please select your state", context);
                           return;
-                        } else if (textFieldController[9].text.isEmpty) {
+                        } 
+                        else if (textFieldController[8].text.isEmpty ||
+                            hobbiesCount < 3) {
+                          CustomSnackBar(false).showInSnackBar(
+                              "Please select atleast 3 hobbies!", context);
+                          return;
+                        }
+                        
+                        else if (textFieldController[9].text.isEmpty) {
                           CustomSnackBar(false).showInSnackBar(
                               "please enter your reference", context);
                           return;
-                        } else {
+                        }
+                         
+                        
+                         else {
                           setState(() {
                             index = index + 1;
                             controller.nextPage(
@@ -685,7 +699,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           .toString()
                           .contains(JobPositionModel.hobbiesList[i])) {
                         setState(() {
-                          hobbiesCount++;
                           addItem(JobPositionModel.hobbiesList[i]
                               .substring(2)
                               .toString());
