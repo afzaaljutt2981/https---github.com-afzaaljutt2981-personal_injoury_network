@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
+import 'package:personal_injury_networking/global/utils/custom_snackbar.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/authentication/view/login_view.dart';
@@ -14,6 +15,7 @@ import 'package:provider/provider.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../../global/utils/functions.dart';
+import '../../authentication/model/job_position_model.dart';
 
 class MyProfileInfo extends StatefulWidget {
   const MyProfileInfo({super.key});
@@ -24,7 +26,6 @@ class MyProfileInfo extends StatefulWidget {
 
 class _MyProfileInfoState extends State<MyProfileInfo> {
   @override
-  @override
   void initState() {
     super.initState();
     // user = context.watch<AuthController>().user;
@@ -33,8 +34,28 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
     textFieldController[2].text = 'www.xyz@gmail.com';
     textFieldController[3].text = '+1 234 453 4563';
     textFieldController[4].text = '54 Houston, Texas, 76778, US ';
+    loadUserPositions();
     textFieldController[5].text =
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s";
+  }
+
+  get shortestSide => MediaQuery.of(context).size.shortestSide;
+
+  loadUserPositions() {
+    JobPositionModel.dropdownItems = [];
+    for (int i = 0; i < JobPositionModel.jobList.length; i++) {
+      JobPositionModel.dropdownItems.add(PopupMenuItem<String>(
+          value: JobPositionModel.jobList[i],
+          child: Text(
+            JobPositionModel.jobList[i],
+            style: AppTextStyles.josefin(
+              style: TextStyle(
+                  color: const Color(0xFF000000),
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400),
+            ),
+          )));
+    }
   }
 
   UserModel? user;
@@ -46,13 +67,13 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
   @override
   Widget build(BuildContext context) {
     user = context.watch<MyProfileController>().user;
-    if(user != null){
-    textFieldController[0].text = user!.company;
-    textFieldController[1].text = user!.position;
-    textFieldController[2].text = user!.website;
-    textFieldController[3].text = user!.phone.toString();
-    textFieldController[4].text = user!.location;
-    textFieldController[5].text = user!.userName;
+    if (user != null) {
+      textFieldController[0].text = user!.company;
+      textFieldController[1].text = user!.position;
+      textFieldController[2].text = user!.website;
+      textFieldController[3].text = user!.phone.toString();
+      textFieldController[4].text = user!.location;
+      textFieldController[5].text = user!.userName;
     }
     return Scaffold(
         backgroundColor: const Color(0xFFf5f4ff),
@@ -107,15 +128,21 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                   },
                                   child: (image1 != null)
                                       ? CircleAvatar(
-                                    radius: 50,
-                                    backgroundImage: MemoryImage(image1!),):(user!.pImage != null)?CircleAvatar(
-                                    radius: 50,
-                                    backgroundImage: NetworkImage(user!.pImage!,),
-                                  ):const CircleAvatar(
-                                    radius: 50,
-                                    backgroundImage:AssetImage(
-                                        'assets/images/profile_pic.png'),
-                                  ),
+                                          radius: 50,
+                                          backgroundImage: MemoryImage(image1!),
+                                        )
+                                      : (user!.pImage != null)
+                                          ? CircleAvatar(
+                                              radius: 50,
+                                              backgroundImage: NetworkImage(
+                                                user!.pImage!,
+                                              ),
+                                            )
+                                          : const CircleAvatar(
+                                              radius: 50,
+                                              backgroundImage: AssetImage(
+                                                  'assets/images/profile_pic.png'),
+                                            ),
                                 ),
                                 imageEditAble
                                     ? Positioned(
@@ -263,7 +290,6 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                     color: const Color(0xFF1A1167),
                                     fontSize: 12.sp)),
                           ),
-                          // subText(user!.phone.toString()),
                           textField('Enter Your Phone No.', 3,
                               textFieldController[3]),
                           CustomSizeBox(5.h),
@@ -275,49 +301,44 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                     color: const Color(0xFF1A1167),
                                     fontSize: 12.sp)),
                           ),
-                          // subText(user!.location),
                           textField('Your Location', 4, textFieldController[4]),
                           CustomSizeBox(5.h),
-                          // Text(
-                          //   'Hobby/ Interests',
-                          //   style: AppTextStyles.josefin(
-                          //       style: TextStyle(
-                          //           fontWeight: FontWeight.w600,
-                          //           color: const Color(0xFF1A1167),
-                          //           fontSize: 12.sp)),
-                          // ),
-                          // textField('Your Hobbies', 6, textFieldController[6]),
                           Padding(
                             padding: EdgeInsets.only(
                                 left: 25.w, right: 25.w, bottom: 20.w),
                             child: GetButton(50.h, () async {
-                              if(!readOnlyTextFields || imageEditAble) {
+                              if (!readOnlyTextFields || imageEditAble) {
                                 Functions.showLoaderDialog(context);
                                 String? url;
                                 if (image1 != null) {
-                                  url =
-                                  await Functions.uploadPic(image1!, "users");
+                                  url = await Functions.uploadPic(
+                                      image1!, "users");
                                 }
-                                await context.read<MyProfileController>()
+                                // ignore: use_build_context_synchronously
+                                await context
+                                    .read<MyProfileController>()
                                     .updateUser(
-                                    userName: textFieldController[5].text,
-                                    company: textFieldController[0].text,
-                                    position: textFieldController[1].text,
-                                    cellPhone: textFieldController[3].text,
-                                    website: textFieldController[2].text,
-                                    location: textFieldController[4].text,
-                                    pImage: url
-                                );
+                                        userName: textFieldController[5].text,
+                                        company: textFieldController[0].text,
+                                        position: textFieldController[1].text,
+                                        cellPhone: textFieldController[3].text,
+                                        website: textFieldController[2].text,
+                                        location: textFieldController[4].text,
+                                        pImage: url);
+                                // ignore: use_build_context_synchronously
                                 Navigator.pop(context);
-                                Functions.showSnackBar(context,
-                                    "user profile updated successfully");
+                                // ignore: use_build_context_synchronously
+                                CustomSnackBar(true).showInSnackBar(
+                                    'User updated Successfully!', context);
                                 setState(() {
-                                  readOnlyTextFields = !readOnlyTextFields;
-                                  imageEditAble = !imageEditAble;
+                                  readOnlyTextFields = true;
+                                  imageEditAble = false;
                                 });
-                              }else{
-                                Functions.showSnackBar(context, "please edit profile");
-                              }},
+                              } else {
+                                Functions.showSnackBar(
+                                    context, "please edit profile");
+                              }
+                            },
                                 Text(
                                   'Save',
                                   style: AppTextStyles.josefin(
@@ -379,14 +400,14 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                 selectPicCatagory(
                     "Camera", Icons.camera_alt_outlined, Colors.white,
                     onTap: () async {
-                      Navigator.pop(context);
-                      final ImagePicker _picker = ImagePicker();
-                      final XFile? pickedImage = await _picker.pickImage(
-                          source: ImageSource.camera);
-                      if (pickedImage != null) {
-                        image1 = await pickedImage.readAsBytes();
-                        setState(() {});
-                      }
+                  Navigator.pop(context);
+                  final ImagePicker _picker = ImagePicker();
+                  final XFile? pickedImage =
+                      await _picker.pickImage(source: ImageSource.camera);
+                  if (pickedImage != null) {
+                    image1 = await pickedImage.readAsBytes();
+                    setState(() {});
+                  }
                 }),
                 selectPicCatagory("Files", Icons.folder, Colors.blue,
                     onTap: () {
@@ -395,14 +416,14 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                 }),
                 selectPicCatagory("Gallery", Icons.image_outlined, Colors.white,
                     onTap: () async {
-                      Navigator.pop(context);
-                      final ImagePicker _picker = ImagePicker();
-                      final XFile? pickedImage = await _picker.pickImage(
-                          source: ImageSource.gallery);
-                      if (pickedImage != null) {
-                        image1 = await pickedImage.readAsBytes();
-                        setState(() {});
-                      }
+                  Navigator.pop(context);
+                  final ImagePicker _picker = ImagePicker();
+                  final XFile? pickedImage =
+                      await _picker.pickImage(source: ImageSource.gallery);
+                  if (pickedImage != null) {
+                    image1 = await pickedImage.readAsBytes();
+                    setState(() {});
+                  }
                 }),
               ],
             ),
@@ -464,8 +485,53 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.sp), color: Colors.white),
       child: TextFormField(
+        onTap: () {
+          if (index == 1) {
+            print('abcdfeff');
+            GestureDetector(
+                onTap: () {
+                  showMenu(
+                    context: context,
+                    position: RelativeRect.fromLTRB(
+                        shortestSide > 600 ? 100 : 50.w,
+                        shortestSide > 600 ? 0 : 100,
+                        shortestSide > 600 ? 100 : 10.w,
+                        shortestSide > 600 ? 100 : 100),
+                    items: [...JobPositionModel.dropdownItems],
+                  ).then((value) {
+                    if (value != null) {
+                      textFieldController[1].text =
+                          value.toString().substring(2);
+
+                      for (int i = 0;
+                          i < JobPositionModel.jobList.length;
+                          i++) {
+                        if (value
+                            .toString()
+                            .contains(JobPositionModel.jobList[i])) {
+                          JobPositionModel.selectedJob =
+                              JobPositionModel.jobList[i].substring(2);
+                        }
+                      }
+                    }
+                  });
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(14.sp),
+                  child: Image(
+                      width: 10.sp,
+                      height: 10.sp,
+                      image: const AssetImage(
+                          'assets/images/arrow_down_signup.png')),
+                ));
+          }
+        },
         maxLines: index == 6 ? 4 : 1,
-        readOnly: (readOnlyTextFields)?true:false,
+        readOnly: index == 1
+            ? true
+            : (readOnlyTextFields)
+                ? true
+                : false,
         textInputAction:
             index == 5 ? TextInputAction.done : TextInputAction.next,
         controller: controller,
@@ -491,10 +557,14 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
       ),
     );
   }
-  Widget subText(String text){
+
+  Widget subText(String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(text,style: TextStyle(color: Colors.deepPurple,fontSize: 11.sp),),
+      child: Text(
+        text,
+        style: TextStyle(color: Colors.deepPurple, fontSize: 11.sp),
+      ),
     );
   }
 }
