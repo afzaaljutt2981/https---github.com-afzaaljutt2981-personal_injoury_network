@@ -25,12 +25,7 @@ class MyProfileController extends ChangeNotifier {
            }
         notifyListeners();
       });
-      // Navigator.pushAndRemoveUntil(context,
-      //     MaterialPageRoute(builder: (_) => BottomNavigationScreen(selectedIndex: 0)), (route) => false);
-    }else{
-      // Navigator.pop(context);
-      // Functions.showSnackBar(context, "something went wrong");
-    }
+      }
   }
   becomeMarketer() async {
     await ref.doc(user!.id).update({
