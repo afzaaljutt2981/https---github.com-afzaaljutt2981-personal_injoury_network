@@ -113,7 +113,7 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
                       CustomSizeBox(3.h),
                       Padding(
                         padding: EdgeInsets.only(
-                            right: 60.w),
+                            right: 40.w),
                         child: GetButton(
                           40.sp,
                               () {
