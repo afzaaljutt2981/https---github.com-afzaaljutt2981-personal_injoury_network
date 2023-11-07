@@ -15,12 +15,13 @@ import 'package:provider/provider.dart';
 
 import '../../../global/utils/app_text_styles.dart';
 import '../../../global/utils/custom_snackbar.dart';
-import '../../home/view/navigation_view.dart';
+import '../../forgetPassword/view/verify_identity.dart';
 import '../model/job_position_model.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({required this.screenType, Key? key}) : super(key: key);
   int screenType;
+
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
@@ -117,10 +118,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool hidePassword = true;
   bool hideConfirmPassword = true;
   List<String> countries = ["Select Country", "United States"];
-  List<String> states = ["Select State", "California"];
+  List<String> states = ["Select State", "Florida"];
 
   String selectedCountry = 'United States';
   String selectedState = 'Florida';
+
+  willPopCalled() {
+    if (index > 1) {
+      setState(() {
+        index = index - 1;
+      });
+      controller.previousPage(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.ease,
+      );
+    } else {
+      Navigator.pop(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -312,20 +327,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               password: textFieldController[11].text,
                               hobbies: selectedHobbies,
                               userName: textFieldController[10].text);
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              childCurrent: widget,
-                              type: PageTransitionType.leftToRight,
-                              alignment: Alignment.center,
-                              duration: const Duration(milliseconds: 200),
-                              reverseDuration:
-                                  const Duration(milliseconds: 200),
-                              child: BottomNavigationScreen(
-                                selectedIndex: 0,
-                              ),
-                            ),
-                          );
+
                         }
                       }
                     },
@@ -543,46 +545,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       return Padding(
                         padding: EdgeInsets.only(right: 20.w),
                         child: Container(
-                          height: 40.h,
+                          // height: 40.h,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(15.sp),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(top: 5.h, right: 0.h),
-                                    child: GestureDetector(
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 10.w, left: 10.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      selectedHobbies[index].toString(),
+                                      style: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              color: AppColors.kPrimaryColor,
+                                              fontSize: 12.sp)),
+                                    ),
+                                    GestureDetector(
                                       onTap: () {
                                         hobbiesCount--;
                                         removeItem(selectedHobbies[index]);
                                       },
-                                      child: Icon(
-                                        Icons.cancel_outlined,
-                                        size: 15.sp,
-                                        color: AppColors.kPrimaryColor,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 10.w),
+                                        child: Icon(
+                                          Icons.cancel_outlined,
+                                          size: 20.sp,
+                                          color: AppColors.kPrimaryColor,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: 10.w, right: 10.w, bottom: 5.h),
-                                child: Text(
-                                  selectedHobbies[index].toString(),
-                                  style: AppTextStyles.josefin(
-                                      style: TextStyle(
-                                          color: AppColors.kPrimaryColor,
-                                          fontSize: 12.sp)),
+                                  ],
                                 ),
-                              )
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -824,9 +826,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               : null,
               contentPadding: EdgeInsets.only(
                   left: 10.w,
-                  top: index == 3 || index == 12 || index == 11 || index == 8
+                  top: index == 3 || index == 12 || index == 11
                       ? 12.h
-                      : 0.h,
+                      : index == 8
+                          ? 18.h
+                          : 0.h,
                   right: index == 3 || index == 8 ? 10.w : 5.w),
               border: InputBorder.none,
               hintText: hintText,

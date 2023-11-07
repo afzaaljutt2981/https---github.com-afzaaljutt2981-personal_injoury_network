@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
-import 'package:personal_injury_networking/ui/forgetPassword/view/verify_identity.dart';
 import 'package:provider/provider.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
@@ -15,8 +11,9 @@ import '../../../global/utils/functions.dart';
 import '../controller/forget_password_controller.dart';
 
 class ForgetPasswordView extends StatefulWidget {
-  const ForgetPasswordView({super.key});
+  ForgetPasswordView({super.key, required this.email});
 
+  String email;
   @override
   State<ForgetPasswordView> createState() => _ForgetPasswordViewState();
 }
@@ -26,7 +23,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
 
   @override
   void initState() {
-    emailController.text = '';
+    emailController.text = widget.email;
     super.initState();
   }
 
@@ -79,24 +76,24 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
               child: GetwhiteButton(50.sp, () async {
-               if (emailController.text == ' '  || emailController.text.isEmpty) {
+                if (emailController.text == ' ' ||
+                    emailController.text.isEmpty) {
                   CustomSnackBar(false)
                       .showInSnackBar('Email field is empty!', context);
-               }
-
-               else {
-                Functions.showLoaderDialog(context);
-                bool isEmailValid = validateEmail(emailController.text);
-
-                if (isEmailValid == false) {
-                  Navigator.pop(context);
-                  CustomSnackBar(false)
-                      .showInSnackBar('Invalid email!', context);
                 } else {
-                  await context
-                      .read<ForgetPasswordController>()
-                      .resetPassword(emailController.text, context);
-                }}
+                  Functions.showLoaderDialog(context);
+                  bool isEmailValid = validateEmail(emailController.text);
+
+                  if (isEmailValid == false) {
+                    Navigator.pop(context);
+                    CustomSnackBar(false)
+                        .showInSnackBar('Invalid email!', context);
+                  } else {
+                    await context
+                        .read<ForgetPasswordController>()
+                        .resetPassword(emailController.text, context);
+                  }
+                }
               },
                   Text(
                     'Send me email',

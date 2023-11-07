@@ -5,12 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
+import 'package:personal_injury_networking/ui/forgetPassword/view/verify_identity.dart';
 import 'package:personal_injury_networking/ui/home/view/navigation_view.dart';
 import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
 import 'package:provider/provider.dart';
 
 import '../../global/helper/custom_sized_box.dart';
 import '../authentication/controller/auth_controller.dart';
+import '../forgetPassword/view/create_verify_identity_view.dart';
 import '../selesction_screen/selection_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -25,18 +27,24 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 7)).then((value) async {
-      if (FirebaseAuth.instance.currentUser != null) {
-        await Provider.of<MyProfileController>(context, listen: false)
-            .getUserData();
-
-        // ignore: use_build_context_synchronously
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) =>
-                BottomNavigationScreen(selectedIndex: 0)));
-      } else {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => const SelectionScreen()));
-      }
+      // if (FirebaseAuth.instance.currentUser != null) {
+      //   await Provider.of<MyProfileController>(context, listen: false)
+      //       .getUserData();
+      //
+      //   // ignore: use_build_context_synchronously
+      //   Navigator.of(context).pushReplacement(MaterialPageRoute(
+      //       builder: (BuildContext context) =>
+      //           BottomNavigationScreen(selectedIndex: 0)));
+      // } else {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (_) => SelectionScreen(
+                // email: "",
+                // from: 2,
+              )),
+              (route) => false); //SelectionScreen
+      // }
     });
     // Timer(
     //     const Duration(seconds: 3),

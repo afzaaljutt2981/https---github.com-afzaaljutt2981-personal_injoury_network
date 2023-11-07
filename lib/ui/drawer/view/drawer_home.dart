@@ -9,12 +9,11 @@ import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/allFriends/view/create_all_freinds_view.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
-import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
-import 'package:personal_injury_networking/ui/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
+
 import '../../authentication/view/login_view.dart';
-import '../../create_event/view/add_event_view.dart';
 import '../../create_event/view/create_add_event_view.dart';
+import '../../forgetPassword/view/create_forget_pass_controller.dart';
 import '../../home/view/navigation_view.dart';
 import '../../myProfile/controller/my_profile_controller.dart';
 
@@ -27,6 +26,7 @@ class MyDrawerHome extends StatefulWidget {
 
 class _MyDrawerHomeState extends State<MyDrawerHome> {
   UserModel? user;
+
   @override
   Widget build(BuildContext context) {
     user = context.watch<MyProfileController>().user;
@@ -54,21 +54,26 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                               right: 35.sp),
                           child: Row(
                             children: [
-                              if(user!.pImage == null)...[
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.sp)),
-                                child: Image(
-                                  height: 50.sp,
-                                  width: 50.sp,
-                                  image: const AssetImage(
-                                      'assets/images/profile_pic.png'),
-                                  fit: BoxFit.cover,
+                              if (user!.pImage == null) ...[
+                                Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(10.sp)),
+                                  child: Image(
+                                    height: 50.sp,
+                                    width: 50.sp,
+                                    image: const AssetImage(
+                                        'assets/images/profile_pic.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              ] else ...[
+                                CircleAvatar(
+                                  radius: 20,
+                                  backgroundImage: NetworkImage(
+                                    user!.pImage!,
+                                  ),
                                 ),
-                              )]else...[
-                  CircleAvatar(
-                  radius: 20,
-                  backgroundImage: NetworkImage(user!.pImage!,),),
                               ],
                               SizedBox(
                                 width: 16.w,
@@ -225,15 +230,35 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                               const Duration(milliseconds: 200),
                                           reverseDuration:
                                               const Duration(milliseconds: 200),
-                                          child: CreateAllFriendsView(user: user!,),
+                                          child: CreateAllFriendsView(
+                                            user: user!,
+                                          ),
                                         ),
                                       );
                                     }),
                                     CustomSizeBox(28.h),
                                     homeFeatures(
                                         'assets/images/setting_icon_drawer.png',
-                                        'Settings',
-                                        onTap: () {}),
+                                        'Settings', onTap: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        PageTransition(
+                                          childCurrent: widget,
+                                          type: PageTransitionType.rightToLeft,
+                                          alignment: Alignment.center,
+                                          duration:
+                                              const Duration(milliseconds: 200),
+                                          reverseDuration:
+                                              const Duration(milliseconds: 200),
+                                          child: CreateForgetPasswordView(
+                                            email: FirebaseAuth.instance
+                                                    .currentUser?.email ??
+                                                "",
+                                          ),
+                                        ),
+                                      );
+                                    }),
                                     CustomSizeBox(28.h),
                                     homeFeatures(
                                         'assets/images/question_icon_drawer.png',
@@ -245,18 +270,19 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  try{
-                                  Functions.showLoaderDialog(context);
-                                  await FirebaseAuth.instance.signOut();
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => const LoginView()),
-                                      (route) => false);
-                                }catch(e){
+                                  try {
+                                    Functions.showLoaderDialog(context);
+                                    await FirebaseAuth.instance.signOut();
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => const LoginView()),
+                                        (route) => false);
+                                  } catch (e) {
                                     Navigator.pop(context);
                                     print("error in signout");
-                                  }},
+                                  }
+                                },
                                 child: Align(
                                   alignment: Alignment.bottomCenter,
                                   child: Padding(

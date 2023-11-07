@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/model/country_state_model.dart';
 import 'package:personal_injury_networking/ui/home/view/navigation_view.dart';
+
 import '../../../global/utils/custom_snackbar.dart';
 import '../../../global/utils/functions.dart';
+import '../../forgetPassword/view/create_verify_identity_view.dart';
+import '../../forgetPassword/view/verify_identity.dart';
 import '../model/user_model.dart';
 
 class AuthController extends ChangeNotifier {
@@ -13,6 +17,7 @@ class AuthController extends ChangeNotifier {
   bool saveChangesButton = false;
   CollectionReference ref = FirebaseFirestore.instance.collection("users");
   UserModel? user;
+
   void signup(
     BuildContext context, {
     required String firstName,
@@ -57,7 +62,14 @@ class AuthController extends ChangeNotifier {
           await doc.set(model.toJson());
           getUserData(context);
           setSaveChangesButtonStatus(false);
-          notifyListeners();
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => VerifyIdentity(
+                        email: email.toString(),
+                        from: 1,
+                      )));
         }
       });
     } on Exception catch (error) {
@@ -78,14 +90,28 @@ class AuthController extends ChangeNotifier {
           Map<String, dynamic> data = value.data() as Map<String, dynamic>;
           user = UserModel.fromJson(data);
           if (user != null) {
-            Constants.userType = user!.userType;
-            Constants.userName = user!.firstName;
-            Constants.userPosition = user!.position;
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-                (route) => false);
+            if (FirebaseAuth.instance.currentUser?.emailVerified == true) {
+              Constants.userType = user?.userType ?? "";
+              Constants.userName = user?.firstName ?? "" + (user?.lastName ?? "");
+              Constants.userPosition = user?.position ?? "";
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+                  (route) => false);
+            } else {
+              Constants.userType = user?.userType ?? "";
+              Constants.userName = user?.firstName ?? "" + (user?.lastName ?? "");
+              Constants.userPosition = user?.position ?? "";
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => CreateVerifyIdentityView(
+                            email: "",
+                            from: 2,
+                          )),
+                  (route) => false);
+            }
           }
         } else {
           await FirebaseAuth.instance.signOut();

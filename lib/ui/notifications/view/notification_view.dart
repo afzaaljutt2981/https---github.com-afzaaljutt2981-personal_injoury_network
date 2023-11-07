@@ -74,7 +74,7 @@ class _NotificationViewState extends State<NotificationView> {
                       CustomSizeBox(100.h),
                       Center(
                         child: Image(
-                          height: 300.sp,
+                          height: 200.sp,
                           width: 250.sp,
                           image: const AssetImage(
                               'assets/images/no_notification_screen.png'),

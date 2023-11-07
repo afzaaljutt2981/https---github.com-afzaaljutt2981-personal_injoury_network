@@ -168,8 +168,15 @@ class _AllUsersChatState extends State<AllUsersChat> {
                       ),
                     ),
                   ] else ...[
-                    const Expanded(
-                        child: Center(child: Text("No Chat Found",style: TextStyle(fontWeight: FontWeight.bold),)))
+                    Expanded(
+                        child: Center(child:  Text(
+                          "No chat found" ,
+                          style: AppTextStyles.josefin(
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w200)),
+                        ),))
                   ]
                 ],
               ));

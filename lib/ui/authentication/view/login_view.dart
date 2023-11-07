@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,17 +8,13 @@ import 'package:personal_injury_networking/global/app_buttons/white_background_b
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
-import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:personal_injury_networking/ui/authentication/view/sign_up_screen.dart';
-import 'package:personal_injury_networking/ui/home/view/home_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/custom_snackbar.dart';
 import '../../forgetPassword/view/create_forget_pass_controller.dart';
-import '../../forgetPassword/view/forget_view.dart';
-import '../../home/view/navigation_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -32,6 +27,7 @@ class _LoginViewState extends State<LoginView> {
   final textFieldController =
       List.generate(2, (i) => TextEditingController(), growable: true);
   bool hidePassword = true;
+
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
@@ -88,7 +84,7 @@ class _LoginViewState extends State<LoginView> {
                         alignment: Alignment.center,
                         duration: const Duration(milliseconds: 200),
                         reverseDuration: const Duration(milliseconds: 200),
-                        child: const CreateForgetPasswordView(),
+                        child: CreateForgetPasswordView(email: ""),
                       ),
                     );
                   },
@@ -113,14 +109,12 @@ class _LoginViewState extends State<LoginView> {
                 child: GetwhiteButton(50.h, () {
                   if (textFieldController[0].text.isEmpty ||
                       !(EmailValidator.validate(textFieldController[0].text))) {
-                    CustomSnackBar(false).showInSnackBar(
-                              'Please enter valid email!',
-                              context);
+                    CustomSnackBar(false)
+                        .showInSnackBar('Please enter valid email!', context);
                     return;
                   } else if (textFieldController[1].text.isEmpty) {
-                      CustomSnackBar(false).showInSnackBar(
-                              'Password field is empty!',
-                              context);
+                    CustomSnackBar(false)
+                        .showInSnackBar('Password field is empty!', context);
                     return;
                   } else {
                     context.read<AuthController>().signIn(
@@ -198,7 +192,9 @@ class _LoginViewState extends State<LoginView> {
                             reverseDuration: const Duration(milliseconds: 200),
                             child: ChangeNotifierProvider(
                                 create: (_) => AuthController(),
-                                child:  SignUpScreen(screenType: 0,)),
+                                child: SignUpScreen(
+                                  screenType: 0,
+                                )),
                           ),
                         );
                       },
@@ -333,26 +329,26 @@ class _LoginViewState extends State<LoginView> {
         Constants.userDisplayName = user.displayName!;
         Constants.userEmail = user.email!;
         Constants.uId = user.uid;
-       // ignore: use_build_context_synchronously
-       Navigator.push(
-                          context,
-                          PageTransition(
-                            childCurrent: widget,
-                            type: PageTransitionType.rightToLeft,
-                            alignment: Alignment.center,
-                            duration: const Duration(milliseconds: 200),
-                            reverseDuration: const Duration(milliseconds: 200),
-                            child: ChangeNotifierProvider(
-                                create: (_) => AuthController(),
-                                child:  SignUpScreen(screenType: 1,)),
-                          ),
-                        );
+        // ignore: use_build_context_synchronously
+        Navigator.push(
+          context,
+          PageTransition(
+            childCurrent: widget,
+            type: PageTransitionType.rightToLeft,
+            alignment: Alignment.center,
+            duration: const Duration(milliseconds: 200),
+            reverseDuration: const Duration(milliseconds: 200),
+            child: ChangeNotifierProvider(
+                create: (_) => AuthController(),
+                child: SignUpScreen(
+                  screenType: 1,
+                )),
+          ),
+        );
       }
       return user;
     } catch (error) {
-      CustomSnackBar(false).showInSnackBar(
-                              error.toString(),
-                              context);
+      CustomSnackBar(false).showInSnackBar(error.toString(), context);
       return null;
     }
   }
