@@ -9,7 +9,7 @@ import '../../authentication/model/user_model.dart';
 import '../../create_event/models/event_model.dart';
 
 class EventsController extends ChangeNotifier {
-  EventsController(){
+  EventsController() {
     getAllUsers();
     getAllEvents();
     getUserBookedEvents();
@@ -30,25 +30,34 @@ class EventsController extends ChangeNotifier {
       notifyListeners();
     });
   }
-  getAllEvents(){
+
+  getAllEvents() {
     allEvents = [];
-    res =  ref.snapshots().listen((event) {
+    res = ref.snapshots().listen((event) {
       allEvents = [];
       event.docs.forEach((element) {
-        allEvents.add(EventModel.fromJson(element.data() as Map<String,dynamic>));
+        allEvents
+            .add(EventModel.fromJson(element.data() as Map<String, dynamic>));
         notifyListeners();
       });
     });
   }
-  getUserBookedEvents(){
-    if(FirebaseAuth.instance.currentUser != null){
-    users.doc(FirebaseAuth.instance.currentUser!.uid).collection("tickets").snapshots().listen((event) {
-      event.docs.forEach((element) {
-        userBookedEvents.add(TicketModel.fromJson(element.data()));
+
+  getUserBookedEvents() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      users
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("tickets")
+          .snapshots()
+          .listen((event) {
+        event.docs.forEach((element) {
+          userBookedEvents.add(TicketModel.fromJson(element.data()));
+        });
+        notifyListeners();
       });
-      notifyListeners();
-    });
-  }}
+    }
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
