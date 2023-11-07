@@ -80,7 +80,7 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                           children: [
                             CustomSizeBox(50.h),
                             Text(
-                              Constants.userName,
+                              user!.firstName,
                               style: AppTextStyles.josefin(
                                   style: TextStyle(
                                       color: Colors.black,
@@ -89,7 +89,7 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                             ),
                             CustomSizeBox(5.h),
                             Text(
-                              Constants.userPosition ,
+                              user!.position ,
                               style: AppTextStyles.josefin(
                                   style: TextStyle(
                                 color: const Color(0xFFA1A1A1),
