@@ -335,34 +335,6 @@ class _LoginViewState extends State<LoginView> {
       if (user != null) {
         getUserData(user);
       }
-      //  await FirebaseFirestore.instance.collection("users").doc(user.uid).set(
-      //       UserModel(location: "", position: "", email: user.email!,
-      //           firstName: user.displayName??"", lastName: "", id: user.uid, reference: "",
-      //           hobbies: [],
-      //           followers: [],
-      //           followings: [],
-      //           userName: '', phone: 0, userType: "user", company: "", website: "").toJson());
-      //   Constants.userDisplayName = user.displayName!;
-      //   Constants.userEmail = user.email!;
-      //   Constants.uId = user.uid;
-      //   // ignore: use_build_context_synchronously
-      //   Navigator.push(
-      //     context,
-      //     PageTransition(
-      //       childCurrent: widget,
-      //       type: PageTransitionType.rightToLeft,
-      //       alignment: Alignment.center,
-      //       duration: const Duration(milliseconds: 200),
-      //       reverseDuration: const Duration(milliseconds: 200),
-      //       child: ChangeNotifierProvider(
-      //           create: (_) => AuthController(),
-      //           child: SignUpScreen(
-      //             screenType: 1,
-      //             isUpdate: true,
-      //           )),
-      //     ),
-      //   );
-      // }
       return user;
     } catch (error) {
       CustomSnackBar(false).showInSnackBar(error.toString(), context);
@@ -370,47 +342,31 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
-  Future<User> signInWithApple({List<Scope> scopes = const []}) async {
+  Future<User?> signInWithApple({List<Scope> scopes = const []}) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final result = await TheAppleSignIn.performRequests(
         [AppleIdRequest(requestedScopes: scopes)]);
 
     switch (result.status) {
       case AuthorizationStatus.authorized:
-        final AppleIdCredential = result.credential!;
+        final appleIdCredential = result.credential!;
         final oAuthProvider = OAuthProvider('apple.com');
         final credential = oAuthProvider.credential(
-            idToken: String.fromCharCodes(AppleIdCredential.identityToken!));
-        final UserCredential = await auth.signInWithCredential(credential);
-        final firebaseUser = UserCredential.user!;
+            idToken: String.fromCharCodes(appleIdCredential.identityToken!));
+        final userCredential = await auth.signInWithCredential(credential);
+        if(userCredential.user != null) {
+          final firebaseUser = userCredential.user!;
+          final email = appleIdCredential.email;
+          getUserData(firebaseUser,userEmail: email);
         if (scopes.contains(Scope.fullName)) {
-          final fullName = AppleIdCredential.fullName;
+          final fullName = appleIdCredential.fullName;
           if (fullName != null &&
               fullName.givenName != null &&
               fullName.familyName != null) {
             final displayName = '${fullName.givenName} ${fullName.familyName}';
-
-            Constants.userDisplayName = displayName;
-            Constants.userEmail = '';
-            // ignore: use_build_context_synchronously
-            Navigator.push(
-              context,
-              PageTransition(
-                childCurrent: widget,
-                type: PageTransitionType.rightToLeft,
-                alignment: Alignment.center,
-                duration: const Duration(milliseconds: 200),
-                reverseDuration: const Duration(milliseconds: 200),
-                child: ChangeNotifierProvider(
-                    create: (_) => AuthController(),
-                    child: SignUpScreen(
-                      screenType: 1,
-                    )),
-              ),
-            );
           }
-        }
-        return firebaseUser;
+        }}
+        return null;
       case AuthorizationStatus.error:
         throw PlatformException(
             code: 'ERROR_AUTHORIZATION_DENIED',
@@ -424,16 +380,13 @@ class _LoginViewState extends State<LoginView> {
         throw UnimplementedError();
     }
   }
-  getUserData(User user) async {
+  getUserData(User user,{String? userEmail}) async {
    var res = await  FirebaseFirestore.instance
         .collection("users")
         .doc(FirebaseAuth.instance.currentUser!.uid).get();
    if(res.exists){
      UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
-      //   .snapshots()
-      //   .listen((event) {
-      // UserModel user = UserModel.fromJson(event.data() as Map<String, dynamic>);
-      if (user.userName == "") {
+       if (user.userName == "") {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -451,23 +404,37 @@ class _LoginViewState extends State<LoginView> {
       }
     // });
   }else{
-     await FirebaseFirestore.instance.collection("users").doc(user.uid).set(
-         UserModel(location: "", position: "", email: user.email!,
-             firstName: user.displayName??"", lastName: "", id: user.uid, reference: "",
-             hobbies: [],
-             followers: [],
-             followings: [],
-             userName: '', phone: 0, userType: "user", company: "", website: "").toJson());
-     Constants.userDisplayName = user.displayName!;
-     Constants.userEmail = user.email!;
-     Constants.uId = user.uid;
-     Navigator.pushAndRemoveUntil(
-         context,
-         MaterialPageRoute(
-             builder: (_) => SignUpScreen(
-               screenType: 1,
-               isUpdate: true,
-             )),
-             (route) => false);
+     try {
+       await FirebaseFirestore.instance.collection("users").doc(user.uid).set(
+           UserModel(location: "",
+               position: "",
+               email: userEmail ?? user.email!,
+               firstName: user.displayName ?? "",
+               lastName: "",
+               id: user.uid,
+               reference: "",
+               hobbies: [],
+               followers: [],
+               followings: [],
+               userName: '',
+               phone: 0,
+               userType: "user",
+               company: "",
+               website: "").toJson());
+       Constants.userDisplayName = user.displayName!;
+       Constants.userEmail = userEmail ?? user.email!;
+       Constants.uId = user.uid;
+       Navigator.pushAndRemoveUntil(
+           context,
+           MaterialPageRoute(
+               builder: (_) =>
+                   SignUpScreen(
+                     screenType: 1,
+                     isUpdate: true,
+                   )),
+               (route) => false);
+     } catch (e){
+       CustomSnackBar(false).showInSnackBar(e.toString(), context);
+     }
    }
 }}

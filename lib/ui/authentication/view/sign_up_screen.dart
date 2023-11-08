@@ -496,9 +496,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
-          if(widget.isUpdate == null)...[
           textField(
-              'First Name', 'Jon', 0, textFieldController[0], false, false)],
+              'First Name', 'Jon', 0, textFieldController[0], widget.isUpdate??false, false),
           textField(
               'Last Name', 'Methon', 1, textFieldController[1], false, false),
           textField('Company', 'Enter Company name', 2, textFieldController[2],
@@ -531,9 +530,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           textField('Cell Phone', '+1 356 786 7865', 4, textFieldController[4],
               false, false,
               inputType: TextInputType.number, maxLength: 12),
-          if(widget.isUpdate == null)...[
-          textField('Email', 'abc@gmail.com', 5, textFieldController[5], false,
-              false)],
+          textField('Email', 'abc@gmail.com', 5, textFieldController[5], widget.isUpdate??false,
+              false),
           textField('Website (Optional)', 'Enter Website name', 6,
               textFieldController[6], false, false),
           Text(
