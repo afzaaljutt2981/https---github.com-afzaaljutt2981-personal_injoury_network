@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:page_transition/page_transition.dart';
@@ -11,10 +12,14 @@ import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:personal_injury_networking/ui/authentication/view/sign_up_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/custom_snackbar.dart';
 import '../../forgetPassword/view/create_forget_pass_controller.dart';
+import '../../forgetPassword/view/forget_view.dart';
+import '../../home/view/navigation_view.dart';
+import '../model/user_model.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -160,8 +165,9 @@ class _LoginViewState extends State<LoginView> {
                   loginGoogleApple('assets/images/google_login.png', onTap: () {
                     signInWithGoogle();
                   }),
-                  loginGoogleApple('assets/images/apple_login.png',
-                      onTap: () {})
+                  loginGoogleApple('assets/images/apple_login.png', onTap: () {
+                    signInWithApple();
+                  })
                 ],
               ),
               CustomSizeBox(24.h),
@@ -324,32 +330,142 @@ class _LoginViewState extends State<LoginView> {
       final UserCredential authResult =
           await _auth.signInWithCredential(credential);
       final User? user = authResult.user;
-
       if (user != null) {
-        Constants.userDisplayName = user.displayName!;
-        Constants.userEmail = user.email!;
-        Constants.uId = user.uid;
-        // ignore: use_build_context_synchronously
-        Navigator.push(
-          context,
-          PageTransition(
-            childCurrent: widget,
-            type: PageTransitionType.rightToLeft,
-            alignment: Alignment.center,
-            duration: const Duration(milliseconds: 200),
-            reverseDuration: const Duration(milliseconds: 200),
-            child: ChangeNotifierProvider(
-                create: (_) => AuthController(),
-                child: SignUpScreen(
-                  screenType: 1,
-                )),
-          ),
-        );
+        getUserData(user);
       }
+      //  await FirebaseFirestore.instance.collection("users").doc(user.uid).set(
+      //       UserModel(location: "", position: "", email: user.email!,
+      //           firstName: user.displayName??"", lastName: "", id: user.uid, reference: "",
+      //           hobbies: [],
+      //           followers: [],
+      //           followings: [],
+      //           userName: '', phone: 0, userType: "user", company: "", website: "").toJson());
+      //   Constants.userDisplayName = user.displayName!;
+      //   Constants.userEmail = user.email!;
+      //   Constants.uId = user.uid;
+      //   // ignore: use_build_context_synchronously
+      //   Navigator.push(
+      //     context,
+      //     PageTransition(
+      //       childCurrent: widget,
+      //       type: PageTransitionType.rightToLeft,
+      //       alignment: Alignment.center,
+      //       duration: const Duration(milliseconds: 200),
+      //       reverseDuration: const Duration(milliseconds: 200),
+      //       child: ChangeNotifierProvider(
+      //           create: (_) => AuthController(),
+      //           child: SignUpScreen(
+      //             screenType: 1,
+      //             isUpdate: true,
+      //           )),
+      //     ),
+      //   );
+      // }
       return user;
     } catch (error) {
       CustomSnackBar(false).showInSnackBar(error.toString(), context);
       return null;
     }
   }
-}
+
+  Future<User> signInWithApple({List<Scope> scopes = const []}) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final result = await TheAppleSignIn.performRequests(
+        [AppleIdRequest(requestedScopes: scopes)]);
+
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+        final AppleIdCredential = result.credential!;
+        final oAuthProvider = OAuthProvider('apple.com');
+        final credential = oAuthProvider.credential(
+            idToken: String.fromCharCodes(AppleIdCredential.identityToken!));
+        final UserCredential = await auth.signInWithCredential(credential);
+        final firebaseUser = UserCredential.user!;
+        if (scopes.contains(Scope.fullName)) {
+          final fullName = AppleIdCredential.fullName;
+          if (fullName != null &&
+              fullName.givenName != null &&
+              fullName.familyName != null) {
+            final displayName = '${fullName.givenName} ${fullName.familyName}';
+
+            Constants.userDisplayName = displayName;
+            Constants.userEmail = '';
+            // ignore: use_build_context_synchronously
+            Navigator.push(
+              context,
+              PageTransition(
+                childCurrent: widget,
+                type: PageTransitionType.rightToLeft,
+                alignment: Alignment.center,
+                duration: const Duration(milliseconds: 200),
+                reverseDuration: const Duration(milliseconds: 200),
+                child: ChangeNotifierProvider(
+                    create: (_) => AuthController(),
+                    child: SignUpScreen(
+                      screenType: 1,
+                    )),
+              ),
+            );
+          }
+        }
+        return firebaseUser;
+      case AuthorizationStatus.error:
+        throw PlatformException(
+            code: 'ERROR_AUTHORIZATION_DENIED',
+            message: result.error.toString());
+
+      case AuthorizationStatus.cancelled:
+        throw PlatformException(
+            code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
+
+      default:
+        throw UnimplementedError();
+    }
+  }
+  getUserData(User user) async {
+   var res = await  FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid).get();
+   if(res.exists){
+     UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
+      //   .snapshots()
+      //   .listen((event) {
+      // UserModel user = UserModel.fromJson(event.data() as Map<String, dynamic>);
+      if (user.userName == "") {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (_) => SignUpScreen(
+                  screenType: 1,
+                  isUpdate: true,
+                )),
+                (route) => false);
+      } else {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+                (route) => false);
+      }
+    // });
+  }else{
+     await FirebaseFirestore.instance.collection("users").doc(user.uid).set(
+         UserModel(location: "", position: "", email: user.email!,
+             firstName: user.displayName??"", lastName: "", id: user.uid, reference: "",
+             hobbies: [],
+             followers: [],
+             followings: [],
+             userName: '', phone: 0, userType: "user", company: "", website: "").toJson());
+     Constants.userDisplayName = user.displayName!;
+     Constants.userEmail = user.email!;
+     Constants.uId = user.uid;
+     Navigator.pushAndRemoveUntil(
+         context,
+         MaterialPageRoute(
+             builder: (_) => SignUpScreen(
+               screenType: 1,
+               isUpdate: true,
+             )),
+             (route) => false);
+   }
+}}

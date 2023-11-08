@@ -15,7 +15,7 @@ class _SingleChatScreenViewState extends State<SingleChatScreenView> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (_)=>ChatController(widget.user.id),
+        create: (_)=>ChatController(otherUserId:widget.user.id),
         child: ChatScreen(user: widget.user));
   }
 }

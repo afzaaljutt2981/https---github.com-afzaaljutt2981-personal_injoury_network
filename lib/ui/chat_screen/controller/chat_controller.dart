@@ -7,9 +7,10 @@ import 'package:personal_injury_networking/ui/chat_screen/model/chat_data.dart';
 import 'package:personal_injury_networking/ui/chat_screen/model/chat_model.dart';
 
 class ChatController extends ChangeNotifier {
-  ChatController(String otherUserId){
+  ChatController({String? otherUserId}){
+    if(otherUserId != null){
     getUserMessages(otherUserId);
-  }
+  }}
   CollectionReference messages =
       FirebaseFirestore.instance.collection("messages");
   List<ChatMessage> currentChat = [];
@@ -34,7 +35,7 @@ class ChatController extends ChangeNotifier {
     });
   }
 
-  sendMessage(String receiverId, String messageContent) async {
+  sendMessage(String receiverId, String messageContent,String messageType) async {
     var uId = FirebaseAuth.instance.currentUser!.uid;
     var senderDoc = messages
         .doc(uId)
@@ -54,14 +55,14 @@ class ChatController extends ChangeNotifier {
               senderId: uId,
               id: senderDoc.id,
               dateTime: DateTime.now(),
-              messageType: "text")
+              messageType: messageType)
           .toJson());
       await receiverDoc.set(ChatMessage(
               messageContent: messageContent,
               id: receiverDoc.id,
               dateTime: DateTime.now(),
               senderId: uId,
-              messageType: "text")
+              messageType: messageType)
           .toJson());
       await saveUserChatData(uId, receiverId,messageContent);
     } catch (e) {

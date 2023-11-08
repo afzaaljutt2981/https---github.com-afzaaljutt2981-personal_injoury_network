@@ -120,7 +120,7 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                           top: screenHeight * 0.01,
                           left: screenWidth * 0.38,
                           child: CircleAvatar(
-                            radius: 50.sp,
+                            radius: 40.sp,
                             backgroundImage: NetworkImage(
                               user!.pImage!,
                             ),

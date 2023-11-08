@@ -148,7 +148,48 @@ class AuthController extends ChangeNotifier {
       }
     });
   }
-
+  Future<void> updateUser(
+      BuildContext context, {
+        required String lastName,
+        required String companyName,
+        required String website,
+        required String phone,
+        required String position,
+        required String location,
+        required String reference,
+        required List<String> hobbies,
+        required String userName,
+      }) async {
+    try {
+      Functions.showLoaderDialog(context);
+          var doc = ref.doc(FirebaseAuth.instance.currentUser!.uid);
+          print(doc.id);
+          print("document Id");
+          await doc.update({
+            "lastName": lastName,
+            "company": companyName,
+            "location": location,
+            "phone": int.parse(phone),
+            "website": website,
+            "reference":reference,
+            "userName": userName,
+            "position": position,
+            "hobbies":hobbies,
+          });
+          getUserData(context);
+          setSaveChangesButtonStatus(false);
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+                  (route) => false);
+          notifyListeners();
+    } on Exception catch (error) {
+      setSaveChangesButtonStatus(false);
+      CustomSnackBar(false).showInSnackBar(error.toString(), context);
+      notifyListeners();
+    }
+  }
   setSaveChangesButtonStatus(bool value) {
     saveChangesButton = value;
     notifyListeners();
