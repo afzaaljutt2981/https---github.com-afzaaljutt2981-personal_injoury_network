@@ -20,7 +20,8 @@ import '../../home/view/navigation_view.dart';
 import '../model/job_position_model.dart';
 
 class SignUpScreen extends StatefulWidget {
-  SignUpScreen({required this.screenType,this.isUpdate, Key? key}) : super(key: key);
+  SignUpScreen({required this.screenType, this.isUpdate, Key? key})
+      : super(key: key);
   int screenType;
   bool? isUpdate;
   @override
@@ -40,6 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         selectedHobbies.add(item);
         hobbiesCount++;
       });
+      setState(() {});
     }
   }
 
@@ -219,7 +221,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     50.sp,
                     () async {
                       if (index == 1) {
-                        if (textFieldController[0].text.isEmpty && widget.isUpdate == null) {
+                        if (textFieldController[0].text.isEmpty &&
+                            widget.isUpdate == null) {
                           CustomSnackBar(false).showInSnackBar(
                               'please enter first name', context);
                           return;
@@ -249,9 +252,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           CustomSnackBar(false).showInSnackBar(
                               'please enter cell phone', context);
                           return;
-                        } else if (widget.isUpdate == null && (textFieldController[5].text.isEmpty ||
-                            !EmailValidator.validate(
-                                textFieldController[5].text))) {
+                        } else if (widget.isUpdate == null &&
+                            (textFieldController[5].text.isEmpty ||
+                                !EmailValidator.validate(
+                                    textFieldController[5].text))) {
                           CustomSnackBar(false).showInSnackBar(
                               "please enter valid email", context);
                           return;
@@ -287,13 +291,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           CustomSnackBar(false).showInSnackBar(
                               'please enter user name', context);
                           return;
-                        } else if (textFieldController[11].text.length < 6 && widget.isUpdate == null) {
+                        } else if (textFieldController[11].text.length < 6 &&
+                            widget.isUpdate == null) {
                           CustomSnackBar(false).showInSnackBar(
                               'Password is too short! must be greater than 6 digits',
                               context);
                           return;
                         } else if (textFieldController[11].text !=
-                            textFieldController[12].text && widget.isUpdate == null) {
+                                textFieldController[12].text &&
+                            widget.isUpdate == null) {
                           CustomSnackBar(false).showInSnackBar(
                               'password and confirm password should be same!',
                               context);
@@ -302,30 +308,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           context
                               .read<AuthController>()
                               .setSaveChangesButtonStatus(true);
-                          if(FirebaseAuth.instance.currentUser != null){
-                             context.read<AuthController>().updateUser(context,
-                                 lastName: textFieldController[1].text,
-                                 companyName: textFieldController[2].text,
-                                 website: textFieldController[6].text,
-                                 phone: textFieldController[4].text,
-                                 position: textFieldController[3].text,
-                                 location: "$selectedState,$selectedCountry",
-                                 reference: textFieldController[9].text,
-                                 hobbies: selectedHobbies, userName: textFieldController[10].text);
-                          }else{
-                          context.read<AuthController>().signup(context,
-                              firstName: textFieldController[0].text,
-                              lastName: textFieldController[1].text,
-                              companyName: textFieldController[2].text,
-                              position: textFieldController[3].text,
-                              phone: textFieldController[4].text,
-                              email: textFieldController[5].text,
-                              website: textFieldController[6].text,
-                              location: "$selectedState,$selectedCountry",
-                              reference: textFieldController[9].text,
-                              password: textFieldController[11].text,
-                              hobbies: selectedHobbies,
-                              userName: textFieldController[10].text);}
+                          if (FirebaseAuth.instance.currentUser != null) {
+                            context.read<AuthController>().updateUser(context,
+                                lastName: textFieldController[1].text,
+                                companyName: textFieldController[2].text,
+                                website: textFieldController[6].text,
+                                phone: textFieldController[4].text,
+                                position: textFieldController[3].text,
+                                location: "$selectedState,$selectedCountry",
+                                reference: textFieldController[9].text,
+                                hobbies: selectedHobbies,
+                                userName: textFieldController[10].text);
+                          } else {
+                            context.read<AuthController>().signup(context,
+                                firstName: textFieldController[0].text,
+                                lastName: textFieldController[1].text,
+                                companyName: textFieldController[2].text,
+                                position: textFieldController[3].text,
+                                phone: textFieldController[4].text,
+                                email: textFieldController[5].text,
+                                website: textFieldController[6].text,
+                                location: "$selectedState,$selectedCountry",
+                                reference: textFieldController[9].text,
+                                password: textFieldController[11].text,
+                                hobbies: selectedHobbies,
+                                userName: textFieldController[10].text);
+                          }
                           // Navigator.push(
                           //   context,
                           //   PageTransition(
@@ -496,8 +504,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
-          textField(
-              'First Name', 'Jon', 0, textFieldController[0], widget.isUpdate??false, false),
+          textField('First Name', 'Jon', 0, textFieldController[0],
+              widget.isUpdate ?? false, false),
           textField(
               'Last Name', 'Methon', 1, textFieldController[1], false, false),
           textField('Company', 'Enter Company name', 2, textFieldController[2],
@@ -530,8 +538,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           textField('Cell Phone', '+1 356 786 7865', 4, textFieldController[4],
               false, false,
               inputType: TextInputType.number, maxLength: 12),
-          textField('Email', 'abc@gmail.com', 5, textFieldController[5], widget.isUpdate??false,
-              false),
+          textField('Email', 'abc@gmail.com', 5, textFieldController[5],
+              widget.isUpdate ?? false, false),
           textField('Website (Optional)', 'Enter Website name', 6,
               textFieldController[6], false, false),
           Text(
@@ -620,12 +628,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
         children: [
           textField('Username', 'Enter username', 10, textFieldController[10],
               false, false),
-          if(widget.isUpdate == null)
-          textField('Password', 'xxxxxxxxx', 11, textFieldController[11], false,
-              hidePassword),
-          if(widget.isUpdate == null)
-          textField('Confirm Password', 'xxxxxxxxx', 12,
-              textFieldController[12], false, hideConfirmPassword),
+          if (widget.isUpdate == null)
+            textField('Password', 'xxxxxxxxx', 11, textFieldController[11],
+                false, hidePassword),
+          if (widget.isUpdate == null)
+            textField('Confirm Password', 'xxxxxxxxx', 12,
+                textFieldController[12], false, hideConfirmPassword),
           CustomSizeBox(20.h)
         ],
       ),
