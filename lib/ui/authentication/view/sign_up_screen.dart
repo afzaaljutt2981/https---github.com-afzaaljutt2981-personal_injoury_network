@@ -711,9 +711,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           addItem(JobPositionModel.hobbiesList[i]
                               .substring(2)
                               .toString());
-                          if (hobbiesCount == 0) {
-                            hobbiesCount++;
-                          }
+                          // if (hobbiesCount == 0) {
+                          //   hobbiesCount++;
+                          // }
                         });
                       }
                     }
