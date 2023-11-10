@@ -827,7 +827,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         if (value != null) {
                                           textFieldController[8].text =
                                               value.toString().substring(2);
-
                                           for (int i = 0;
                                               i <
                                                   JobPositionModel
@@ -837,7 +836,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 JobPositionModel
                                                     .hobbiesList[i])) {
                                               setState(() {
-                                                hobbiesCount++;
+                                                addItem(JobPositionModel
+                                                    .hobbiesList[i]
+                                                    .substring(2)
+                                                    .toString());
+                                                // if (hobbiesCount == 0) {
+                                                //   hobbiesCount++;
+                                                // }
                                               });
                                             }
                                           }
