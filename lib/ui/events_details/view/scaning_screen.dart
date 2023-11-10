@@ -1,14 +1,18 @@
+
+
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+// ignore: must_be_immutable
 class QRScannerScreen extends StatefulWidget {
   QRScannerScreen({required this.eventId, super.key});
   var eventId;
+
   @override
   State<StatefulWidget> createState() => _QRScannerScreenState();
 }
@@ -19,27 +23,48 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-              flex: 3,
-              child: QRView(
-                key: qrKey,
-                onQRViewCreated: _onQRViewCreated,
-                overlay: QrScannerOverlayShape(
-                  borderColor: AppColors.kPrimaryColor,
-                  borderRadius: 10,
-                  borderLength: 30,
-                  borderWidth: 10,
+          Column(
+            children: [
+              Expanded(
+                flex: 3,
+                child: QRView(
+                  key: qrKey,
+                  onQRViewCreated: _onQRViewCreated,
+                  overlay: QrScannerOverlayShape(
+                    borderColor: AppColors.kPrimaryColor,
+                    borderRadius: 10,
+                    borderLength: 30,
+                    borderWidth: 10,
+                  ),
+                  onPermissionSet: (ctrl, p) =>
+                      _onPermissionSet(context, ctrl, p),
                 ),
-                onPermissionSet: (ctrl, p) =>
-                    _onPermissionSet(context, ctrl, p),
-              )),
-          const Expanded(
-            flex: 1,
-            child: Center(
-              child: Text('Scaning QR Code'),
+              ),
+              const Expanded(
+                flex: 1,
+                child: Center(
+                  child: Text('Scanning QR Code'),
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            top: screenHeight * 0.04,
+            left: screenWidth * 0.025,
+            child: IconButton(
+              icon: Icon(
+                Icons.navigate_before,
+                color: Colors.white,
+                size: 35.sp,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
           ),
         ],
@@ -78,107 +103,21 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
           }
 
           if (matchFound) {
+             // ignore: use_build_context_synchronously
             Navigator.pop(context);
             showAlertDialog('User is registered');
           } else {
+             // ignore: use_build_context_synchronously
             Navigator.pop(context);
             showAlertDialog('User is not registered');
           }
         } else {
-          print('No documents found in the collection');
         }
-      } catch (e) {
-        print('Error: $e');
+      } catch (_) {
+       
       }
     });
   }
-
-  // void _onQRViewCreated(QRViewController controller) {
-  // setState(() {
-  //   this.controller = controller;
-  // });
-  // controller.scannedDataStream.listen((scanData) async {
-  //   try {
-  //     final scannedCode = scanData.code;
-
-  //     final firestore = FirebaseFirestore.instance;
-  //     final ticketsCollection = firestore.collection('events').doc(widget.eventId).collection('tickets'); // Replace with your collection name
-
-  //     final querySnapshot = await ticketsCollection.get();
-
-  //     if (querySnapshot.docs.isNotEmpty) {
-  //      bool matchFound = false;
-  //       for (QueryDocumentSnapshot doc in querySnapshot.docs) {
-  //         var ticketId = doc.data()?['id'];
-  //         if (ticketId != null && ticketId == scannedCode) {
-  //           matchFound = true;
-  //           break;
-  //         }
-  //       }
-  //       showAlertDialog('User is registered');
-
-  //       // if (matchFound) {
-  //       //    showAlertDialog('User is registered');
-  //       // } else {
-  //       //   showAlertDialog('User is not registered');
-  //       // }
-  //     } else {
-
-  //     }
-  //   } catch (_) {
-
-  //   }
-  // });
-//}
-
-  // void _onQRViewCreated(QRViewController controller) {
-  //   setState(() {
-  //     this.controller = controller;
-  //   });
-  //   controller.scannedDataStream.listen((scanData) async {
-  //     try {
-  //       print('Scanned data: ${scanData.code}');
-  //       final scannedCode = scanData.code;
-
-  //       final firestore = FirebaseFirestore.instance;
-  //       // final eventsCollection = firestore.collection('events').doc(widget.eventId).collection('tickets');
-
-  //       // final querySnapshot =
-  //       //     await eventsCollection.where(doc, isEqualTo: scannedCode).get();
-
-  //        final eventDoc = firestore.collection('events').doc(widget.eventId);
-
-  //     final ticketsCollection = eventDoc.collection('tickets');
-
-  //     final querySnapshot = await ticketsCollection.where('ticketId', isEqualTo: scannedCode).get();
-
-  //       if (querySnapshot.docs.isNotEmpty) {
-  //         // Event found with a matching ID
-  //         // Now, you can check the tickets subcollection to verify if the user is registered.
-  //         final eventDoc = querySnapshot.docs.first;
-  //         final ticketsCollection = eventDoc.reference.collection('tickets');
-
-  //         // Replace 'ticketId' with the field that contains the ticket ID in the ticket document
-  //         final ticketQuerySnapshot = await ticketsCollection
-  //             .where('ticketId', isEqualTo: scannedCode)
-  //             .get();
-
-  //         if (ticketQuerySnapshot.docs.isNotEmpty) {
-  //           // User is registered
-  //           showAlertDialog('User is registered');
-  //         } else {
-  //           // User is not registered
-  // showAlertDialog('User is not registered');
-  //         }
-  //       } else {
-  //         // Event not found
-  //         showAlertDialog('Event not found');
-  //       }
-  //     } catch (e) {
-  //       print('Error: $e');
-  //     }
-  //   });
-  // }
 
   void showAlertDialog(String message) {
     showDialog(
@@ -199,20 +138,6 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       },
     );
   }
-
-  // void _onQRViewCreated(QRViewController controller) {
-  //   setState(() {
-  //     this.controller = controller;
-  //   });
-  //   controller.scannedDataStream.listen((scanData) {
-  //     setState(() {
-  //       print('Scanned data: ${scanData.code}');
-
-  //     });
-
-  //     Navigator.pop(context);
-  //   });
-  // }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');

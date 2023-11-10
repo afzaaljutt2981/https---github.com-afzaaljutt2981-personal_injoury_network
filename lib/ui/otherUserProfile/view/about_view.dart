@@ -6,6 +6,7 @@ import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 
 import '../../authentication/model/user_model.dart';
 
+// ignore: must_be_immutable
 class OrganizerAbout extends StatelessWidget {
    OrganizerAbout({super.key,required this.user});
 UserModel user;

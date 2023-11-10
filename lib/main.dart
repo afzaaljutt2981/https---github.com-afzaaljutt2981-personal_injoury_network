@@ -4,7 +4,6 @@ import 'package:personal_injury_networking/ui/authentication/controller/auth_con
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:personal_injury_networking/ui/forgetPassword/view/verify_identity.dart';
 import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
-import 'package:personal_injury_networking/ui/otherUserProfile/controller/other_user_profile_controller.dart';
 import 'package:personal_injury_networking/ui/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
 

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../authentication/model/user_model.dart';
 import '../controller/AllParticipantsController.dart';
 
+// ignore: must_be_immutable
 class CreateAllParticipantsView extends StatefulWidget {
   CreateAllParticipantsView(
       {super.key, required this.users, required this.currentUser});

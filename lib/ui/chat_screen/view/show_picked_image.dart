@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../../global/utils/app_colors.dart';
 import '../controller/chat_controller.dart';
 
+// ignore: must_be_immutable
 class ShowPickedImage extends StatelessWidget {
   ShowPickedImage({super.key, required this.image, required this.chatUser});
   Uint8List image;
@@ -41,12 +42,17 @@ class ShowPickedImage extends StatelessWidget {
                     Functions.showLoaderDialog(context);
                     try{
                   String url = await  Functions.uploadPic(image, "chatImages");
+                   // ignore: use_build_context_synchronously
                    await context.read<ChatController>().sendMessage(chatUser.id, url, "image");
+                    // ignore: use_build_context_synchronously
                     Navigator.pop(context);
+                    // ignore: use_build_context_synchronously
                     Navigator.pop(context);
                     }
                   catch(e){
+                     // ignore: use_build_context_synchronously
                       Navigator.pop(context);
+                       // ignore: use_build_context_synchronously
                       CustomSnackBar(false).showInSnackBar(e.toString(), context);
                     }},
                   child: Container(

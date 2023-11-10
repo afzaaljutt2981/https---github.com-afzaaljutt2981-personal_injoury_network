@@ -6,8 +6,8 @@ import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../create_event/models/event_model.dart';
-import '../../otherUserProfile/model/events_history_model.dart';
 
+// ignore: must_be_immutable
 class SearchEventScreen extends StatefulWidget {
   SearchEventScreen({super.key,required this.events});
 List<EventModel> events;
@@ -16,23 +16,10 @@ List<EventModel> events;
 }
 
 TextEditingController searchcontroller = TextEditingController();
-List<EventHistoryModel> eventsHistoryList = [
-  EventHistoryModel('assets/images/intro_background_image.png',
-      'A virtual evening of smooth jazz', '1st  May- Sat -2:00 PM'),
-  EventHistoryModel('assets/images/intro_background_image.png',
-      'Jo malone london’s mother’s day ', '1st  May- Sat -2:00 PM'),
-  EventHistoryModel('assets/images/intro_background_image.png',
-      "Women's leadership conference", '1st  May- Sat -2:00 PM'),
-  EventHistoryModel('assets/images/intro_background_image.png',
-      'International kids safe parents night out', '1st  May- Sat -2:00 PM'),
-  EventHistoryModel('assets/images/intro_background_image.png',
-      'International gala music festival', '1st  May- Sat -2:00 PM'),
-];
 
 class _SearchEventScreenState extends State<SearchEventScreen> {
 @override
 void initState() {
-    // TODO: implement initState
     super.initState();
     sEvents = widget.events;
   }

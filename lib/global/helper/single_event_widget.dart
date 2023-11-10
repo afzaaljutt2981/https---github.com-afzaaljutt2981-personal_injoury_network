@@ -8,6 +8,8 @@ import '../app_buttons/app_primary_button.dart';
 import '../utils/app_text_styles.dart';
 import 'custom_sized_box.dart';
 
+
+// ignore: must_be_immutable
 class SingleEventWidget extends StatefulWidget {
   SingleEventWidget({super.key,required this.event});
 EventModel event;

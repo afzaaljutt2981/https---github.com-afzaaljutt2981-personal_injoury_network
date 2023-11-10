@@ -14,6 +14,7 @@ import '../../../global/utils/functions.dart';
 import '../models/address_model.dart';
 
 
+// ignore: must_be_immutable
 class SelectLocation extends StatefulWidget {
   Color primary;
   final AddressModel? addressModel;
@@ -287,26 +288,18 @@ class _SelectLocationState extends State<SelectLocation> {
       city = "";
       country = "";
       postalCode = "";
-      print("place id");
-      print(p.placeId);
       PlacesDetailsResponse detail =
       await _places.getDetailsByPlaceId(p.placeId!);
       var element = detail.result;
       for (var element in element.addressComponents) {
         var types = element.types;
-        print(types);
-        print("Types");
         if (types.contains('locality')) {
-          print("city Name");
-          print(element.longName);
           city = element.longName;
         }
         if (types.contains('postalCode')) {
           postalCode = element.longName;
         }
         if (types.contains('country')) {
-          print("country");
-          print(element.longName);
           country = element.longName;
         }
       }

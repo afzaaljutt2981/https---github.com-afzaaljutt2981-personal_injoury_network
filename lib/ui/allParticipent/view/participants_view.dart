@@ -3,15 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
-import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../../global/utils/constants.dart';
 import '../../authentication/model/user_model.dart';
 import '../../otherUserProfile/view/create_other_profile_view.dart';
-import '../../otherUserProfile/view/other_user_view.dart';
 
+// ignore: must_be_immutable
 class AllParticipantsView extends StatefulWidget {
   AllParticipantsView({super.key, required this.users,required this.currentUser});
   List<UserModel> users;

@@ -6,6 +6,7 @@ import '../../authentication/model/user_model.dart';
 import '../controller/allFriendsController.dart';
 import 'all_friends_view.dart';
 
+// ignore: must_be_immutable
 class CreateAllFriendsView extends StatefulWidget {
    CreateAllFriendsView({super.key,required this.user});
 UserModel user;
