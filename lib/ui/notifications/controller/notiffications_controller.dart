@@ -11,7 +11,6 @@ import '../../authentication/model/user_model.dart';
 
 class NotificationsController extends ChangeNotifier {
   NotificationsController(){
-    print("start");
     getUserNotifications();
   }
   CollectionReference user = FirebaseFirestore.instance.collection("users");
@@ -19,8 +18,6 @@ class NotificationsController extends ChangeNotifier {
   List<NotificationsModel> notifications = [];
   getUserNotifications(){
     var uId = FirebaseAuth.instance.currentUser!.uid;
-    print(uId);
-    print("object");
     notificationsStream  = user.doc(uId).collection("notifications").orderBy("time",descending: true).snapshots().listen((event) {
       notifications = [];
       for (var element in event.docs) {
@@ -28,7 +25,6 @@ class NotificationsController extends ChangeNotifier {
       }
       notifyListeners();
     });
-    print(notifications.length);
     notifyListeners();
   }
   followTap(
@@ -36,7 +32,6 @@ class NotificationsController extends ChangeNotifier {
       String followerId,
       BuildContext context
       ) async {
-    String cId = FirebaseAuth.instance.currentUser!.uid;
     final collectionRef =
     user.doc(userModel.id);
     var fList = userModel.followers;
@@ -54,7 +49,11 @@ class NotificationsController extends ChangeNotifier {
     );
       fList = [];
     }catch (e){
+      
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
+      
+      // ignore: use_build_context_synchronously
       CustomSnackBar(false).showInSnackBar(e.toString(), context);
     }
   }
@@ -79,10 +78,15 @@ class NotificationsController extends ChangeNotifier {
         },
       );
       fList = [];
+      
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
+      // ignore: use_build_context_synchronously
       CustomSnackBar(true).showInSnackBar("Request Accepted", context);
     } catch (e){
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
+      // ignore: use_build_context_synchronously
       CustomSnackBar(false).showInSnackBar(e.toString(), context);
     }
   }
@@ -94,17 +98,20 @@ class NotificationsController extends ChangeNotifier {
       "status":status
     });
     if(status == "Rejected"){
+      // ignore: use_build_context_synchronously
     Navigator.pop(context);
+    // ignore: use_build_context_synchronously
     CustomSnackBar(false).showInSnackBar("Request $status", context);
     }}
     catch (e){
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
+      // ignore: use_build_context_synchronously
       CustomSnackBar(false).showInSnackBar(e.toString(), context);
     }
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     notificationsStream?.cancel();
   }

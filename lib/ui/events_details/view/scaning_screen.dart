@@ -3,12 +3,12 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+// ignore: must_be_immutable
 class QRScannerScreen extends StatefulWidget {
   QRScannerScreen({required this.eventId, super.key});
   var eventId;
@@ -103,17 +103,18 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
           }
 
           if (matchFound) {
+             // ignore: use_build_context_synchronously
             Navigator.pop(context);
             showAlertDialog('User is registered');
           } else {
+             // ignore: use_build_context_synchronously
             Navigator.pop(context);
             showAlertDialog('User is not registered');
           }
         } else {
-          print('No documents found in the collection');
         }
-      } catch (e) {
-        print('Error: $e');
+      } catch (_) {
+       
       }
     });
   }

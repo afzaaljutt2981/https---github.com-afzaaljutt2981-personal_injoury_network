@@ -13,21 +13,18 @@ import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
-import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:personal_injury_networking/ui/events_details/controller/event_details_controller.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/view/create_other_profile_view.dart';
 import 'package:provider/provider.dart';
-
-import '../../allParticipent/view/create_all_participants_view.dart';
 import '../../allParticipent/view/participants_view.dart';
 import '../../create_event/models/event_model.dart';
 import '../../notifications/model/nitofications_model.dart';
 import '../../otherUserProfile/controller/other_user_profile_controller.dart';
-import '../../otherUserProfile/view/other_user_view.dart';
 import '../models/ticket_model.dart';
 import 'events_qr_view.dart';
 
+// ignore: must_be_immutable
 class EventsDetailsView extends StatefulWidget {
   EventsDetailsView({super.key, required this.event});
   EventModel event;
@@ -52,7 +49,6 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   String buttonName = "Register";
   @override
   Widget build(BuildContext context) {
-    // print(widget.event.id.toString());
     eventTickets = [];
     weekDates = [];
     eventParticipants = [];
@@ -359,8 +355,11 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         await context
                             .read<EventDetailsController>()
                             .addUserTicket(widget.event.id);
+                             // ignore: use_build_context_synchronously
                         Navigator.pop(context);
+                         // ignore: use_build_context_synchronously
                         Navigator.pop(context);
+                         // ignore: use_build_context_synchronously
                         Functions.showSnackBar(
                             context, "Event register successfully");
                       }

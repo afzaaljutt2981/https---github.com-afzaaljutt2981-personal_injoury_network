@@ -7,12 +7,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/chat_screen/controller/chat_controller.dart';
 import 'package:personal_injury_networking/ui/chat_screen/view/create-picked_image_view.dart';
-import 'package:personal_injury_networking/ui/chat_screen/view/show_picked_image.dart';
 import 'package:provider/provider.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../model/chat_model.dart';
 
+// ignore: must_be_immutable
 class ChatScreen extends StatefulWidget {
   ChatScreen({super.key, required this.user});
   UserModel user;
@@ -24,11 +24,7 @@ TextEditingController textController = TextEditingController();
 bool emplyList = false;
 
 class _ChatScreenState extends State<ChatScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+ 
 
   List<ChatMessage> chats = [];
   Uint8List? image1;
@@ -278,6 +274,7 @@ class _ChatScreenState extends State<ChatScreen> {
         await _picker.pickImage(source: ImageSource.camera);
     if (pickedImage != null) {
       image1 = await pickedImage.readAsBytes();
+      // ignore: use_build_context_synchronously
       Navigator.push(
           context,
           MaterialPageRoute(

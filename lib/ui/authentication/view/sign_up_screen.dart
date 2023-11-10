@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
@@ -16,9 +15,9 @@ import 'package:provider/provider.dart';
 import '../../../global/helper/api_functions.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../../global/utils/custom_snackbar.dart';
-import '../../home/view/navigation_view.dart';
 import '../model/job_position_model.dart';
 
+// ignore: must_be_immutable
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({required this.screenType, this.isUpdate, Key? key})
       : super(key: key);
@@ -659,7 +658,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.sp), color: Colors.white),
           child: TextFormField(
-            inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
+            inputFormatters: index ==4 ? [FilteringTextInputFormatter.deny(RegExp(r'\s'))] : null,
             maxLength: maxLength,
             keyboardType: inputType,
             obscureText: obsecureTerxt,

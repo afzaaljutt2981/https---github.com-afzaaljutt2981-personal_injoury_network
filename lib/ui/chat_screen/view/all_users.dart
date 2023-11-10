@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/ui/chat_screen/controller/user_chat_data.dart';
 import 'package:personal_injury_networking/ui/chat_screen/model/chat_data.dart';
-import 'package:personal_injury_networking/ui/chat_screen/view/chat_view.dart';
 import 'package:personal_injury_networking/ui/chat_screen/view/single_chat_screen_view.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:provider/provider.dart';
 
 import '../../../global/utils/app_text_styles.dart';
 import '../../authentication/model/user_model.dart';
-import '../model/chat_model.dart';
 
 class AllUsersChat extends StatefulWidget {
   const AllUsersChat({super.key});

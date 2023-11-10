@@ -29,8 +29,6 @@ class EventDetailsController extends ChangeNotifier {
       for (var element in event.docs) {
         eventTickets.add(TicketModel.fromJson(element.data()));
       }
-      print(eventTickets.length);
-      print("event tickets");
       notifyListeners();
     });
   }

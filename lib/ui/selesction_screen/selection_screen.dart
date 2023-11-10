@@ -7,7 +7,6 @@ import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 
 import '../authentication/view/create_auth_view.dart';
-import '../authentication/view/login_view.dart';
 
 class SelectionScreen extends StatefulWidget {
   const SelectionScreen({super.key});

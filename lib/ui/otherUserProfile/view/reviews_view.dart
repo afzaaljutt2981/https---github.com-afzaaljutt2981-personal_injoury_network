@@ -1,37 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../../global/utils/constants.dart';
 import '../../create_event/models/event_model.dart';
-import '../model/events_history_model.dart';
 
+// ignore: must_be_immutable
 class OtherUserReviewScreen extends StatefulWidget {
    OtherUserReviewScreen({super.key,required this.userEvents});
 List<EventModel> userEvents;
   @override
   State<OtherUserReviewScreen> createState() => _OtherUserReviewScreenState();
 }
-
-// List<EventHistoryModel> eventsReviewList = [
-//   EventHistoryModel('assets/images/intro_background_image.png',
-//       'A virtual evening of smooth jazz', '1st  May- Sat -2:00 PM'),
-//   EventHistoryModel('assets/images/intro_background_image.png',
-//       'Jo malone london’s mother’s day ', '1st  May- Sat -2:00 PM'),
-//   EventHistoryModel('assets/images/intro_background_image.png',
-//       "Women's leadership conference", '1st  May- Sat -2:00 PM'),
-//   EventHistoryModel('assets/images/intro_background_image.png',
-//       'International kids safe parents night out', '1st  May- Sat -2:00 PM'),
-//   EventHistoryModel('assets/images/intro_background_image.png',
-//       'International gala music festival', '1st  May- Sat -2:00 PM'),
-// ];
-
 class _OtherUserReviewScreenState extends State<OtherUserReviewScreen> {
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
-import 'package:personal_injury_networking/ui/create_event/models/event_model.dart';
 
 import '../../events_details/models/ticket_model.dart';
 import '../../notifications/model/nitofications_model.dart';

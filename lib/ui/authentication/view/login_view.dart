@@ -10,17 +10,14 @@ import 'package:personal_injury_networking/global/app_buttons/white_background_b
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
-import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:personal_injury_networking/ui/authentication/view/sign_up_screen.dart';
-import 'package:personal_injury_networking/ui/home/view/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/custom_snackbar.dart';
 import '../../forgetPassword/view/create_forget_pass_controller.dart';
-import '../../forgetPassword/view/forget_view.dart';
 import '../../home/view/navigation_view.dart';
 import '../model/user_model.dart';
 
@@ -337,6 +334,7 @@ class _LoginViewState extends State<LoginView> {
       }
       return user;
     } catch (error) {
+      // ignore: use_build_context_synchronously
       CustomSnackBar(false).showInSnackBar(error.toString(), context);
       return null;
     }
@@ -387,6 +385,7 @@ class _LoginViewState extends State<LoginView> {
    if(res.exists){
      UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
        if (user.userName == "") {
+        // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -396,6 +395,7 @@ class _LoginViewState extends State<LoginView> {
                 )),
                 (route) => false);
       } else {
+        // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -424,6 +424,7 @@ class _LoginViewState extends State<LoginView> {
        Constants.userDisplayName = user.displayName!;
        Constants.userEmail = userEmail ?? user.email!;
        Constants.uId = user.uid;
+       // ignore: use_build_context_synchronously
        Navigator.pushAndRemoveUntil(
            context,
            MaterialPageRoute(
@@ -434,6 +435,7 @@ class _LoginViewState extends State<LoginView> {
                    )),
                (route) => false);
      } catch (e){
+       // ignore: use_build_context_synchronously
        CustomSnackBar(false).showInSnackBar(e.toString(), context);
      }
    }

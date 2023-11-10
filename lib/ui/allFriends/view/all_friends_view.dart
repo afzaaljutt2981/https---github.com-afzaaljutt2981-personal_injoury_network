@@ -9,6 +9,7 @@ import '../../../global/utils/app_text_styles.dart';
 import '../../authentication/model/user_model.dart';
 import '../../events/controller/events_controller.dart';
 
+// ignore: must_be_immutable
 class AllFriendsScreen extends StatefulWidget {
   AllFriendsScreen({super.key, required this.user});
   UserModel user;

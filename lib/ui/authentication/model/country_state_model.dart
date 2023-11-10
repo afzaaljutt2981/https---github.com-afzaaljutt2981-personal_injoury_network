@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 
 CountryStateModel countryStateModelFromJson(String str) =>
     CountryStateModel.fromJson(json.decode(str));

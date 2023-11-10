@@ -9,11 +9,8 @@ import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/allFriends/view/create_all_freinds_view.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
-import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
-import 'package:personal_injury_networking/ui/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
 import '../../authentication/view/login_view.dart';
-import '../../create_event/view/add_event_view.dart';
 import '../../create_event/view/create_add_event_view.dart';
 import '../../home/view/navigation_view.dart';
 import '../../myProfile/controller/my_profile_controller.dart';
@@ -143,6 +140,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                             String? res =
                                                 await _showDialogueBox(context);
                                             if (res != null) {
+                                              // ignore: use_build_context_synchronously
                                               context
                                                   .read<MyProfileController>()
                                                   .becomeMarketer();
@@ -248,14 +246,15 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                   try{
                                   Functions.showLoaderDialog(context);
                                   await FirebaseAuth.instance.signOut();
+                                  // ignore: use_build_context_synchronously
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) => const LoginView()),
                                       (route) => false);
                                 }catch(e){
+                                    // ignore: use_build_context_synchronously
                                     Navigator.pop(context);
-                                    print("error in signout");
                                   }},
                                 child: Align(
                                   alignment: Alignment.bottomCenter,

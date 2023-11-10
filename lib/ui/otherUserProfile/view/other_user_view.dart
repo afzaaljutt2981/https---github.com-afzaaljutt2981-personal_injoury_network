@@ -4,8 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
-import 'package:personal_injury_networking/ui/chat_screen/view/chat_view.dart';
-import 'package:personal_injury_networking/ui/chat_screen/view/create_chat_view.dart';
 import 'package:personal_injury_networking/ui/chat_screen/view/single_chat_screen_view.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:personal_injury_networking/ui/notifications/model/nitofications_model.dart';
@@ -18,6 +16,7 @@ import '../../../global/utils/app_text_styles.dart';
 import '../../create_event/models/event_model.dart';
 import '../../events_details/models/ticket_model.dart';
 
+// ignore: must_be_immutable
 class OtherUserProfileScreen extends StatefulWidget {
   OtherUserProfileScreen({super.key, required this.currentUser});
   UserModel currentUser;
@@ -190,10 +189,12 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                     await context
                                         .read<OtherUserProfileController>()
                                         .followTap(user!);
+                                    // ignore: use_build_context_synchronously
                                     await context
                                         .read<OtherUserProfileController>()
                                         .followingTap(
                                             widget.currentUser, user!.id);
+                                            // ignore: use_build_context_synchronously
                                     await context
                                         .read<OtherUserProfileController>()
                                         .unFollow(user!.id, notifyId);

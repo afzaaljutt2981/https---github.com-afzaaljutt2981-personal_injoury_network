@@ -1,15 +1,11 @@
 import 'dart:typed_data';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/custom_snackbar.dart';
-import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
-import 'package:personal_injury_networking/ui/authentication/view/login_view.dart';
 import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
 import 'package:provider/provider.dart';
 import '../../../global/utils/app_colors.dart';
@@ -487,7 +483,6 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
       child: TextFormField(
         onTap: () {
           if (index == 1) {
-            print('abcdfeff');
             GestureDetector(
                 onTap: () {
                   showMenu(

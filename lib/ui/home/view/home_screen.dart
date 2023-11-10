@@ -4,10 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:personal_injury_networking/global/helper/single_event_widget.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
-import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:provider/provider.dart';
 
@@ -17,12 +15,9 @@ import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../create_event/models/event_model.dart';
 import '../../drawer/view/create_drawer_view.dart';
-import '../../drawer/view/drawer_home.dart';
 import '../../events/view/search_events_view.dart';
 import '../../events_details/view/create_event_details_view.dart';
-import '../../events_details/view/event_details_view.dart';
 import '../../notifications/view/create_notifications_view.dart';
-import '../../notifications/view/notification_view.dart';
 import 'navigation_view.dart';
 
 class HomeScreen extends StatefulWidget {

@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/helper/single_event_widget.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
-import 'package:personal_injury_networking/global/utils/constants.dart';
-import 'package:personal_injury_networking/ui/create_event/view/add_event_view.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:personal_injury_networking/ui/events/view/past_events.dart';
 import 'package:personal_injury_networking/ui/events/view/up_coming_events.dart';
 import 'package:personal_injury_networking/ui/events_details/models/ticket_model.dart';
 import 'package:provider/provider.dart';
-
-import '../../../global/app_buttons/app_primary_button.dart';
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../create_event/models/event_model.dart';
-import '../../events_details/view/create_event_details_view.dart';
-import '../model/all_events_model.dart';
 
 class AllEventScreen extends StatefulWidget {
   const AllEventScreen({super.key});

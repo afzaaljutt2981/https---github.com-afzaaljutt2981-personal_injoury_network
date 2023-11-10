@@ -100,10 +100,11 @@ class AuthController extends ChangeNotifier {
       });
     } catch (e) {
       // Navigator.pop(context);
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
+      // ignore: use_build_context_synchronously
       CustomSnackBar(false).showInSnackBar("Invalid Credentials", context);
-      print(e.toString());
-      print("error is here");
+     
     }
   }
 
@@ -142,8 +143,6 @@ class AuthController extends ChangeNotifier {
     try {
       Functions.showLoaderDialog(context);
           var doc = ref.doc(FirebaseAuth.instance.currentUser!.uid);
-          print(doc.id);
-          print("document Id");
           await doc.update({
             "lastName": lastName,
             "company": companyName,
@@ -155,8 +154,10 @@ class AuthController extends ChangeNotifier {
             "position": position,
             "hobbies":hobbies,
           });
+          // ignore: use_build_context_synchronously
           getUserData(context);
           setSaveChangesButtonStatus(false);
+          // ignore: use_build_context_synchronously
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -165,6 +166,7 @@ class AuthController extends ChangeNotifier {
           notifyListeners();
     } on Exception catch (error) {
       setSaveChangesButtonStatus(false);
+      // ignore: use_build_context_synchronously
       CustomSnackBar(false).showInSnackBar(error.toString(), context);
       notifyListeners();
     }
