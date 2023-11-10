@@ -15,7 +15,6 @@ import 'package:provider/provider.dart';
 
 import '../../../global/utils/app_text_styles.dart';
 import '../../../global/utils/custom_snackbar.dart';
-import '../../forgetPassword/view/verify_identity.dart';
 import '../model/job_position_model.dart';
 
 // ignore: must_be_immutable
@@ -667,7 +666,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.sp), color: Colors.white),
           child: TextFormField(
-            inputFormatters: index ==4 ? [FilteringTextInputFormatter.deny(RegExp(r'\s'))] : null,
+            inputFormatters: index == 4
+                ? [FilteringTextInputFormatter.deny(RegExp(r'\s'))]
+                : null,
             maxLength: maxLength,
             keyboardType: inputType,
             obscureText: obsecureTerxt,
@@ -862,7 +863,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   top: index == 3 || index == 12 || index == 11
                       ? 12.h
                       : index == 8
-                          ? 18.h
+                          ? 12.h
                           : 0.h,
                   right: index == 3 || index == 8 ? 10.w : 5.w),
               border: InputBorder.none,
