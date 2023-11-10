@@ -41,6 +41,7 @@ class _AddEventViewState extends State<AddEventView> {
   DateTime? parseTime;
   DateTime? endParseTime;
   Uint8List? image1;
+
   @override
   Widget build(BuildContext context) {
     String formattedDate = '';
@@ -406,7 +407,7 @@ class _AddEventViewState extends State<AddEventView> {
                           dateTime: selectedDate!,
                           latitude: latitude,
                           longitude: longitude);
-                           // ignore: use_build_context_synchronously
+                      // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                       eventCreated();
                     },
@@ -616,8 +617,7 @@ class _AddEventViewState extends State<AddEventView> {
             setState(() {
               startTime.text = formattedTime; //set the value of text field.
             });
-          } else {
-          }
+          } else {}
         })),
         const SizedBox(
           width: 10,
@@ -638,8 +638,7 @@ class _AddEventViewState extends State<AddEventView> {
             setState(() {
               endTime.text = formattedTime; //set the value of text field.
             });
-          } else {
-          }
+          } else {}
         })),
       ],
     );
