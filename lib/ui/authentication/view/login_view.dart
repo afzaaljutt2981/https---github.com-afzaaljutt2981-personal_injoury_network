@@ -344,7 +344,7 @@ class _LoginViewState extends State<LoginView> {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final result = await TheAppleSignIn.performRequests(
         [AppleIdRequest(requestedScopes: scopes)]);
-
+    print("object");
     switch (result.status) {
       case AuthorizationStatus.authorized:
         final appleIdCredential = result.credential!;
@@ -352,18 +352,22 @@ class _LoginViewState extends State<LoginView> {
         final credential = oAuthProvider.credential(
             idToken: String.fromCharCodes(appleIdCredential.identityToken!));
         final userCredential = await auth.signInWithCredential(credential);
-        if(userCredential.user != null) {
+        if (userCredential.user != null) {
+          print("object4");
           final firebaseUser = userCredential.user!;
           final email = appleIdCredential.email;
-          getUserData(firebaseUser,userEmail: email);
-        if (scopes.contains(Scope.fullName)) {
-          final fullName = appleIdCredential.fullName;
-          if (fullName != null &&
-              fullName.givenName != null &&
-              fullName.familyName != null) {
-            final displayName = '${fullName.givenName} ${fullName.familyName}';
+          getUserData(firebaseUser, userEmail: email);
+          if (scopes.contains(Scope.fullName)) {
+            print('object55');
+            final fullName = appleIdCredential.fullName;
+            if (fullName != null &&
+                fullName.givenName != null &&
+                fullName.familyName != null) {
+              final displayName =
+                  '${fullName.givenName} ${fullName.familyName}';
+            }
           }
-        }}
+        }
         return null;
       case AuthorizationStatus.error:
         throw PlatformException(
@@ -378,65 +382,69 @@ class _LoginViewState extends State<LoginView> {
         throw UnimplementedError();
     }
   }
-  getUserData(User user,{String? userEmail}) async {
-   var res = await  FirebaseFirestore.instance
+
+  getUserData(User user, {String? userEmail}) async {
+    var res = await FirebaseFirestore.instance
         .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid).get();
-   if(res.exists){
-     UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
-       if (user.userName == "") {
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    if (res.exists) {
+      UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
+      if (user.userName == "") {
         // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
                 builder: (_) => SignUpScreen(
-                  screenType: 1,
-                  isUpdate: true,
-                )),
-                (route) => false);
+                      screenType: 1,
+                      isUpdate: true,
+                    )),
+            (route) => false);
       } else {
         // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
                 builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-                (route) => false);
+            (route) => false);
       }
-    // });
-  }else{
-     try {
-       await FirebaseFirestore.instance.collection("users").doc(user.uid).set(
-           UserModel(location: "",
-               position: "",
-               email: userEmail ?? user.email!,
-               firstName: user.displayName ?? "",
-               lastName: "",
-               id: user.uid,
-               reference: "",
-               hobbies: [],
-               followers: [],
-               followings: [],
-               userName: '',
-               phone: 0,
-               userType: "user",
-               company: "",
-               website: "").toJson());
-       Constants.userDisplayName = user.displayName!;
-       Constants.userEmail = userEmail ?? user.email!;
-       Constants.uId = user.uid;
-       // ignore: use_build_context_synchronously
-       Navigator.pushAndRemoveUntil(
-           context,
-           MaterialPageRoute(
-               builder: (_) =>
-                   SignUpScreen(
-                     screenType: 1,
-                     isUpdate: true,
-                   )),
-               (route) => false);
-     } catch (e){
-       // ignore: use_build_context_synchronously
-       CustomSnackBar(false).showInSnackBar(e.toString(), context);
-     }
-   }
-}}
+      // });
+    } else {
+      try {
+        await FirebaseFirestore.instance.collection("users").doc(user.uid).set(
+            UserModel(
+                    location: "",
+                    position: "",
+                    email: userEmail ?? user.email!,
+                    firstName: user.displayName ?? "",
+                    lastName: "",
+                    id: user.uid,
+                    reference: "",
+                    hobbies: [],
+                    followers: [],
+                    followings: [],
+                    userName: '',
+                    phone: 0,
+                    userType: "user",
+                    company: "",
+                    website: "")
+                .toJson());
+        Constants.userDisplayName = user.displayName!;
+        Constants.userEmail = userEmail ?? user.email!;
+        Constants.uId = user.uid;
+        // ignore: use_build_context_synchronously
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (_) => SignUpScreen(
+                      screenType: 1,
+                      isUpdate: true,
+                    )),
+            (route) => false);
+      } catch (e) {
+        // ignore: use_build_context_synchronously
+        CustomSnackBar(false).showInSnackBar(e.toString(), context);
+      }
+    }
+  }
+}
