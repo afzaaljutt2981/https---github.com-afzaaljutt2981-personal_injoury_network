@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +8,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/model/country_state_model.dart';
 import 'package:personal_injury_networking/ui/home/view/navigation_view.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../global/utils/custom_snackbar.dart';
 import '../../../global/utils/functions.dart';
@@ -71,6 +75,7 @@ class AuthController extends ChangeNotifier {
                         from: 1,
                       )));
         }
+        notifyListeners();
       });
     } on Exception catch (error) {
       setSaveChangesButtonStatus(false);
@@ -196,4 +201,61 @@ class AuthController extends ChangeNotifier {
     saveChangesButton = value;
     notifyListeners();
   }
+
+
+
+
+
+
+
+
+
+
+
+
+   String generateNonce([int length = 32]) {
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+        .join();
+  }
+
+  /// Returns the sha256 hash of [input] in hex notation.
+  // String sha256ofString(String input) {
+  //   final bytes = utf8.encode(input);
+  //   final digest = sha256.convert(bytes);
+  //   return digest.toString();
+  // }
+late final FirebaseAuth firebaseAuth;
+  // Future<User> signInWithApple() async {
+
+  //   try {
+  //     final appleCredential = await SignInWithApple.getAppleIDCredential(
+  //       scopes: [
+  //         AppleIDAuthorizationScopes.email,
+  //         AppleIDAuthorizationScopes.fullName,
+  //       ],
+  //     );
+
+  //     print(appleCredential.authorizationCode);
+      // final oauthCredential = OAuthProvider("apple.com").credential(
+      //   idToken: appleCredential.identityToken,
+      // );
+      // final authResult =
+      //     await firebaseAuth.signInWithCredential(oauthCredential);
+
+  //     final displayName =
+  //         '${appleCredential.givenName} ${appleCredential.familyName}';
+  //     final userEmail = '${appleCredential.email}';
+
+  //     final firebaseUser = authResult.user;
+  //     print(displayName);
+
+
+  //     return firebaseUser!;
+  //   } catch (exception) {
+  //     print(exception);
+  //   }
+  // }
 }

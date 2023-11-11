@@ -10,7 +10,7 @@ import '../../../global/utils/app_text_styles.dart';
 
 // ignore: must_be_immutable
 class EventsQrView extends StatefulWidget {
-   EventsQrView({ required this.eventId,  super.key});
+  EventsQrView({required this.eventId, super.key});
   var eventId;
   @override
   State<EventsQrView> createState() => _EventsQrViewState();
@@ -63,6 +63,18 @@ class _EventsQrViewState extends State<EventsQrView> {
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w800)),
               )),
+          Positioned(
+            top: screenHeight * 0.084,
+            left: screenWidth * 0.06,
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+                size: 18.sp,
+              ),
+            ),
+          ),
           Padding(
             padding: EdgeInsets.only(
                 top: screenHeight * 0.82, left: 30.w, right: 30.w),
@@ -75,7 +87,9 @@ class _EventsQrViewState extends State<EventsQrView> {
                   alignment: Alignment.center,
                   duration: const Duration(milliseconds: 200),
                   reverseDuration: const Duration(milliseconds: 200),
-                  child: QRScannerScreen(eventId: widget.eventId,),
+                  child: QRScannerScreen(
+                    eventId: widget.eventId,
+                  ),
                 ),
               );
               // Navigator.push(
