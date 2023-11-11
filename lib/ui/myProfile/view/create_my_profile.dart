@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:provider/provider.dart';
+
 import '../controller/my_profile_controller.dart';
 import 'my_profile.dart';
 

@@ -7,6 +7,7 @@ import 'app_text_styles.dart';
 // ignore: must_be_immutable
 class CustomSnackBar extends StatelessWidget {
   bool okOperation = true;
+
   CustomSnackBar(this.okOperation, {super.key});
 
   void showInSnackBar(String value, BuildContext context) {

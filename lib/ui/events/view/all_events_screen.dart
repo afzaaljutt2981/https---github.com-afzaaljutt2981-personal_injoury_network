@@ -9,6 +9,7 @@ import 'package:personal_injury_networking/ui/events/view/past_events.dart';
 import 'package:personal_injury_networking/ui/events/view/up_coming_events.dart';
 import 'package:personal_injury_networking/ui/events_details/models/ticket_model.dart';
 import 'package:provider/provider.dart';
+
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../create_event/models/event_model.dart';
@@ -75,7 +76,7 @@ class _AllEventScreenState extends State<AllEventScreen>
                   Expanded(
                     child: ListView.builder(
                         physics: const BouncingScrollPhysics(),
-                       itemCount: events.length,
+                        itemCount: events.length,
                         itemBuilder: (context, index) {
                           var model = events[index];
                           return SingleEventWidget(event: model);

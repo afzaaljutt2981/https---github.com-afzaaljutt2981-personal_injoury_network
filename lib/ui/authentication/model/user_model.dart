@@ -15,6 +15,7 @@ class UserModel {
   List<String> hobbies = [];
   List<String> followers = [];
   List<String> followings = [];
+
   UserModel(
       {required this.location,
       required this.position,
@@ -22,39 +23,42 @@ class UserModel {
       required this.firstName,
       required this.lastName,
       required this.id,
-        required this.reference,
+      required this.reference,
       required this.hobbies,
-        required this.followers,
-        required this.followings,
+      required this.followers,
+      required this.followings,
       this.pImage,
       required this.userName,
       required this.phone,
       required this.userType,
       required this.company,
       required this.website});
+
   factory UserModel.fromJson(Map<String, dynamic> json) {
     List hobbies = json['hobbies'] ?? [];
     List followers = json['followers'] ?? [];
     List followings = json['followings'] ?? [];
     return UserModel(
-        userName: json['userName'],
-        location: json['location'],
-        position: json['position'],
-        email: json['email'],
-        id: json['id'],
-        pImage: json['pImage'],
-        firstName: json['firstName'],
-        lastName: json['lastName'],
-        phone: json['phone'],
-        reference: json['reference'],
-        company: json['company'],
-        website: json['website'],
-        userType: json['userType'],
-        hobbies: List.generate(hobbies.length, (index) => hobbies[index]),
-        followings: List.generate(followings.length, (index) => followings[index]),
-      followers:List.generate(followers.length, (index) => followers[index]),
+      userName: json['userName'],
+      location: json['location'],
+      position: json['position'],
+      email: json['email'],
+      id: json['id'],
+      pImage: json['pImage'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      phone: json['phone'],
+      reference: json['reference'],
+      company: json['company'],
+      website: json['website'],
+      userType: json['userType'],
+      hobbies: List.generate(hobbies.length, (index) => hobbies[index]),
+      followings:
+          List.generate(followings.length, (index) => followings[index]),
+      followers: List.generate(followers.length, (index) => followers[index]),
     );
   }
+
   Map<String, dynamic> toJson() {
     return {
       "firstName": firstName,
@@ -66,13 +70,13 @@ class UserModel {
       "id": id,
       "website": website,
       "email": email,
-      "reference":reference,
+      "reference": reference,
       "userType": userType,
       "userName": userName,
       "position": position,
-      "hobbies":hobbies,
-      "followers":followers,
-      "followings":followings
+      "hobbies": hobbies,
+      "followers": followers,
+      "followings": followings
     };
   }
 }

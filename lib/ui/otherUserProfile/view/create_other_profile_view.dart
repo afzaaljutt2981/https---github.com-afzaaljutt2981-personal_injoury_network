@@ -8,8 +8,10 @@ import 'other_user_view.dart';
 class CreateOtherUserProfileView extends StatefulWidget {
   CreateOtherUserProfileView(
       {super.key, required this.participant, required this.currentUser});
+
   UserModel participant;
   UserModel currentUser;
+
   @override
   State<CreateOtherUserProfileView> createState() =>
       _CreateOtherUserProfileViewState();

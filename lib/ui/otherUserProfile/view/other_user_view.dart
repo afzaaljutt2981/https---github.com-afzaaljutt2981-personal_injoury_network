@@ -12,6 +12,7 @@ import 'package:personal_injury_networking/ui/otherUserProfile/view/about_view.d
 import 'package:personal_injury_networking/ui/otherUserProfile/view/events_view.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/view/reviews_view.dart';
 import 'package:provider/provider.dart';
+
 import '../../../global/utils/app_text_styles.dart';
 import '../../create_event/models/event_model.dart';
 import '../../events_details/models/ticket_model.dart';
@@ -19,7 +20,9 @@ import '../../events_details/models/ticket_model.dart';
 // ignore: must_be_immutable
 class OtherUserProfileScreen extends StatefulWidget {
   OtherUserProfileScreen({super.key, required this.currentUser});
+
   UserModel currentUser;
+
   @override
   State<OtherUserProfileScreen> createState() => _OtherUserProfileScreenState();
 }
@@ -27,6 +30,7 @@ class OtherUserProfileScreen extends StatefulWidget {
 class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
     with SingleTickerProviderStateMixin {
   TabController? tabController;
+
   @override
   void initState() {
     tabController = TabController(length: 3, vsync: this);
@@ -39,6 +43,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
   List<EventModel> userEvents = [];
   List<TicketModel> userTickets = [];
   String notifyId = "";
+
   @override
   Widget build(BuildContext context) {
     userEvents = [];
@@ -194,7 +199,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                         .read<OtherUserProfileController>()
                                         .followingTap(
                                             widget.currentUser, user!.id);
-                                            // ignore: use_build_context_synchronously
+                                    // ignore: use_build_context_synchronously
                                     await context
                                         .read<OtherUserProfileController>()
                                         .unFollow(user!.id, notifyId);
@@ -203,14 +208,16 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                 child: Container(
                                   decoration: BoxDecoration(
                                       color: AppColors.kPrimaryColor,
-                                      borderRadius: BorderRadius.circular(7.sp)),
+                                      borderRadius:
+                                          BorderRadius.circular(7.sp)),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
                                         horizontal:
                                             isFollow == false ? 30.w : 23.w,
                                         vertical: 12.h),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         isFollow == false
                                             ? Image(
@@ -241,53 +248,58 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                 ),
                               ),
                             ),
-                            if(followButton == "Following")...[
+                            if (followButton == "Following") ...[
                               SizedBox(
                                 width: 7.w,
                               ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) =>
-                                               SingleChatScreenView(user: user!,)));
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: AppColors.kPrimaryColor,
-                                          width: 1.5.sp),
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(7.sp)),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 24.w, vertical: 10.h),
-                                    child: Row(
-                                      children: [
-                                        Image(
-                                          height: 20.sp,
-                                          width: 20.sp,
-                                          image: const AssetImage(
-                                              'assets/images/message_orgnizer_screen.png'),
-                                        ),
-                                        SizedBox(
-                                          width: 5.w,
-                                        ),
-                                        Text(
-                                          'Messages',
-                                          style: AppTextStyles.josefin(
-                                              style: TextStyle(
-                                                  color: AppColors.kPrimaryColor,
-                                                  fontSize: 16.sp)),
-                                        ),
-                                      ],
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                SingleChatScreenView(
+                                                  user: user!,
+                                                )));
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: AppColors.kPrimaryColor,
+                                            width: 1.5.sp),
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(7.sp)),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 24.w, vertical: 10.h),
+                                      child: Row(
+                                        children: [
+                                          Image(
+                                            height: 20.sp,
+                                            width: 20.sp,
+                                            image: const AssetImage(
+                                                'assets/images/message_orgnizer_screen.png'),
+                                          ),
+                                          SizedBox(
+                                            width: 5.w,
+                                          ),
+                                          Text(
+                                            'Messages',
+                                            style: AppTextStyles.josefin(
+                                                style: TextStyle(
+                                                    color:
+                                                        AppColors.kPrimaryColor,
+                                                    fontSize: 16.sp)),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),],
+                            ],
                           ],
                         ),
                       ),
@@ -338,14 +350,17 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                     ),
                   ),
                 ),
-                if (followButton == "Following" || FirebaseAuth.instance.currentUser!.uid !="") ...[
+                if (followButton == "Following" ||
+                    FirebaseAuth.instance.currentUser!.uid != "") ...[
                   Expanded(
                       child: TabBarView(controller: tabController, children: [
                     OrganizerAbout(
                       user: user!,
                     ),
                     OrganizerEvents(userEvents: userEvents),
-                        OtherUserReviewScreen(userEvents: userEvents,)
+                    OtherUserReviewScreen(
+                      userEvents: userEvents,
+                    )
                   ]))
                 ] else if (followButton == "Follow") ...[
                   const Expanded(
@@ -363,7 +378,8 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
           : const Center(child: CircularProgressIndicator()),
     );
   }
-  setFollowButton(List<NotificationsModel> notifications){
+
+  setFollowButton(List<NotificationsModel> notifications) {
     for (var element in notifications) {
       if (element.senderId == FirebaseAuth.instance.currentUser!.uid &&
           element.status != "Rejected" &&

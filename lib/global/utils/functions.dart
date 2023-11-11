@@ -1,12 +1,9 @@
-import 'dart:typed_data';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebasestorage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebasestorage;
 
 import 'app_strings.dart';
 
@@ -56,7 +53,7 @@ class Functions {
     );
   }
 
-  static Future<String> uploadPic(Uint8List file,String name) async {
+  static Future<String> uploadPic(Uint8List file, String name) async {
     try {
       final firebasestorage.FirebaseStorage _storage =
           firebasestorage.FirebaseStorage.instance;

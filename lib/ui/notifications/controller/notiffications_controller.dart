@@ -10,15 +10,22 @@ import 'package:personal_injury_networking/ui/notifications/model/nitofications_
 import '../../authentication/model/user_model.dart';
 
 class NotificationsController extends ChangeNotifier {
-  NotificationsController(){
+  NotificationsController() {
     getUserNotifications();
   }
+
   CollectionReference user = FirebaseFirestore.instance.collection("users");
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? notificationsStream;
   List<NotificationsModel> notifications = [];
-  getUserNotifications(){
+
+  getUserNotifications() {
     var uId = FirebaseAuth.instance.currentUser!.uid;
-    notificationsStream  = user.doc(uId).collection("notifications").orderBy("time",descending: true).snapshots().listen((event) {
+    notificationsStream = user
+        .doc(uId)
+        .collection("notifications")
+        .orderBy("time", descending: true)
+        .snapshots()
+        .listen((event) {
       notifications = [];
       for (var element in event.docs) {
         notifications.add(NotificationsModel.fromJson(element.data()));
@@ -27,13 +34,10 @@ class NotificationsController extends ChangeNotifier {
     });
     notifyListeners();
   }
+
   followTap(
-      UserModel userModel,
-      String followerId,
-      BuildContext context
-      ) async {
-    final collectionRef =
-    user.doc(userModel.id);
+      UserModel userModel, String followerId, BuildContext context) async {
+    final collectionRef = user.doc(userModel.id);
     var fList = userModel.followers;
 
     if (fList.contains(followerId)) {
@@ -41,29 +45,25 @@ class NotificationsController extends ChangeNotifier {
     } else {
       fList.add(followerId);
     }
-    try{
+    try {
       await collectionRef.update(
-      {
-        "followers": fList,
-      },
-    );
+        {
+          "followers": fList,
+        },
+      );
       fList = [];
-    }catch (e){
-      
+    } catch (e) {
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
-      
+
       // ignore: use_build_context_synchronously
       CustomSnackBar(false).showInSnackBar(e.toString(), context);
     }
   }
-  followingTap(
-      UserModel userModel,
-      BuildContext context
-      ) async {
+
+  followingTap(UserModel userModel, BuildContext context) async {
     String id = FirebaseAuth.instance.currentUser!.uid;
-    final collectionRef =
-    user.doc(userModel.id);
+    final collectionRef = user.doc(userModel.id);
     var fList = userModel.followings;
 
     if (fList.contains(id)) {
@@ -78,38 +78,43 @@ class NotificationsController extends ChangeNotifier {
         },
       );
       fList = [];
-      
+
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
       // ignore: use_build_context_synchronously
       CustomSnackBar(true).showInSnackBar("Request Accepted", context);
-    } catch (e){
+    } catch (e) {
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
       // ignore: use_build_context_synchronously
       CustomSnackBar(false).showInSnackBar(e.toString(), context);
     }
   }
-  respondRequest(String notificationId,String status,BuildContext context) async {
+
+  respondRequest(
+      String notificationId, String status, BuildContext context) async {
     Functions.showLoaderDialog(context);
     var uId = FirebaseAuth.instance.currentUser!.uid;
-    try{
-    await user.doc(uId).collection("notifications").doc(notificationId).update({
-      "status":status
-    });
-    if(status == "Rejected"){
-      // ignore: use_build_context_synchronously
-    Navigator.pop(context);
-    // ignore: use_build_context_synchronously
-    CustomSnackBar(false).showInSnackBar("Request $status", context);
-    }}
-    catch (e){
+    try {
+      await user
+          .doc(uId)
+          .collection("notifications")
+          .doc(notificationId)
+          .update({"status": status});
+      if (status == "Rejected") {
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+        // ignore: use_build_context_synchronously
+        CustomSnackBar(false).showInSnackBar("Request $status", context);
+      }
+    } catch (e) {
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
       // ignore: use_build_context_synchronously
       CustomSnackBar(false).showInSnackBar(e.toString(), context);
     }
   }
+
   @override
   void dispose() {
     super.dispose();

@@ -1,5 +1,3 @@
-
-
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,6 +9,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 // ignore: must_be_immutable
 class QRScannerScreen extends StatefulWidget {
   QRScannerScreen({required this.eventId, super.key});
+
   var eventId;
 
   @override
@@ -103,19 +102,16 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
           }
 
           if (matchFound) {
-             // ignore: use_build_context_synchronously
+            // ignore: use_build_context_synchronously
             Navigator.pop(context);
             showAlertDialog('User is registered');
           } else {
-             // ignore: use_build_context_synchronously
+            // ignore: use_build_context_synchronously
             Navigator.pop(context);
             showAlertDialog('User is not registered');
           }
-        } else {
-        }
-      } catch (_) {
-       
-      }
+        } else {}
+      } catch (_) {}
     });
   }
 

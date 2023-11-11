@@ -12,5 +12,4 @@ class Constants {
       : "AIzaSyCct6Mn9T-U4-wclBHsL7mx2hp1JII8kkA";
 
   static String adminEmail = "Patauma@hotmail.com";
-
 }

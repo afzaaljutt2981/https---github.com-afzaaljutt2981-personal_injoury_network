@@ -12,7 +12,9 @@ import '../../events/controller/events_controller.dart';
 // ignore: must_be_immutable
 class AllFriendsScreen extends StatefulWidget {
   AllFriendsScreen({super.key, required this.user});
+
   UserModel user;
+
   @override
   State<AllFriendsScreen> createState() => _AllFriendsScreenState();
 }
@@ -20,6 +22,7 @@ class AllFriendsScreen extends StatefulWidget {
 class _AllFriendsScreenState extends State<AllFriendsScreen> {
   List<UserModel> friendsList = [];
   List<UserModel> allUsers = [];
+
   @override
   Widget build(BuildContext context) {
     allUsers = [];

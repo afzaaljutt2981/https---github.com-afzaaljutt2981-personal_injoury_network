@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 CountryStateModel countryStateModelFromJson(String str) =>
     CountryStateModel.fromJson(json.decode(str));
 

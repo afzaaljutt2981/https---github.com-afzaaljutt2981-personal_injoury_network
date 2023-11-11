@@ -6,15 +6,24 @@ import 'custom_sized_box.dart';
 
 // ignore: must_be_immutable
 class TextFieldWidget extends StatefulWidget {
-  TextFieldWidget({super.key,required this.controller,
-    required this.index,required this.hintText,
-    required this.obsecureTerxt,required this.identityText,required this.readOnly,this.inputType});
+  TextFieldWidget(
+      {super.key,
+      required this.controller,
+      required this.index,
+      required this.hintText,
+      required this.obsecureTerxt,
+      required this.identityText,
+      required this.readOnly,
+      this.inputType});
+
   String identityText;
-      String hintText;
+  String hintText;
   int index;
-      TextEditingController controller;
-          bool readOnly; bool obsecureTerxt;
+  TextEditingController controller;
+  bool readOnly;
+  bool obsecureTerxt;
   TextInputType? inputType;
+
   @override
   State<TextFieldWidget> createState() => _TextFieldWidgetState();
 }
@@ -51,42 +60,45 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             decoration: InputDecoration(
               suffixIcon: widget.index == 3
                   ? GestureDetector(
-                  onTap: () {},
-                  child: Padding(
-                    padding: EdgeInsets.all(14.sp),
-                    child: Image(
-                        width: 10.sp,
-                        height: 10.sp,
-                        image: const AssetImage(
-                            'assets/images/arrow_down_signup.png')),
-                  ))
+                      onTap: () {},
+                      child: Padding(
+                        padding: EdgeInsets.all(14.sp),
+                        child: Image(
+                            width: 10.sp,
+                            height: 10.sp,
+                            image: const AssetImage(
+                                'assets/images/arrow_down_signup.png')),
+                      ))
                   : widget.index == 11
-                  ? GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      // hidePassword = !hidePassword;
-                    });
-                  },
-                  child: const Icon(
-                    Icons.visibility_off_outlined,
-                    color: Colors.grey,
-                  )
-              )
-                  : widget.index == 12
-                  ? GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      // hideConfirmPassword = !hideConfirmPassword;
-                    });
-                  },
-                  child: const Icon(
-                    Icons.visibility_off_outlined,
-                    color: Colors.grey,
-                  ))
-                  : null,
+                      ? GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              // hidePassword = !hidePassword;
+                            });
+                          },
+                          child: const Icon(
+                            Icons.visibility_off_outlined,
+                            color: Colors.grey,
+                          ))
+                      : widget.index == 12
+                          ? GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  // hideConfirmPassword = !hideConfirmPassword;
+                                });
+                              },
+                              child: const Icon(
+                                Icons.visibility_off_outlined,
+                                color: Colors.grey,
+                              ))
+                          : null,
               contentPadding: EdgeInsets.only(
                   left: 10.w,
-                  top: widget.index == 3 || widget.index == 12 || widget.index == 11 ? 12.h : 0.h,
+                  top: widget.index == 3 ||
+                          widget.index == 12 ||
+                          widget.index == 11
+                      ? 12.h
+                      : 0.h,
                   right: widget.index == 3 ? 10.w : 5.w),
               border: InputBorder.none,
               hintText: widget.hintText,
@@ -97,9 +109,10 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                 ),
               ),
             ),
-            textInputAction: widget.index == 2 || widget.index == 9 || widget.index == 12
-                ? TextInputAction.done
-                : TextInputAction.next,
+            textInputAction:
+                widget.index == 2 || widget.index == 9 || widget.index == 12
+                    ? TextInputAction.done
+                    : TextInputAction.next,
           ),
         ),
         CustomSizeBox(22.h)

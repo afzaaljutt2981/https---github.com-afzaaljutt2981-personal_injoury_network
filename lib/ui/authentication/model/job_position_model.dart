@@ -61,6 +61,5 @@ class JobPositionModel {
     '- Casino'
   ];
 
-  
   static List<PopupMenuItem<String>> hobbiesDropDown = [];
 }

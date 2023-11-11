@@ -9,8 +9,10 @@ import '../controller/AllParticipantsController.dart';
 class CreateAllParticipantsView extends StatefulWidget {
   CreateAllParticipantsView(
       {super.key, required this.users, required this.currentUser});
+
   List<UserModel> users;
   UserModel currentUser;
+
   @override
   State<CreateAllParticipantsView> createState() =>
       _CreateAllParticipantsViewState();

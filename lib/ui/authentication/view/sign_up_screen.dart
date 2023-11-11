@@ -24,6 +24,7 @@ class SignUpScreen extends StatefulWidget {
   int screenType;
 
   bool? isUpdate;
+
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }

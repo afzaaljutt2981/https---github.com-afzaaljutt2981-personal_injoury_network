@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+
 
 class NotificationsModel {
   String id;
@@ -8,6 +8,7 @@ class NotificationsModel {
   int time;
   String status;
   String notificationType;
+
   NotificationsModel({
     required this.id,
     required this.senderId,
@@ -17,7 +18,8 @@ class NotificationsModel {
     required this.time,
     required this.notificationType,
   });
-  factory NotificationsModel.fromJson(Map<String,dynamic> json){
+
+  factory NotificationsModel.fromJson(Map<String, dynamic> json) {
     return NotificationsModel(
         id: json['id'],
         senderId: json['senderId'],
@@ -25,16 +27,16 @@ class NotificationsModel {
         notificationContent: json['notificationContent'],
         time: json['time'],
         status: json['status'],
-        notificationType: json['notificationType']
-    );
+        notificationType: json['notificationType']);
   }
-  Map<String,dynamic> toJson()=>{
-    "id":id,
-    "senderId":senderId,
-    "image":image,
-    "notificationContent":notificationContent,
-    "time":time,
-    "status":status,
-    "notificationType":notificationType
-  };
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "senderId": senderId,
+        "image": image,
+        "notificationContent": notificationContent,
+        "time": time,
+        "status": status,
+        "notificationType": notificationType
+      };
 }

@@ -8,6 +8,7 @@ import 'package:personal_injury_networking/ui/authentication/model/user_model.da
 import 'package:personal_injury_networking/ui/chat_screen/controller/chat_controller.dart';
 import 'package:personal_injury_networking/ui/chat_screen/view/create-picked_image_view.dart';
 import 'package:provider/provider.dart';
+
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../model/chat_model.dart';
@@ -15,7 +16,9 @@ import '../model/chat_model.dart';
 // ignore: must_be_immutable
 class ChatScreen extends StatefulWidget {
   ChatScreen({super.key, required this.user});
+
   UserModel user;
+
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
@@ -24,10 +27,9 @@ TextEditingController textController = TextEditingController();
 bool emplyList = false;
 
 class _ChatScreenState extends State<ChatScreen> {
- 
-
   List<ChatMessage> chats = [];
   Uint8List? image1;
+
   @override
   Widget build(BuildContext context) {
     chats = [];
@@ -118,14 +120,14 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                             ))
                         : ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image(
                               image: NetworkImage(chats[index].messageContent),
                               width: 100,
                               height: 100,
-                          fit: BoxFit.cover,
-                    ),
-                        ),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                   ));
             },
           )),
@@ -284,39 +286,39 @@ class _ChatScreenState extends State<ChatScreen> {
                   )));
     }
   }
-  // Future emojiesPicker() async {
-  //   EmojiPicker(
-  //     textEditingController: textController,
-  //     config: Config(
-  //       columns: 7,
-  //       emojiSizeMax: 32 *
-  //           (foundation.defaultTargetPlatform == TargetPlatform.iOS
-  //               ? 1.30
-  //               : 1.0),
-  //       verticalSpacing: 0,
-  //       horizontalSpacing: 0,
-  //       gridPadding: EdgeInsets.zero,
-  //       initCategory: Category.RECENT,
-  //       bgColor: Color(0xFFF2F2F2),
-  //       indicatorColor: Colors.blue,
-  //       iconColor: Colors.grey,
-  //       iconColorSelected: Colors.blue,
-  //       backspaceColor: Colors.blue,
-  //       skinToneDialogBgColor: Colors.white,
-  //       skinToneIndicatorColor: Colors.grey,
-  //       enableSkinTones: true,
-  //       recentTabBehavior: RecentTabBehavior.RECENT,
-  //       recentsLimit: 28,
-  //       noRecents: const Text(
-  //         'No Recents',
-  //         style: TextStyle(fontSize: 20, color: Colors.black26),
-  //         textAlign: TextAlign.center,
-  //       ), // Needs to be const Widget
-  //       loadingIndicator: const SizedBox.shrink(), // Needs to be const Widget
-  //       tabIndicatorAnimDuration: kTabScrollDuration,
-  //       categoryIcons: const CategoryIcons(),
-  //       buttonMode: ButtonMode.MATERIAL,
-  //     ),
-  //   );
-  // }
+// Future emojiesPicker() async {
+//   EmojiPicker(
+//     textEditingController: textController,
+//     config: Config(
+//       columns: 7,
+//       emojiSizeMax: 32 *
+//           (foundation.defaultTargetPlatform == TargetPlatform.iOS
+//               ? 1.30
+//               : 1.0),
+//       verticalSpacing: 0,
+//       horizontalSpacing: 0,
+//       gridPadding: EdgeInsets.zero,
+//       initCategory: Category.RECENT,
+//       bgColor: Color(0xFFF2F2F2),
+//       indicatorColor: Colors.blue,
+//       iconColor: Colors.grey,
+//       iconColorSelected: Colors.blue,
+//       backspaceColor: Colors.blue,
+//       skinToneDialogBgColor: Colors.white,
+//       skinToneIndicatorColor: Colors.grey,
+//       enableSkinTones: true,
+//       recentTabBehavior: RecentTabBehavior.RECENT,
+//       recentsLimit: 28,
+//       noRecents: const Text(
+//         'No Recents',
+//         style: TextStyle(fontSize: 20, color: Colors.black26),
+//         textAlign: TextAlign.center,
+//       ), // Needs to be const Widget
+//       loadingIndicator: const SizedBox.shrink(), // Needs to be const Widget
+//       tabIndicatorAnimDuration: kTabScrollDuration,
+//       categoryIcons: const CategoryIcons(),
+//       buttonMode: ButtonMode.MATERIAL,
+//     ),
+//   );
+// }
 }

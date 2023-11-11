@@ -22,6 +22,7 @@ class AllUsersChat extends StatefulWidget {
 class _AllUsersChatState extends State<AllUsersChat> {
   List<ChatData> chatUsers = [];
   List<UserModel> allUsers = [];
+
   @override
   Widget build(BuildContext context) {
     chatUsers = [];
@@ -68,25 +69,29 @@ class _AllUsersChatState extends State<AllUsersChat> {
                               UserModel user = allUsers.firstWhere((element) =>
                                   element.id == chatUsers[index].to);
                               DateTime dateTime = chatUsers[index].dateTime;
-                              String fDateTime = DateFormat("HH:mm a").format(dateTime);
+                              String fDateTime =
+                                  DateFormat("HH:mm a").format(dateTime);
                               return GestureDetector(
                                 onTap: () {
                                   Navigator.push(
-                                    context,MaterialPageRoute(builder: (_)=>SingleChatScreenView(user: user))
-                                    // PageTransition(
-                                    //   childCurrent: widget,
-                                    //   type:
-                                    //       PageTransitionType.rightToLeftJoined,
-                                    //   alignment: Alignment.center,
-                                    //   duration:
-                                    //       const Duration(milliseconds: 200),
-                                    //   reverseDuration:
-                                    //       const Duration(milliseconds: 200),
-                                    //   child: ChatScreen(
-                                    //     user: user,
-                                    //   ),
-                                    // ),
-                                  );
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              SingleChatScreenView(user: user))
+                                      // PageTransition(
+                                      //   childCurrent: widget,
+                                      //   type:
+                                      //       PageTransitionType.rightToLeftJoined,
+                                      //   alignment: Alignment.center,
+                                      //   duration:
+                                      //       const Duration(milliseconds: 200),
+                                      //   reverseDuration:
+                                      //       const Duration(milliseconds: 200),
+                                      //   child: ChatScreen(
+                                      //     user: user,
+                                      //   ),
+                                      // ),
+                                      );
                                 },
                                 child: Container(
                                   padding: EdgeInsets.only(
@@ -129,7 +134,8 @@ class _AllUsersChatState extends State<AllUsersChat> {
                                                     ),
                                                     CustomSizeBox(6.h),
                                                     Text(
-                                                      chatUsers[index].lastMessage,
+                                                      chatUsers[index]
+                                                          .lastMessage,
                                                       style: AppTextStyles.josefin(
                                                           style: TextStyle(
                                                               fontWeight:
@@ -166,14 +172,16 @@ class _AllUsersChatState extends State<AllUsersChat> {
                     ),
                   ] else ...[
                     Expanded(
-                        child: Center(child:  Text(
-                          "No chat found" ,
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w200)),
-                        ),))
+                        child: Center(
+                      child: Text(
+                        "No chat found",
+                        style: AppTextStyles.josefin(
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w200)),
+                      ),
+                    ))
                   ]
                 ],
               ));

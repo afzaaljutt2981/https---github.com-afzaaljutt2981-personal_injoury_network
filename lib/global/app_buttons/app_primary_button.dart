@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../utils/app_colors.dart';
 
 // ignore: must_be_immutable
@@ -6,6 +7,7 @@ class GetButton extends StatelessWidget {
   double height;
   final VoidCallback onTap;
   Widget? buttonText;
+
   GetButton(this.height, this.onTap, this.buttonText, {Key? key})
       : super(key: key);
 

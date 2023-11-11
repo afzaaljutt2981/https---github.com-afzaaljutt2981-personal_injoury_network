@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
@@ -100,7 +99,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30.sp),
                     child: GetButton(50.h, () {
-                      if(FirebaseAuth.instance.currentUser == null) {
+                      if (FirebaseAuth.instance.currentUser == null) {
                         Navigator.push(
                           context,
                           PageTransition(
@@ -121,11 +120,12 @@ class _SelectionScreenState extends State<SelectionScreen> {
                             alignment: Alignment.center,
                             duration: const Duration(milliseconds: 200),
                             reverseDuration: const Duration(milliseconds: 200),
-                            child:  BottomNavigationScreen(selectedIndex: 0,),
+                            child: BottomNavigationScreen(
+                              selectedIndex: 0,
+                            ),
                           ),
                         );
                       }
-               
                     },
                         Text(
                           "Get Started",

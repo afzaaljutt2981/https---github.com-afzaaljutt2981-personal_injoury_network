@@ -106,10 +106,10 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                 if (FirebaseAuth.instance.currentUser?.email !=
                     Constants.adminEmail)
                   BottomNavigationBarItem(
-                  icon: ImageIcon(
-                      AssetImage('assets/images/chat_icon_home_b.png')),
-                  label: "Messages",
-                ),
+                    icon: ImageIcon(
+                        AssetImage('assets/images/chat_icon_home_b.png')),
+                    label: "Messages",
+                  ),
                 BottomNavigationBarItem(
                   icon:
                       ImageIcon(AssetImage('assets/images/qr_icon_home_b.png')),

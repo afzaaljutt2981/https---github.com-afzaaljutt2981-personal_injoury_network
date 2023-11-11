@@ -14,6 +14,7 @@ class EventsController extends ChangeNotifier {
     getAllEvents();
     getUserBookedEvents();
   }
+
   CollectionReference ref = FirebaseFirestore.instance.collection("events");
   CollectionReference users = FirebaseFirestore.instance.collection("users");
   StreamSubscription<QuerySnapshot<Object?>>? usersStream;
@@ -23,8 +24,9 @@ class EventsController extends ChangeNotifier {
   List<TicketModel> userBookedEvents = [];
   List<EventModel> allEvents = [];
   List<UserModel> allUsers = [];
+
   getAllUsers() {
-   usersStream = users.snapshots().listen((event) {
+    usersStream = users.snapshots().listen((event) {
       allUsers = [];
       for (var element in event.docs) {
         allUsers
@@ -48,7 +50,7 @@ class EventsController extends ChangeNotifier {
 
   getUserBookedEvents() {
     if (FirebaseAuth.instance.currentUser != null) {
-     userEventsStream =  users
+      userEventsStream = users
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection("tickets")
           .snapshots()

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../utils/app_colors.dart';
 
 // ignore: must_be_immutable
@@ -6,6 +7,7 @@ class GetwhiteButton extends StatelessWidget {
   double height;
   final VoidCallback onTap;
   Widget? buttonText;
+
   GetwhiteButton(this.height, this.onTap, this.buttonText, {Key? key})
       : super(key: key);
 
@@ -28,7 +30,7 @@ class GetwhiteButton extends StatelessWidget {
             color: Colors.white),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-             splashFactory: NoSplash.splashFactory,
+            splashFactory: NoSplash.splashFactory,
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
           ),

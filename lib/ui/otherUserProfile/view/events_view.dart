@@ -44,7 +44,7 @@ class OrganizerEvents extends StatelessWidget {
             });
   }
 
-  Widget eventBox(EventModel event){
+  Widget eventBox(EventModel event) {
     DateTime date = DateTime.fromMillisecondsSinceEpoch(event.dateTime);
     String fDate = DateFormat("d MMM- EEEE").format(date);
     DateTime startTime = DateTime.fromMillisecondsSinceEpoch(event.startTime);
@@ -76,13 +76,11 @@ class OrganizerEvents extends StatelessWidget {
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(20.sp),
                     image: DecorationImage(
-                        image: NetworkImage(event.pImage),
-                        fit: BoxFit.cover)),
+                        image: NetworkImage(event.pImage), fit: BoxFit.cover)),
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(
-                      left: 20.w, right: 10.w, top: 20.h),
+                  padding: EdgeInsets.only(left: 20.w, right: 10.w, top: 20.h),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,30 +108,27 @@ class OrganizerEvents extends StatelessWidget {
                       Constants.userType == 'user'
                           ? const SizedBox()
                           : Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF0AFF31)
-                                  .withOpacity(0.24),
-                              borderRadius:
-                              BorderRadius.circular(20.sp),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(8.sp),
-                              child: Text(
-                                'Upcoming',
-                                style: AppTextStyles.josefin(
-                                    style: TextStyle(
-                                        color: const Color(
-                                            0xFF17DF1F),
-                                        fontSize: 12.sp)),
-                              ),
-                            ),
-                          )
-                        ],
-                      )
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF0AFF31)
+                                        .withOpacity(0.24),
+                                    borderRadius: BorderRadius.circular(20.sp),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.sp),
+                                    child: Text(
+                                      'Upcoming',
+                                      style: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              color: const Color(0xFF17DF1F),
+                                              fontSize: 12.sp)),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
                     ],
                   ),
                 ),

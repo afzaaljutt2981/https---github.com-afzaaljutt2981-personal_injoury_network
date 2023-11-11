@@ -7,7 +7,6 @@ import '../../../global/app_buttons/white_background_button.dart';
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
-import '../../../global/utils/functions.dart';
 import '../controller/forget_password_controller.dart';
 
 // ignore: must_be_immutable

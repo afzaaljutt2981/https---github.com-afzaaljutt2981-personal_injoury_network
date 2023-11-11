@@ -10,6 +10,7 @@ class EventModel {
   late String uId;
   double latitude;
   double longitude;
+
   EventModel({
     required this.endTime,
     required this.startTime,
@@ -22,8 +23,9 @@ class EventModel {
     required this.longitude,
     required this.latitude,
     required this.uId,
-});
-  factory EventModel.fromJson(Map<String,dynamic> json){
+  });
+
+  factory EventModel.fromJson(Map<String, dynamic> json) {
     return EventModel(
         endTime: json['endTime'],
         startTime: json['startTime'],
@@ -33,19 +35,22 @@ class EventModel {
         title: json['title'],
         latitude: json['latitude'],
         longitude: json['longitude'],
-        dateTime: json['dateTime'], pImage:json['pImage'], uId: json['uId']);
+        dateTime: json['dateTime'],
+        pImage: json['pImage'],
+        uId: json['uId']);
   }
-  Map<String,dynamic> toJson()=>{
-    "id":id,
-    "endTime":endTime,
-    "startTime":startTime,
-    "address":address,
-    "description":description,
-    "title":title,
-    "dateTime":dateTime,
-    "latitude":latitude,
-    "longitude":longitude,
-    "pImage":pImage,
-    "uId":uId
-  };
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "endTime": endTime,
+        "startTime": startTime,
+        "address": address,
+        "description": description,
+        "title": title,
+        "dateTime": dateTime,
+        "latitude": latitude,
+        "longitude": longitude,
+        "pImage": pImage,
+        "uId": uId
+      };
 }

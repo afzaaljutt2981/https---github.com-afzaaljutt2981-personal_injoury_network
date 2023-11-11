@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -11,11 +10,14 @@ import '../../create_event/models/event_model.dart';
 
 // ignore: must_be_immutable
 class OtherUserReviewScreen extends StatefulWidget {
-   OtherUserReviewScreen({super.key,required this.userEvents});
-List<EventModel> userEvents;
+  OtherUserReviewScreen({super.key, required this.userEvents});
+
+  List<EventModel> userEvents;
+
   @override
   State<OtherUserReviewScreen> createState() => _OtherUserReviewScreenState();
 }
+
 class _OtherUserReviewScreenState extends State<OtherUserReviewScreen> {
   @override
   Widget build(BuildContext context) {
@@ -137,14 +139,14 @@ class _OtherUserReviewScreenState extends State<OtherUserReviewScreen> {
                     );
             });
   }
-  Widget eventBox(EventModel model){
+
+  Widget eventBox(EventModel model) {
     DateTime date = DateTime.fromMillisecondsSinceEpoch(model.dateTime);
     String fDate = DateFormat("d MMM- EEEE").format(date);
     DateTime startTime = DateTime.fromMillisecondsSinceEpoch(model.startTime);
     String fStartTime = DateFormat("HH:mm a").format(startTime);
     return Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: 15.w, vertical: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.sp),
@@ -170,17 +172,14 @@ class _OtherUserReviewScreenState extends State<OtherUserReviewScreen> {
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(20.sp),
                     image: DecorationImage(
-                        image: NetworkImage(model.pImage),
-                        fit: BoxFit.cover)),
+                        image: NetworkImage(model.pImage), fit: BoxFit.cover)),
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(
-                      left: 20.w, right: 10.w, top: 20.h),
+                  padding: EdgeInsets.only(left: 20.w, right: 10.w, top: 20.h),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
                         width: 10.w,
@@ -204,8 +203,7 @@ class _OtherUserReviewScreenState extends State<OtherUserReviewScreen> {
                       ),
                       CustomSizeBox(5.h),
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           RatingStars(
                             value: 0,

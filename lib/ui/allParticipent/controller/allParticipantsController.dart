@@ -1,5 +1,3 @@
 import 'package:flutter/material.dart';
 
-class AllParticipantsController extends ChangeNotifier {
-
-}
+class AllParticipantsController extends ChangeNotifier {}

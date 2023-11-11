@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,6 +9,7 @@ import 'package:personal_injury_networking/global/utils/custom_snackbar.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
 import 'package:provider/provider.dart';
+
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../../global/utils/functions.dart';
@@ -60,6 +62,7 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
   bool imageEditAble = false;
   final textFieldController =
       List.generate(7, (i) => TextEditingController(), growable: true);
+
   @override
   Widget build(BuildContext context) {
     user = context.watch<MyProfileController>().user;

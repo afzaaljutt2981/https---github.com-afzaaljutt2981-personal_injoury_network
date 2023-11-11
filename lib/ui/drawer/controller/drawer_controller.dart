@@ -1,5 +1,3 @@
 import 'package:flutter/material.dart';
 
-class MyDrawerController extends ChangeNotifier {
-
-}
+class MyDrawerController extends ChangeNotifier {}

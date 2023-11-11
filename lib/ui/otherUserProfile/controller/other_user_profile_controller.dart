@@ -9,65 +9,77 @@ import '../../events_details/models/ticket_model.dart';
 import '../../notifications/model/nitofications_model.dart';
 
 class OtherUserProfileController extends ChangeNotifier {
-  OtherUserProfileController({String? userId}){
-    if(userId != null){
-    getOtherUserData(userId);
-    getUserEvents(userId);
-    getOtherUserNotifications(userId);
+  OtherUserProfileController({String? userId}) {
+    if (userId != null) {
+      getOtherUserData(userId);
+      getUserEvents(userId);
+      getOtherUserNotifications(userId);
     }
   }
-CollectionReference user = FirebaseFirestore.instance.collection("users");
+
+  CollectionReference user = FirebaseFirestore.instance.collection("users");
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? notificationsStream;
-UserModel? userModel;
-List<NotificationsModel> notifications = [];
-List<TicketModel> userTickets = [];
-getOtherUserNotifications(String userId){
-  notificationsStream  = user.doc(userId).collection("notifications").snapshots().listen((event) {
-    for (var element in event.docs) {
-      notifications.add(NotificationsModel.fromJson(element.data()));
-    }
-    notifyListeners();
-  });
-}
-  getOtherUserData(String userId){
+  UserModel? userModel;
+  List<NotificationsModel> notifications = [];
+  List<TicketModel> userTickets = [];
+
+  getOtherUserNotifications(String userId) {
+    notificationsStream = user
+        .doc(userId)
+        .collection("notifications")
+        .snapshots()
+        .listen((event) {
+      for (var element in event.docs) {
+        notifications.add(NotificationsModel.fromJson(element.data()));
+      }
+      notifyListeners();
+    });
+  }
+
+  getOtherUserData(String userId) {
     user.doc(userId).snapshots().listen((event) {
-      userModel = UserModel.fromJson(event.data() as Map<String,dynamic>);
+      userModel = UserModel.fromJson(event.data() as Map<String, dynamic>);
     });
     notifyListeners();
   }
-  getUserEvents(String userId){
+
+  getUserEvents(String userId) {
     user.doc(userId).collection("tickets").snapshots().listen((event) {
       for (var element in event.docs) {
         userTickets.add(TicketModel.fromJson(element.data()));
       }
       notifyListeners();
     });
-
   }
+
   sendFollowRequest(String userId) {
     var doc = user.doc(userId).collection("notifications").doc();
     var senderId = FirebaseAuth.instance.currentUser!.uid;
     doc.set(NotificationsModel(
-        id: doc.id,
-        senderId: senderId,
-        image: "",
-        notificationContent: "",
-        time: DateTime.now().millisecondsSinceEpoch,
-        notificationType: "Follow", status: 'Pending')
+            id: doc.id,
+            senderId: senderId,
+            image: "",
+            notificationContent: "",
+            time: DateTime.now().millisecondsSinceEpoch,
+            notificationType: "Follow",
+            status: 'Pending')
         .toJson());
   }
-  unFollow(String userId,String notificationId) async {
-   await user.doc(userId).collection("notifications").doc(notificationId).update(
-        {
-          "status":"unFollowed"
-        });
+
+  unFollow(String userId, String notificationId) async {
+    await user
+        .doc(userId)
+        .collection("notifications")
+        .doc(notificationId)
+        .update({"status": "unFollowed"});
   }
+
   followTap(
-      UserModel userModel,
-      ) {
+    UserModel userModel,
+  ) {
     String cId = FirebaseAuth.instance.currentUser!.uid;
     final collectionRef =
-    FirebaseFirestore.instance.collection("users").doc(userModel.id);
+        FirebaseFirestore.instance.collection("users").doc(userModel.id);
     var fList = userModel.followers;
 
     if (fList.contains(cId)) {
@@ -91,13 +103,9 @@ getOtherUserNotifications(String userId){
     });
   }
 
-  followingTap(
-      UserModel userModel,
-      String uId
-      ) {
+  followingTap(UserModel userModel, String uId) {
     String id = FirebaseAuth.instance.currentUser!.uid;
-    final collectionRef =
-    user.doc(id);
+    final collectionRef = user.doc(id);
     var fList = userModel.followings;
 
     if (fList.contains(uId)) {

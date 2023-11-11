@@ -1,5 +1,3 @@
 import 'package:flutter/material.dart';
 
-class AllFriendsController extends ChangeNotifier {
-
-}
+class AllFriendsController extends ChangeNotifier {}

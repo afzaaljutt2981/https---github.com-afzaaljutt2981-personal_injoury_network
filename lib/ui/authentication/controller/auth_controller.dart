@@ -1,14 +1,11 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/model/country_state_model.dart';
 import 'package:personal_injury_networking/ui/home/view/navigation_view.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../global/utils/custom_snackbar.dart';
 import '../../../global/utils/functions.dart';
@@ -97,7 +94,8 @@ class AuthController extends ChangeNotifier {
           if (user != null) {
             if (FirebaseAuth.instance.currentUser?.emailVerified == true) {
               Constants.userType = user?.userType ?? "";
-              Constants.userName = user?.firstName ?? "" + (user?.lastName ?? "");
+              Constants.userName =
+                  user?.firstName ?? "" + (user?.lastName ?? "");
               Constants.userPosition = user?.position ?? "";
               Navigator.pushAndRemoveUntil(
                   context,
@@ -106,7 +104,8 @@ class AuthController extends ChangeNotifier {
                   (route) => false);
             } else {
               Constants.userType = user?.userType ?? "";
-              Constants.userName = user?.firstName ?? "" + (user?.lastName ?? "");
+              Constants.userName =
+                  user?.firstName ?? "" + (user?.lastName ?? "");
               Constants.userPosition = user?.position ?? "";
               Navigator.pushAndRemoveUntil(
                   context,
@@ -130,7 +129,6 @@ class AuthController extends ChangeNotifier {
       Navigator.pop(context);
       // ignore: use_build_context_synchronously
       CustomSnackBar(false).showInSnackBar("Invalid Credentials", context);
-     
     }
   }
 
@@ -154,42 +152,43 @@ class AuthController extends ChangeNotifier {
       }
     });
   }
+
   Future<void> updateUser(
-      BuildContext context, {
-        required String lastName,
-        required String companyName,
-        required String website,
-        required String phone,
-        required String position,
-        required String location,
-        required String reference,
-        required List<String> hobbies,
-        required String userName,
-      }) async {
+    BuildContext context, {
+    required String lastName,
+    required String companyName,
+    required String website,
+    required String phone,
+    required String position,
+    required String location,
+    required String reference,
+    required List<String> hobbies,
+    required String userName,
+  }) async {
     try {
       Functions.showLoaderDialog(context);
-          var doc = ref.doc(FirebaseAuth.instance.currentUser!.uid);
-          await doc.update({
-            "lastName": lastName,
-            "company": companyName,
-            "location": location,
-            "phone": int.parse(phone),
-            "website": website,
-            "reference":reference,
-            "userName": userName,
-            "position": position,
-            "hobbies":hobbies,
-          });
-          // ignore: use_build_context_synchronously
-          getUserData(context);
-          setSaveChangesButtonStatus(false);
-          // ignore: use_build_context_synchronously
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-                  (route) => false);
-          notifyListeners();
+      var doc = ref.doc(FirebaseAuth.instance.currentUser!.uid);
+      await doc.update({
+        "lastName": lastName,
+        "company": companyName,
+        "location": location,
+        "phone": int.parse(phone),
+        "website": website,
+        "reference": reference,
+        "userName": userName,
+        "position": position,
+        "hobbies": hobbies,
+      });
+      // ignore: use_build_context_synchronously
+      getUserData(context);
+      setSaveChangesButtonStatus(false);
+      // ignore: use_build_context_synchronously
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+          (route) => false);
+      notifyListeners();
     } on Exception catch (error) {
       setSaveChangesButtonStatus(false);
       // ignore: use_build_context_synchronously
@@ -197,23 +196,13 @@ class AuthController extends ChangeNotifier {
       notifyListeners();
     }
   }
+
   setSaveChangesButtonStatus(bool value) {
     saveChangesButton = value;
     notifyListeners();
   }
 
-
-
-
-
-
-
-
-
-
-
-
-   String generateNonce([int length = 32]) {
+  String generateNonce([int length = 32]) {
     const charset =
         '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
     final random = Random.secure();
@@ -227,35 +216,34 @@ class AuthController extends ChangeNotifier {
   //   final digest = sha256.convert(bytes);
   //   return digest.toString();
   // }
-late final FirebaseAuth firebaseAuth;
-  // Future<User> signInWithApple() async {
+  late final FirebaseAuth firebaseAuth;
+// Future<User> signInWithApple() async {
 
-  //   try {
-  //     final appleCredential = await SignInWithApple.getAppleIDCredential(
-  //       scopes: [
-  //         AppleIDAuthorizationScopes.email,
-  //         AppleIDAuthorizationScopes.fullName,
-  //       ],
-  //     );
+//   try {
+//     final appleCredential = await SignInWithApple.getAppleIDCredential(
+//       scopes: [
+//         AppleIDAuthorizationScopes.email,
+//         AppleIDAuthorizationScopes.fullName,
+//       ],
+//     );
 
-  //     print(appleCredential.authorizationCode);
-      // final oauthCredential = OAuthProvider("apple.com").credential(
-      //   idToken: appleCredential.identityToken,
-      // );
-      // final authResult =
-      //     await firebaseAuth.signInWithCredential(oauthCredential);
+//     print(appleCredential.authorizationCode);
+// final oauthCredential = OAuthProvider("apple.com").credential(
+//   idToken: appleCredential.identityToken,
+// );
+// final authResult =
+//     await firebaseAuth.signInWithCredential(oauthCredential);
 
-  //     final displayName =
-  //         '${appleCredential.givenName} ${appleCredential.familyName}';
-  //     final userEmail = '${appleCredential.email}';
+//     final displayName =
+//         '${appleCredential.givenName} ${appleCredential.familyName}';
+//     final userEmail = '${appleCredential.email}';
 
-  //     final firebaseUser = authResult.user;
-  //     print(displayName);
+//     final firebaseUser = authResult.user;
+//     print(displayName);
 
-
-  //     return firebaseUser!;
-  //   } catch (exception) {
-  //     print(exception);
-  //   }
-  // }
+//     return firebaseUser!;
+//   } catch (exception) {
+//     print(exception);
+//   }
+// }
 }

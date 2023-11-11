@@ -1,21 +1,18 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/ui/authentication/view/sign_up_screen.dart';
-import 'package:personal_injury_networking/ui/forgetPassword/view/verify_identity.dart';
 import 'package:personal_injury_networking/ui/home/view/navigation_view.dart';
 import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
 import 'package:provider/provider.dart';
 
 import '../../global/helper/custom_sized_box.dart';
-import '../authentication/controller/auth_controller.dart';
 import '../authentication/model/user_model.dart';
-import '../forgetPassword/view/create_verify_identity_view.dart';
 import '../selesction_screen/selection_screen.dart';
 
 class SplashScreen extends StatefulWidget {

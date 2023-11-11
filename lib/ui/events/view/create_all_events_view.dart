@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../controller/events_controller.dart';
 import 'all_events_screen.dart';
 

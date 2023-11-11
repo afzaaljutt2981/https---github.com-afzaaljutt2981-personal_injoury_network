@@ -271,19 +271,20 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  try{
-                                  Functions.showLoaderDialog(context);
-                                  await FirebaseAuth.instance.signOut();
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => const LoginView()),
-                                      (route) => false);
-                                }catch(e){
+                                  try {
+                                    Functions.showLoaderDialog(context);
+                                    await FirebaseAuth.instance.signOut();
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => const LoginView()),
+                                        (route) => false);
+                                  } catch (e) {
                                     // ignore: use_build_context_synchronously
                                     Navigator.pop(context);
-                                  }},
+                                  }
+                                },
                                 child: Align(
                                   alignment: Alignment.bottomCenter,
                                   child: Padding(

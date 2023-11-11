@@ -12,9 +12,12 @@ import '../../otherUserProfile/view/create_other_profile_view.dart';
 
 // ignore: must_be_immutable
 class AllParticipantsView extends StatefulWidget {
-  AllParticipantsView({super.key, required this.users,required this.currentUser});
+  AllParticipantsView(
+      {super.key, required this.users, required this.currentUser});
+
   List<UserModel> users;
   UserModel currentUser;
+
   @override
   State<AllParticipantsView> createState() => _AllParticipantsViewState();
 }

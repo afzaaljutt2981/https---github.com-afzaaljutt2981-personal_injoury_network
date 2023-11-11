@@ -13,7 +13,6 @@ import '../../../global/utils/constants.dart';
 import '../../../global/utils/functions.dart';
 import '../models/address_model.dart';
 
-
 // ignore: must_be_immutable
 class SelectLocation extends StatefulWidget {
   Color primary;
@@ -137,7 +136,10 @@ class _SelectLocationState extends State<SelectLocation> {
             child: Padding(
               padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
               child: Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(12),color: Colors.white,),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.white,
+                ),
                 margin: EdgeInsets.symmetric(
                     horizontal: width * 0.03, vertical: height * 0.01),
                 // decoration: Constants.shadowDecoration(),
@@ -180,8 +182,7 @@ class _SelectLocationState extends State<SelectLocation> {
                   shape: const StadiumBorder(),
                 ),
                 onPressed: () {
-                  if (latLng == null ||
-                      searchResults == "Search Address") {
+                  if (latLng == null || searchResults == "Search Address") {
                     Functions.showSnackBar(
                         context, AppStrings.pleaseSelectALocationToContinue);
                   } else {
@@ -207,7 +208,6 @@ class _SelectLocationState extends State<SelectLocation> {
               ),
             ),
           ),
-
         ],
       ),
     );
@@ -217,7 +217,7 @@ class _SelectLocationState extends State<SelectLocation> {
     var googleGeocoding = gc.GoogleGeocoding(Constants.mapKey);
     var l = gc.LatLon(latLng!.latitude, latLng!.longitude);
     gc.GeocodingResponse? result =
-    await googleGeocoding.geocoding.getReverse(l);
+        await googleGeocoding.geocoding.getReverse(l);
 
     String address = "";
     searchResults = "";
@@ -289,7 +289,7 @@ class _SelectLocationState extends State<SelectLocation> {
       country = "";
       postalCode = "";
       PlacesDetailsResponse detail =
-      await _places.getDetailsByPlaceId(p.placeId!);
+          await _places.getDetailsByPlaceId(p.placeId!);
       var element = detail.result;
       for (var element in element.addressComponents) {
         var types = element.types;

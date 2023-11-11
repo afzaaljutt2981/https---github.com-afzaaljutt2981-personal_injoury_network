@@ -6,17 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:personal_injury_networking/ui/chat_screen/model/chat_data.dart';
 
 class UserChatData extends ChangeNotifier {
-  UserChatData(){
-getUserChats();
+  UserChatData() {
+    getUserChats();
   }
+
   CollectionReference messages =
-  FirebaseFirestore.instance.collection("messages");
+      FirebaseFirestore.instance.collection("messages");
   StreamSubscription<QuerySnapshot<Object?>>? chatStream;
   List<ChatData> userChatsData = [];
+
   //comment
-  getUserChats(){
+  getUserChats() {
     var uId = FirebaseAuth.instance.currentUser!.uid;
-   chatStream = messages.doc(uId).collection("chats").snapshots().listen((event) {
+    chatStream =
+        messages.doc(uId).collection("chats").snapshots().listen((event) {
       userChatsData = [];
       for (var element in event.docs) {
         userChatsData.add(ChatData.fromJson(element.data()));
@@ -24,6 +27,7 @@ getUserChats();
       notifyListeners();
     });
   }
+
   @override
   void dispose() {
     super.dispose();

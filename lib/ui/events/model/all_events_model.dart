@@ -1,4 +1,3 @@
-
 class AllEventsModel {
   String image;
   String eventName;

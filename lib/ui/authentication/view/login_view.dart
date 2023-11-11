@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -358,7 +356,7 @@ class _LoginViewState extends State<LoginView> {
   //   );
   //   final FirebaseAuth auth = FirebaseAuth.instance;
   //   final result = auth.signInWithCredential(oauthCredential);
-     
+
   //   // auth.signInWithProvider(credential);
   //   // getUserData(auth.currentUser!);
   //   // } catch (e) {
@@ -371,7 +369,7 @@ class _LoginViewState extends State<LoginView> {
   //throw UnimplementedError();
 
   Future<User?> signInWithApple({List<Scope> scopes = const []}) async {
-  final FirebaseAuth auth = FirebaseAuth.instance;
+    final FirebaseAuth auth = FirebaseAuth.instance;
     final result = await TheAppleSignIn.performRequests(
         [AppleIdRequest(requestedScopes: scopes)]);
     print("object");

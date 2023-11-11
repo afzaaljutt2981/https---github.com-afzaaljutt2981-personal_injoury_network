@@ -22,12 +22,14 @@ class NotificationView extends StatefulWidget {
 class _NotificationViewState extends State<NotificationView> {
   List<UserModel> allUsers = [];
   List<NotificationsModel> notiList = [];
+
   String formatDateTime(DateTime dateTime) {
     final dateFormat = DateFormat('E, h:mm a');
     return dateFormat.format(dateTime);
   }
 
   UserModel? currentUser;
+
   @override
   Widget build(BuildContext context) {
     notiList = [];

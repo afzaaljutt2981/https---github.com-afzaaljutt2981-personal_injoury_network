@@ -17,6 +17,7 @@ import 'package:personal_injury_networking/ui/events/controller/events_controlle
 import 'package:personal_injury_networking/ui/events_details/controller/event_details_controller.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/view/create_other_profile_view.dart';
 import 'package:provider/provider.dart';
+
 import '../../allParticipent/view/participants_view.dart';
 import '../../create_event/models/event_model.dart';
 import '../../notifications/model/nitofications_model.dart';
@@ -27,7 +28,9 @@ import 'events_qr_view.dart';
 // ignore: must_be_immutable
 class EventsDetailsView extends StatefulWidget {
   EventsDetailsView({super.key, required this.event});
+
   EventModel event;
+
   @override
   State<EventsDetailsView> createState() => _EventsDetailsViewState();
 }
@@ -47,6 +50,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   String notifyId = "";
   List<DateTime> weekDates = [];
   String buttonName = "Register";
+
   @override
   Widget build(BuildContext context) {
     eventTickets = [];
@@ -156,16 +160,16 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(10.sp),
                                     child: Image(
-                                      image: NetworkImage(widget.event
-                                          .pImage), //'assets/images/background_events.png'
+                                      image: NetworkImage(widget.event.pImage),
+                                      //'assets/images/background_events.png'
                                       fit: BoxFit.cover,
                                     ),
                                   )
                                 : ClipRRect(
                                     borderRadius: BorderRadius.circular(10.sp),
                                     child: Image(
-                                      image: NetworkImage(widget.event
-                                          .pImage), // 'assets/images/background_events_admin.png'
+                                      image: NetworkImage(widget.event.pImage),
+                                      // 'assets/images/background_events_admin.png'
                                       fit: BoxFit.cover,
                                     ),
                                   ),

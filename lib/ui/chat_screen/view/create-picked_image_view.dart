@@ -8,9 +8,12 @@ import 'package:provider/provider.dart';
 import '../../authentication/model/user_model.dart';
 
 class CreatePickedImageView extends StatefulWidget {
-   CreatePickedImageView({super.key,required this.chatUser,required this.image});
+  CreatePickedImageView(
+      {super.key, required this.chatUser, required this.image});
+
   Uint8List image;
   UserModel chatUser;
+
   @override
   State<CreatePickedImageView> createState() => _CreatePickedImageViewState();
 }
@@ -19,7 +22,7 @@ class _CreatePickedImageViewState extends State<CreatePickedImageView> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (_)=>ChatController(),
+        create: (_) => ChatController(),
         child: ShowPickedImage(image: widget.image, chatUser: widget.chatUser));
   }
 }

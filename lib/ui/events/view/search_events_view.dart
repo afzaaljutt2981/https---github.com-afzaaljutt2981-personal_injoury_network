@@ -9,8 +9,10 @@ import '../../create_event/models/event_model.dart';
 
 // ignore: must_be_immutable
 class SearchEventScreen extends StatefulWidget {
-  SearchEventScreen({super.key,required this.events});
-List<EventModel> events;
+  SearchEventScreen({super.key, required this.events});
+
+  List<EventModel> events;
+
   @override
   State<SearchEventScreen> createState() => _SearchEventScreenState();
 }
@@ -18,26 +20,30 @@ List<EventModel> events;
 TextEditingController searchcontroller = TextEditingController();
 
 class _SearchEventScreenState extends State<SearchEventScreen> {
-@override
-void initState() {
+  @override
+  void initState() {
     super.initState();
     sEvents = widget.events;
   }
-  List<EventModel> sEvents= [];
-List<EventModel> searchEventsByTitle(List<EventModel> eventList, String searchTerm) {
-  // Create an empty list to store the matching events.
-  List<EventModel> matchingEvents = [];
 
-  // Iterate through the eventList and check if the title contains the searchTerm.
-  for (EventModel event in eventList) {
-    if (event.title.toLowerCase().contains(searchTerm.toLowerCase())) {
-      matchingEvents.add(event);
+  List<EventModel> sEvents = [];
+
+  List<EventModel> searchEventsByTitle(
+      List<EventModel> eventList, String searchTerm) {
+    // Create an empty list to store the matching events.
+    List<EventModel> matchingEvents = [];
+
+    // Iterate through the eventList and check if the title contains the searchTerm.
+    for (EventModel event in eventList) {
+      if (event.title.toLowerCase().contains(searchTerm.toLowerCase())) {
+        matchingEvents.add(event);
+      }
     }
+
+    // Return the list of matching events.
+    return matchingEvents;
   }
 
-  // Return the list of matching events.
-  return matchingEvents;
-}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,11 +120,12 @@ List<EventModel> searchEventsByTitle(List<EventModel> eventList, String searchTe
                               width: 200.w,
                               child: TextFormField(
                                 controller: searchcontroller,
-                                 onChanged: (v){
+                                onChanged: (v) {
                                   setState(() {
-                                    sEvents = searchEventsByTitle(widget.events, v);
+                                    sEvents =
+                                        searchEventsByTitle(widget.events, v);
                                   });
-                                   },
+                                },
                                 maxLines: 1,
 
                                 //  controller: controller,
@@ -159,8 +166,10 @@ List<EventModel> searchEventsByTitle(List<EventModel> eventList, String searchTe
                 itemCount: sEvents.length,
                 itemBuilder: (context, index) {
                   var model = sEvents[index];
-                  DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(model.dateTime);
-                  DateTime startTime =  DateTime.fromMillisecondsSinceEpoch(model.startTime);
+                  DateTime dateTime =
+                      DateTime.fromMillisecondsSinceEpoch(model.dateTime);
+                  DateTime startTime =
+                      DateTime.fromMillisecondsSinceEpoch(model.startTime);
                   String dateFormat = DateFormat("d MMM-EEE").format(dateTime);
                   String startFormat = DateFormat("HH:mm a").format(startTime);
                   return Padding(

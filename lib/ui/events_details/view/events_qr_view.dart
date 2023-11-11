@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/ui/events_details/view/scaning_screen.dart';
@@ -11,7 +10,9 @@ import '../../../global/utils/app_text_styles.dart';
 // ignore: must_be_immutable
 class EventsQrView extends StatefulWidget {
   EventsQrView({required this.eventId, super.key});
+
   var eventId;
+
   @override
   State<EventsQrView> createState() => _EventsQrViewState();
 }

@@ -1,16 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
-import 'package:personal_injury_networking/ui/notifications/controller/notiffications_controller.dart';
 import 'package:personal_injury_networking/ui/notifications/model/nitofications_model.dart';
-import 'package:provider/provider.dart';
 
-import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
-import '../controller/term_and_conditions_controller.dart';
 
 class TermAndConditionsView extends StatefulWidget {
   const TermAndConditionsView({super.key});
@@ -22,12 +16,14 @@ class TermAndConditionsView extends StatefulWidget {
 class _TermAndConditionsViewState extends State<TermAndConditionsView> {
   List<UserModel> allUsers = [];
   List<NotificationsModel> notiList = [];
+
   String formatDateTime(DateTime dateTime) {
     final dateFormat = DateFormat('E, h:mm a');
     return dateFormat.format(dateTime);
   }
 
   UserModel? currentUser;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,11 +56,8 @@ class _TermAndConditionsViewState extends State<TermAndConditionsView> {
             ),
           ),
         ),
-        body:Center(
-                child: CircularProgressIndicator(),
-              )
-    );
+        body: Center(
+          child: CircularProgressIndicator(),
+        ));
   }
-
 }
-

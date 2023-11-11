@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<EventModel> events = [];
   UserModel? user;
   List<UserModel> allUsers = [];
+
   @override
   Widget build(BuildContext context) {
     events = [];
