@@ -153,15 +153,21 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                               borderRadius: BorderRadius.circular(10.sp),
                             ),
                             child: Constants.userType == 'user'
-                                ? const Image(
-                                    image: AssetImage(
-                                        'assets/images/background_events.png'),
-                                    fit: BoxFit.contain,
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.sp),
+                                    child: Image(
+                                      image: NetworkImage(widget.event
+                                          .pImage), //'assets/images/background_events.png'
+                                      fit: BoxFit.cover,
+                                    ),
                                   )
-                                : const Image(
-                                    image: AssetImage(
-                                        'assets/images/background_events_admin.png'),
-                                    fit: BoxFit.contain,
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.sp),
+                                    child: Image(
+                                      image: NetworkImage(widget.event
+                                          .pImage), // 'assets/images/background_events_admin.png'
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                           ),
                           Padding(
@@ -355,11 +361,11 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         await context
                             .read<EventDetailsController>()
                             .addUserTicket(widget.event.id);
-                             // ignore: use_build_context_synchronously
+                        // ignore: use_build_context_synchronously
                         Navigator.pop(context);
-                         // ignore: use_build_context_synchronously
+                        // ignore: use_build_context_synchronously
                         Navigator.pop(context);
-                         // ignore: use_build_context_synchronously
+                        // ignore: use_build_context_synchronously
                         Functions.showSnackBar(
                             context, "Event register successfully");
                       }

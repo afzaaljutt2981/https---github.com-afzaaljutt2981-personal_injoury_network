@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -294,7 +296,7 @@ class _LoginViewState extends State<LoginView> {
                             )),
               contentPadding: EdgeInsets.only(
                   left: 10.w,
-                  top: index == 0 ? 0.h : 14.h,
+                  top: index == 0 ? 0.h : 12.sp,
                   right: index == 0 ? 10.w : 0.h),
               border: InputBorder.none,
               hintText: hintText,
@@ -340,8 +342,35 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
+  //Future<User?>
+  // signInWithApple() async {
+  //   //  try {
+  //   //  final FirebaseAuth auth = FirebaseAuth.instance;
+  //   final credential = await SignInWithApple.getAppleIDCredential(
+  //     scopes: [
+  //       AppleIDAuthorizationScopes.email,
+  //       AppleIDAuthorizationScopes.fullName,
+  //     ],
+  //   );
+  //   final oauthCredential = OAuthProvider("apple.com").credential(
+  //     idToken: credential.identityToken,
+  //   );
+  //   final FirebaseAuth auth = FirebaseAuth.instance;
+  //   final result = auth.signInWithCredential(oauthCredential);
+     
+  //   // auth.signInWithProvider(credential);
+  //   // getUserData(auth.currentUser!);
+  //   // } catch (e) {
+  //   //   print(e.toString());
+  //   //   // ignore: use_build_context_synchronously
+  //   //   // CustomSnackBar(false).showInSnackBar(e.toString(), context);
+  //   // }
+  // }
+
+  //throw UnimplementedError();
+
   Future<User?> signInWithApple({List<Scope> scopes = const []}) async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
     final result = await TheAppleSignIn.performRequests(
         [AppleIdRequest(requestedScopes: scopes)]);
     print("object");
