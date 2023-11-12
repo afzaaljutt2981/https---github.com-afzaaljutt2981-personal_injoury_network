@@ -19,8 +19,7 @@ class AuthController extends ChangeNotifier {
   CollectionReference ref = FirebaseFirestore.instance.collection("users");
   UserModel? user;
 
-  void signup(
-    BuildContext context, {
+  void signup(BuildContext context, {
     required String firstName,
     required String lastName,
     required String companyName,
@@ -69,19 +68,18 @@ class AuthController extends ChangeNotifier {
                       VerifyIdentity(
                         email: email.toString(),
                         from: 1,
-                      )));
+                      )), (route) => false);
           notifyListeners();
-        }
-      })
 
+      }});
     } on Exception catch (error) {
       CustomSnackBar(false).showInSnackBar(error.toString(), context);
       notifyListeners();
     }
   }
 
-  Future<void> signIn(
-      String email, String password, BuildContext context) async {
+  Future<void> signIn(String email, String password,
+      BuildContext context) async {
     try {
       Functions.showLoaderDialog(context);
       await FirebaseAuth.instance
@@ -100,7 +98,7 @@ class AuthController extends ChangeNotifier {
                   context,
                   MaterialPageRoute(
                       builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-                  (route) => false);
+                      (route) => false);
             } else {
               Constants.userType = user?.userType ?? "";
               Constants.userName =
@@ -109,11 +107,12 @@ class AuthController extends ChangeNotifier {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => CreateVerifyIdentityView(
+                      builder: (_) =>
+                          CreateVerifyIdentityView(
                             email: "",
                             from: 2,
                           )),
-                  (route) => false);
+                      (route) => false);
             }
           }
         } else {
@@ -142,7 +141,7 @@ class AuthController extends ChangeNotifier {
               context,
               MaterialPageRoute(
                   builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-              (route) => false);
+                  (route) => false);
         }
       } else {
         await FirebaseAuth.instance.signOut();
@@ -152,45 +151,44 @@ class AuthController extends ChangeNotifier {
     });
   }
 
-  Future<void> updateUser(
-      BuildContext context, {
-        required String firstName,
-        required String lastName,
-        required String companyName,
-        required String email,
-        required String website,
-        required String phone,
-        required String position,
-        required String location,
-        required String reference,
-        required List<String> hobbies,
-        required String userName,
-      }) async {
+  Future<void> updateUser(BuildContext context, {
+    required String firstName,
+    required String lastName,
+    required String companyName,
+    required String email,
+    required String website,
+    required String phone,
+    required String position,
+    required String location,
+    required String reference,
+    required List<String> hobbies,
+    required String userName,
+  }) async {
     try {
       Functions.showLoaderDialog(context);
-          var doc = ref.doc(FirebaseAuth.instance.currentUser!.uid);
-          await doc.update({
-            "firstName": firstName,
-            "lastName": lastName,
-            "company": companyName,
-            "email": email,
-            "location": location,
-            "phone": int.parse(phone),
-            "website": website,
-            "reference":reference,
-            "userName": userName,
-            "position": position,
-            "hobbies":hobbies,
-          });
-          // ignore: use_build_context_synchronously
-          getUserData(context);
-          // ignore: use_build_context_synchronously
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-                  (route) => false);
-          notifyListeners();
+      var doc = ref.doc(FirebaseAuth.instance.currentUser!.uid);
+      await doc.update({
+        "firstName": firstName,
+        "lastName": lastName,
+        "company": companyName,
+        "email": email,
+        "location": location,
+        "phone": int.parse(phone),
+        "website": website,
+        "reference": reference,
+        "userName": userName,
+        "position": position,
+        "hobbies": hobbies,
+      });
+      // ignore: use_build_context_synchronously
+      getUserData(context);
+      // ignore: use_build_context_synchronously
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+              (route) => false);
+      notifyListeners();
     } on Exception catch (error) {
       // ignore: use_build_context_synchronously
       CustomSnackBar(false).showInSnackBar(error.toString(), context);
