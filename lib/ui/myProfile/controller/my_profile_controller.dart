@@ -38,7 +38,7 @@ class MyProfileController extends ChangeNotifier {
   }
   updateUser({
     String? pImage,
-    required String userName,
+    required String firstName,
     required String company,
     required String position,
     required String cellPhone,
@@ -47,7 +47,7 @@ class MyProfileController extends ChangeNotifier {
 }) async {
     String docId = FirebaseAuth.instance.currentUser!.uid;
     await ref.doc(docId).update({
-      "userName":userName,
+      "firstName":firstName,
       "company":company,
       "position":position,
       "phone":int.parse(cellPhone),

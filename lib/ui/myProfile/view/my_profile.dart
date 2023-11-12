@@ -69,7 +69,7 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
       textFieldController[2].text = user!.website;
       textFieldController[3].text = user!.phone.toString();
       textFieldController[4].text = user!.location;
-      textFieldController[5].text = user!.userName;
+      textFieldController[5].text = user!.firstName;
     }
     return Scaffold(
         backgroundColor: const Color(0xFFf5f4ff),
@@ -179,7 +179,7 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      user!.userName,
+                                      user!.firstName,
                                       style: AppTextStyles.josefin(
                                           style: TextStyle(
                                               color: const Color(0xFF27261E),
@@ -314,7 +314,7 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                 await context
                                     .read<MyProfileController>()
                                     .updateUser(
-                                        userName: textFieldController[5].text,
+                                        firstName: textFieldController[5].text,
                                         company: textFieldController[0].text,
                                         position: textFieldController[1].text,
                                         cellPhone: textFieldController[3].text,

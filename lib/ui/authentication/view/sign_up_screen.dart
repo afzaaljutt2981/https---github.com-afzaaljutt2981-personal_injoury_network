@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
@@ -11,6 +10,7 @@ import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:personal_injury_networking/ui/authentication/model/country_state_model.dart'
     as cs_model;
+import 'package:personal_injury_networking/ui/authentication/view/create_auth_view.dart';
 import 'package:provider/provider.dart';
 import '../../../global/helper/api_functions.dart';
 import '../../../global/utils/app_text_styles.dart';
@@ -72,10 +72,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState() {
     widget.screenType == 1
-        ? textFieldController[0].text = Constants.userDisplayName.toString()
+        ? textFieldController[0].text =
+            Constants.userDisplayName.toString() != ''
+                ? Constants.userDisplayName.toString()
+                : ''
         : textFieldController[0].text = '';
     widget.screenType == 1
-        ? textFieldController[5].text = Constants.userEmail.toString()
+        ? textFieldController[5].text = Constants.userEmail.toString() != ''
+            ? Constants.userDisplayName.toString()
+            : ''
         : textFieldController[5].text = '';
     loadUserPositions();
     loadUserHobbies();
@@ -118,7 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String selectedCountry = 'Select Country';
   String selectedState = 'Select State';
 
-  willPopCalled() {
+  willPopCalled() async {
     if (index > 1) {
       setState(() {
         index = index - 1;
@@ -128,13 +133,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
         curve: Curves.ease,
       );
     } else {
-      Navigator.pop(context);
+      if (widget.screenType == 1) {
+        await FirebaseAuth.instance.signOut();
+        // ignore: use_build_context_synchronously
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const CreateAuthenticationView()),
+            (route) => false);
+      } else {
+        Navigator.pop(context);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    bool saveChangesButton = context.watch<AuthController>().saveChangesButton;
     return WillPopScope(
       onWillPop: () {
         return willPopCalled();
@@ -216,155 +230,135 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           : index == 2
                               ? 10.h
                               : 25.h),
-                  child: GetwhiteButton(
-                    50.sp,
-                    () async {
-                      if (index == 1) {
-                        if (textFieldController[0].text.isEmpty &&
-                            widget.isUpdate == null) {
-                          CustomSnackBar(false).showInSnackBar(
-                              'please enter first name', context);
-                          return;
-                        } else if (textFieldController[1].text.isEmpty) {
-                          CustomSnackBar(false).showInSnackBar(
-                              "please enter last name", context);
-                          return;
-                        } else if (textFieldController[2].text.isEmpty) {
-                          CustomSnackBar(false).showInSnackBar(
-                              "please enter company name", context);
-                          return;
-                        } else if (textFieldController[3].text.isEmpty) {
-                          CustomSnackBar(false).showInSnackBar(
-                              "please select your position or job", context);
-                          return;
+                  child: GetwhiteButton(50.sp, () async {
+                    if (index == 1) {
+                      if (textFieldController[0].text.isEmpty &&
+                              widget.isUpdate == null ||
+                          textFieldController[0].text == '') {
+                        CustomSnackBar(false)
+                            .showInSnackBar('please enter first name', context);
+                        return;
+                      } else if (textFieldController[1].text.isEmpty) {
+                        CustomSnackBar(false)
+                            .showInSnackBar("please enter last name", context);
+                        return;
+                      } else if (textFieldController[2].text.isEmpty) {
+                        CustomSnackBar(false).showInSnackBar(
+                            "please enter company name", context);
+                        return;
+                      } else if (textFieldController[3].text.isEmpty) {
+                        CustomSnackBar(false).showInSnackBar(
+                            "please select your position or job", context);
+                        return;
+                      } else {
+                        setState(() {
+                          index = index + 1;
+                          controller.nextPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                          );
+                        });
+                      }
+                    } else if (index == 2) {
+                      if (textFieldController[4].text.isEmpty) {
+                        CustomSnackBar(false)
+                            .showInSnackBar('please enter cell phone', context);
+                        return;
+                      } else if (widget.isUpdate == null &&
+                          (textFieldController[5].text.isEmpty ||
+                              !EmailValidator.validate(
+                                  textFieldController[5].text) ||
+                              textFieldController[5].text == '')) {
+                        CustomSnackBar(false).showInSnackBar(
+                            "please enter valid email", context);
+                        return;
+                      } else if (selectedCountry == " Select Country") {
+                        CustomSnackBar(false).showInSnackBar(
+                            "please select your country", context);
+                        return;
+                      } else if (selectedState == " Select State") {
+                        CustomSnackBar(false).showInSnackBar(
+                            "please select your state", context);
+                        return;
+                      } else if (textFieldController[8].text.isEmpty ||
+                          selectedHobbies.length < 3) {
+                        CustomSnackBar(false).showInSnackBar(
+                            "Please select atleast 3 hobbies!", context);
+                        return;
+                      } else if (textFieldController[9].text.isEmpty) {
+                        CustomSnackBar(false).showInSnackBar(
+                            "please enter your reference", context);
+                        return;
+                      } else {
+                        setState(() {
+                          index = index + 1;
+                          controller.nextPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                          );
+                        });
+                      }
+                    }
+                    if (index == 3) {
+                      if (textFieldController[10].text.isEmpty) {
+                        CustomSnackBar(false)
+                            .showInSnackBar('please enter user name', context);
+                        return;
+                      } else if (textFieldController[11].text.length < 6 &&
+                          widget.screenType == 0) {
+                        CustomSnackBar(false).showInSnackBar(
+                            'Password is too short! must be greater than 6 digits',
+                            context);
+                        return;
+                      } else if (textFieldController[11].text !=
+                              textFieldController[12].text &&
+                          widget.screenType == 0) {
+                        CustomSnackBar(false).showInSnackBar(
+                            'password and confirm password should be same!',
+                            context);
+                        return;
+                      } else {
+                        if (FirebaseAuth.instance.currentUser != null) {
+                          context.read<AuthController>().updateUser(context,
+                              firstName: textFieldController[0].text,
+                              email: textFieldController[5].text,
+                              lastName: textFieldController[1].text,
+                              companyName: textFieldController[2].text,
+                              website: textFieldController[6].text,
+                              phone: textFieldController[4].text,
+                              position: textFieldController[3].text,
+                              location:
+                                  "Pakistan, Lahore", // "$selectedState,$selectedCountry",
+                              reference: textFieldController[9].text,
+                              hobbies: selectedHobbies,
+                              userName: textFieldController[10].text);
                         } else {
-                          setState(() {
-                            index = index + 1;
-                            controller.nextPage(
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeInOut,
-                            );
-                          });
-                        }
-                      } else if (index == 2) {
-                        if (textFieldController[4].text.isEmpty) {
-                          CustomSnackBar(false).showInSnackBar(
-                              'please enter cell phone', context);
-                          return;
-                        } else if (widget.isUpdate == null &&
-                            (textFieldController[5].text.isEmpty ||
-                                !EmailValidator.validate(
-                                    textFieldController[5].text))) {
-                          CustomSnackBar(false).showInSnackBar(
-                              "please enter valid email", context);
-                          return;
-                        } else if (selectedCountry == "Select Country") {
-                          CustomSnackBar(false).showInSnackBar(
-                              "please select your country", context);
-                          return;
-                        } else if (selectedState == "Select State") {
-                          CustomSnackBar(false).showInSnackBar(
-                              "please select your state", context);
-                          return;
-                        } else if (textFieldController[8].text.isEmpty ||
-                            selectedHobbies.length < 3) {
-                          CustomSnackBar(false).showInSnackBar(
-                              "Please select atleast 3 hobbies!", context);
-                          return;
-                        } else if (textFieldController[9].text.isEmpty) {
-                          CustomSnackBar(false).showInSnackBar(
-                              "please enter your reference", context);
-                          return;
-                        } else {
-                          setState(() {
-                            index = index + 1;
-                            controller.nextPage(
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeInOut,
-                            );
-                          });
+                          context.read<AuthController>().signup(context,
+                              firstName: textFieldController[0].text,
+                              lastName: textFieldController[1].text,
+                              companyName: textFieldController[2].text,
+                              position: textFieldController[3].text,
+                              phone: textFieldController[4].text,
+                              email: textFieldController[5].text,
+                              website: textFieldController[6].text,
+                              location: "$selectedState,$selectedCountry",
+                              reference: textFieldController[9].text,
+                              password: textFieldController[11].text,
+                              hobbies: selectedHobbies,
+                              userName: textFieldController[10].text);
                         }
                       }
-                      if (index == 3) {
-                        if (textFieldController[10].text.isEmpty) {
-                          CustomSnackBar(false).showInSnackBar(
-                              'please enter user name', context);
-                          return;
-                        } else if (textFieldController[11].text.length < 6 &&
-                            widget.isUpdate == null) {
-                          CustomSnackBar(false).showInSnackBar(
-                              'Password is too short! must be greater than 6 digits',
-                              context);
-                          return;
-                        } else if (textFieldController[11].text !=
-                                textFieldController[12].text &&
-                            widget.isUpdate == null) {
-                          CustomSnackBar(false).showInSnackBar(
-                              'password and confirm password should be same!',
-                              context);
-                          return;
-                        } else {
-                          context
-                              .read<AuthController>()
-                              .setSaveChangesButtonStatus(true);
-                          if (FirebaseAuth.instance.currentUser != null) {
-                            context.read<AuthController>().updateUser(context,
-                                lastName: textFieldController[1].text,
-                                companyName: textFieldController[2].text,
-                                website: textFieldController[6].text,
-                                phone: textFieldController[4].text,
-                                position: textFieldController[3].text,
-                                location: "$selectedState,$selectedCountry",
-                                reference: textFieldController[9].text,
-                                hobbies: selectedHobbies,
-                                userName: textFieldController[10].text);
-                          } else {
-                            context.read<AuthController>().signup(context,
-                                firstName: textFieldController[0].text,
-                                lastName: textFieldController[1].text,
-                                companyName: textFieldController[2].text,
-                                position: textFieldController[3].text,
-                                phone: textFieldController[4].text,
-                                email: textFieldController[5].text,
-                                website: textFieldController[6].text,
-                                location: "$selectedState,$selectedCountry",
-                                reference: textFieldController[9].text,
-                                password: textFieldController[11].text,
-                                hobbies: selectedHobbies,
-                                userName: textFieldController[10].text);
-                          }
-                          // Navigator.push(
-                          //   context,
-                          //   PageTransition(
-                          //     childCurrent: widget,
-                          //     type: PageTransitionType.leftToRight,
-                          //     alignment: Alignment.center,
-                          //     duration: const Duration(milliseconds: 200),
-                          //     reverseDuration:
-                          //         const Duration(milliseconds: 200),
-                          //     child: BottomNavigationScreen(
-                          //       selectedIndex: 0,
-                          //     ),
-                          //   ),
-                          // );
-                        }
-                      }
-                    },
-                    saveChangesButton == false
-                        ? Text(
-                            index < 3 ? "Next" : "Save",
-                            style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                color: AppColors.kPrimaryColor,
-                                fontSize: 18.sp,
-                              ),
-                            ),
-                          )
-                        : SpinKitCircle(
-                            color: Colors.white,
-                            size: shortestSide > 600 ? 16.sp : 20,
+                    }
+                  },
+                      Text(
+                        index < 3 ? "Next" : "Save",
+                        style: AppTextStyles.josefin(
+                          style: TextStyle(
+                            color: AppColors.kPrimaryColor,
+                            fontSize: 18.sp,
                           ),
-                  ),
+                        ),
+                      )),
                 ),
                 index == 3
                     ? Center(
@@ -504,7 +498,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Column(
         children: [
           textField('First Name', 'Jon', 0, textFieldController[0],
-              widget.isUpdate ?? false, false),
+              Constants.userDisplayName.toString() == '' ? false : true, false),
           textField(
               'Last Name', 'Methon', 1, textFieldController[1], false, false),
           textField('Company', 'Enter Company name', 2, textFieldController[2],
@@ -538,7 +532,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               false, false,
               inputType: TextInputType.number, maxLength: 12),
           textField('Email', 'abc@gmail.com', 5, textFieldController[5],
-              widget.isUpdate ?? false, false),
+              Constants.userEmail.toString() == '' ? false : true, false),
           textField('Website (Optional)', 'Enter Website name', 6,
               textFieldController[6], false, false),
           Text(
@@ -627,10 +621,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         children: [
           textField('Username', 'Enter username', 10, textFieldController[10],
               false, false),
-          if (widget.isUpdate == null)
-            textField('Password', 'xxxxxxxxx', 11, textFieldController[11],
-                false, hidePassword),
-          if (widget.isUpdate == null)
+          widget.screenType == 0
+              ? textField('Password', 'xxxxxxxxx', 11, textFieldController[11],
+                  false, hidePassword)
+              : const SizedBox(),
+          if (widget.screenType == 0)
             textField('Confirm Password', 'xxxxxxxxx', 12,
                 textFieldController[12], false, hideConfirmPassword),
           CustomSizeBox(20.h)
@@ -658,6 +653,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.sp), color: Colors.white),
           child: TextFormField(
+            onChanged: (value) {
+              print(value.toString());
+            },
             inputFormatters: index == 4
                 ? [FilteringTextInputFormatter.deny(RegExp(r'\s'))]
                 : null,
@@ -858,7 +856,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               contentPadding: EdgeInsets.only(
                   left: 10.w,
                   top: index == 3 || index == 12 || index == 11 || index == 8
-                      ? 12.h
+                      ? 11.h
                       : 0.h,
                   right: index == 3 || index == 8 ? 10.w : 5.w),
               border: InputBorder.none,

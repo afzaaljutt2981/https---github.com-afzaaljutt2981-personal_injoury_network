@@ -28,9 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3)).then((value) async {
-      if (FirebaseAuth.instance.currentUser != null) {
-        await Provider.of<MyProfileController>(context, listen: false)
-            .getUserData();
+      if (FirebaseAuth.instance.currentUser != null) {        
         getUserData();
         // ignore: use_build_context_synchronously
       } else {
