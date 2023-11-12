@@ -13,6 +13,7 @@ import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:personal_injury_networking/ui/authentication/view/sign_up_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
@@ -126,19 +127,6 @@ class _LoginViewState extends State<LoginView> {
                         textFieldController[0].text,
                         textFieldController[1].text,
                         context);
-                    // Navigator.push(
-                    //   context,
-                    //   PageTransition(
-                    //     childCurrent: widget,
-                    //     type: PageTransitionType.rightToLeft,
-                    //     alignment: Alignment.center,
-                    //     duration: const Duration(milliseconds: 200),
-                    //     reverseDuration: const Duration(milliseconds: 200),
-                    //     child: BottomNavigationScreen(
-                    //       selectedIndex: 0,
-                    //     ),
-                    //   ),
-                    // );
                   }
                 },
                     Text(
@@ -166,7 +154,12 @@ class _LoginViewState extends State<LoginView> {
                     signInWithGoogle();
                   }),
                   loginGoogleApple('assets/images/apple_login.png', onTap: () {
-                    signInWithApple();
+                    if (Platform.isIOS) {
+                      signInWithApple();
+                    } else {
+                      CustomSnackBar(false)
+                          .showInSnackBar('Error platform'.toString(), context);
+                    }
                   })
                 ],
               ),
@@ -341,38 +334,10 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
-  //Future<User?>
-  // signInWithApple() async {
-  //   //  try {
-  //   //  final FirebaseAuth auth = FirebaseAuth.instance;
-  //   final credential = await SignInWithApple.getAppleIDCredential(
-  //     scopes: [
-  //       AppleIDAuthorizationScopes.email,
-  //       AppleIDAuthorizationScopes.fullName,
-  //     ],
-  //   );
-  //   final oauthCredential = OAuthProvider("apple.com").credential(
-  //     idToken: credential.identityToken,
-  //   );
-  //   final FirebaseAuth auth = FirebaseAuth.instance;
-  //   final result = auth.signInWithCredential(oauthCredential);
-
-  //   // auth.signInWithProvider(credential);
-  //   // getUserData(auth.currentUser!);
-  //   // } catch (e) {
-  //   //   print(e.toString());
-  //   //   // ignore: use_build_context_synchronously
-  //   //   // CustomSnackBar(false).showInSnackBar(e.toString(), context);
-  //   // }
-  // }
-
-  //throw UnimplementedError();
-
   Future<User?> signInWithApple({List<Scope> scopes = const []}) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final result = await TheAppleSignIn.performRequests(
         [AppleIdRequest(requestedScopes: scopes)]);
-    print("object");
     switch (result.status) {
       case AuthorizationStatus.authorized:
         final appleIdCredential = result.credential!;
@@ -381,20 +346,9 @@ class _LoginViewState extends State<LoginView> {
             idToken: String.fromCharCodes(appleIdCredential.identityToken!));
         final userCredential = await auth.signInWithCredential(credential);
         if (userCredential.user != null) {
-          print("object4");
           final firebaseUser = userCredential.user!;
           final email = appleIdCredential.email;
           getUserData(firebaseUser, userEmail: email);
-          if (scopes.contains(Scope.fullName)) {
-            print('object55');
-            final fullName = appleIdCredential.fullName;
-            if (fullName != null &&
-                fullName.givenName != null &&
-                fullName.familyName != null) {
-              final displayName =
-                  '${fullName.givenName} ${fullName.familyName}';
-            }
-          }
         }
         return null;
       case AuthorizationStatus.error:
@@ -420,14 +374,14 @@ class _LoginViewState extends State<LoginView> {
       UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
       if (user.userName == "") {
         // ignore: use_build_context_synchronously
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (_) => SignUpScreen(
-                      screenType: 1,
-                      isUpdate: true,
-                    )),
-            (route) => false);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => SignUpScreen(
+                    screenType: 1,
+                    isUpdate: true,
+                  )),
+        );
       } else {
         // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(
@@ -443,7 +397,7 @@ class _LoginViewState extends State<LoginView> {
             UserModel(
                     location: "",
                     position: "",
-                    email: userEmail ?? user.email!,
+                    email: userEmail ?? user.email ?? '',
                     firstName: user.displayName ?? "",
                     lastName: "",
                     id: user.uid,
@@ -457,18 +411,18 @@ class _LoginViewState extends State<LoginView> {
                     company: "",
                     website: "")
                 .toJson());
-        Constants.userDisplayName = user.displayName!;
-        Constants.userEmail = userEmail ?? user.email!;
+        Constants.userDisplayName = user.displayName ?? '';
+        Constants.userEmail = userEmail ?? user.email ?? "";
         Constants.uId = user.uid;
         // ignore: use_build_context_synchronously
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (_) => SignUpScreen(
-                      screenType: 1,
-                      isUpdate: true,
-                    )),
-            (route) => false);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => SignUpScreen(
+                    screenType: 1,
+                    isUpdate: Platform.isIOS ? false : true,
+                  )),
+        );
       } catch (e) {
         // ignore: use_build_context_synchronously
         CustomSnackBar(false).showInSnackBar(e.toString(), context);
