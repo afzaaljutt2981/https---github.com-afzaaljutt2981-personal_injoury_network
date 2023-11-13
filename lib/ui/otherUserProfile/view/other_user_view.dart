@@ -338,7 +338,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                     ),
                   ),
                 ),
-                if (followButton == "Following" || FirebaseAuth.instance.currentUser!.uid !="") ...[
+                if (followButton == "Following" || FirebaseAuth.instance.currentUser!.uid == user!.id) ...[
                   Expanded(
                       child: TabBarView(controller: tabController, children: [
                     OrganizerAbout(

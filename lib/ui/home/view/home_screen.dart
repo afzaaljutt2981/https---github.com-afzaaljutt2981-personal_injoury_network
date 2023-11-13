@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
       user = allUsers.firstWhere(
           (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
     }
-    if (Constants.userType == "user") {
+    if (user != null && user!.userType == "user") {
       events = context.watch<EventsController>().allEvents;
     } else if (FirebaseAuth.instance.currentUser != null) {
       events = context

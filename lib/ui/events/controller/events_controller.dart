@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:personal_injury_networking/global/utils/custom_snackbar.dart';
+import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/events_details/models/ticket_model.dart';
 
 import '../../authentication/model/user_model.dart';
 import '../../create_event/models/event_model.dart';
+import '../../notifications/model/nitofications_model.dart';
 
 class EventsController extends ChangeNotifier {
   EventsController() {
@@ -24,7 +27,7 @@ class EventsController extends ChangeNotifier {
   List<EventModel> allEvents = [];
   List<UserModel> allUsers = [];
   getAllUsers() {
-   usersStream = users.snapshots().listen((event) {
+    usersStream = users.snapshots().listen((event) {
       allUsers = [];
       for (var element in event.docs) {
         allUsers
@@ -48,7 +51,7 @@ class EventsController extends ChangeNotifier {
 
   getUserBookedEvents() {
     if (FirebaseAuth.instance.currentUser != null) {
-     userEventsStream =  users
+      userEventsStream = users
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection("tickets")
           .snapshots()
@@ -61,6 +64,35 @@ class EventsController extends ChangeNotifier {
     }
   }
 
+  sendInvite(String userId, EventModel event, context) async {
+    try {
+      Functions.showLoaderDialog(context);
+      var doc = users.doc(userId).collection("notifications").doc();
+      var senderId = FirebaseAuth.instance.currentUser!.uid;
+      await doc.set(NotificationsModel(
+              id: doc.id,
+              senderId: senderId,
+              image: "",
+              eId: event.id,
+              notificationContent: "",
+              time: DateTime.now().millisecondsSinceEpoch,
+              notificationType: "Invite",
+              status: '')
+          .toJson());
+      await updateEventInvite(event, userId);
+      Navigator.pop(context);
+    } catch (e) {
+      Navigator.pop(context);
+      CustomSnackBar(false).showInSnackBar(e.toString(), context);
+    }
+  }
+updateEventInvite(EventModel event,String userId) async {
+    List<String> invites = event.invites;
+    invites.add(userId);
+    await ref.doc(event.id).update({
+      "invites":invites
+    });
+}
   @override
   void dispose() {
     // TODO: implement dispose

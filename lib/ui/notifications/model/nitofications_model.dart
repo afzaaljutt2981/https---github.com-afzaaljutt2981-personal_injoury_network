@@ -4,6 +4,7 @@ class NotificationsModel {
   String id;
   String senderId;
   String image;
+  String? eId;
   String notificationContent;
   int time;
   String status;
@@ -13,6 +14,7 @@ class NotificationsModel {
     required this.senderId,
     required this.image,
     required this.status,
+    this.eId,
     required this.notificationContent,
     required this.time,
     required this.notificationType,
@@ -24,6 +26,7 @@ class NotificationsModel {
         image: json['image'],
         notificationContent: json['notificationContent'],
         time: json['time'],
+        eId: json['eId'],
         status: json['status'],
         notificationType: json['notificationType']
     );
@@ -35,6 +38,7 @@ class NotificationsModel {
     "notificationContent":notificationContent,
     "time":time,
     "status":status,
+    "eId":eId,
     "notificationType":notificationType
   };
 }
