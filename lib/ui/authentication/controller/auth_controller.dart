@@ -18,8 +18,8 @@ class AuthController extends ChangeNotifier {
   bool saveChangesButton = false;
   CollectionReference ref = FirebaseFirestore.instance.collection("users");
   UserModel? user;
-
-  void signup(BuildContext context, {
+  Future<void> signup(
+    BuildContext context, {
     required String firstName,
     required String lastName,
     required String companyName,
@@ -32,10 +32,10 @@ class AuthController extends ChangeNotifier {
     required String reference,
     required List<String> hobbies,
     required String userName,
-  }) {
+  }) async {
     try {
       Functions.showLoaderDialog(context);
-      FirebaseAuth.instance
+     await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
         email: email.trim(),
         password: password.trim(),
@@ -73,6 +73,7 @@ class AuthController extends ChangeNotifier {
 
       }});
     } on Exception catch (error) {
+      Navigator.pop(context);
       CustomSnackBar(false).showInSnackBar(error.toString(), context);
       notifyListeners();
     }

@@ -26,6 +26,7 @@ class CreateEventController extends ChangeNotifier {
             address: address,
             description: description,
             uId: uId,
+            invites: [],
             title: title,
             dateTime: dateTime.millisecondsSinceEpoch,
             longitude: longitude,

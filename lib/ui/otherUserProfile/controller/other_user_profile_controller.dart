@@ -16,13 +16,11 @@ class OtherUserProfileController extends ChangeNotifier {
       getOtherUserNotifications(userId);
     }
   }
-
   CollectionReference user = FirebaseFirestore.instance.collection("users");
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? notificationsStream;
   UserModel? userModel;
   List<NotificationsModel> notifications = [];
   List<TicketModel> userTickets = [];
-
   getOtherUserNotifications(String userId) {
     notificationsStream = user
         .doc(userId)

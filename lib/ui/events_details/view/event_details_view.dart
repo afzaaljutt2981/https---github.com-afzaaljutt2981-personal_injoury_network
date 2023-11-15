@@ -13,6 +13,7 @@ import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
+import 'package:personal_injury_networking/ui/chat_screen/view/invite_guests.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:personal_injury_networking/ui/events_details/controller/event_details_controller.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/view/create_other_profile_view.dart';
@@ -319,10 +320,10 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         ),
                       ),
                       CustomSizeBox(25.h),
-                      if (eventParticipants.length > 3) ...[
+                      if (eventParticipants.length > 2) ...[
                         Row(
                           children: [
-                            for (var i = 0; i < 3; i++)
+                            for (var i = 0; i < 2; i++)
                               participant(eventParticipants[i]),
                             GestureDetector(
                               onTap: () {
@@ -335,7 +336,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                             )));
                               },
                               child: Text(
-                                "+${eventParticipants.length - 3} Participants",
+                                "+${eventParticipants.length - 2} Participants",
                                 style: const TextStyle(color: Colors.black),
                               ),
                             )
@@ -351,7 +352,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                 ),
               ),
             ),
-            Constants.userType == 'user'
+            currentUser!.userType == 'user'
                 ? Padding(
                     padding:
                         EdgeInsets.only(left: 40.w, right: 40.w, bottom: 20.h),
@@ -416,24 +417,32 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                     )),
                               ),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: const Color(0xFFD70E0E),
-                                      width: 1.5.sp),
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12.sp)),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 22.w, vertical: 14.h),
-                                child: Center(
-                                  child: Text(
-                                    'Cancel Event',
-                                    style: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color: const Color(0xFFD70E0E),
-                                            fontSize: 16.sp)),
+                            InkWell(
+                              onTap: () async {
+                                Functions.showLoaderDialog(context);
+                                await context.read<EventDetailsController>().deleteEvent(widget.event.id);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: const Color(0xFFD70E0E),
+                                        width: 1.5.sp),
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12.sp)),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 22.w, vertical: 14.h),
+                                  child: Center(
+                                    child: Text(
+                                      'Cancel Event',
+                                      style: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color: const Color(0xFFD70E0E),
+                                              fontSize: 16.sp)),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -521,202 +530,10 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
       builder: (BuildContext context) {
         return StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
-          return FractionallySizedBox(
-            heightFactor: 0.9,
-            child: SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.9,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.sp),
-                    topRight: Radius.circular(30.sp),
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomSizeBox(7.h),
-                      Center(
-                        child: Container(
-                          height: 5.h,
-                          width: 25.h,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.sp),
-                              color: const Color(0xFFB2B2B2).withOpacity(0.50)),
-                        ),
-                      ),
-                      CustomSizeBox(20.h),
-                      Text(
-                        'Invite Friend',
-                        style: AppTextStyles.josefin(
-                            style: TextStyle(
-                                color: const Color(0xFF120D26),
-                                fontSize: 24.sp,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                      CustomSizeBox(10.h),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: const Color(0xFFF0F0F0)),
-                          borderRadius: BorderRadius.circular(25.sp),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                maxLines: 1,
-                                readOnly: false,
-                                style: AppTextStyles.josefin(
-                                    style: TextStyle(
-                                        color: const Color(0xFF1F314A),
-                                        fontSize: 16.sp)),
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.only(left: 12.w),
-                                    border: InputBorder.none,
-                                    hintText: "Search",
-                                    hintStyle: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                            color: const Color(0xFF1F314A)
-                                                .withOpacity(0.40),
-                                            fontSize: 13.sp))),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(right: 20.w, left: 5.w),
-                              child: Image(
-                                height: 18.sp,
-                                width: 18.sp,
-                                image: const AssetImage(
-                                    'assets/images/search_icon.png'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Stack(
-                        children: [
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.7,
-                          ),
-                          SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.7,
-                              child: ListView.builder(
-                                  physics: const BouncingScrollPhysics(),
-                                  itemCount: 25,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    return Column(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              bottom: 20.h,
-                                              top: index == 0 ? 25.h : 0.h),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image(
-                                                image: const AssetImage(
-                                                    'assets/images/profile_pic.png'),
-                                                width: 45.sp,
-                                                height: 45.sp,
-                                              ),
-                                              SizedBox(
-                                                width: 10.w,
-                                              ),
-                                              Expanded(
-                                                  child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Micheal Ulasi',
-                                                    style: AppTextStyles.josefin(
-                                                        style: TextStyle(
-                                                            color: const Color(
-                                                                0xFF120D26),
-                                                            fontSize: 14.sp,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500)),
-                                                  ),
-                                                  CustomSizeBox(5.h),
-                                                  Text(
-                                                    '2k Follwers',
-                                                    style: AppTextStyles.josefin(
-                                                        style: TextStyle(
-                                                            color: const Color(
-                                                                0xFF747688),
-                                                            fontSize: 12.sp,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400)),
-                                                  ),
-                                                ],
-                                              )),
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    right: 20.w),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      isInvited = !isInvited;
-                                                    });
-                                                  },
-                                                  child: Image(
-                                                    height: 18.sp,
-                                                    width: 18.sp,
-                                                    image: isInvited
-                                                        ? const AssetImage(
-                                                            'assets/images/select_invite_friend.png')
-                                                        : const AssetImage(
-                                                            'assets/images/no_select_invite_friend.png'),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        index == 24
-                                            ? CustomSizeBox(90.h)
-                                            : CustomSizeBox(0.h),
-                                      ],
-                                    );
-                                  })),
-                          Positioned(
-                            bottom: 20.h,
-                            right: 10.w,
-                            left: 10.w,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GetButton(
-                                  50.sp,
-                                  () {},
-                                  Text(
-                                    'Invite',
-                                    style: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                            fontSize: 15.sp,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500)),
-                                  )),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+          return InviteGuests(
+            currentUser: currentUser!,
+            event: widget.event,
+            allUsers: allUsers,
           );
         });
       },

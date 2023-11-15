@@ -53,7 +53,7 @@ class Functions {
     );
   }
 
-  static Future<String> uploadPic(Uint8List file, String name) async {
+  static Future<String> uploadPic(Uint8List file,String name,{String? contentType}) async {
     try {
       final firebasestorage.FirebaseStorage _storage =
           firebasestorage.FirebaseStorage.instance;
@@ -63,7 +63,7 @@ class Functions {
       String mils = '$mills';
       var reference = _storage.ref().child(name).child(uid).child(mils);
       var r = await reference.putData(
-          file, SettableMetadata(contentType: 'image/jpeg'));
+          file, SettableMetadata(contentType: contentType??'image/jpeg'));
       if (r.state == firebasestorage.TaskState.success) {
         String url = await reference.getDownloadURL();
         return url;
