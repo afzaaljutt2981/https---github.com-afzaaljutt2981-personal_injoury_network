@@ -1,15 +1,22 @@
+import 'dart:core';
+import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:audioplayers/audioplayers.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/chat_screen/controller/chat_controller.dart';
 import 'package:personal_injury_networking/ui/chat_screen/view/create-picked_image_view.dart';
 import 'package:provider/provider.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
+import 'package:record/record.dart';
 import '../model/chat_model.dart';
 
 // ignore: must_be_immutable
@@ -24,12 +31,65 @@ TextEditingController textController = TextEditingController();
 bool emplyList = false;
 
 class _ChatScreenState extends State<ChatScreen> {
- 
-
   List<ChatMessage> chats = [];
   Uint8List? image1;
+  late AudioRecorder audioRecord;
+  late AudioPlayer audioPlayer;
+  bool isRecording = false;
+  String audioPath = "";
+  bool pause = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    audioPlayer = AudioPlayer();
+    audioRecord = AudioRecorder();
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    audioRecord.dispose();
+    audioPlayer.dispose();
+  }
+
+  Future<void> stopRecording() async {
+    try {
+      String? path = await audioRecord.stop();
+      setState(() {
+        isRecording = false;
+        if (path != null) {
+          audioPath = path;
+        }
+      });
+      print("path is here $path");
+    } catch (e) {
+      print("Error in stop recording:$e");
+    }
+  }
+
+  Future<void> startRecording() async {
+    try {
+      if (await audioRecord.hasPermission()) {
+        Directory directory = await getTemporaryDirectory();
+        setState(() {
+          isRecording = true;
+        });
+        await audioRecord.start(const RecordConfig(),
+            path:
+                "${directory.path}/${DateTime.now().millisecondsSinceEpoch.toString()}.mp3");
+        print(isRecording);
+        print("isRecording start");
+      }
+    } catch (e) {
+      print("Error in start recording:$e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("Recording status");
+    print(isRecording);
     chats = [];
     chats = context.watch<ChatController>().currentChat;
     return Scaffold(
@@ -117,15 +177,18 @@ class _ChatScreenState extends State<ChatScreen> {
                                 color: (!match ? Colors.black : Colors.white),
                               ),
                             ))
-                        : ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image(
-                              image: NetworkImage(chats[index].messageContent),
-                              width: 100,
-                              height: 100,
-                          fit: BoxFit.cover,
-                    ),
-                        ),
+                        : (chats[index].messageType == "mp3")
+                            ? const Icon(Icons.play_arrow)
+                            : ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image(
+                                  image:
+                                      NetworkImage(chats[index].messageContent),
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                   ));
             },
           )),
@@ -191,7 +254,9 @@ class _ChatScreenState extends State<ChatScreen> {
                             width: emplyList ? 20.w : 0.w,
                           ),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              _openAttachmentOptions();
+                            },
                             child: Image(
                               height: 22.sp,
                               width: 22.sp,
@@ -205,7 +270,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           emplyList == false
                               ? GestureDetector(
                                   onTap: () {
-                                    pickImage();
+                                    pickImage(ImageSource.camera);
                                   },
                                   child: Image(
                                     height: 20.sp,
@@ -222,13 +287,107 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                     GestureDetector(
+                      onLongPress: () {
+                        if (!emplyList) {
+                          startRecording();
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return ChangeNotifierProvider(
+                                create: (_)=>ChatController(),
+                                child: StatefulBuilder(
+                                  builder: (context,
+                                          void Function(void Function())
+                                              _setState) =>
+                                      SizedBox(
+                                    height: 100,
+                                    child: Center(
+                                        child: Column(
+                                      // crossAxisAlignment:
+                                      //     CrossAxisAlignment.start,
+                                      children: [
+                                        if (pause) ...[
+                                          Row(
+                                            children: [
+                                              IconButton(
+                                                onPressed: () {
+                                                  audioPlayer
+                                                      .play(UrlSource(audioPath));
+                                                },
+                                                icon: const Icon(Icons.play_arrow),
+                                              ),
+                                            ],
+                                          ),
+                                        ]else...[
+                                          const Text("Recording............")
+                                        ],
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    audioRecord.stop();
+                                                    isRecording = false;
+                                                  });
+                                                  Navigator.pop(context);
+                                                },
+                                                icon: const Icon(Icons.delete)),
+                                            InkWell(
+                                                onTap: () async {
+                                                  setState(() {
+                                                    _setState(() {
+                                                      pause = !pause;
+                                                      if (pause) {
+                                                        audioRecord.pause();
+                                                      } else {
+                                                        audioRecord.resume();
+                                                      }
+                                                    });
+                                                  });
+                                                },
+                                                child: Icon((!pause)
+                                                    ? Icons.pause
+                                                    : Icons.mic)),
+                                            IconButton(
+                                                onPressed: () async {
+                                                  Functions.showLoaderDialog(
+                                                      context);
+                                                  await stopRecording();
+                                                  File file = File(audioPath);
+                                                  String url =
+                                                      await Functions.uploadPic(
+                                                          file.readAsBytesSync(),
+                                                          "voice",
+                                                          contentType: "mp3");
+                                                  Provider.of<ChatController>(context,listen: false).sendMessage(widget.user.id,
+                                                          url, "mp3");
+                                                  Navigator.pop(context);
+                                                  Navigator.pop(context);
+                                                  print(url);
+                                                },
+                                                icon: const Icon(Icons.send))
+                                          ],
+                                        ),
+                                      ],
+                                    )),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      },
                       onTap: () async {
-                        context.read<ChatController>().sendMessage(
-                            widget.user.id, textController.text, "text");
-                        setState(() {
-                          textController.clear();
-                          emplyList = false;
-                        });
+                        if (emplyList) {
+                          context.read<ChatController>().sendMessage(
+                              widget.user.id, textController.text, "text");
+                          setState(() {
+                            textController.clear();
+                            emplyList = false;
+                          });
+                        }
                       },
                       child: Container(
                         height: 40.sp,
@@ -268,10 +427,9 @@ class _ChatScreenState extends State<ChatScreen> {
         ]));
   }
 
-  pickImage() async {
+  pickImage(ImageSource source) async {
     final ImagePicker _picker = ImagePicker();
-    final XFile? pickedImage =
-        await _picker.pickImage(source: ImageSource.camera);
+    final XFile? pickedImage = await _picker.pickImage(source: source);
     if (pickedImage != null) {
       image1 = await pickedImage.readAsBytes();
       // ignore: use_build_context_synchronously
@@ -284,6 +442,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   )));
     }
   }
+
   // Future emojiesPicker() async {
   //   EmojiPicker(
   //     textEditingController: textController,
@@ -319,4 +478,57 @@ class _ChatScreenState extends State<ChatScreen> {
   //     ),
   //   );
   // }
+  void _openAttachmentOptions() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          // Customize the appearance of your attachment options
+          // Add buttons or widgets for different attachment options
+          height: 200,
+          child: Column(
+            children: [
+              ListTile(
+                leading: Icon(Icons.photo),
+                title: Text('Choose Image'),
+                onTap: () {
+                  Navigator.pop(context); // Close the bottom sheet
+                  pickImage(ImageSource
+                      .gallery); // Method to pick an image (you may already have this method)
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.attach_file),
+                title: Text('Attach File'),
+                onTap: () {
+                  pickFile();
+                  Navigator.pop(context);
+                },
+              ),
+              // Add more ListTile widgets for different attachment options if needed
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> pickFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+      if (result != null) {
+        PlatformFile file = result.files.first;
+        print(file.runtimeType);
+        // Use the picked file: file.path
+        // You can handle the file here as needed (e.g., send it in the chat, save it, etc.)
+        print('Picked file path: ${file.path}');
+      } else {
+        // User canceled the picker
+      }
+    } catch (e) {
+      // Handle exceptions that might occur during file picking
+      print('Error picking file: $e');
+    }
+  }
 }
