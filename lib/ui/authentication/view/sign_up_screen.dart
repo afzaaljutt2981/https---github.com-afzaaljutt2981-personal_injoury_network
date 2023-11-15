@@ -272,11 +272,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         CustomSnackBar(false).showInSnackBar(
                             "please enter valid email", context);
                         return;
-                      } else if (selectedCountry == " Select Country") {
+                      } else if (selectedCountry == "Select Country") {
                         CustomSnackBar(false).showInSnackBar(
                             "please select your country", context);
                         return;
-                      } else if (selectedState == " Select State") {
+                      } else if (selectedState == "Select State") {
                         CustomSnackBar(false).showInSnackBar(
                             "please select your state", context);
                         return;
@@ -327,8 +327,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               website: textFieldController[6].text,
                               phone: textFieldController[4].text,
                               position: textFieldController[3].text,
-                              location:
-                                  "Pakistan, Lahore", // "$selectedState,$selectedCountry",
+                              location: "$selectedState,$selectedCountry",
                               reference: textFieldController[9].text,
                               hobbies: selectedHobbies,
                               userName: textFieldController[10].text);

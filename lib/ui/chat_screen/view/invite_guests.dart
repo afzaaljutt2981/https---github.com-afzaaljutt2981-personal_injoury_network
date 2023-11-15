@@ -11,7 +11,11 @@ import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
 
 class InviteGuests extends StatefulWidget {
-  InviteGuests({super.key, required this.currentUser, required this.allUsers,required this.event});
+  InviteGuests(
+      {super.key,
+      required this.currentUser,
+      required this.allUsers,
+      required this.event});
   UserModel currentUser;
   List<UserModel> allUsers;
   EventModel event;
@@ -41,9 +45,9 @@ class _InviteGuestsState extends State<InviteGuests> {
     }
     sFriends = friends;
   }
+
   @override
   Widget build(BuildContext context) {
-
     return FractionallySizedBox(
       heightFactor: 0.9,
       child: SingleChildScrollView(
@@ -56,149 +60,163 @@ class _InviteGuestsState extends State<InviteGuests> {
               topRight: Radius.circular(30.sp),
             ),
           ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomSizeBox(7.h),
-                Center(
-                  child: Container(
-                    height: 5.h,
-                    width: 25.h,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.sp),
-                        color: const Color(0xFFB2B2B2).withOpacity(0.50)),
+          child: (sFriends.isEmpty)
+              ? const Center(
+                  child: Text(
+                    "You have no friend to show",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                ),
-                CustomSizeBox(20.h),
-                Text(
-                  'Invite Friend',
-                  style: AppTextStyles.josefin(
-                      style: TextStyle(
-                          color: const Color(0xFF120D26),
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.w500)),
-                ),
-                CustomSizeBox(10.h),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: const Color(0xFFF0F0F0)),
-                    borderRadius: BorderRadius.circular(25.sp),
-                  ),
-                  child: Row(
+                )
+              : Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: TextFormField(
-                          onChanged: (v){
-                            setState(() {
-                              sFriends = searchUserByName(friends, v);
-                            });
-                          },
-                          maxLines: 1,
-                          readOnly: false,
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  color: const Color(0xFF1F314A),
-                                  fontSize: 16.sp)),
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.only(left: 12.w),
-                              border: InputBorder.none,
-                              hintText: "Search",
-                              hintStyle: AppTextStyles.josefin(
-                                  style: TextStyle(
-                                      color: const Color(0xFF1F314A)
-                                          .withOpacity(0.40),
-                                      fontSize: 13.sp))),
+                      CustomSizeBox(7.h),
+                      Center(
+                        child: Container(
+                          height: 5.h,
+                          width: 25.h,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.sp),
+                              color: const Color(0xFFB2B2B2).withOpacity(0.50)),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 20.w, left: 5.w),
-                        child: Image(
-                          height: 18.sp,
-                          width: 18.sp,
-                          image:
-                              const AssetImage('assets/images/search_icon.png'),
+                      CustomSizeBox(20.h),
+                      Text(
+                        'Invite Friend',
+                        style: AppTextStyles.josefin(
+                            style: TextStyle(
+                                color: const Color(0xFF120D26),
+                                fontSize: 24.sp,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      CustomSizeBox(10.h),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: const Color(0xFFF0F0F0)),
+                          borderRadius: BorderRadius.circular(25.sp),
                         ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                onChanged: (v) {
+                                  setState(() {
+                                    sFriends = searchUserByName(friends, v);
+                                  });
+                                },
+                                maxLines: 1,
+                                readOnly: false,
+                                style: AppTextStyles.josefin(
+                                    style: TextStyle(
+                                        color: const Color(0xFF1F314A),
+                                        fontSize: 16.sp)),
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.only(left: 12.w),
+                                    border: InputBorder.none,
+                                    hintText: "Search",
+                                    hintStyle: AppTextStyles.josefin(
+                                        style: TextStyle(
+                                            color: const Color(0xFF1F314A)
+                                                .withOpacity(0.40),
+                                            fontSize: 13.sp))),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 20.w, left: 5.w),
+                              child: Image(
+                                height: 18.sp,
+                                width: 18.sp,
+                                image: const AssetImage(
+                                    'assets/images/search_icon.png'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Stack(
+                        children: [
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.7,
+                          ),
+                          if (sFriends.isEmpty) ...[
+                            const Padding(
+                              padding: EdgeInsets.only(top: 18.0),
+                              child: Center(child: Text("No User Found")),
+                            )
+                          ] else ...[
+                            SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.7,
+                                child: ListView.builder(
+                                    physics: const BouncingScrollPhysics(),
+                                    itemCount: sFriends.length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      return friend(sFriends[index]);
+                                    }))
+                          ],
+                          if (sFriends.isNotEmpty) ...[
+                            Positioned(
+                              bottom: 0.h,
+                              right: 10.w,
+                              left: 10.w,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: GetButton(50.sp, () {
+                                  if (tempList.isNotEmpty) {
+                                    for (var element in tempList) {
+                                      context
+                                          .read<EventsController>()
+                                          .sendInvite(element.id, widget.event,
+                                              context);
+                                    }
+                                  } else {
+                                    Navigator.pop(context);
+                                    CustomSnackBar(true).showInSnackBar(
+                                        "please select user to invite",
+                                        context);
+                                  }
+                                },
+                                    Text(
+                                      'Invite',
+                                      style: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              fontSize: 15.sp,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500)),
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                     ],
                   ),
                 ),
-                Stack(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.7,
-                    ),
-                    if(sFriends.isEmpty)...[
-                      const Padding(
-                        padding: EdgeInsets.only(top: 18.0),
-                        child: Center(child: Text("No User Found")),
-                      )
-                    ]else...[
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.7,
-                        child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: sFriends.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return friend(sFriends[index]);
-                            }))],
-                    if(sFriends.isNotEmpty)...[
-                    Positioned(
-                      bottom: 0.h,
-                      right: 10.w,
-                      left: 10.w,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GetButton(
-                            50.sp,
-                            () {
-                              if(tempList.isNotEmpty){
-                              for (var element in tempList) {
-                                context.read<EventsController>().sendInvite(element.id, widget.event, context);
-                              }
-                            }else{
-                                Navigator.pop(context);
-                                CustomSnackBar(true).showInSnackBar("please select user to invite", context);
-                              }},
-                            Text(
-                              'Invite',
-                              style: AppTextStyles.josefin(
-                                  style: TextStyle(
-                                      fontSize: 15.sp,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500)),
-                            )),
-                      ),
-                    ),],
-                  ],
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );
   }
 
   Widget friend(UserModel friend) {
-    if(tempList.contains(friend) || widget.event.invites.contains(friend.id)){
+    if (tempList.contains(friend) || widget.event.invites.contains(friend.id)) {
       isInvited = true;
     }
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         print("object");
-        if(tempList.isNotEmpty){
+        if (tempList.isNotEmpty) {
           tempList.add(friend);
         }
       },
-      onLongPress: (){
+      onLongPress: () {
         print("here is long press");
-        if(tempList.isEmpty){
+        if (tempList.isEmpty) {
           setState(() {
             tempList.add(friend);
           });
@@ -260,7 +278,8 @@ class _InviteGuestsState extends State<InviteGuests> {
                   height: 18.sp,
                   width: 18.sp,
                   image: isInvited
-                      ? const AssetImage('assets/images/select_invite_friend.png')
+                      ? const AssetImage(
+                          'assets/images/select_invite_friend.png')
                       : const AssetImage(
                           'assets/images/no_select_invite_friend.png'),
                 ),
@@ -271,6 +290,7 @@ class _InviteGuestsState extends State<InviteGuests> {
       ),
     );
   }
+
   List<UserModel> searchUserByName(List<UserModel> users, String searchTerm) {
     // Create an empty list to store the matching events.
     List<UserModel> matchingUsers = [];

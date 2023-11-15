@@ -178,7 +178,15 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                             ))
                         : (chats[index].messageType == "mp3")
-                            ? const Icon(Icons.play_arrow)
+                            ? IconButton(
+                                onPressed: () async {
+                                  await audioPlayer.play(
+                                      UrlSource(
+                                        chats[index].messageContent,
+                                      ),
+                                      mode: PlayerMode.mediaPlayer);
+                                },
+                                icon: const Icon(Icons.play_arrow))
                             : ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
                                 child: Image(
@@ -288,96 +296,102 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     GestureDetector(
                       onLongPress: () {
-                        if (!emplyList) {
-                          startRecording();
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return ChangeNotifierProvider(
-                                create: (_)=>ChatController(),
-                                child: StatefulBuilder(
-                                  builder: (context,
-                                          void Function(void Function())
-                                              _setState) =>
-                                      SizedBox(
-                                    height: 100,
-                                    child: Center(
-                                        child: Column(
-                                      // crossAxisAlignment:
-                                      //     CrossAxisAlignment.start,
-                                      children: [
-                                        if (pause) ...[
-                                          Row(
-                                            children: [
-                                              IconButton(
-                                                onPressed: () {
-                                                  audioPlayer
-                                                      .play(UrlSource(audioPath));
-                                                },
-                                                icon: const Icon(Icons.play_arrow),
-                                              ),
-                                            ],
-                                          ),
-                                        ]else...[
-                                          const Text("Recording............")
-                                        ],
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    audioRecord.stop();
-                                                    isRecording = false;
-                                                  });
-                                                  Navigator.pop(context);
-                                                },
-                                                icon: const Icon(Icons.delete)),
-                                            InkWell(
-                                                onTap: () async {
-                                                  setState(() {
-                                                    _setState(() {
-                                                      pause = !pause;
-                                                      if (pause) {
-                                                        audioRecord.pause();
-                                                      } else {
-                                                        audioRecord.resume();
-                                                      }
-                                                    });
-                                                  });
-                                                },
-                                                child: Icon((!pause)
-                                                    ? Icons.pause
-                                                    : Icons.mic)),
-                                            IconButton(
-                                                onPressed: () async {
-                                                  Functions.showLoaderDialog(
-                                                      context);
-                                                  await stopRecording();
-                                                  File file = File(audioPath);
-                                                  String url =
-                                                      await Functions.uploadPic(
-                                                          file.readAsBytesSync(),
-                                                          "voice",
-                                                          contentType: "mp3");
-                                                  Provider.of<ChatController>(context,listen: false).sendMessage(widget.user.id,
-                                                          url, "mp3");
-                                                  Navigator.pop(context);
-                                                  Navigator.pop(context);
-                                                  print(url);
-                                                },
-                                                icon: const Icon(Icons.send))
-                                          ],
-                                        ),
-                                      ],
-                                    )),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        }
+                        // if (!emplyList) {
+                        //   startRecording();
+                        //   showModalBottomSheet(
+                        //     context: context,
+                        //     builder: (context) {
+                        //       return ChangeNotifierProvider(
+                        //         create: (_) => ChatController(),
+                        //         child: StatefulBuilder(
+                        //           builder: (context,
+                        //                   void Function(void Function())
+                        //                       _setState) =>
+                        //               SizedBox(
+                        //             height: 100,
+                        //             child: Center(
+                        //                 child: Column(
+                        //               // crossAxisAlignment:
+                        //               //     CrossAxisAlignment.start,
+                        //               children: [
+                        //                 if (pause) ...[
+                        //                   Row(
+                        //                     children: [
+                        //                       IconButton(
+                        //                         onPressed: () {
+                        //                           audioPlayer.play(
+                        //                               UrlSource(audioPath));
+                        //                         },
+                        //                         icon: const Icon(
+                        //                             Icons.play_arrow),
+                        //                       ),
+                        //                     ],
+                        //                   ),
+                        //                 ] else ...[
+                        //                   const Text("Recording............")
+                        //                 ],
+                        //                 Row(
+                        //                   mainAxisAlignment:
+                        //                       MainAxisAlignment.spaceBetween,
+                        //                   children: [
+                        //                     IconButton(
+                        //                         onPressed: () {
+                        //                           setState(() {
+                        //                             audioRecord.stop();
+                        //                             isRecording = false;
+                        //                           });
+                        //                           Navigator.pop(context);
+                        //                         },
+                        //                         icon: const Icon(Icons.delete)),
+                        //                     InkWell(
+                        //                         onTap: () async {
+                        //                           setState(() {
+                        //                             _setState(() {
+                        //                               pause = !pause;
+                        //                               if (pause) {
+                        //                                 audioRecord.pause();
+                        //                               } else {
+                        //                                 audioRecord.resume();
+                        //                               }
+                        //                             });
+                        //                           });
+                        //                         },
+                        //                         child: Icon((!pause)
+                        //                             ? Icons.pause
+                        //                             : Icons.mic)),
+                        //                     IconButton(
+                        //                         onPressed: () async {
+                        //                           Functions.showLoaderDialog(
+                        //                               context);
+                        //                           await stopRecording();
+                        //                           File file = File(audioPath);
+                        //                           String url =
+                        //                               await Functions.uploadPic(
+                        //                                   file.readAsBytesSync(),
+                        //                                   "voice",
+                        //                                   contentType: "mp3");
+                        //                           Provider.of<ChatController>(
+                        //                                   context,
+                        //                                   listen: false)
+                        //                               .sendMessage(
+                        //                                   widget.user.id,
+                        //                                   url,
+                        //                                   "mp3");
+                        //                           Navigator.pop(context);
+                        //                           Navigator.pop(context);
+                        //                           print(url);
+                        //                         },
+                        //                         icon: const Icon(Icons.send))
+                        //                   ],
+                        //                 ),
+                        //               ],
+                        //             )),
+                        //           ),
+                        //         ),
+                        //       );
+                        //     },
+                        //   );
+                        // }
                       },
                       onTap: () async {
                         if (emplyList) {
@@ -407,15 +421,18 @@ class _ChatScreenState extends State<ChatScreen> {
                               end: Alignment.centerRight,
                               colors: [Color(0xFFAF48FF), Color(0xFF212E73)],
                             )),
-                        child: emplyList == false
-                            ? Padding(
-                                padding: EdgeInsets.all(10.sp),
-                                child: const Image(
-                                  image: AssetImage(
-                                      'assets/images/microphone_chat_screen.png'),
-                                ),
-                              )
-                            : const Center(
+                        child:
+                        // emplyList == false
+                        //     ?const SizedBox()
+                        // Padding(
+                        //         padding: EdgeInsets.all(10.sp),
+                        //         child: const Image(
+                        //           image: AssetImage(
+                        //               'assets/images/microphone_chat_screen.png'),
+                        //         ),
+                        //       )
+                        //     :
+                        const Center(
                                 child: Icon(Icons.send,
                                     color: Colors.white, size: 20),
                               ),
@@ -520,8 +537,6 @@ class _ChatScreenState extends State<ChatScreen> {
       if (result != null) {
         PlatformFile file = result.files.first;
         print(file.runtimeType);
-        // Use the picked file: file.path
-        // You can handle the file here as needed (e.g., send it in the chat, save it, etc.)
         print('Picked file path: ${file.path}');
       } else {
         // User canceled the picker

@@ -316,10 +316,10 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         ),
                       ),
                       CustomSizeBox(25.h),
-                      if (eventParticipants.length > 3) ...[
+                      if (eventParticipants.length > 2) ...[
                         Row(
                           children: [
-                            for (var i = 0; i < 3; i++)
+                            for (var i = 0; i < 2; i++)
                               participant(eventParticipants[i]),
                             GestureDetector(
                               onTap: () {
@@ -332,7 +332,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                             )));
                               },
                               child: Text(
-                                "+${eventParticipants.length - 3} Participants",
+                                "+${eventParticipants.length - 2} Participants",
                                 style: const TextStyle(color: Colors.black),
                               ),
                             )
@@ -413,24 +413,32 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                     )),
                               ),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: const Color(0xFFD70E0E),
-                                      width: 1.5.sp),
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12.sp)),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 22.w, vertical: 14.h),
-                                child: Center(
-                                  child: Text(
-                                    'Cancel Event',
-                                    style: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color: const Color(0xFFD70E0E),
-                                            fontSize: 16.sp)),
+                            InkWell(
+                              onTap: () async {
+                                Functions.showLoaderDialog(context);
+                                await context.read<EventDetailsController>().deleteEvent(widget.event.id);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: const Color(0xFFD70E0E),
+                                        width: 1.5.sp),
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12.sp)),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 22.w, vertical: 14.h),
+                                  child: Center(
+                                    child: Text(
+                                      'Cancel Event',
+                                      style: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color: const Color(0xFFD70E0E),
+                                              fontSize: 16.sp)),
+                                    ),
                                   ),
                                 ),
                               ),
