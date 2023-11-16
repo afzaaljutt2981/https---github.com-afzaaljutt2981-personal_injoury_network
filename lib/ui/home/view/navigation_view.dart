@@ -64,11 +64,11 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               setState(() => selectedIndex = index);
             },
             children: <Widget>[
-              FirebaseAuth.instance.currentUser?.email == Constants.adminEmail
+              FirebaseAuth.instance.currentUser?.email?.toLowerCase() == Constants.adminEmail.toLowerCase()
                   ? CreateAdminHomeScreenView()
                   : CreateHomeScreenView(),
-              if (FirebaseAuth.instance.currentUser?.email !=
-                  Constants.adminEmail)
+              if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
+                  Constants.adminEmail.toLowerCase())
                 CreateChatView(),
               CreateQrScanView(),
               CreateAllEventsView(),
@@ -103,8 +103,8 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                       AssetImage('assets/images/home_icon_home_b.png')),
                   label: "Home",
                 ),
-                if (FirebaseAuth.instance.currentUser?.email !=
-                    Constants.adminEmail)
+                if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
+                    Constants.adminEmail.toLowerCase())
                   BottomNavigationBarItem(
                     icon: ImageIcon(
                         AssetImage('assets/images/chat_icon_home_b.png')),

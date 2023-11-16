@@ -38,7 +38,7 @@ class _AllEventScreenState extends State<AllEventScreen>
 
   @override
   Widget build(BuildContext context) {
-    if (FirebaseAuth.instance.currentUser?.email != Constants.adminEmail) {
+    if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() != Constants.adminEmail.toLowerCase()) {
       List<TicketModel> tickets =
           context.watch<EventsController>().userBookedEvents;
       events = [];

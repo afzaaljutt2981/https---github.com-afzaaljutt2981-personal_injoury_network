@@ -88,8 +88,8 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              if (FirebaseAuth.instance.currentUser?.email !=
-                                  Constants.adminEmail)
+                              if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
+                                  Constants.adminEmail.toLowerCase())
                                 GestureDetector(
                                   onTap: () {
                                     Navigator.push(
@@ -117,8 +117,8 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                 ),
                               // Constants.userType == 'marketer'
                               //     ?
-                              if (FirebaseAuth.instance.currentUser?.email !=
-                                  Constants.adminEmail)
+                              if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
+                                  Constants.adminEmail.toLowerCase())
                                 GestureDetector(
                                   onTap: () {
                                     Navigator.push(
