@@ -4,6 +4,7 @@ import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/forgetPassword/view/create_verify_identity_view.dart';
 
 import '../../../global/utils/custom_snackbar.dart';
+import '../../selesction_screen/selection_screen.dart';
 import '../view/verify_identity.dart';
 
 class ForgetPasswordController extends ChangeNotifier {
@@ -32,7 +33,6 @@ class ForgetPasswordController extends ChangeNotifier {
       Functions.showLoaderDialog(context);
 
       await FirebaseAuth.instance.currentUser?.sendEmailVerification();
-      Navigator.pop(context);
       // ignore: use_build_context_synchronously
       // ignore: use_build_context_synchronously
       // Navigator.push(
@@ -42,6 +42,10 @@ class ForgetPasswordController extends ChangeNotifier {
       //           // email: email.toString(),
       //           // from: 1,
       //         )));
+      await FirebaseAuth.instance.signOut();
+      Navigator.pop(context);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) => const SelectionScreen()));
       CustomSnackBar(true)
           .showInSnackBar("Verification email sent successfully", context);
     } catch (e) {
