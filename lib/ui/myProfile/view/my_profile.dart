@@ -67,12 +67,15 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
   Widget build(BuildContext context) {
     user = context.watch<MyProfileController>().user;
     if (user != null) {
-      textFieldController[0].text = user!.company;
-      textFieldController[1].text = user!.position;
-      textFieldController[2].text = user!.website;
-      textFieldController[3].text = user!.phone.toString();
-      textFieldController[4].text = user!.location;
-      textFieldController[5].text = user!.firstName;
+      var hobbies =  user?.hobbies.join(', ');
+      textFieldController[0].text = user?.company??"";
+      textFieldController[1].text = user?.position??"";
+      textFieldController[2].text = user?.website??"";
+      textFieldController[3].text = user?.phone.toString()??"";
+      textFieldController[4].text = user?.location??"";
+      textFieldController[5].text = user?.firstName??"";
+      textFieldController[6].text = hobbies??"";
+
     }
     return Scaffold(
         backgroundColor: const Color(0xFFf5f4ff),
@@ -259,6 +262,15 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                     fontSize: 12.sp)),
                           ),
                           textField("company", 0, textFieldController[0]),
+                          Text(
+                            'Hobbies',
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFF1A1167),
+                                    fontSize: 12.sp)),
+                          ),
+                          textField("hobbies", 0, textFieldController[6]),
                           Text(
                             'Job/Position',
                             style: AppTextStyles.josefin(

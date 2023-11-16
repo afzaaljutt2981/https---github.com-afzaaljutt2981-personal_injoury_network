@@ -7,12 +7,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/ui/authentication/view/sign_up_screen.dart';
+import 'package:personal_injury_networking/ui/forgetPassword/view/create_verify_identity_view.dart';
 import 'package:personal_injury_networking/ui/home/view/navigation_view.dart';
-import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
-import 'package:provider/provider.dart';
 
 import '../../global/helper/custom_sized_box.dart';
 import '../authentication/model/user_model.dart';
+import '../forgetPassword/view/verify_identity.dart';
 import '../selesction_screen/selection_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -26,9 +26,23 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3)).then((value) async {
+    Future.delayed(const Duration(seconds: 7)).then((value) async {
       if (FirebaseAuth.instance.currentUser != null) {
-        getUserData();
+        print("FirebaseAuth.instance.currentUser?.emailVerified - ${FirebaseAuth.instance.currentUser?.emailVerified??""}");
+        if (FirebaseAuth.instance.currentUser?.emailVerified == false) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CreateVerifyIdentityView(
+                        email: FirebaseAuth.instance.currentUser?.email
+                                .toString() ??
+                            "",
+                        from: 2,
+                      )),
+              (route) => false);
+        } else {
+          getUserData();
+        }
         // ignore: use_build_context_synchronously
       } else {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -80,7 +94,7 @@ class _SplashScreenState extends State<SplashScreen> {
   getUserData() {
     FirebaseFirestore.instance
         .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(FirebaseAuth.instance.currentUser?.uid)
         .snapshots()
         .listen((event) {
       UserModel user = UserModel.fromJson(event.data() as Map<String, dynamic>);

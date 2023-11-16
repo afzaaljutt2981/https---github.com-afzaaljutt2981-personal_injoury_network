@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +16,7 @@ class AuthController extends ChangeNotifier {
   bool saveChangesButton = false;
   CollectionReference ref = FirebaseFirestore.instance.collection("users");
   UserModel? user;
+
   Future<void> signup(
     BuildContext context, {
     required String firstName,
@@ -35,7 +34,7 @@ class AuthController extends ChangeNotifier {
   }) async {
     try {
       Functions.showLoaderDialog(context);
-     await FirebaseAuth.instance
+      await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
         email: email.trim(),
         password: password.trim(),
@@ -64,14 +63,14 @@ class AuthController extends ChangeNotifier {
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      VerifyIdentity(
+                  builder: (context) => CreateVerifyIdentityView(
                         email: email.toString(),
-                        from: 1,
-                      )), (route) => false);
+                        from: 2,
+                      )),
+              (route) => false);
           notifyListeners();
-
-      }});
+        }
+      });
     } on Exception catch (error) {
       Navigator.pop(context);
       CustomSnackBar(false).showInSnackBar(error.toString(), context);
@@ -79,8 +78,8 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  Future<void> signIn(String email, String password,
-      BuildContext context) async {
+  Future<void> signIn(
+      String email, String password, BuildContext context) async {
     try {
       Functions.showLoaderDialog(context);
       await FirebaseAuth.instance
@@ -99,7 +98,7 @@ class AuthController extends ChangeNotifier {
                   context,
                   MaterialPageRoute(
                       builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-                      (route) => false);
+                  (route) => false);
             } else {
               Constants.userType = user?.userType ?? "";
               Constants.userName =
@@ -108,12 +107,11 @@ class AuthController extends ChangeNotifier {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                      builder: (_) =>
-                          CreateVerifyIdentityView(
+                      builder: (_) => CreateVerifyIdentityView(
                             email: "",
                             from: 2,
                           )),
-                      (route) => false);
+                  (route) => false);
             }
           }
         } else {
@@ -142,7 +140,7 @@ class AuthController extends ChangeNotifier {
               context,
               MaterialPageRoute(
                   builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-                  (route) => false);
+              (route) => false);
         }
       } else {
         await FirebaseAuth.instance.signOut();
@@ -152,7 +150,8 @@ class AuthController extends ChangeNotifier {
     });
   }
 
-  Future<void> updateUser(BuildContext context, {
+  Future<void> updateUser(
+    BuildContext context, {
     required String firstName,
     required String lastName,
     required String companyName,
@@ -188,7 +187,7 @@ class AuthController extends ChangeNotifier {
           context,
           MaterialPageRoute(
               builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-              (route) => false);
+          (route) => false);
       notifyListeners();
     } on Exception catch (error) {
       // ignore: use_build_context_synchronously
@@ -196,5 +195,4 @@ class AuthController extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 }
