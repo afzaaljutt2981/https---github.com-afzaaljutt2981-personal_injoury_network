@@ -106,11 +106,17 @@ class _AllUsersChatState extends State<AllUsersChat> {
                                       Expanded(
                                         child: Row(
                                           children: <Widget>[
-                                            CircleAvatar(
-                                              backgroundImage: const AssetImage(
-                                                  'assets/images/profile_pic.png'),
-                                              maxRadius: 26.sp,
-                                            ),
+                                            (user.pImage != null)
+                                                ? CircleAvatar(
+                                                    radius: 20,
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                            user.pImage!),
+                                                  )
+                                                : Image(
+                                                    width: 40.sp,
+                                                    image: const AssetImage(
+                                                        "assets/images/profile_pic.png")),
                                             SizedBox(
                                               width: 16.sp,
                                             ),
@@ -122,7 +128,7 @@ class _AllUsersChatState extends State<AllUsersChat> {
                                                       CrossAxisAlignment.start,
                                                   children: <Widget>[
                                                     Text(
-                                                      user.userName,
+                                                      user.lastName,
                                                       style: AppTextStyles.josefin(
                                                           style: TextStyle(
                                                               fontWeight:
@@ -135,7 +141,12 @@ class _AllUsersChatState extends State<AllUsersChat> {
                                                     CustomSizeBox(6.h),
                                                     Text(
                                                       chatUsers[index]
-                                                          .lastMessage,
+                                                              .lastMessage
+                                                              .contains(
+                                                                  'https://')
+                                                          ? 'sent a photo'
+                                                          : chatUsers[index]
+                                                              .lastMessage,
                                                       style: AppTextStyles.josefin(
                                                           style: TextStyle(
                                                               fontWeight:

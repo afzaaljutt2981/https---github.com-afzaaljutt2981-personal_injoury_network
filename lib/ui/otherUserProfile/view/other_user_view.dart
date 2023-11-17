@@ -189,12 +189,13 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                     await context
                                         .read<OtherUserProfileController>()
                                         .followTap(user!);
+
                                     // ignore: use_build_context_synchronously
                                     await context
                                         .read<OtherUserProfileController>()
                                         .followingTap(
                                             widget.currentUser, user!.id);
-                                            // ignore: use_build_context_synchronously
+                                    // ignore: use_build_context_synchronously
                                     await context
                                         .read<OtherUserProfileController>()
                                         .unFollow(user!.id, notifyId);
@@ -203,14 +204,16 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                 child: Container(
                                   decoration: BoxDecoration(
                                       color: AppColors.kPrimaryColor,
-                                      borderRadius: BorderRadius.circular(7.sp)),
+                                      borderRadius:
+                                          BorderRadius.circular(7.sp)),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
                                         horizontal:
                                             isFollow == false ? 30.w : 23.w,
                                         vertical: 12.h),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         isFollow == false
                                             ? Image(
@@ -241,53 +244,58 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                 ),
                               ),
                             ),
-                            if(followButton == "Following")...[
+                            if (followButton == "Following") ...[
                               SizedBox(
                                 width: 7.w,
                               ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) =>
-                                               SingleChatScreenView(user: user!,)));
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: AppColors.kPrimaryColor,
-                                          width: 1.5.sp),
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(7.sp)),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 24.w, vertical: 10.h),
-                                    child: Row(
-                                      children: [
-                                        Image(
-                                          height: 20.sp,
-                                          width: 20.sp,
-                                          image: const AssetImage(
-                                              'assets/images/message_orgnizer_screen.png'),
-                                        ),
-                                        SizedBox(
-                                          width: 5.w,
-                                        ),
-                                        Text(
-                                          'Messages',
-                                          style: AppTextStyles.josefin(
-                                              style: TextStyle(
-                                                  color: AppColors.kPrimaryColor,
-                                                  fontSize: 16.sp)),
-                                        ),
-                                      ],
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                SingleChatScreenView(
+                                                  user: user!,
+                                                )));
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: AppColors.kPrimaryColor,
+                                            width: 1.5.sp),
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(7.sp)),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 24.w, vertical: 10.h),
+                                      child: Row(
+                                        children: [
+                                          Image(
+                                            height: 20.sp,
+                                            width: 20.sp,
+                                            image: const AssetImage(
+                                                'assets/images/message_orgnizer_screen.png'),
+                                          ),
+                                          SizedBox(
+                                            width: 5.w,
+                                          ),
+                                          Text(
+                                            'Messages',
+                                            style: AppTextStyles.josefin(
+                                                style: TextStyle(
+                                                    color:
+                                                        AppColors.kPrimaryColor,
+                                                    fontSize: 16.sp)),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),],
+                            ],
                           ],
                         ),
                       ),
@@ -338,14 +346,20 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                     ),
                   ),
                 ),
-                if (followButton == "Following" || FirebaseAuth.instance.currentUser!.uid == user!.id) ...[
+                if (followButton == "Following" ||
+                    FirebaseAuth.instance.currentUser!.uid == user!.id) ...[
                   Expanded(
                       child: TabBarView(controller: tabController, children: [
                     OrganizerAbout(
                       user: user!,
                     ),
-                    OrganizerEvents(userEvents: userEvents,userModel: user!,),
-                        OtherUserReviewScreen(userEvents: userEvents,)
+                    OrganizerEvents(
+                      userEvents: userEvents,
+                      userModel: user!,
+                    ),
+                    OtherUserReviewScreen(
+                      userEvents: userEvents,
+                    )
                   ]))
                 ] else if (followButton == "Follow") ...[
                   const Expanded(
@@ -363,7 +377,8 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
           : const Center(child: CircularProgressIndicator()),
     );
   }
-  setFollowButton(List<NotificationsModel> notifications){
+
+  setFollowButton(List<NotificationsModel> notifications) {
     for (var element in notifications) {
       if (element.senderId == FirebaseAuth.instance.currentUser!.uid &&
           element.status != "Rejected" &&

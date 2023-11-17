@@ -116,14 +116,28 @@ class _AllFriendsScreenState extends State<AllFriendsScreen> {
               SizedBox(
                 width: 10.w,
               ),
-              Text(
-                user.userName,
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        fontSize: 14.sp,
-                        color: const Color(0xFF1A1167),
-                        fontWeight: FontWeight.w400)),
-              )
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user.lastName,
+                    style: AppTextStyles.josefin(
+                        style: TextStyle(
+                            fontSize: 16.sp,
+                            color: const Color(0xFF1A1167),
+                            fontWeight: FontWeight.w400)),
+                  ),
+                  CustomSizeBox(3.h),
+                  Text(
+                    user.position,
+                    style: AppTextStyles.josefin(
+                        style: TextStyle(
+                            fontSize: 10.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400)),
+                  ),
+                ],
+              ),
             ]),
           ),
         ),

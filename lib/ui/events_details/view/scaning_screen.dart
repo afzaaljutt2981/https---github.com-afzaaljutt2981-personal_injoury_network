@@ -56,10 +56,14 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
             top: screenHeight * 0.04,
             left: screenWidth * 0.025,
             child: IconButton(
-              icon: Icon(
-                Icons.navigate_before,
-                color: Colors.white,
-                size: 35.sp,
+              icon: Container(
+                width: 30.sp,
+                height: 40.sp,
+                child: Icon(
+                  Icons.navigate_before,
+                  color: Colors.white,
+                  size: 35.sp,
+                ),
               ),
               onPressed: () {
                 Navigator.pop(context);

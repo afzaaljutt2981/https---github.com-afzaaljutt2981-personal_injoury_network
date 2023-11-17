@@ -42,7 +42,6 @@ class _ChatScreenState extends State<ChatScreen> {
   bool pause = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     audioPlayer = AudioPlayer();
     audioRecord = AudioRecorder();
@@ -64,7 +63,6 @@ class _ChatScreenState extends State<ChatScreen> {
           audioPath = path;
         }
       });
-      print("path is here $path");
     } catch (e) {
       print("Error in stop recording:$e");
     }
@@ -80,18 +78,12 @@ class _ChatScreenState extends State<ChatScreen> {
         await audioRecord.start(const RecordConfig(),
             path:
                 "${directory.path}/${DateTime.now().millisecondsSinceEpoch.toString()}.mp3");
-        print(isRecording);
-        print("isRecording start");
       }
-    } catch (e) {
-      print("Error in start recording:$e");
-    }
+    } catch (_) {}
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Recording status");
-    print(isRecording);
     chats = [];
     chats = context.watch<ChatController>().currentChat;
     return Scaffold(
@@ -112,7 +104,7 @@ class _ChatScreenState extends State<ChatScreen> {
           title: Row(
             children: [
               Text(
-                widget.user.userName,
+                widget.user.lastName,
                 style: AppTextStyles.josefin(
                     style: TextStyle(
                         color: Colors.black,
@@ -422,18 +414,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               end: Alignment.centerRight,
                               colors: [Color(0xFFAF48FF), Color(0xFF212E73)],
                             )),
-                        child:
-                            // emplyList == false
-                            //     ?const SizedBox()
-                            // Padding(
-                            //         padding: EdgeInsets.all(10.sp),
-                            //         child: const Image(
-                            //           image: AssetImage(
-                            //               'assets/images/microphone_chat_screen.png'),
-                            //         ),
-                            //       )
-                            //     :
-                            const Center(
+                        child: const Center(
                           child:
                               Icon(Icons.send, color: Colors.white, size: 20),
                         ),
@@ -461,69 +442,30 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  // Future emojiesPicker() async {
-  //   EmojiPicker(
-  //     textEditingController: textController,
-  //     config: Config(
-  //       columns: 7,
-  //       emojiSizeMax: 32 *
-  //           (foundation.defaultTargetPlatform == TargetPlatform.iOS
-  //               ? 1.30
-  //               : 1.0),
-  //       verticalSpacing: 0,
-  //       horizontalSpacing: 0,
-  //       gridPadding: EdgeInsets.zero,
-  //       initCategory: Category.RECENT,
-  //       bgColor: Color(0xFFF2F2F2),
-  //       indicatorColor: Colors.blue,
-  //       iconColor: Colors.grey,
-  //       iconColorSelected: Colors.blue,
-  //       backspaceColor: Colors.blue,
-  //       skinToneDialogBgColor: Colors.white,
-  //       skinToneIndicatorColor: Colors.grey,
-  //       enableSkinTones: true,
-  //       recentTabBehavior: RecentTabBehavior.RECENT,
-  //       recentsLimit: 28,
-  //       noRecents: const Text(
-  //         'No Recents',
-  //         style: TextStyle(fontSize: 20, color: Colors.black26),
-  //         textAlign: TextAlign.center,
-  //       ), // Needs to be const Widget
-  //       loadingIndicator: const SizedBox.shrink(), // Needs to be const Widget
-  //       tabIndicatorAnimDuration: kTabScrollDuration,
-  //       categoryIcons: const CategoryIcons(),
-  //       buttonMode: ButtonMode.MATERIAL,
-  //     ),
-  //   );
-  // }
   void _openAttachmentOptions() {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          // Customize the appearance of your attachment options
-          // Add buttons or widgets for different attachment options
+        return SizedBox(
           height: 200,
           child: Column(
             children: [
               ListTile(
-                leading: Icon(Icons.photo),
-                title: Text('Choose Image'),
+                leading: const Icon(Icons.photo),
+                title: const Text('Choose Image'),
                 onTap: () {
-                  Navigator.pop(context); // Close the bottom sheet
-                  pickImage(ImageSource
-                      .gallery); // Method to pick an image (you may already have this method)
+                  Navigator.pop(context);
+                  pickImage(ImageSource.gallery);
                 },
               ),
               ListTile(
-                leading: Icon(Icons.attach_file),
-                title: Text('Attach File'),
+                leading: const Icon(Icons.attach_file),
+                title: const Text('Attach File'),
                 onTap: () {
                   pickFile();
                   Navigator.pop(context);
                 },
               ),
-              // Add more ListTile widgets for different attachment options if needed
             ],
           ),
         );
@@ -537,30 +479,22 @@ class _ChatScreenState extends State<ChatScreen> {
 
       if (result != null) {
         PlatformFile file = result.files.first;
-        print(file.runtimeType);
-        print('Picked file path: ${file.path}');
       } else {
         // User canceled the picker
       }
-    } catch (e) {
-      // Handle exceptions that might occur during file picking
-      print('Error picking file: $e');
-    }
+    } catch (_) {}
   }
-  Widget chatImage(String url){
+
+  Widget chatImage(String url) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => ImageView(
-                    imageUrl: url)));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (_) => ImageView(imageUrl: url)));
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: Image(
-          image: NetworkImage(
-              url),
+          image: NetworkImage(url),
           width: 100,
           height: 100,
           fit: BoxFit.cover,

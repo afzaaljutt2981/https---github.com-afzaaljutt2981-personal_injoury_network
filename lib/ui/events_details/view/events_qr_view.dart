@@ -69,10 +69,14 @@ class _EventsQrViewState extends State<EventsQrView> {
             left: screenWidth * 0.06,
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 18.sp,
+              child: Container(
+                width: 30.sp,
+                height: 40.sp,
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                  size: 18.sp,
+                ),
               ),
             ),
           ),

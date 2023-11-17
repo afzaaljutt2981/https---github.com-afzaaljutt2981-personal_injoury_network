@@ -38,7 +38,8 @@ class _AllEventScreenState extends State<AllEventScreen>
 
   @override
   Widget build(BuildContext context) {
-    if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() != Constants.adminEmail.toLowerCase()) {
+    if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
+        Constants.adminEmail.toLowerCase()) {
       List<TicketModel> tickets =
           context.watch<EventsController>().userBookedEvents;
       events = [];
@@ -50,7 +51,6 @@ class _AllEventScreenState extends State<AllEventScreen>
       }
     } else {
       events = context.watch<EventsController>().allEvents;
-      print("all events --> $events");
     }
     return Scaffold(
         backgroundColor: Colors.white,
@@ -87,8 +87,15 @@ class _AllEventScreenState extends State<AllEventScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Center(
-                    child: Text("No events"),
-                  ),
+                    child: Text(
+                      "No Events found",
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w200)),
+                    ),
+                  )
                 ],
               )
 

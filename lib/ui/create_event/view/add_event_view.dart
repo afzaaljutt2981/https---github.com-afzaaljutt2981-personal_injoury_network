@@ -54,13 +54,17 @@ class _AddEventViewState extends State<AddEventView> {
           backgroundColor: AppColors.kPrimaryColor,
           elevation: 0,
           leading: Padding(
-            padding: EdgeInsets.all(17.sp),
+            padding: EdgeInsets.all(10.sp),
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 18.sp,
+              child: Container(
+                width: 30.sp,
+                height: 40.sp,
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                  size: 18.sp,
+                ),
               ),
             ),
           ),
@@ -569,7 +573,7 @@ class _AddEventViewState extends State<AddEventView> {
                         context,
                         MaterialPageRoute(
                             builder: (_) =>
-                                BottomNavigationScreen(selectedIndex: 3)),
+                                BottomNavigationScreen(selectedIndex: 0)),
                         (route) => false);
                   },
                   Text(

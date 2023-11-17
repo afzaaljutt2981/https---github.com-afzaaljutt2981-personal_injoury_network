@@ -41,13 +41,17 @@ class _NotificationViewState extends State<NotificationView> {
           backgroundColor: Colors.white,
           elevation: 0,
           leading: Padding(
-            padding: EdgeInsets.all(17.sp),
+            padding: EdgeInsets.all(10.sp),
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: const Color(0xFF120D26),
-                size: 18.sp,
+              child: SizedBox(
+                width: 30.sp,
+                height: 40.sp,
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: const Color(0xFF120D26),
+                  size: 18.sp,
+                ),
               ),
             ),
           ),
@@ -123,11 +127,6 @@ class _NotificationViewState extends State<NotificationView> {
                   : Image(
                       width: 40.sp,
                       image: const AssetImage("assets/images/profile_pic.png")),
-              // Image(
-              //   height: 45.sp,
-              //   width: 45.sp,
-              //   image: const AssetImage('assets/images/profile_pic.png'),
-              // ),
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -136,7 +135,7 @@ class _NotificationViewState extends State<NotificationView> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        user.userName,
+                        user.lastName,
                         style: AppTextStyles.josefin(
                             style: TextStyle(
                                 color: AppColors.kBlackColor,
@@ -144,7 +143,11 @@ class _NotificationViewState extends State<NotificationView> {
                                 fontWeight: FontWeight.w500)),
                       ),
                       CustomSizeBox(5.h),
-                      const Text("Started following you"),
+                      Text(
+                        "started following you",
+                        style: AppTextStyles.josefin(
+                            style: TextStyle(fontSize: 12.sp)),
+                      ),
                       CustomSizeBox(10.h),
                       if (model.status == "Pending") buttonRow(model, user)
                     ],
@@ -163,7 +166,10 @@ class _NotificationViewState extends State<NotificationView> {
             ],
           ),
         ),
-        Divider()
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: const Divider(),
+        )
       ],
     );
   }
@@ -201,9 +207,11 @@ class _NotificationViewState extends State<NotificationView> {
             await context
                 .read<NotificationsController>()
                 .respondRequest(model.id, "Accepted", context);
+            // ignore: use_build_context_synchronously
             await context
                 .read<NotificationsController>()
                 .followTap(currentUser!, user.id, context);
+            // ignore: use_build_context_synchronously
             await context
                 .read<NotificationsController>()
                 .followingTap(user, context);
@@ -226,81 +234,3 @@ class _NotificationViewState extends State<NotificationView> {
     );
   }
 }
-
-// Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Image(
-//               height: 45.sp,
-//               width: 45.sp,
-//               image: const AssetImage('assets/images/profile_pic.png'),
-//             ),
-//             Expanded(
-//               child: Padding(
-//                 padding: EdgeInsets.symmetric(horizontal: 12.w),
-//                 child: Column(
-//                   mainAxisAlignment: MainAxisAlignment.start,
-//                   children: [
-//                     CustomSizeBox(4.h),
-//                     Text(
-//                       'David Silbia Invite Jo Malone London’s Mother’s ',
-//                       style: AppTextStyles.josefin(
-//                           style: TextStyle(
-//                               color: AppColors.kBlackColor, fontSize: 14.sp)),
-//                     ),
-//                     CustomSizeBox(10.h),
-//                     Row(
-//                       children: [
-//                         Container(
-//                           decoration: BoxDecoration(
-//                               color: Colors.white,
-//                               border:
-//                                   Border.all(color: const Color(0xFFEEEEEE)),
-//                               borderRadius: BorderRadius.circular(7.sp)),
-//                           child: Padding(
-//                             padding: EdgeInsets.symmetric(
-//                                 horizontal: 30.w, vertical: 9.h),
-//                             child: Text(
-//                               'Reject',
-//                               style: AppTextStyles.josefin(
-//                                   style: TextStyle(
-//                                       color: const Color(0xFF706D6D),
-//                                       fontSize: 12.sp)),
-//                             ),
-//                           ),
-//                         ),
-//                         SizedBox(
-//                           width: 8.w,
-//                         ),
-//                         Container(
-//                           decoration: BoxDecoration(
-//                               color: AppColors.kPrimaryColor,
-//                               borderRadius: BorderRadius.circular(7.sp)),
-//                           child: Padding(
-//                             padding: EdgeInsets.symmetric(
-//                                 horizontal: 30.w, vertical: 9.h),
-//                             child: Text(
-//                               'Accept',
-//                               style: AppTextStyles.josefin(
-//                                   style: TextStyle(
-//                                       color: Colors.white, fontSize: 12.sp)),
-//                             ),
-//                           ),
-//                         )
-//                       ],
-//                     )
-//                   ],
-//                 ),
-//               ),
-//             ),
-//             Padding(
-//               padding: EdgeInsets.only(top: 5.h),
-//               child: Text(
-//                 'Just now',
-//                 style: AppTextStyles.josefin(
-//                     style: const TextStyle(color: AppColors.kBlackColor)),
-//               ),
-//             )
-//           ],
-//         )

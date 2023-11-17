@@ -77,13 +77,17 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: Padding(
-          padding: EdgeInsets.all(19.sp),
+          padding: EdgeInsets.all(10.sp),
           child: GestureDetector(
             onTap: () => Navigator.pop(context),
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: AppColors.kPrimaryColor,
-              size: 18.sp,
+            child: SizedBox(
+              width: 30.sp,
+              height: 40.sp,
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.kPrimaryColor,
+                size: 18.sp,
+              ),
             ),
           ),
         ),
@@ -146,7 +150,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
