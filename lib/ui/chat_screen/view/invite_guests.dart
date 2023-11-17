@@ -16,32 +16,31 @@ class InviteGuests extends StatefulWidget {
       required this.currentUser,
       required this.allUsers,
       required this.event});
-  UserModel currentUser;
-  List<UserModel> allUsers;
-  EventModel event;
+  UserModel? currentUser;
+  List<UserModel?>? allUsers;
+  EventModel? event;
   @override
   State<InviteGuests> createState() => _InviteGuestsState();
 }
 
 class _InviteGuestsState extends State<InviteGuests> {
   bool isInvited = false;
-  List<UserModel> tempList = [];
-  List<UserModel> friends = [];
-  List<UserModel> sFriends = [];
+  List<UserModel?>? tempList = [];
+  List<UserModel?>? friends = [];
+  List<UserModel?>? sFriends = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    List<String> friendsIds = widget.currentUser.followers;
-    for (var element in widget.currentUser.followings) {
+    List<String?>? friendsIds = widget.currentUser?.followers??[];
+    for (var element in widget.currentUser?.followings??[]) {
       if (friendsIds.contains(element)) {
       } else {
         friendsIds.add(element);
       }
     }
     for (var element1 in friendsIds) {
-      friends
-          .add(widget.allUsers.firstWhere((element) => element.id == element1));
+      friends?.add(widget.allUsers?.firstWhere((element) => element?.id == element1));
     }
     sFriends = friends;
   }
@@ -60,7 +59,7 @@ class _InviteGuestsState extends State<InviteGuests> {
               topRight: Radius.circular(30.sp),
             ),
           ),
-          child: (sFriends.isEmpty)
+          child: (sFriends?.isEmpty == true)
               ? const Center(
                   child: Text(
                     "You have no friend to show",
@@ -143,7 +142,7 @@ class _InviteGuestsState extends State<InviteGuests> {
                           Container(
                             height: MediaQuery.of(context).size.height * 0.7,
                           ),
-                          if (sFriends.isEmpty) ...[
+                          if (sFriends?.isEmpty == true) ...[
                             const Padding(
                               padding: EdgeInsets.only(top: 18.0),
                               child: Center(child: Text("No User Found")),
@@ -154,13 +153,13 @@ class _InviteGuestsState extends State<InviteGuests> {
                                     MediaQuery.of(context).size.height * 0.7,
                                 child: ListView.builder(
                                     physics: const BouncingScrollPhysics(),
-                                    itemCount: sFriends.length,
+                                    itemCount: sFriends?.length??0,
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
-                                      return friend(sFriends[index]);
+                                      return friend(sFriends?[index]);
                                     }))
                           ],
-                          if (sFriends.isNotEmpty) ...[
+                          if (sFriends?.isNotEmpty == true) ...[
                             Positioned(
                               bottom: 0.h,
                               right: 10.w,
@@ -168,8 +167,8 @@ class _InviteGuestsState extends State<InviteGuests> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: GetButton(50.sp, () {
-                                  if (tempList.isNotEmpty) {
-                                    for (var element in tempList) {
+                                  if (tempList?.isNotEmpty == true) {
+                                    for (var element in tempList??[]) {
                                       context
                                           .read<EventsController>()
                                           .sendInvite(element.id, widget.event,
@@ -203,22 +202,22 @@ class _InviteGuestsState extends State<InviteGuests> {
     );
   }
 
-  Widget friend(UserModel friend) {
-    if (tempList.contains(friend) || widget.event.invites?.contains(friend.id) == true) {
+  Widget friend(UserModel? friend) {
+    if (tempList?.contains(friend) ?? false || widget.event?.invites?.contains(friend?.id) == true) {
       isInvited = true;
     }
     return GestureDetector(
       onTap: () {
         print("object");
-        if (tempList.isNotEmpty) {
-          tempList.add(friend);
+        if (tempList?.isNotEmpty == true) {
+          tempList?.add(friend);
         }
       },
       onLongPress: () {
         print("here is long press");
-        if (tempList.isEmpty) {
+        if (tempList?.isEmpty == true) {
           setState(() {
-            tempList.add(friend);
+            tempList?.add(friend);
           });
         }
       },
@@ -228,9 +227,9 @@ class _InviteGuestsState extends State<InviteGuests> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (friend.pImage != null) ...[
+            if (friend?.pImage != null) ...[
               CircleAvatar(
-                backgroundImage: NetworkImage(friend.pImage!),
+                backgroundImage: NetworkImage(friend?.pImage??""),
                 radius: 23,
               )
             ] else ...[
@@ -248,7 +247,7 @@ class _InviteGuestsState extends State<InviteGuests> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  friend.firstName,
+                  friend?.firstName??"",
                   style: AppTextStyles.josefin(
                       style: TextStyle(
                           color: const Color(0xFF120D26),
@@ -257,7 +256,7 @@ class _InviteGuestsState extends State<InviteGuests> {
                 ),
                 CustomSizeBox(5.h),
                 Text(
-                  '${friend.followers.length} Followers',
+                  '${friend?.followers?.length ?? 0} Followers',
                   style: AppTextStyles.josefin(
                       style: TextStyle(
                           color: const Color(0xFF747688),
@@ -291,13 +290,13 @@ class _InviteGuestsState extends State<InviteGuests> {
     );
   }
 
-  List<UserModel> searchUserByName(List<UserModel> users, String searchTerm) {
+  List<UserModel?>? searchUserByName(List<UserModel?>? users, String searchTerm) {
     // Create an empty list to store the matching events.
-    List<UserModel> matchingUsers = [];
+    List<UserModel?>? matchingUsers = [];
 
     // Iterate through the eventList and check if the title contains the searchTerm.
-    for (UserModel user in users) {
-      if (user.firstName.toLowerCase().contains(searchTerm.toLowerCase())) {
+    for (UserModel? user in users??[]) {
+      if ((user?.firstName??"").toLowerCase().contains(searchTerm.toLowerCase())) {
         matchingUsers.add(user);
       }
     }

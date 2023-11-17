@@ -82,7 +82,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    user!.firstName,
+                                    user!.firstName??"",
                                     style: AppTextStyles.josefin(
                                         style: TextStyle(
                                             color: AppColors.kBlackColor,
@@ -91,7 +91,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                   ),
                                   CustomSizeBox(5.h),
                                   Text(
-                                    user!.email,
+                                    user?.email??"",
                                     style: AppTextStyles.josefin(
                                         style: TextStyle(
                                             color: const Color(0xFF27261E),

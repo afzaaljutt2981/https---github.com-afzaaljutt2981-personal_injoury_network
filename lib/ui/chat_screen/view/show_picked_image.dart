@@ -34,7 +34,7 @@ class ShowPickedImage extends StatelessWidget {
             bottom: 15,
             left: 20,
             child: Text(
-              chatUser.userName,
+              chatUser.userName??"",
               style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
@@ -52,7 +52,7 @@ class ShowPickedImage extends StatelessWidget {
                   // ignore: use_build_context_synchronously
                   await context
                       .read<ChatController>()
-                      .sendMessage(chatUser.id, url, "image");
+                      .sendMessage(chatUser.id??"", url, "image");
                   // ignore: use_build_context_synchronously
                   Navigator.pop(context);
                   // ignore: use_build_context_synchronously

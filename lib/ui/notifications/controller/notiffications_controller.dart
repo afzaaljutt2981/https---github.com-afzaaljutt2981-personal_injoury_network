@@ -36,14 +36,14 @@ class NotificationsController extends ChangeNotifier {
   }
 
   followTap(
-      UserModel userModel, String followerId, BuildContext context) async {
-    final collectionRef = user.doc(userModel.id);
-    var fList = userModel.followers;
+      UserModel? userModel, String followerId, BuildContext context) async {
+    final collectionRef = user.doc(userModel?.id??"");
+    var fList = userModel?.followers??[];
 
-    if (fList.contains(followerId)) {
-      fList.remove(followerId);
+    if (fList?.contains(followerId) == true) {
+      fList?.remove(followerId);
     } else {
-      fList.add(followerId);
+      fList?.add(followerId);
     }
     try {
       await collectionRef.update(
@@ -66,10 +66,10 @@ class NotificationsController extends ChangeNotifier {
     final collectionRef = user.doc(userModel.id);
     var fList = userModel.followings;
 
-    if (fList.contains(id)) {
-      fList.remove(id);
+    if (fList?.contains(id) == true) {
+      fList?.remove(id);
     } else {
-      fList.add(id);
+      fList?.add(id);
     }
     try {
       await collectionRef.update(

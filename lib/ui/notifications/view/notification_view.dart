@@ -110,7 +110,7 @@ class _NotificationViewState extends State<NotificationView> {
         allUsers.firstWhere((element) => element.id == model.senderId);
     currentUser = allUsers.firstWhere(
         (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
-    DateTime time = DateTime.fromMillisecondsSinceEpoch(model.time);
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(model.time??0);
     String formattedDate = formatDateTime(time);
     return Column(
       children: [
@@ -137,7 +137,7 @@ class _NotificationViewState extends State<NotificationView> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        user.lastName,
+                        user.lastName??"",
                         style: AppTextStyles.josefin(
                             style: TextStyle(
                                 color: AppColors.kBlackColor,
@@ -183,7 +183,7 @@ class _NotificationViewState extends State<NotificationView> {
           onTap: () async {
             context
                 .read<NotificationsController>()
-                .respondRequest(model.id, "Rejected", context);
+                .respondRequest(model.id??"", "Rejected", context);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -208,11 +208,11 @@ class _NotificationViewState extends State<NotificationView> {
           onTap: () async {
             await context
                 .read<NotificationsController>()
-                .respondRequest(model.id, "Accepted", context);
+                .respondRequest(model.id??"", "Accepted", context);
             // ignore: use_build_context_synchronously
             await context
                 .read<NotificationsController>()
-                .followTap(currentUser!, user.id, context);
+                .followTap(currentUser, user.id??"", context);
             // ignore: use_build_context_synchronously
             await context
                 .read<NotificationsController>()

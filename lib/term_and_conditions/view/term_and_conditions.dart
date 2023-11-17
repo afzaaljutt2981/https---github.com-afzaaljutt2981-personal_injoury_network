@@ -5,6 +5,7 @@ import 'package:personal_injury_networking/ui/authentication/model/user_model.da
 import 'package:personal_injury_networking/ui/notifications/model/nitofications_model.dart';
 
 import '../../../global/utils/app_text_styles.dart';
+import '../../global/utils/app_colors.dart';
 
 class TermAndConditionsView extends StatefulWidget {
   const TermAndConditionsView({super.key});
@@ -35,10 +36,14 @@ class _TermAndConditionsViewState extends State<TermAndConditionsView> {
             padding: EdgeInsets.all(17.sp),
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: const Color(0xFF120D26),
-                size: 18.sp,
+              child: SizedBox(
+                width: 30.sp,
+                height: 40.sp,
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: AppColors.kPrimaryColor,
+                  size: 18.sp,
+                ),
               ),
             ),
           ),

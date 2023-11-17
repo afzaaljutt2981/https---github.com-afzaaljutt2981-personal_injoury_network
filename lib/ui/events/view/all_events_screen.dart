@@ -58,6 +58,24 @@ class _AllEventScreenState extends State<AllEventScreen>
           backgroundColor: Colors.white,
           elevation: 0,
           automaticallyImplyLeading: false,
+          leading: FirebaseAuth.instance.currentUser?.email?.toLowerCase() ==
+                  Constants.adminEmail.toLowerCase()
+              ? Padding(
+                  padding: EdgeInsets.all(19.sp),
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: SizedBox(
+                      width: 30.sp,
+                      height: 40.sp,
+                      child: Icon(
+                        Icons.arrow_back_ios,
+                        color: AppColors.kPrimaryColor,
+                        size: 18.sp,
+                      ),
+                    ),
+                  ),
+                )
+              : SizedBox(),
           title: Center(
             child: Text(
               "All Events",

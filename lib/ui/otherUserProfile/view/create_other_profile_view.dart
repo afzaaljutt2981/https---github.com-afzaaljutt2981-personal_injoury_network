@@ -9,8 +9,8 @@ class CreateOtherUserProfileView extends StatefulWidget {
   CreateOtherUserProfileView(
       {super.key, required this.participant, required this.currentUser});
 
-  UserModel participant;
-  UserModel currentUser;
+  UserModel? participant;
+  UserModel? currentUser;
 
   @override
   State<CreateOtherUserProfileView> createState() =>
@@ -22,7 +22,7 @@ class _CreateOtherUserProfileViewState
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => OtherUserProfileController(userId: widget.participant.id),
+      create: (_) => OtherUserProfileController(userId: widget.participant?.id),
       child: OtherUserProfileScreen(
         currentUser: widget.currentUser,
       ),

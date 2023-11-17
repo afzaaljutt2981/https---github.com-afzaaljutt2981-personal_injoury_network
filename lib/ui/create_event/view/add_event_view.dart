@@ -62,7 +62,7 @@ class _AddEventViewState extends State<AddEventView> {
                 height: 40.sp,
                 child: Icon(
                   Icons.arrow_back_ios,
-                  color: Colors.white,
+                  color: AppColors.kPrimaryColor,
                   size: 18.sp,
                 ),
               ),
@@ -477,10 +477,10 @@ class _AddEventViewState extends State<AddEventView> {
                       SelectLocation(primary: AppColors.kPrimaryColor)))
               .then((value) {
             if (value is AddressModel) {
-              locationController.text = value.address;
+              locationController.text = value.address??"";
               setState(() {
-                latitude = value.latitude;
-                longitude = value.longitude;
+                latitude = value.latitude??0;
+                longitude = value.longitude??0;
               });
             }
           });

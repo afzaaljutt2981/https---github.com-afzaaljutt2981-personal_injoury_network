@@ -80,10 +80,10 @@ class OtherUserProfileController extends ChangeNotifier {
         FirebaseFirestore.instance.collection("users").doc(userModel.id);
     var fList = userModel.followers;
 
-    if (fList.contains(cId)) {
-      fList.remove(cId);
+    if (fList?.contains(cId) == true) {
+      fList?.remove(cId);
     } else {
-      fList.add(cId);
+      fList?.add(cId);
     }
     collectionRef.update(
       {
@@ -101,15 +101,15 @@ class OtherUserProfileController extends ChangeNotifier {
     });
   }
 
-  followingTap(UserModel userModel, String uId) {
+  followingTap(UserModel? userModel, String? uId) {
     String id = FirebaseAuth.instance.currentUser!.uid;
     final collectionRef = user.doc(id);
-    var fList = userModel.followings;
+    var fList = userModel?.followings??[];
 
     if (fList.contains(uId)) {
       fList.remove(uId);
     } else {
-      fList.add(uId);
+      fList.add(uId??"");
     }
     collectionRef.update(
       {

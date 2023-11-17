@@ -135,7 +135,7 @@ class AuthController extends ChangeNotifier {
         Map<String, dynamic> data = value.data() as Map<String, dynamic>;
         user = UserModel.fromJson(data);
         if (user != null) {
-          Constants.userType = user!.userType;
+          Constants.userType = user?.userType??"";
           await Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(

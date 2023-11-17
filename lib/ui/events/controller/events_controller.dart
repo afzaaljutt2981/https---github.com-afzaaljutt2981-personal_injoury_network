@@ -66,7 +66,7 @@ class EventsController extends ChangeNotifier {
     }
   }
 
-  sendInvite(String userId, EventModel event, context) async {
+  sendInvite(String userId, EventModel? event, context) async {
     try {
       Functions.showLoaderDialog(context);
       var doc = users.doc(userId).collection("notifications").doc();
@@ -75,7 +75,7 @@ class EventsController extends ChangeNotifier {
               id: doc.id,
               senderId: senderId,
               image: "",
-              eId: event.id,
+              eId: event?.id??"",
               notificationContent: "",
               time: DateTime.now().millisecondsSinceEpoch,
               notificationType: "Invite",
@@ -88,10 +88,10 @@ class EventsController extends ChangeNotifier {
       CustomSnackBar(false).showInSnackBar(e.toString(), context);
     }
   }
-updateEventInvite(EventModel event,String userId) async {
-    List<String?> invites = event.invites??[];
+updateEventInvite(EventModel? event,String? userId) async {
+    List<String?> invites = event?.invites??[];
     invites.add(userId);
-    await ref.doc(event.id).update({
+    await ref.doc(event?.id).update({
       "invites":invites
     });
 }

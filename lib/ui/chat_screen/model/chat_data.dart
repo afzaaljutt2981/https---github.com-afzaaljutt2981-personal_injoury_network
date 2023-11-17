@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatData {
-  String name;
-  String image;
-  DateTime dateTime;
-  String lastMessage;
-  String to;
+  String? name;
+  String? image;
+  DateTime? dateTime;
+  String? lastMessage;
+  String? to;
 
   ChatData(
       {required this.lastMessage,

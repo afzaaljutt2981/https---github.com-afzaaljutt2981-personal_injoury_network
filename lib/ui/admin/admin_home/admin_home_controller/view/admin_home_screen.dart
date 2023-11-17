@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/admin/admin_home/all_registered_marketers/view/create_all_registered_users_view.dart';
@@ -9,7 +10,9 @@ import 'package:provider/provider.dart';
 
 import '../../../../../global/utils/app_colors.dart';
 import '../../../../../global/utils/app_text_styles.dart';
+import '../../../../../global/utils/functions.dart';
 import '../../../../authentication/model/user_model.dart';
+import '../../../../authentication/view/login_view.dart';
 import '../../../../create_event/models/event_model.dart';
 import '../../../../drawer/view/create_drawer_view.dart';
 import '../../../../events/view/create_all_events_view.dart';
@@ -88,7 +91,8 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
+                              if (FirebaseAuth.instance.currentUser?.email
+                                      ?.toLowerCase() !=
                                   Constants.adminEmail.toLowerCase())
                                 GestureDetector(
                                   onTap: () {
@@ -117,7 +121,8 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                 ),
                               // Constants.userType == 'marketer'
                               //     ?
-                              if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
+                              if (FirebaseAuth.instance.currentUser?.email
+                                      ?.toLowerCase() !=
                                   Constants.adminEmail.toLowerCase())
                                 GestureDetector(
                                   onTap: () {
@@ -440,6 +445,64 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                 ),
                               ),
                             ),
+                            GestureDetector(
+                              onTap: () async {
+                                Functions.showLoaderDialog(context);
+                                await FirebaseAuth.instance.signOut();
+                                // ignore: use_build_context_synchronously
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const LoginView()),
+                                    (route) => false);
+                              },
+                              child: Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(18, 0, 0, 40),
+                                  child: Container(
+                                    height: 50,
+                                    width: 140,
+                                    decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: const Color(0xFFFE613D)
+                                                .withOpacity(0.2),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 8.sp),
+                                          )
+                                        ],
+                                        borderRadius:
+                                            BorderRadius.circular(15.sp),
+                                        color: const Color(0xFFD70E0E)
+                                            .withOpacity(0.8)),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20.w, vertical: 10.h),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.logout,
+                                            color: Colors.white,
+                                            size: 20.sp,
+                                          ),
+                                          SizedBox(
+                                            width: 10.w,
+                                          ),
+                                          Text(
+                                            "Logout",
+                                            style: GoogleFonts.poppins(
+                                                color: Colors.white,
+                                                fontSize: 12.sp),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       ),

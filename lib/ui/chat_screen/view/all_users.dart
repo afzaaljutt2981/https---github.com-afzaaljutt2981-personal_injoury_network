@@ -68,9 +68,10 @@ class _AllUsersChatState extends State<AllUsersChat> {
                             itemBuilder: (context, index) {
                               UserModel user = allUsers.firstWhere((element) =>
                                   element.id == chatUsers[index].to);
-                              DateTime dateTime = chatUsers[index].dateTime;
-                              String fDateTime =
-                                  DateFormat("HH:mm a").format(dateTime);
+                              DateTime? dateTime = chatUsers[index].dateTime;
+                              String fDateTime = dateTime != null
+                                  ? DateFormat("HH:mm a").format(dateTime)
+                                  : "";
                               return GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -128,7 +129,7 @@ class _AllUsersChatState extends State<AllUsersChat> {
                                                       CrossAxisAlignment.start,
                                                   children: <Widget>[
                                                     Text(
-                                                      user.lastName,
+                                                      user.lastName??"",
                                                       style: AppTextStyles.josefin(
                                                           style: TextStyle(
                                                               fontWeight:
@@ -141,12 +142,14 @@ class _AllUsersChatState extends State<AllUsersChat> {
                                                     CustomSizeBox(6.h),
                                                     Text(
                                                       chatUsers[index]
-                                                              .lastMessage
-                                                              .contains(
-                                                                  'https://')
+                                                                  .lastMessage
+                                                                  ?.contains(
+                                                                      'https://') ==
+                                                              true
                                                           ? 'sent a photo'
                                                           : chatUsers[index]
-                                                              .lastMessage,
+                                                                  .lastMessage ??
+                                                              "",
                                                       style: AppTextStyles.josefin(
                                                           style: TextStyle(
                                                               fontWeight:

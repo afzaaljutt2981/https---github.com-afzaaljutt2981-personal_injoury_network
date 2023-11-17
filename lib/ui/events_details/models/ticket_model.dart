@@ -1,7 +1,7 @@
 class TicketModel {
-  String id;
-  String eId;
-  String uId;
+  String? id;
+  String? eId;
+  String? uId;
 
   TicketModel({required this.id, required this.eId, required this.uId});
 

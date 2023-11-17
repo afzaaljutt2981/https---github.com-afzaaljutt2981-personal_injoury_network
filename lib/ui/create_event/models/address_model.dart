@@ -1,12 +1,12 @@
 class AddressModel {
-  double latitude = 0;
-  double longitude = 0;
+  double? latitude = 0;
+  double? longitude = 0;
 
   //address controllers
-  String address = "";
-  String city = "";
-  String postalCode = "";
-  String country = "";
+  String? address = "";
+  String? city = "";
+  String? postalCode = "";
+  String? country = "";
 
   AddressModel({
     required this.latitude,

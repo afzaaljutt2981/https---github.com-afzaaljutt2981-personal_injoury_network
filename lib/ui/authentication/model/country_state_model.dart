@@ -7,9 +7,9 @@ String countryStateModelToJson(CountryStateModel data) =>
     json.encode(data.toJson());
 
 class CountryStateModel {
-  bool error;
-  String msg;
-  List<Datum> data;
+  bool? error;
+  String? msg;
+  List<Datum?>? data;
 
   CountryStateModel({
     required this.error,
@@ -27,7 +27,7 @@ class CountryStateModel {
   Map<dynamic, dynamic> toJson() => {
         "error": error,
         "msg": msg,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": List<dynamic>.from((data??[]).map((x) => x?.toJson())),
       };
 }
 

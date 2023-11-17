@@ -37,18 +37,18 @@ class EventsDetailsView extends StatefulWidget {
 CollectionReference ref = FirebaseFirestore.instance.collection("users");
 
 class _EventsDetailsViewState extends State<EventsDetailsView> {
-  bool registerFee = false;
-  String followButton = "Follow";
-  List<EventModel> userEvents = [];
-  List<TicketModel> userTickets = [];
-  List<UserModel> eventParticipants = [];
-  List<UserModel> allUsers = [];
-  List<TicketModel> eventTickets = [];
+  bool? registerFee = false;
+  String? followButton = "Follow";
+  List<EventModel?>? userEvents = [];
+  List<TicketModel?>? userTickets = [];
+  List<UserModel?>? eventParticipants = [];
+  List<UserModel?>? allUsers = [];
+  List<TicketModel?>? eventTickets = [];
   UserModel? currentUser;
   UserModel? eventCreater;
-  String notifyId = "";
-  List<DateTime> weekDates = [];
-  String buttonName = "Register";
+  String? notifyId = "";
+  List<DateTime?>? weekDates = [];
+  String? buttonName = "Register";
   @override
   Widget build(BuildContext context) {
     eventTickets = [];
@@ -228,7 +228,9 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                           ],
                         ),
                       ),
-                      Padding(
+                      if (Constants.userType == 'user' && FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
+                          Constants.adminEmail.toLowerCase())
+                        Padding(
                         padding: EdgeInsets.only(
                           left: 8.w,
                           right: 8.w,
@@ -265,7 +267,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                             )
                           ],
                         ),
-                      ),
+                      )
+                      else SizedBox(height: 20,),
                       Text(
                         widget.event.description??"",
                         style: AppTextStyles.josefin(
@@ -280,7 +283,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            for (var e in weekDates) calenderView(e, dateTime),
+                            for (var e in weekDates??[]) calenderView(e, dateTime),
                           ],
                         ),
                       ),
@@ -321,23 +324,23 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         ),
                       ),
                       CustomSizeBox(25.h),
-                      if (eventParticipants.length > 2) ...[
+                      if ((eventParticipants?.length??0) > 2) ...[
                         Row(
                           children: [
                             for (var i = 0; i < 2; i++)
-                              participant(eventParticipants[i]),
+                              participant(eventParticipants?[i]),
                             GestureDetector(
                               onTap: () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (_) => AllParticipantsView(
-                                              users: eventParticipants,
+                                              users: eventParticipants??[],
                                               currentUser: currentUser!,
                                             )));
                               },
                               child: Text(
-                                "+${eventParticipants.length - 2} Participants",
+                                "+${(eventParticipants?.length??0) - 2} Participants",
                                 style: const TextStyle(color: Colors.black),
                               ),
                             )
@@ -345,7 +348,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         )
                       ] else ...[
                         Row(children: [
-                          for (var e in eventParticipants) participant(e)
+                          for (var e in eventParticipants??[]) participant(e)
                         ])
                       ],
                     ],
@@ -353,7 +356,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                 ),
               ),
             ),
-            currentUser!.userType == 'user'
+            currentUser!.userType == 'user' && FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
+                Constants.adminEmail.toLowerCase()
                 ? Padding(
                     padding:
                         EdgeInsets.only(left: 40.w, right: 40.w, bottom: 20.h),
@@ -377,7 +381,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                       }
                     },
                         Text(
-                          buttonName,
+                          buttonName??"",
                           style: AppTextStyles.josefin(
                               style: TextStyle(
                                   color: Colors.white, fontSize: 18.sp)),
@@ -536,7 +540,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
           return InviteGuests(
             currentUser: currentUser!,
             event: widget.event,
-            allUsers: allUsers,
+            allUsers: allUsers??[],
           );
         });
       },
@@ -569,7 +573,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      eventCreater!.userName,
+                      eventCreater?.userName??"",
                       style: AppTextStyles.josefin(
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
@@ -587,13 +591,14 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                     ),
                   ],
                 )),
-                GestureDetector(
+                if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
+                    Constants.adminEmail.toLowerCase()) GestureDetector(
                   onTap: () async {
                     if (followButton == "Follow") {
                       context
                           .read<OtherUserProfileController>()
                           .sendFollowRequest(
-                            eventCreater!.id,
+                            eventCreater?.id??"",
                           );
                     } else if (followButton == "Following") {
                       await context
@@ -606,7 +611,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                       // ignore: use_build_context_synchronously
                       await context
                           .read<OtherUserProfileController>()
-                          .unFollow(eventCreater!.id, notifyId);
+                          .unFollow(eventCreater?.id??"", notifyId??"");
                     }
                   },
                   child: Padding(
@@ -621,7 +626,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         padding: EdgeInsets.all(10.sp),
                         child: Center(
                           child: Text(
-                            followButton,
+                            followButton??"",
                             style: AppTextStyles.josefin(
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
@@ -639,7 +644,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
         : const SizedBox();
   }
 
-  Widget participant(UserModel user) {
+  Widget participant(UserModel? user) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: GestureDetector(
@@ -659,10 +664,10 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
               ),
             );
           },
-          child: (user.pImage != null)
+          child: (user?.pImage != null)
               ? CircleAvatar(
                   radius: 20,
-                  backgroundImage: NetworkImage(user.pImage!),
+                  backgroundImage: NetworkImage(user?.pImage??""),
                 )
               : Image(
                   width: 40.sp,
@@ -671,7 +676,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   }
 
   setRegisterButton() {
-    for (var element in eventParticipants) {
+    for (var element in eventParticipants??[]) {
       if (element.id == currentUser!.id) {
         buttonName = "Registered";
       }
@@ -690,20 +695,19 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   addWeekDates(DateTime dateTime) {
     DateTime tempDate = dateTime.subtract(const Duration(days: 3));
     for (var i = 0; i < 6; i++) {
-      weekDates.add(tempDate.add(Duration(days: i)));
+      weekDates?.add(tempDate.add(Duration(days: i)));
     }
   }
 
   setData(List<NotificationsModel> notifications) {
-    if (allUsers.isNotEmpty) {
-      currentUser = allUsers.firstWhere(
-          (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+    if (allUsers?.isNotEmpty == true) {
+      currentUser = allUsers?.firstWhere(
+          (element) => element?.id == FirebaseAuth.instance.currentUser!.uid);
       eventCreater =
-          allUsers.firstWhere((element) => element.id == widget.event.uId);
+          allUsers?.firstWhere((element) => element?.id == widget.event.uId);
       setFollowButton(notifications);
-      for (var element1 in eventTickets) {
-        eventParticipants
-            .add(allUsers.firstWhere((element) => element.id == element1.uId));
+      for (var element1 in eventTickets??[]) {
+        eventParticipants?.add(allUsers?.firstWhere((element) => element?.id == element1.uId));
       }
     }
   }

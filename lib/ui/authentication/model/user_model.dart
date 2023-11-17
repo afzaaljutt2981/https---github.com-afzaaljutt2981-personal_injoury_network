@@ -1,20 +1,20 @@
 class UserModel {
-  late String firstName;
-  late String lastName;
-  late String company;
-  late String position;
-  late int phone;
-  late String email;
+  late String? firstName;
+  late String? lastName;
+  late String? company;
+  late String? position;
+  late int? phone;
+  late String? email;
   String? pImage;
-  late String website;
-  late String location;
-  late String userName;
-  late String id;
-  late String reference;
-  late String userType;
-  List<String> hobbies = [];
-  List<String> followers = [];
-  List<String> followings = [];
+  late String? website;
+  late String? location;
+  late String? userName;
+  late String? id;
+  late String? reference;
+  late String? userType;
+  List<String?>? hobbies = [];
+  List<String?>? followers = [];
+  List<String?>? followings = [];
 
   UserModel(
       {required this.location,

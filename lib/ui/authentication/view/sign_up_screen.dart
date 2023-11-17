@@ -177,10 +177,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onTap: () {
                         willPopCalled();
                       },
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.white,
-                        size: 18.sp,
+                      child: SizedBox(
+                        width: 30.sp,
+                        height: 40.sp,
+                        child: Icon(
+                          Icons.arrow_back_ios,
+                          color: AppColors.kPrimaryColor,
+                          size: 18.sp,
+                        ),
                       ),
                     ),
                   ],

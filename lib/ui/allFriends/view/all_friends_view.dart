@@ -20,18 +20,18 @@ class AllFriendsScreen extends StatefulWidget {
 }
 
 class _AllFriendsScreenState extends State<AllFriendsScreen> {
-  List<UserModel> friendsList = [];
-  List<UserModel> allUsers = [];
+  List<UserModel?>? friendsList = [];
+  List<UserModel?>? allUsers = [];
 
   @override
   Widget build(BuildContext context) {
     allUsers = [];
     friendsList = [];
     allUsers = context.watch<EventsController>().allUsers;
-    List<String> tempList = widget.user.followers + widget.user.followings;
-    for (var element in allUsers) {
+    List<String?>? tempList = (widget.user.followers??[]) + (widget.user.followings??[]);
+    for (var element in allUsers??[]) {
       if (tempList.contains(element.id)) {
-        friendsList.add(element);
+        friendsList?.add(element);
       }
     }
     return Scaffold(
@@ -43,10 +43,14 @@ class _AllFriendsScreenState extends State<AllFriendsScreen> {
           padding: EdgeInsets.all(19.sp),
           child: GestureDetector(
             onTap: () => Navigator.pop(context),
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: AppColors.kPrimaryColor,
-              size: 18.sp,
+            child: SizedBox(
+              width: 30.sp,
+              height: 40.sp,
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.kPrimaryColor,
+                size: 18.sp,
+              ),
             ),
           ),
         ),
@@ -67,15 +71,15 @@ class _AllFriendsScreenState extends State<AllFriendsScreen> {
       body: Column(
         children: [
           CustomSizeBox(5.h),
-          if (friendsList.isEmpty) ...[
+          if (friendsList?.isEmpty == true) ...[
             const Expanded(child: Center(child: Text("No Friend Yet")))
           ] else ...[
             Expanded(
                 child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
-                    itemCount: friendsList.length,
+                    itemCount: friendsList?.length,
                     itemBuilder: (context, index) {
-                      return friend(friendsList[index]);
+                      return friend(friendsList?[index]);
                     })),
           ],
         ],
@@ -83,7 +87,7 @@ class _AllFriendsScreenState extends State<AllFriendsScreen> {
     );
   }
 
-  Widget friend(UserModel user) {
+  Widget friend(UserModel? user) {
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -102,10 +106,10 @@ class _AllFriendsScreenState extends State<AllFriendsScreen> {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             child: Row(children: [
-              if (user.pImage != null) ...[
+              if (user?.pImage != null) ...[
                 CircleAvatar(
                   radius: 25,
-                  backgroundImage: NetworkImage(user.pImage!),
+                  backgroundImage: NetworkImage(user?.pImage??""),
                 )
               ] else ...[
                 Image(
@@ -120,7 +124,7 @@ class _AllFriendsScreenState extends State<AllFriendsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    user.lastName,
+                    user?.lastName??"",
                     style: AppTextStyles.josefin(
                         style: TextStyle(
                             fontSize: 16.sp,
@@ -129,7 +133,7 @@ class _AllFriendsScreenState extends State<AllFriendsScreen> {
                   ),
                   CustomSizeBox(3.h),
                   Text(
-                    user.position,
+                    user?.position??"",
                     style: AppTextStyles.josefin(
                         style: TextStyle(
                             fontSize: 10.sp,

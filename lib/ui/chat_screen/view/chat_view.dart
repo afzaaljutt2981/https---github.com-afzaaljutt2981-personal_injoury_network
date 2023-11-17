@@ -104,7 +104,7 @@ class _ChatScreenState extends State<ChatScreen> {
           title: Row(
             children: [
               Text(
-                widget.user.lastName,
+                widget.user.lastName??"",
                 style: AppTextStyles.josefin(
                     style: TextStyle(
                         color: Colors.black,
@@ -137,7 +137,7 @@ class _ChatScreenState extends State<ChatScreen> {
             physics: const ClampingScrollPhysics(),
             itemBuilder: (context, index) {
               Alignment alignment = Alignment.topLeft;
-              String time = DateFormat("HH:mm").format(chats[index].dateTime);
+              String? time = chats[index].dateTime != null ? DateFormat("HH:mm").format(chats[index].dateTime!) : "";
               bool match = false;
               if (chats[index].senderId ==
                   FirebaseAuth.instance.currentUser!.uid) {
@@ -169,7 +169,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               padding: EdgeInsets.all(18.sp),
                               child: Text(
-                                chats[index].messageContent,
+                                chats[index].messageContent??"",
                                 style: TextStyle(
                                   fontSize: 12.sp,
                                   color: (!match ? Colors.black : Colors.white),
@@ -180,12 +180,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                   onPressed: () async {
                                     await audioPlayer.play(
                                         UrlSource(
-                                          chats[index].messageContent,
+                                          chats[index].messageContent??"",
                                         ),
                                         mode: PlayerMode.mediaPlayer);
                                   },
                                   icon: const Icon(Icons.play_arrow))
-                              : chatImage(chats[index].messageContent),
+                              : chatImage(chats[index].messageContent??""),
                       Text(time)
                     ],
                   ),
@@ -389,7 +389,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       onTap: () async {
                         if (emplyList) {
                           context.read<ChatController>().sendMessage(
-                              widget.user.id, textController.text, "text");
+                              widget.user.id??"", textController.text, "text");
                           setState(() {
                             textController.clear();
                             emplyList = false;

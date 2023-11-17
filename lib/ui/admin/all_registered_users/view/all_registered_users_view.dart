@@ -51,10 +51,14 @@ class _AllRegisteredUsersScreenState extends State<AllRegisteredUsersScreen> {
             padding: EdgeInsets.all(19.sp),
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: AppColors.kPrimaryColor,
-                size: 18.sp,
+              child: SizedBox(
+                width: 30.sp,
+                height: 40.sp,
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: AppColors.kPrimaryColor,
+                  size: 18.sp,
+                ),
               ),
             ),
           ),

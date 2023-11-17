@@ -48,10 +48,14 @@ class _AllRegisteredUsersScreenState
             padding: EdgeInsets.all(19.sp),
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: AppColors.kPrimaryColor,
-                size: 18.sp,
+              child: SizedBox(
+                width: 30.sp,
+                height: 40.sp,
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: AppColors.kPrimaryColor,
+                  size: 18.sp,
+                ),
               ),
             ),
           ),
@@ -138,7 +142,7 @@ class _AllRegisteredUsersScreenState
                                                           FontWeight.w500)),
                                             ),
                                             Text(
-                                              model.position,
+                                              model.position??"",
                                               style: AppTextStyles.josefin(
                                                   style: TextStyle(
                                                       fontSize: 10.sp,

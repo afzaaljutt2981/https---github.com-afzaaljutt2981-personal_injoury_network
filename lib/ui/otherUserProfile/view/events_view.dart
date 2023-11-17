@@ -10,13 +10,15 @@ import '../../authentication/model/user_model.dart';
 
 // ignore: must_be_immutable
 class OrganizerEvents extends StatelessWidget {
-  List<EventModel> userEvents;
-UserModel userModel;
-  OrganizerEvents({super.key, required this.userEvents,required this.userModel});
+  List<EventModel?>? userEvents;
+  UserModel? userModel;
+
+  OrganizerEvents(
+      {super.key, required this.userEvents, required this.userModel});
 
   @override
   Widget build(BuildContext context) {
-    return userEvents.isEmpty
+    return userEvents?.isEmpty == true
         ? Column(
             children: [
               CustomSizeBox(30.h),
@@ -39,20 +41,21 @@ UserModel userModel;
         : ListView.builder(
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
-            itemCount: userEvents.length,
+            itemCount: userEvents?.length??0,
             itemBuilder: (context, index) {
-              return eventBox(userEvents[index]);
+              return eventBox(userEvents?[index]);
             });
   }
 
-  Widget eventBox(EventModel event){
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(event.dateTime??0);
-    String status = event.status??"";
-    if(date.isBefore(DateTime.now()) && status != "cancelled"){
+  Widget eventBox(EventModel? event) {
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(event?.dateTime ?? 0);
+    String status = event?.status ?? "";
+    if (date.isBefore(DateTime.now()) && status != "cancelled") {
       status = "Completed";
     }
     String fDate = DateFormat("d MMM- EEEE").format(date);
-    DateTime startTime = DateTime.fromMillisecondsSinceEpoch(event.startTime??0);
+    DateTime startTime =
+        DateTime.fromMillisecondsSinceEpoch(event?.startTime ?? 0);
     String fStartTime = DateFormat("HH:mm a").format(startTime);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
@@ -81,13 +84,12 @@ UserModel userModel;
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(20.sp),
                     image: DecorationImage(
-                        image: NetworkImage(event.pImage??""),
+                        image: NetworkImage(event?.pImage ?? ""),
                         fit: BoxFit.cover)),
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(
-                      left: 20.w, right: 10.w, top: 20.h),
+                  padding: EdgeInsets.only(left: 20.w, right: 10.w, top: 20.h),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,40 +107,37 @@ UserModel userModel;
                       ),
                       CustomSizeBox(10.h),
                       Text(
-                        event.title??"",
+                        event?.title ?? "",
                         style: AppTextStyles.josefin(
                             style: TextStyle(
                                 color: const Color(0xFF120D26),
                                 fontSize: 18.sp,
                                 fontWeight: FontWeight.w500)),
                       ),
-                      userModel.userType == 'user'
+                      userModel?.userType == 'user'
                           ? const SizedBox()
                           : Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF0AFF31)
-                                  .withOpacity(0.24),
-                              borderRadius:
-                              BorderRadius.circular(20.sp),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(8.sp),
-                              child: Text(
-                                status,
-                                style: AppTextStyles.josefin(
-                                    style: TextStyle(
-                                        color: const Color(
-                                            0xFF17DF1F),
-                                        fontSize: 12.sp)),
-                              ),
-                            ),
-                          )
-                        ],
-                      )
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF0AFF31)
+                                        .withOpacity(0.24),
+                                    borderRadius: BorderRadius.circular(20.sp),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.sp),
+                                    child: Text(
+                                      status,
+                                      style: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              color: const Color(0xFF17DF1F),
+                                              fontSize: 12.sp)),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
                     ],
                   ),
                 ),

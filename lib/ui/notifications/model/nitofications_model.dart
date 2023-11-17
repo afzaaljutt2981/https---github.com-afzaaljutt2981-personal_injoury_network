@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 
 class NotificationsModel {
-  String id;
-  String senderId;
-  String image;
+  String? id;
+  String? senderId;
+  String? image;
   String? eId;
-  String notificationContent;
-  int time;
-  String status;
-  String notificationType;
+  String? notificationContent;
+  int? time;
+  String? status;
+  String? notificationType;
   NotificationsModel({
     required this.id,
     required this.senderId,

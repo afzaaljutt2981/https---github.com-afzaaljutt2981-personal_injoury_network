@@ -67,7 +67,7 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
   Widget build(BuildContext context) {
     user = context.watch<MyProfileController>().user;
     if (user != null) {
-      var hobbies =  user?.hobbies.join(', ');
+      var hobbies =  user?.hobbies?.join(', ');
       textFieldController[0].text = user?.company??"";
       textFieldController[1].text = user?.position??"";
       textFieldController[2].text = user?.website??"";
@@ -185,7 +185,7 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      user!.firstName,
+                                      user?.firstName??"",
                                       style: AppTextStyles.josefin(
                                           style: TextStyle(
                                               color: const Color(0xFF27261E),
@@ -210,7 +210,7 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                 ),
                                 CustomSizeBox(4.h),
                                 Text(
-                                  user!.email,
+                                  user?.email??"",
                                   style: AppTextStyles.josefin(
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400,

@@ -14,13 +14,14 @@ import 'package:personal_injury_networking/ui/otherUserProfile/view/events_view.
 import 'package:personal_injury_networking/ui/otherUserProfile/view/reviews_view.dart';
 import 'package:provider/provider.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../../global/utils/constants.dart';
 import '../../create_event/models/event_model.dart';
 import '../../events_details/models/ticket_model.dart';
 
 // ignore: must_be_immutable
 class OtherUserProfileScreen extends StatefulWidget {
   OtherUserProfileScreen({super.key, required this.currentUser});
-  UserModel currentUser;
+  UserModel? currentUser;
   @override
   State<OtherUserProfileScreen> createState() => _OtherUserProfileScreenState();
 }
@@ -34,12 +35,12 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
     super.initState();
   }
 
-  bool isFollow = false;
+  bool? isFollow = false;
   UserModel? user;
-  String followButton = "Follow";
-  List<EventModel> userEvents = [];
-  List<TicketModel> userTickets = [];
-  String notifyId = "";
+  String? followButton = "Follow";
+  List<EventModel?>? userEvents = [];
+  List<TicketModel?>? userTickets = [];
+  String? notifyId = "";
   @override
   Widget build(BuildContext context) {
     userEvents = [];
@@ -50,10 +51,10 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
     user = context.watch<OtherUserProfileController>().userModel;
     userTickets = context.watch<OtherUserProfileController>().userTickets;
     if (allEvents.isNotEmpty) {
-      for (var element in userTickets) {
+      for (var element in userTickets??[]) {
         for (var element1 in allEvents) {
           if (element1.id == element.eId) {
-            userEvents.add(element1);
+            userEvents?.add(element1);
           }
         }
       }
@@ -68,10 +69,14 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
           padding: EdgeInsets.all(19.sp),
           child: GestureDetector(
             onTap: () => Navigator.pop(context),
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: AppColors.kPrimaryColor,
-              size: 18.sp,
+            child: SizedBox(
+              width: 30.sp,
+              height: 40.sp,
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.kPrimaryColor,
+                size: 18.sp,
+              ),
             ),
           ),
         ),
@@ -104,7 +109,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                 ],
                 CustomSizeBox(20.h),
                 Text(
-                  user!.userName,
+                  (user?.userName??""),
                   style: AppTextStyles.josefin(
                       style: TextStyle(
                           color: Colors.black,
@@ -120,7 +125,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          user!.followings.length.toString(),
+                          (user!.followings?.length??0).toString(),
                           style: AppTextStyles.josefin(
                               style: TextStyle(
                                   fontSize: 16.sp,
@@ -157,7 +162,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          user!.followers.length.toString(),
+                          (user?.followers?.length??0).toString(),
                           style: AppTextStyles.josefin(
                               style: TextStyle(
                                   fontSize: 16.sp,
@@ -186,14 +191,15 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                         child: Row(
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
+                            if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
+                                Constants.adminEmail.toLowerCase()) Expanded(
                               child: GestureDetector(
                                 onTap: () async {
                                   if (followButton == "Follow") {
                                     context
                                         .read<OtherUserProfileController>()
                                         .sendFollowRequest(
-                                          user!.id,
+                                          user?.id??"",
                                         );
                                   } else if (followButton == "Following") {
                                     await context
@@ -204,11 +210,11 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                     await context
                                         .read<OtherUserProfileController>()
                                         .followingTap(
-                                            widget.currentUser, user!.id);
+                                            widget.currentUser, user?.id);
                                     // ignore: use_build_context_synchronously
                                     await context
                                         .read<OtherUserProfileController>()
-                                        .unFollow(user!.id, notifyId);
+                                        .unFollow(user?.id??"", notifyId??"");
                                   }
                                 },
                                 child: Container(
@@ -242,7 +248,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                           width: 7.w,
                                         ),
                                         Text(
-                                          followButton,
+                                          followButton??"",
                                           style: AppTextStyles.josefin(
                                               style: TextStyle(
                                                   color: Colors.white,
@@ -357,7 +363,8 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                   ),
                 ),
                 if (followButton == "Following" ||
-                    FirebaseAuth.instance.currentUser!.uid == user!.id) ...[
+                    FirebaseAuth.instance.currentUser!.uid == user!.id || FirebaseAuth.instance.currentUser?.email?.toLowerCase() ==
+                    Constants.adminEmail.toLowerCase()) ...[
                   Expanded(
                       child: TabBarView(controller: tabController, children: [
                     OrganizerAbout(

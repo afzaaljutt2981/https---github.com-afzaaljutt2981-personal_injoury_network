@@ -27,18 +27,18 @@ class OrganizerAbout extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             text('Company', FontWeight.w600),
-            text(user.company, FontWeight.w600,
+            text(user?.company??"", FontWeight.w600,
                 color: AppColors.kLiteBlueColor),
             CustomSizeBox(9.h),
             text('Job/Position', FontWeight.w600),
-            text(user.position, FontWeight.w600,
+            text(user.position??"", FontWeight.w600,
                 color: AppColors.kLiteBlueColor),
             CustomSizeBox(9.h),
             text('Email', FontWeight.w600),
-            text(user.email, FontWeight.w600, color: AppColors.kLiteBlueColor),
+            text(user.email??"", FontWeight.w600, color: AppColors.kLiteBlueColor),
             CustomSizeBox(9.h),
             text('Website', FontWeight.w600),
-            text(user.website, FontWeight.w600,
+            text(user.website??"", FontWeight.w600,
                 color: AppColors.kLiteBlueColor),
             CustomSizeBox(9.h),
             text('Cellphone', FontWeight.w600),
@@ -48,7 +48,7 @@ class OrganizerAbout extends StatelessWidget {
             text('Hobbies', FontWeight.w600),
             Row(
               children: [
-                for (var e in user.hobbies)
+                for (var e in user.hobbies??[])
                   text("$e,", FontWeight.w600, color: AppColors.kLiteBlueColor),
               ],
             ),

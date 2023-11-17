@@ -23,7 +23,7 @@ class MyProfileController extends ChangeNotifier {
           Map<String, dynamic> data = event.data() as Map<String, dynamic>;
           user = UserModel.fromJson(data);
           if(user != null){
-            Constants.userType = user!.userType;
+            Constants.userType = user?.userType??"";
           }
         }
         notifyListeners();

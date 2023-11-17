@@ -15,8 +15,8 @@ class AllParticipantsView extends StatefulWidget {
   AllParticipantsView(
       {super.key, required this.users, required this.currentUser});
 
-  List<UserModel> users;
-  UserModel currentUser;
+  List<UserModel?>? users;
+  UserModel? currentUser;
 
   @override
   State<AllParticipantsView> createState() => _AllParticipantsViewState();
@@ -28,11 +28,11 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
     // TODO: implement initState
     super.initState();
     setState(() {
-    users = widget.users;
-    users.sort((a, b) => a.userName.compareTo(b.userName));
+    users = widget.users??[];
+    users?.sort((a, b) => (a?.userName??"").compareTo(b?.userName??""));
     });
     }
-  List<UserModel> users = [];
+  List<UserModel?>? users = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,10 +49,14 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
               children: [
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: AppColors.kPrimaryColor,
-                    size: 18.sp,
+                  child: SizedBox(
+                    width: 30.sp,
+                    height: 40.sp,
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: AppColors.kPrimaryColor,
+                      size: 18.sp,
+                    ),
                   ),
                 ),
                 Constants.userType == 'user'
@@ -112,7 +116,7 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                     children: [
                       CustomSizeBox(25.h),
                       Text(
-                        'No 0f Registered Users : ${users.length}',
+                        'No 0f Registered Users : ${users?.length??0}',
                         textAlign: TextAlign.end,
                         style: AppTextStyles.josefin(
                           style: TextStyle(
@@ -130,7 +134,7 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
               child: Constants.userType == 'user'
                   ? GridView.builder(
                       physics: const BouncingScrollPhysics(),
-                      itemCount: users.length,
+                      itemCount: users?.length??0,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         mainAxisExtent: 80.h,
@@ -147,19 +151,19 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                                 reverseDuration:
                                     const Duration(milliseconds: 200),
                                 child: CreateOtherUserProfileView(
-                                  participant: users[index],
-                                  currentUser: users[index],
+                                  participant: users?[index],
+                                  currentUser: users?[index],
                                 ),
                               ),
                             );
                           },
                           child: Column(
                             children: [
-                              if (users[index].pImage != null) ...[
+                              if (users?[index]?.pImage != null) ...[
                                 CircleAvatar(
                                   radius: 25,
                                   backgroundImage: NetworkImage(
-                                    users[index].pImage!,
+                                    users?[index]?.pImage??"",
                                   ),
                                 )
                               ] else ...[
@@ -194,7 +198,7 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                               ),
                               Expanded(
                                 child: Text(
-                                  users[index].userName,
+                                  users?[index]?.userName??"",
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.montserrat(
                                       color: const Color(0xFF1A1167),
@@ -209,10 +213,10 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                     )
                   : ListView.builder(
                       physics: const BouncingScrollPhysics(),
-                      itemCount: users.length,
+                      itemCount: users?.length??0,
                       // shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        UserModel user = users[index];
+                        UserModel? user = users?[index];
                         return Padding(
                           padding: EdgeInsets.only(
                               left: 12.w, right: 12.w, bottom: 10.h),
@@ -227,8 +231,8 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                                   reverseDuration:
                                   const Duration(milliseconds: 200),
                                   child: CreateOtherUserProfileView(
-                                    participant: users[index],
-                                    currentUser: users[index],
+                                    participant: users?[index],
+                                    currentUser: users?[index],
                                   ),
                                 ),
                               );
@@ -242,11 +246,11 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 12.w, vertical: 15.h),
                                 child: Row(children: [
-                                  if(user.pImage != null)...[
+                                  if(user?.pImage != null)...[
                                     CircleAvatar(
                                       radius: 23,
                                       backgroundImage: NetworkImage(
-                                        user.pImage!,
+                                        user?.pImage??"",
                                       ),
                                     )
                                   ]else...[
@@ -262,7 +266,7 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        user.userName,
+                                        user?.userName??"",
                                         style: AppTextStyles.josefin(
                                             style: TextStyle(
                                                 fontSize: 14.sp,
@@ -271,7 +275,7 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                                       ),
                                       CustomSizeBox(5.h),
                                       Text(
-                                        user.userType,
+                                        user?.userType??"",
                                         style: AppTextStyles.josefin(
                                             style: TextStyle(
                                                 fontSize: 10.sp,

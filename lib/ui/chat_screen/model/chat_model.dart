@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatMessage {
-  String id;
-  String messageContent;
-  String messageType;
-  String senderId;
-  DateTime dateTime;
+  String? id;
+  String? messageContent;
+  String? messageType;
+  String? senderId;
+  DateTime? dateTime;
 
   ChatMessage(
       {required this.messageContent,
