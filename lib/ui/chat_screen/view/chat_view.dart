@@ -115,7 +115,8 @@ class _ChatScreenState extends State<ChatScreen> {
       } else {
         print("condition true for else ${difference?.inDays}");
         modifiedChats.add(ChatMessage(
-            messageContent: chats.first.dateTime.toString(),
+            messageContent:
+                "${chats.first.dateTime?.day.toString()}-${chats.first.dateTime?.month.toString()}-${chats.first.dateTime?.year.toString()}",
             id: '',
             dateTime: null,
             messageType: 'date',
@@ -149,7 +150,8 @@ class _ChatScreenState extends State<ChatScreen> {
           } else {
             print("condition true for else ${difference?.inDays}");
             modifiedChats.add(ChatMessage(
-                messageContent: chat.dateTime.toString(),
+                messageContent:
+                    "${chat.dateTime?.day.toString()}-${chat.dateTime?.month.toString()}-${chat.dateTime?.year.toString()}",
                 id: '',
                 dateTime: null,
                 messageType: 'date',
