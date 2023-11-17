@@ -35,7 +35,7 @@ class _SearchEventScreenState extends State<SearchEventScreen> {
 
     // Iterate through the eventList and check if the title contains the searchTerm.
     for (EventModel event in eventList) {
-      if (event.title.toLowerCase().contains(searchTerm.toLowerCase())) {
+      if (event.title?.toLowerCase().contains(searchTerm.toLowerCase()) == true) {
         matchingEvents.add(event);
       }
     }
@@ -167,9 +167,9 @@ class _SearchEventScreenState extends State<SearchEventScreen> {
                 itemBuilder: (context, index) {
                   var model = sEvents[index];
                   DateTime dateTime =
-                      DateTime.fromMillisecondsSinceEpoch(model.dateTime);
+                      DateTime.fromMillisecondsSinceEpoch(model.dateTime??0);
                   DateTime startTime =
-                      DateTime.fromMillisecondsSinceEpoch(model.startTime);
+                      DateTime.fromMillisecondsSinceEpoch(model.startTime??0);
                   String dateFormat = DateFormat("d MMM-EEE").format(dateTime);
                   String startFormat = DateFormat("HH:mm a").format(startTime);
                   return Padding(
@@ -200,7 +200,7 @@ class _SearchEventScreenState extends State<SearchEventScreen> {
                                   color: Colors.grey[300],
                                   borderRadius: BorderRadius.circular(10.sp),
                                   image: DecorationImage(
-                                      image: NetworkImage(model.pImage),
+                                      image: NetworkImage(model.pImage??""),
                                       fit: BoxFit.cover)),
                             ),
                             Expanded(
@@ -222,7 +222,7 @@ class _SearchEventScreenState extends State<SearchEventScreen> {
                                     ),
                                     CustomSizeBox(10.h),
                                     Text(
-                                      model.title,
+                                      model.title??"",
                                       style: AppTextStyles.josefin(
                                           style: TextStyle(
                                               color: const Color(0xFF120D26),

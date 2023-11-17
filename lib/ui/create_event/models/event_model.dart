@@ -1,17 +1,17 @@
 class EventModel {
-  late String id;
-  late String title;
-  late String address;
-  late String description;
-  late int dateTime;
-  late int startTime;
-  late int endTime;
-  List<String> invites;
-  late String pImage;
-  late String uId;
-  late String status;
-  double latitude;
-  double longitude;
+  late String? id;
+  late String? title;
+  late String? address;
+  late String? description;
+  late int? dateTime;
+  late int? startTime;
+  late int? endTime;
+  List<String?>? invites;
+  late String? pImage;
+  late String? uId;
+  late String? status;
+  double? latitude;
+  double? longitude;
   EventModel({
     required this.endTime,
     required this.startTime,

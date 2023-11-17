@@ -10,6 +10,7 @@ import '../view/verify_identity.dart';
 class ForgetPasswordController extends ChangeNotifier {
   Future resetPassword(String email, BuildContext context) async {
     try {
+      print("Sending email to " + email);
       await FirebaseAuth.instance.sendPasswordResetEmail(
         email: email,
       );

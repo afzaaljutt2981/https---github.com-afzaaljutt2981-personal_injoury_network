@@ -1,12 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import '../../../global/app_buttons/white_background_button.dart';
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../authentication/view/create_auth_view.dart';
+import '../../selesction_screen/selection_screen.dart';
 import '../controller/forget_password_controller.dart';
 
 // ignore: must_be_immutable
@@ -121,39 +124,83 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                 ],
               ),
             )),
+            if (widget.from == 2)
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
+                child: GetwhiteButton(50.sp, () async {
+                  if (widget.from == 2) {
+                    print("Button clicked");
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            const SelectionScreen()));
+                  }
+                  // Navigator.push(
+                  //   context,
+                  //   PageTransition(
+                  //     childCurrent: widget,
+                  //     type: PageTransitionType.rightToLeft,
+                  //     alignment: Alignment.center,
+                  //     duration: const Duration(milliseconds: 200),
+                  //     reverseDuration: const Duration(milliseconds: 200),
+                  //     child: const CreateAuthenticationView(),
+                  //   ),
+                  // );
+                },
+                    GestureDetector(
+                      onTap: () async {},
+                      child: Text(
+                        "Change Email",
+                        style: AppTextStyles.josefin(
+                            style: TextStyle(
+                                color: AppColors.kPrimaryColor,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600)),
+                      ),
+                    )),
+              ),
+            SizedBox(
+              height: 10,
+            ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
-              child: GetwhiteButton(50.sp, () async {
-                if (widget.from == 2) {
-                  print("Button clicked");
-                  await context
-                      .read<ForgetPasswordController>()
-                      .sendVerificationEmail(context);
-                }
-                // Navigator.push(
-                //   context,
-                //   PageTransition(
-                //     childCurrent: widget,
-                //     type: PageTransitionType.rightToLeft,
-                //     alignment: Alignment.center,
-                //     duration: const Duration(milliseconds: 200),
-                //     reverseDuration: const Duration(milliseconds: 200),
-                //     child: const CreateAuthenticationView(),
-                //   ),
-                // );
-              },
-                  GestureDetector(
-                    onTap: () async {},
-                    child: Text(
-                      widget.from == 1 ? 'Done' : "Send Email",
-                      style: AppTextStyles.josefin(
-                          style: TextStyle(
-                              color: AppColors.kPrimaryColor,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600)),
-                    ),
-                  )),
-            )
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+              child: GetwhiteButton(
+                50.sp,
+                () async {
+                  if (widget.from == 2) {
+                    print("Button clicked");
+                    await context
+                        .read<ForgetPasswordController>()
+                        .sendVerificationEmail(context);
+                  } else {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        childCurrent: widget,
+                        type: PageTransitionType.rightToLeft,
+                        alignment: Alignment.center,
+                        duration: const Duration(milliseconds: 200),
+                        reverseDuration: const Duration(milliseconds: 200),
+                        child: const CreateAuthenticationView(),
+                      ),
+                    );
+                  }
+                },
+                Text(
+                  widget.from == 1 ? 'Done' : "Send Email",
+                  style: AppTextStyles.josefin(
+                      style: TextStyle(
+                          color: AppColors.kPrimaryColor,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600)),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
           ],
         ),
       ),

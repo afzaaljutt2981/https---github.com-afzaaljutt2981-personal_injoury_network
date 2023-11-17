@@ -46,13 +46,13 @@ UserModel userModel;
   }
 
   Widget eventBox(EventModel event){
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(event.dateTime);
-    String status = event.status;
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(event.dateTime??0);
+    String status = event.status??"";
     if(date.isBefore(DateTime.now()) && status != "cancelled"){
       status = "Completed";
     }
     String fDate = DateFormat("d MMM- EEEE").format(date);
-    DateTime startTime = DateTime.fromMillisecondsSinceEpoch(event.startTime);
+    DateTime startTime = DateTime.fromMillisecondsSinceEpoch(event.startTime??0);
     String fStartTime = DateFormat("HH:mm a").format(startTime);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
@@ -81,7 +81,7 @@ UserModel userModel;
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(20.sp),
                     image: DecorationImage(
-                        image: NetworkImage(event.pImage),
+                        image: NetworkImage(event.pImage??""),
                         fit: BoxFit.cover)),
               ),
               Expanded(
@@ -105,7 +105,7 @@ UserModel userModel;
                       ),
                       CustomSizeBox(10.h),
                       Text(
-                        event.title,
+                        event.title??"",
                         style: AppTextStyles.josefin(
                             style: TextStyle(
                                 color: const Color(0xFF120D26),

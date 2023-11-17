@@ -204,7 +204,7 @@ class _InviteGuestsState extends State<InviteGuests> {
   }
 
   Widget friend(UserModel friend) {
-    if (tempList.contains(friend) || widget.event.invites.contains(friend.id)) {
+    if (tempList.contains(friend) || widget.event.invites?.contains(friend.id) == true) {
       isInvited = true;
     }
     return GestureDetector(

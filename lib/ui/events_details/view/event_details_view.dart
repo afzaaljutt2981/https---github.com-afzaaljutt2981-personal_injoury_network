@@ -61,11 +61,11 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
     setData(notifications);
     setRegisterButton();
     DateTime dateTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime);
+        DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime??0);
     DateTime startTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.event.startTime);
+        DateTime.fromMillisecondsSinceEpoch(widget.event.startTime??0);
     DateTime endTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.event.endTime);
+        DateTime.fromMillisecondsSinceEpoch(widget.event.endTime??0);
     addWeekDates(dateTime);
     String formattedDiff = calculateDiff(endTime, startTime);
     String startFormat = DateFormat("HH:MM a").format(startTime);
@@ -155,7 +155,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => ImageView(
-                                      imageUrl: widget.event.pImage)));
+                                      imageUrl: widget.event.pImage??"")));
                         },
                         child: Stack(
                           children: [
@@ -170,7 +170,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                 borderRadius: BorderRadius.circular(10.sp),
                                 child: Image(
                                   image: NetworkImage(widget.event
-                                      .pImage), // 'assets/images/background_events_admin.png'
+                                      .pImage??""), // 'assets/images/background_events_admin.png'
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -210,7 +210,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                     child: Padding(
                                       padding: EdgeInsets.only(right: 50.w),
                                       child: Text(
-                                        widget.event.title,
+                                        widget.event.title??"",
                                         style: AppTextStyles.josefin(
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w700,
@@ -267,7 +267,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         ),
                       ),
                       Text(
-                        widget.event.description,
+                        widget.event.description??"",
                         style: AppTextStyles.josefin(
                             style: TextStyle(
                                 color: AppColors.kBlackColor, fontSize: 12.sp)),
@@ -362,11 +362,11 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         Functions.showLoaderDialog(context);
                         await context
                             .read<EventDetailsController>()
-                            .addEventTicket(widget.event.id);
+                            .addEventTicket(widget.event.id??"");
                         // ignore: use_build_context_synchronously
                         await context
                             .read<EventDetailsController>()
-                            .addUserTicket(widget.event.id);
+                            .addUserTicket(widget.event.id??"");
                         // ignore: use_build_context_synchronously
                         Navigator.pop(context);
                         // ignore: use_build_context_synchronously
@@ -423,7 +423,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                 Functions.showLoaderDialog(context);
                                 await context
                                     .read<EventDetailsController>()
-                                    .deleteEvent(widget.event.id);
+                                    .deleteEvent(widget.event.id??"");
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                               },

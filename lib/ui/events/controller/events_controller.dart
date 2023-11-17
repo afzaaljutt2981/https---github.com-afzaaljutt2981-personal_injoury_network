@@ -89,7 +89,7 @@ class EventsController extends ChangeNotifier {
     }
   }
 updateEventInvite(EventModel event,String userId) async {
-    List<String> invites = event.invites;
+    List<String?> invites = event.invites??[];
     invites.add(userId);
     await ref.doc(event.id).update({
       "invites":invites

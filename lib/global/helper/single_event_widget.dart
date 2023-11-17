@@ -48,7 +48,7 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(10.sp),
                     image: DecorationImage(
-                        image: NetworkImage(widget.event.pImage),
+                        image: NetworkImage(widget.event.pImage??""),
                         fit: BoxFit.cover)),
               ),
               Expanded(
@@ -60,7 +60,7 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
                     children: [
                       CustomSizeBox(3.h),
                       Text(
-                        widget.event.title,
+                        widget.event.title??"",
                         style: AppTextStyles.josefin(
                             style: TextStyle(
                                 color: const Color(0xFF3A51C8),
@@ -69,7 +69,7 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
                       ),
                       CustomSizeBox(10.h),
                       Text(
-                        widget.event.title,
+                        widget.event.title??"",
                         style: AppTextStyles.josefin(
                             style: TextStyle(
                                 color: const Color(0xFF120D26),
@@ -89,7 +89,7 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
                           ),
                           Expanded(
                             child: Text(
-                              widget.event.address,
+                              widget.event.address??"",
                               style: AppTextStyles.josefin(
                                   style: TextStyle(
                                       color: const Color(0xFF747688),
