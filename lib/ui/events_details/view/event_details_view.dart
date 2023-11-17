@@ -177,32 +177,32 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  left: 20.w, top: 10.h, right: 20.w),
+                                  left: 20.w, top: 30.h, right: 20.w),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
                                     children: [
-                                      Text('Weekly Virtual Event',
-                                          style: GoogleFonts.montserrat(
-                                            fontSize: 11.sp,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                          )),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 50.w,
-                                            top: Constants.userType == 'user'
-                                                ? 15.h
-                                                : 25.h,
-                                            bottom: 15.h),
-                                        child: Image(
-                                          height: 34.sp,
-                                          width: 34.sp,
-                                          image: const AssetImage(
-                                              'assets/images/verified_icon_events.png'),
-                                        ),
-                                      ),
+                                      // Text('Weekly Virtual Event',
+                                      //     style: GoogleFonts.montserrat(
+                                      //       fontSize: 11.sp,
+                                      //       fontWeight: FontWeight.w600,
+                                      //       color: Colors.white,
+                                      //     )),
+                                      // Padding(
+                                      //   padding: EdgeInsets.only(
+                                      //       left: 50.w,
+                                      //       top: Constants.userType == 'user'
+                                      //           ? 15.h
+                                      //           : 25.h,
+                                      //       bottom: 15.h),
+                                      //   child: Image(
+                                      //     height: 34.sp,
+                                      //     width: 34.sp,
+                                      //     image: const AssetImage(
+                                      //         'assets/images/verified_icon_events.png'),
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                   SizedBox(
