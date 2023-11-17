@@ -12,7 +12,6 @@ import 'package:personal_injury_networking/ui/home/view/navigation_view.dart';
 
 import '../../global/helper/custom_sized_box.dart';
 import '../authentication/model/user_model.dart';
-import '../forgetPassword/view/verify_identity.dart';
 import '../selesction_screen/selection_screen.dart';
 
 class SplashScreen extends StatefulWidget {

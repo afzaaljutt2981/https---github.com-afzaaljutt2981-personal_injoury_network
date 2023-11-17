@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
+import 'package:personal_injury_networking/global/helper/image_view.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/chat_screen/view/single_chat_screen_view.dart';
@@ -87,9 +88,18 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                     image: const AssetImage('assets/images/profile_pic.png'),
                   ))
                 ] else ...[
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundImage: NetworkImage(user!.pImage!),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) =>
+                                  ImageView(imageUrl: user?.pImage ?? '')));
+                    },
+                    child: CircleAvatar(
+                      radius: 50.sp,
+                      backgroundImage: NetworkImage(user!.pImage!),
+                    ),
                   )
                 ],
                 CustomSizeBox(20.h),

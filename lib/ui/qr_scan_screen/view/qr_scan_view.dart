@@ -65,7 +65,7 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                                 children: [
                                   CustomSizeBox(50.h),
                                   Text(
-                                    user!.firstName,
+                                    user?.firstName ?? 'Q/A',
                                     style: AppTextStyles.josefin(
                                         style: TextStyle(
                                             color: Colors.black,
@@ -74,7 +74,7 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                                   ),
                                   CustomSizeBox(5.h),
                                   Text(
-                                    user!.position,
+                                    user?.position ?? 'Q/A',
                                     style: AppTextStyles.josefin(
                                         style: TextStyle(
                                       color: const Color(0xFFA1A1A1),
@@ -84,8 +84,8 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                                   CustomSizeBox(15.h),
                                   QrImage(
                                     foregroundColor: AppColors.kPrimaryColor,
-                                    data: FirebaseAuth.instance.currentUser!.uid
-                                        .toString(),
+                                    data: FirebaseAuth.instance.currentUser?.uid
+                                        .toString() ?? 'Q/A',
                                     version: QrVersions.auto,
                                     size: 180.sp,
                                     gapless: false,
@@ -120,7 +120,7 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                           child: CircleAvatar(
                             radius: 40.sp,
                             backgroundImage: NetworkImage(
-                              user!.pImage!,
+                              user?.pImage ?? '',
                             ),
                           ),
                         ),

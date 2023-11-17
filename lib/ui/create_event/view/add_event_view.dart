@@ -57,7 +57,7 @@ class _AddEventViewState extends State<AddEventView> {
             padding: EdgeInsets.all(10.sp),
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
-              child: Container(
+              child: SizedBox(
                 width: 30.sp,
                 height: 40.sp,
                 child: Icon(

@@ -41,16 +41,18 @@ class _NotificationViewState extends State<NotificationView> {
           backgroundColor: Colors.white,
           elevation: 0,
           leading: Padding(
-            padding: EdgeInsets.all(10.sp),
+            padding: EdgeInsets.all(8.sp),
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
               child: SizedBox(
-                width: 30.sp,
+                width: 40.sp,
                 height: 40.sp,
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: const Color(0xFF120D26),
-                  size: 18.sp,
+                child: Center(
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: const Color(0xFF120D26),
+                    size: 18.sp,
+                  ),
                 ),
               ),
             ),
