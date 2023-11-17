@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
+import 'package:personal_injury_networking/global/helper/image_view.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
@@ -18,7 +19,6 @@ import 'package:personal_injury_networking/ui/events/controller/events_controlle
 import 'package:personal_injury_networking/ui/events_details/controller/event_details_controller.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/view/create_other_profile_view.dart';
 import 'package:provider/provider.dart';
-
 import '../../allParticipent/view/participants_view.dart';
 import '../../create_event/models/event_model.dart';
 import '../../notifications/model/nitofications_model.dart';
@@ -29,9 +29,7 @@ import 'events_qr_view.dart';
 // ignore: must_be_immutable
 class EventsDetailsView extends StatefulWidget {
   EventsDetailsView({super.key, required this.event});
-
   EventModel event;
-
   @override
   State<EventsDetailsView> createState() => _EventsDetailsViewState();
 }
@@ -51,7 +49,6 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   String notifyId = "";
   List<DateTime> weekDates = [];
   String buttonName = "Register";
-
   @override
   Widget build(BuildContext context) {
     eventTickets = [];
@@ -148,84 +145,84 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Stack(
-                        children: [
-                          Container(
-                            height: 200.h,
-                            width: MediaQuery.of(context).size.width,
-                            margin: EdgeInsets.only(top: 10.h),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.sp),
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => ImageView(
+                                      imageUrl: widget.event.pImage)));
+                        },
+                        child: Stack(
+                          children: [
+                            Container(
+                              height: 200.h,
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.only(top: 10.h),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.sp),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.sp),
+                                child: Image(
+                                  image: NetworkImage(widget.event
+                                      .pImage), // 'assets/images/background_events_admin.png'
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                            child: Constants.userType == 'user'
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.sp),
-                                    child: Image(
-                                      image: NetworkImage(widget.event.pImage),
-                                      //'assets/images/background_events.png'
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                : ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.sp),
-                                    child: Image(
-                                      image: NetworkImage(widget.event.pImage),
-                                      // 'assets/images/background_events_admin.png'
-                                      fit: BoxFit.cover,
-                                    ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 20.w, top: 10.h, right: 20.w),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text('Weekly Virtual Event',
+                                          style: GoogleFonts.montserrat(
+                                            fontSize: 11.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white,
+                                          )),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 50.w,
+                                            top: Constants.userType == 'user'
+                                                ? 15.h
+                                                : 25.h,
+                                            bottom: 15.h),
+                                        child: Image(
+                                          height: 34.sp,
+                                          width: 34.sp,
+                                          image: const AssetImage(
+                                              'assets/images/verified_icon_events.png'),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 20.w, top: 10.h, right: 20.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text('Weekly Virtual Event',
-                                        style: GoogleFonts.montserrat(
-                                          fontSize: 11.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                        )),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 50.w,
-                                          top: Constants.userType == 'user'
-                                              ? 15.h
-                                              : 25.h,
-                                          bottom: 15.h),
-                                      child: Image(
-                                        height: 34.sp,
-                                        width: 34.sp,
-                                        image: const AssetImage(
-                                            'assets/images/verified_icon_events.png'),
+                                  SizedBox(
+                                    height: 95.h,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 50.w),
+                                      child: Text(
+                                        widget.event.title,
+                                        style: AppTextStyles.josefin(
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                color: const Color(0xFF9EE8FF),
+                                                fontSize: 22.sp)),
                                       ),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 95.h,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 50.w),
-                                    child: Text(
-                                      widget.event.title,
-                                      style: AppTextStyles.josefin(
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              color: const Color(0xFF9EE8FF),
-                                              fontSize: 22.sp)),
-                                    ),
                                   ),
-                                ),
-                                Constants.userType == 'user'
-                                    ? marketerInfo()
-                                    : const SizedBox()
-                              ],
+                                  Constants.userType == 'user'
+                                      ? marketerInfo()
+                                      : const SizedBox()
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.only(
@@ -420,10 +417,12 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                             InkWell(
                               onTap: () async {
                                 Functions.showLoaderDialog(context);
-                                await context.read<EventDetailsController>().deleteEvent(widget.event.id);
+                                await context
+                                    .read<EventDetailsController>()
+                                    .deleteEvent(widget.event.id);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
-                                },
+                              },
                               child: Container(
                                 decoration: BoxDecoration(
                                     border: Border.all(

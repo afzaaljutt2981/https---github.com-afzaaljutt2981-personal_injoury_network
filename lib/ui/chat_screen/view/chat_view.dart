@@ -8,12 +8,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/chat_screen/controller/chat_controller.dart';
 import 'package:personal_injury_networking/ui/chat_screen/view/create-picked_image_view.dart';
 import 'package:provider/provider.dart';
+import '../../../global/helper/image_view.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
 import 'package:record/record.dart';
@@ -143,61 +145,60 @@ class _ChatScreenState extends State<ChatScreen> {
             physics: const ClampingScrollPhysics(),
             itemBuilder: (context, index) {
               Alignment alignment = Alignment.topLeft;
+              String time = DateFormat("HH:mm").format(chats[index].dateTime);
               bool match = false;
               if (chats[index].senderId ==
                   FirebaseAuth.instance.currentUser!.uid) {
                 alignment = Alignment.topRight;
                 match = true;
               }
-              return Container(
-                  padding: const EdgeInsets.only(
-                      left: 14, right: 14, top: 0, bottom: 10),
-                  child: Align(
-                    alignment: alignment,
-                    child: (chats[index].messageType == "text")
-                        ? Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft:
-                                    Radius.circular((!match ? 0.sp : 20.sp)),
-                                topRight:
-                                    Radius.circular((match ? 0.sp : 20.sp)),
-                                bottomLeft: Radius.circular(20.sp),
-                                bottomRight: Radius.circular(20.sp),
-                              ),
-                              color: (!match
-                                  ? const Color(0xFFF5F5F5)
-                                  : AppColors.kPrimaryColor),
-                            ),
-                            padding: EdgeInsets.all(18.sp),
-                            child: Text(
-                              chats[index].messageContent,
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: (!match ? Colors.black : Colors.white),
-                              ),
-                            ))
-                        : (chats[index].messageType == "mp3")
-                            ? IconButton(
-                                onPressed: () async {
-                                  await audioPlayer.play(
-                                      UrlSource(
-                                        chats[index].messageContent,
-                                      ),
-                                      mode: PlayerMode.mediaPlayer);
-                                },
-                                icon: const Icon(Icons.play_arrow))
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image(
-                                  image:
-                                      NetworkImage(chats[index].messageContent),
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
+              return Padding(
+                padding: const EdgeInsets.only(
+                    left: 14, right: 14, top: 0, bottom: 10),
+                child: Align(
+                  alignment: alignment,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      (chats[index].messageType == "text")
+                          ? Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft:
+                                      Radius.circular((!match ? 0.sp : 20.sp)),
+                                  topRight:
+                                      Radius.circular((match ? 0.sp : 20.sp)),
+                                  bottomLeft: Radius.circular(20.sp),
+                                  bottomRight: Radius.circular(20.sp),
                                 ),
+                                color: (!match
+                                    ? const Color(0xFFF5F5F5)
+                                    : AppColors.kPrimaryColor),
                               ),
-                  ));
+                              padding: EdgeInsets.all(18.sp),
+                              child: Text(
+                                chats[index].messageContent,
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: (!match ? Colors.black : Colors.white),
+                                ),
+                              ))
+                          : (chats[index].messageType == "mp3")
+                              ? IconButton(
+                                  onPressed: () async {
+                                    await audioPlayer.play(
+                                        UrlSource(
+                                          chats[index].messageContent,
+                                        ),
+                                        mode: PlayerMode.mediaPlayer);
+                                  },
+                                  icon: const Icon(Icons.play_arrow))
+                              : chatImage(chats[index].messageContent),
+                      Text(time)
+                    ],
+                  ),
+                ),
+              );
             },
           )),
           Align(
@@ -422,20 +423,20 @@ class _ChatScreenState extends State<ChatScreen> {
                               colors: [Color(0xFFAF48FF), Color(0xFF212E73)],
                             )),
                         child:
-                        // emplyList == false
-                        //     ?const SizedBox()
-                        // Padding(
-                        //         padding: EdgeInsets.all(10.sp),
-                        //         child: const Image(
-                        //           image: AssetImage(
-                        //               'assets/images/microphone_chat_screen.png'),
-                        //         ),
-                        //       )
-                        //     :
-                        const Center(
-                                child: Icon(Icons.send,
-                                    color: Colors.white, size: 20),
-                              ),
+                            // emplyList == false
+                            //     ?const SizedBox()
+                            // Padding(
+                            //         padding: EdgeInsets.all(10.sp),
+                            //         child: const Image(
+                            //           image: AssetImage(
+                            //               'assets/images/microphone_chat_screen.png'),
+                            //         ),
+                            //       )
+                            //     :
+                            const Center(
+                          child:
+                              Icon(Icons.send, color: Colors.white, size: 20),
+                        ),
                       ),
                     ),
                   ],
@@ -545,5 +546,26 @@ class _ChatScreenState extends State<ChatScreen> {
       // Handle exceptions that might occur during file picking
       print('Error picking file: $e');
     }
+  }
+  Widget chatImage(String url){
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => ImageView(
+                    imageUrl: url)));
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image(
+          image: NetworkImage(
+              url),
+          width: 100,
+          height: 100,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
   }
 }

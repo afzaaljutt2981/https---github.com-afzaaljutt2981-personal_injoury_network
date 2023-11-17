@@ -6,12 +6,13 @@ import 'package:personal_injury_networking/ui/create_event/models/event_model.da
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../../global/utils/constants.dart';
+import '../../authentication/model/user_model.dart';
 
 // ignore: must_be_immutable
 class OrganizerEvents extends StatelessWidget {
   List<EventModel> userEvents;
-
-  OrganizerEvents({super.key, required this.userEvents});
+UserModel userModel;
+  OrganizerEvents({super.key, required this.userEvents,required this.userModel});
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +45,12 @@ class OrganizerEvents extends StatelessWidget {
             });
   }
 
-  Widget eventBox(EventModel event) {
+  Widget eventBox(EventModel event){
     DateTime date = DateTime.fromMillisecondsSinceEpoch(event.dateTime);
+    String status = event.status;
+    if(date.isBefore(DateTime.now()) && status != "cancelled"){
+      status = "Completed";
+    }
     String fDate = DateFormat("d MMM- EEEE").format(date);
     DateTime startTime = DateTime.fromMillisecondsSinceEpoch(event.startTime);
     String fStartTime = DateFormat("HH:mm a").format(startTime);
@@ -76,11 +81,13 @@ class OrganizerEvents extends StatelessWidget {
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(20.sp),
                     image: DecorationImage(
-                        image: NetworkImage(event.pImage), fit: BoxFit.cover)),
+                        image: NetworkImage(event.pImage),
+                        fit: BoxFit.cover)),
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 20.w, right: 10.w, top: 20.h),
+                  padding: EdgeInsets.only(
+                      left: 20.w, right: 10.w, top: 20.h),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,30 +112,33 @@ class OrganizerEvents extends StatelessWidget {
                                 fontSize: 18.sp,
                                 fontWeight: FontWeight.w500)),
                       ),
-                      Constants.userType == 'user'
+                      userModel.userType == 'user'
                           ? const SizedBox()
                           : Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFF0AFF31)
-                                        .withOpacity(0.24),
-                                    borderRadius: BorderRadius.circular(20.sp),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.sp),
-                                    child: Text(
-                                      'Upcoming',
-                                      style: AppTextStyles.josefin(
-                                          style: TextStyle(
-                                              color: const Color(0xFF17DF1F),
-                                              fontSize: 12.sp)),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            )
+                        mainAxisAlignment:
+                        MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF0AFF31)
+                                  .withOpacity(0.24),
+                              borderRadius:
+                              BorderRadius.circular(20.sp),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(8.sp),
+                              child: Text(
+                                status,
+                                style: AppTextStyles.josefin(
+                                    style: TextStyle(
+                                        color: const Color(
+                                            0xFF17DF1F),
+                                        fontSize: 12.sp)),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
                     ],
                   ),
                 ),

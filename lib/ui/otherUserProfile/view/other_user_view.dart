@@ -344,7 +344,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                     OrganizerAbout(
                       user: user!,
                     ),
-                    OrganizerEvents(userEvents: userEvents),
+                    OrganizerEvents(userEvents: userEvents,userModel: user!,),
                         OtherUserReviewScreen(userEvents: userEvents,)
                   ]))
                 ] else if (followButton == "Follow") ...[
