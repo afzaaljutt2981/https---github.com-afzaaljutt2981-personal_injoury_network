@@ -9,6 +9,7 @@ class EventModel {
   List<String> invites;
   late String pImage;
   late String uId;
+  late String status;
   double latitude;
   double longitude;
   EventModel({
@@ -21,6 +22,7 @@ class EventModel {
     required this.invites,
     required this.dateTime,
     required this.pImage,
+    required this.status,
     required this.longitude,
     required this.latitude,
     required this.uId,
@@ -31,6 +33,7 @@ class EventModel {
         endTime: json['endTime'],
         startTime: json['startTime'],
         id: json['id'],
+        status: json['status'],
         address: json['address'],
         description: json['description'],
         title: json['title'],
@@ -50,6 +53,7 @@ class EventModel {
     "latitude":latitude,
     "longitude":longitude,
     "pImage":pImage,
+    "status":status,
     "invites":invites,
     "uId":uId
   };

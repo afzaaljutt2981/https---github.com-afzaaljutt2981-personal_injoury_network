@@ -51,8 +51,9 @@ class EventDetailsController extends ChangeNotifier {
             uId: FirebaseAuth.instance.currentUser!.uid)
         .toJson());
   }
+
   deleteEvent(String eventId) async {
-   await events.doc(eventId).delete();
-  notifyListeners();
+    await events.doc(eventId).update({"status": "cancelled"});
+    notifyListeners();
   }
 }
