@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         from: 2,
                       )),
               (route) => false);
-        } else {
+        } else { 
           getUserData();
         }
         // ignore: use_build_context_synchronously
