@@ -24,7 +24,9 @@ import '../model/chat_model.dart';
 // ignore: must_be_immutable
 class ChatScreen extends StatefulWidget {
   ChatScreen({super.key, required this.user});
+
   UserModel user;
+
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
@@ -34,12 +36,14 @@ bool emplyList = false;
 
 class _ChatScreenState extends State<ChatScreen> {
   List<ChatMessage> chats = [];
+  List<ChatMessage> modifiedChats = [];
   Uint8List? image1;
   late AudioRecorder audioRecord;
   late AudioPlayer audioPlayer;
   bool isRecording = false;
   String audioPath = "";
   bool pause = false;
+
   @override
   void initState() {
     super.initState();
@@ -86,6 +90,79 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     chats = [];
     chats = context.watch<ChatController>().currentChat;
+    modifiedChats = [];
+
+    print("Displaying chats");
+    if (chats.length > 0) {
+      Duration? difference = chats.first.dateTime?.difference(DateTime.now());
+      if (difference?.inDays == -1) {
+        print("condition true for  Yesterday" + difference.toString());
+
+        modifiedChats.add(ChatMessage(
+            messageContent: "Yesterday",
+            id: '',
+            dateTime: null,
+            messageType: 'date',
+            senderId: ''));
+      } else if (difference?.inDays == 0) {
+        print("condition true for today ${difference?.inDays}");
+        modifiedChats.add(ChatMessage(
+            messageContent: "Today",
+            id: '',
+            dateTime: null,
+            messageType: 'date',
+            senderId: ''));
+      } else {
+        print("condition true for else ${difference?.inDays}");
+        modifiedChats.add(ChatMessage(
+            messageContent: chats.first.dateTime.toString(),
+            id: '',
+            dateTime: null,
+            messageType: 'date',
+            senderId: ''));
+      }
+
+      DateTime? dateTimeTracking = chats.first.dateTime;
+      for (var chat in chats) {
+        Duration? difference = chat.dateTime?.difference(DateTime.now());
+        print("Difference in days: ${difference?.inDays}");
+        if (chat.dateTime?.day != dateTimeTracking?.day ||
+            chat.dateTime?.month != dateTimeTracking?.month) {
+          print("A different date");
+          if (difference?.inDays == -1) {
+            print("condition true for  Yesterday" + difference.toString());
+
+            modifiedChats.add(ChatMessage(
+                messageContent: "Yesterday",
+                id: '',
+                dateTime: null,
+                messageType: 'date',
+                senderId: ''));
+          } else if (difference?.inDays == 0) {
+            print("condition true for today ${difference?.inDays}");
+            modifiedChats.add(ChatMessage(
+                messageContent: "Today",
+                id: '',
+                dateTime: null,
+                messageType: 'date',
+                senderId: ''));
+          } else {
+            print("condition true for else ${difference?.inDays}");
+            modifiedChats.add(ChatMessage(
+                messageContent: chat.dateTime.toString(),
+                id: '',
+                dateTime: null,
+                messageType: 'date',
+                senderId: ''));
+          }
+        } else {
+          print("Same date");
+        }
+        modifiedChats.add(chat);
+        print(chat.toJson());
+        dateTimeTracking = chat.dateTime;
+      }
+    }
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -104,7 +181,7 @@ class _ChatScreenState extends State<ChatScreen> {
           title: Row(
             children: [
               Text(
-                widget.user.lastName??"",
+                widget.user.lastName ?? "",
                 style: AppTextStyles.josefin(
                     style: TextStyle(
                         color: Colors.black,
@@ -132,17 +209,22 @@ class _ChatScreenState extends State<ChatScreen> {
         body: Column(children: [
           Expanded(
               child: ListView.builder(
-            itemCount: chats.length,
+            itemCount: modifiedChats.length,
             padding: const EdgeInsets.only(top: 10, bottom: 10),
             physics: const ClampingScrollPhysics(),
             itemBuilder: (context, index) {
               Alignment alignment = Alignment.topLeft;
-              String? time = chats[index].dateTime != null ? DateFormat("HH:mm").format(chats[index].dateTime!) : "";
+              String? time = modifiedChats[index].dateTime != null
+                  ? DateFormat("HH:mm").format(modifiedChats[index].dateTime!)
+                  : "";
               bool match = false;
-              if (chats[index].senderId ==
+              if (modifiedChats[index].senderId ==
                   FirebaseAuth.instance.currentUser!.uid) {
                 alignment = Alignment.topRight;
                 match = true;
+              }
+              if (modifiedChats[index].messageType == "date") {
+                alignment = Alignment.topCenter;
               }
               return Padding(
                 padding: const EdgeInsets.only(
@@ -152,7 +234,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      (chats[index].messageType == "text")
+                      (modifiedChats[index].messageType == "text")
                           ? Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.only(
@@ -169,23 +251,50 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               padding: EdgeInsets.all(18.sp),
                               child: Text(
-                                chats[index].messageContent??"",
+                                modifiedChats[index].messageContent ?? "",
                                 style: TextStyle(
                                   fontSize: 12.sp,
                                   color: (!match ? Colors.black : Colors.white),
                                 ),
                               ))
-                          : (chats[index].messageType == "mp3")
+                          : (modifiedChats[index].messageType == "mp3")
                               ? IconButton(
                                   onPressed: () async {
                                     await audioPlayer.play(
                                         UrlSource(
-                                          chats[index].messageContent??"",
+                                          modifiedChats[index].messageContent ??
+                                              "",
                                         ),
                                         mode: PlayerMode.mediaPlayer);
                                   },
                                   icon: const Icon(Icons.play_arrow))
-                              : chatImage(chats[index].messageContent??""),
+                              : (modifiedChats[index].messageType == "date")
+                                  ? Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular((10.sp)),
+                                          topRight: Radius.circular((10.sp)),
+                                          bottomLeft: Radius.circular(10.sp),
+                                          bottomRight: Radius.circular(10.sp),
+                                        ),
+                                        color: (!match
+                                            ? const Color(0xFFF5F5F5)
+                                            : AppColors.kPrimaryColor),
+                                      ),
+                                      padding: EdgeInsets.all(8.sp),
+                                      child: Text(
+                                        modifiedChats[index].messageContent ??
+                                            "",
+                                        style: TextStyle(
+                                          fontSize: 10.sp,
+                                          color: (!match
+                                              ? Colors.black
+                                              : Colors.white),
+                                        ),
+                                      ))
+                                  : chatImage(
+                                      modifiedChats[index].messageContent ??
+                                          ""),
                       Text(time)
                     ],
                   ),
@@ -389,7 +498,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       onTap: () async {
                         if (emplyList) {
                           context.read<ChatController>().sendMessage(
-                              widget.user.id??"", textController.text, "text");
+                              widget.user.id ?? "",
+                              textController.text,
+                              "text");
                           setState(() {
                             textController.clear();
                             emplyList = false;

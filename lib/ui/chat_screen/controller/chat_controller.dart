@@ -26,6 +26,10 @@ class ChatController extends ChangeNotifier {
         .snapshots()
         .listen((event) {
       currentChat = [];
+      // print("Displaying chats");
+      // for (var chat in event.docs) {
+      //   print(ChatMessage.fromJson(chat.data()).toJson());
+      // }
       for (var element in event.docs) {
         currentChat.add(ChatMessage.fromJson(element.data()));
       }
