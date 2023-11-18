@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "423594580933",
-    "project_id": "personal-injoury",
-    "storage_bucket": "personal-injoury.appspot.com"
+    "project_number": "84312334778",
+    "project_id": "personal-injury-65638",
+    "storage_bucket": "personal-injury-65638.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:423594580933:android:276390ee922afea2d289ac",
+        "mobilesdk_app_id": "1:84312334778:android:db7e6f4b75bb92b8773d83",
         "android_client_info": {
-          "package_name": "com.example.personal_injury_networking"
+          "package_name": "com.law.personalinjurynetworking"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCXko8N3UyhrwKG_dmHCvYH5znuVOCRlOI"
+          "current_key": "AIzaSyBtCJkkBL2qraYCUx7sAPnryEgASPM_06k"
         }
       ],
       "services": {

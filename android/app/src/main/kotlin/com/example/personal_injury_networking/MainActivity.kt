@@ -1,4 +1,4 @@
-package com.example.personal_injury_networking
+package com.law.personalinjurynetworking
 
 import io.flutter.embedding.android.FlutterActivity
 
