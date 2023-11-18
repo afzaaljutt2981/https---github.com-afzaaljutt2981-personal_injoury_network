@@ -171,12 +171,16 @@ class _ChatScreenState extends State<ChatScreen> {
           backgroundColor: Colors.white,
           elevation: 0,
           leading: Padding(
-            padding: EdgeInsets.all(17.sp),
+            padding: EdgeInsets.all(10.sp),
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
-              child: const Icon(
-                Icons.arrow_back,
-                color: Colors.black,
+              child: SizedBox(
+                width: 40.h,
+                height: 40.h,
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                ),
               ),
             ),
           ),
