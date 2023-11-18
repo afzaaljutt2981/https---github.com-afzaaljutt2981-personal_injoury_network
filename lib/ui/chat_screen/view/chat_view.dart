@@ -10,10 +10,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:personal_injury_networking/global/helper/api_functions.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/chat_screen/controller/chat_controller.dart';
 import 'package:personal_injury_networking/ui/chat_screen/view/create-picked_image_view.dart';
+import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:provider/provider.dart';
 import '../../../global/helper/image_view.dart';
 import '../../../global/utils/app_colors.dart';
@@ -47,8 +49,8 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    audioPlayer = AudioPlayer();
-    audioRecord = AudioRecorder();
+    // audioPlayer = AudioPlayer();
+    // audioRecord = AudioRecorder();
   }
 
   @override
@@ -85,10 +87,13 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     } catch (_) {}
   }
-
+List<UserModel> allUsers = [];
   @override
   Widget build(BuildContext context) {
     chats = [];
+    allUsers = [];
+    allUsers = context.watch<EventsController>().allUsers;
+    UserModel currentUser = allUsers.firstWhere((element) => element.id == FirebaseAuth.instance.currentUser!.uid);
     chats = context.watch<ChatController>().currentChat;
     modifiedChats = [];
 
@@ -507,6 +512,10 @@ class _ChatScreenState extends State<ChatScreen> {
                               widget.user.id ?? "",
                               textController.text,
                               "text");
+                          if(widget.user.fcmToken != null){
+                         await CountryStateCityRepo.sendPushNotification(
+                              currentUser.firstName!, textController.text, widget.user.fcmToken!);
+                          }
                           setState(() {
                             textController.clear();
                             emplyList = false;

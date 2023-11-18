@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 
 import '../../ui/authentication/model/country_state_model.dart';
+import '../utils/constants.dart';
 
 class CountryStateCityRepo {
   static const countriesStateURL =
@@ -28,5 +30,27 @@ class CountryStateCityRepo {
       log('Exception: ${e.toString()}');
       throw Exception(e.toString());
     }
+  }
+  static Future<http.Response> sendPushNotification(String title,String body,String fcmToken) async {
+    Map<String,String> headers = {
+      "Authorization": "key=${Constants.serverKey}",
+      "Content-Type": "application/json",
+    };
+    Map<String, dynamic> notification = {
+      'title': title,
+      'body': body,
+    };
+    Map<String, dynamic> data = {
+      'notification': notification,
+      'to': fcmToken,
+    };
+    var response = await http.post(
+        Uri.parse(Constants.fcmApi),
+        headers: headers,
+       body: jsonEncode(data)
+    );
+    print(response.statusCode);
+    print("response is here");
+    return response;
   }
 }

@@ -59,22 +59,28 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomSizeBox(3.h),
-                      Text(
-                        widget.event.title??"",
-                        style: AppTextStyles.josefin(
-                            style: TextStyle(
-                                color: const Color(0xFF3A51C8),
-                                fontSize: 13.sp,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                      CustomSizeBox(10.h),
-                      Text(
-                        widget.event.title??"",
-                        style: AppTextStyles.josefin(
-                            style: TextStyle(
-                                color: const Color(0xFF120D26),
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.w500)),
+                      // Text(
+                      //   widget.event.title??"",
+                      //   style: AppTextStyles.josefin(
+                      //       style: TextStyle(
+                      //           color: const Color(0xFF3A51C8),
+                      //           fontSize: 13.sp,
+                      //           fontWeight: FontWeight.w500)),
+                      // ),
+                      // CustomSizeBox(10.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            widget.event.title??"",
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    color: const Color(0xFF120D26),
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                          eventStatus()
+                        ],
                       ),
                       CustomSizeBox(8.h),
                       Row(
@@ -136,6 +142,47 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+  Widget eventStatus(){
+    Color? bgColor;
+    Color? textColor;
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime ?? 0);
+    DateTime startTime = DateTime.fromMillisecondsSinceEpoch(widget.event.startTime!);
+    DateTime endTime = DateTime.fromMillisecondsSinceEpoch(widget.event.endTime!);
+    String status = widget.event.status ?? "";
+    if(startTime.isBefore(DateTime.now()) && DateTime.now().isBefore(endTime)){
+      status = "Started";
+      bgColor = const Color(0xFF0AFF31);
+      textColor = const Color(0xFF17DF1F);
+    }else if (date.isBefore(DateTime.now()) && status != "cancelled") {
+      status = "Completed";
+      bgColor = const Color(0xFF0AFF31);
+      textColor = const Color(0xFF17DF1F);
+    }
+    if(status == "upComing"){
+      bgColor = Colors.yellow.shade200;
+      // const Color(0xffF3F628);
+      textColor = Colors.yellow.shade600;
+    }else if(status == "cancelled"){
+      bgColor = Colors.red.shade200;
+      textColor = Colors.red.shade600;
+    }
+    return Container(
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(20.sp),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(8.sp),
+        child: Text(
+          status,
+          style: AppTextStyles.josefin(
+              style: TextStyle(
+                  color: textColor,
+                  fontSize: 12.sp)),
         ),
       ),
     );

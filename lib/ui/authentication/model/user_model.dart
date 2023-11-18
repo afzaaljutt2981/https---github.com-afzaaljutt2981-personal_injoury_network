@@ -9,9 +9,10 @@ class UserModel {
   late String? website;
   late String? location;
   late String? userName;
-  late String? id;
+  late String id;
   late String? reference;
   late String? userType;
+  late String? fcmToken;
   List<String?>? hobbies = [];
   List<String?>? followers = [];
   List<String?>? followings = [];
@@ -28,6 +29,7 @@ class UserModel {
       required this.followers,
       required this.followings,
       this.pImage,
+        this.fcmToken,
       required this.userName,
       required this.phone,
       required this.userType,
@@ -44,6 +46,7 @@ class UserModel {
       position: json['position'],
       email: json['email'],
       id: json['id'],
+      fcmToken: json['fcmToken'],
       pImage: json['pImage'],
       firstName: json['firstName'],
       lastName: json['lastName'],
@@ -70,6 +73,7 @@ class UserModel {
       "id": id,
       "website": website,
       "email": email,
+      "fcmToken":fcmToken,
       "reference": reference,
       "userType": userType,
       "userName": userName,

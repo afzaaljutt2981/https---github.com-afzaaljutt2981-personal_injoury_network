@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 
 import 'app_strings.dart';
-
+import 'package:http/http.dart' as http;
 class Functions {
   static showSnackBar(BuildContext context, String message, {Color? color}) {
     color ??= Colors.white;
@@ -75,4 +75,5 @@ class Functions {
       rethrow;
     }
   }
+
 }

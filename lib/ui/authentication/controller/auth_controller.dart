@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/model/country_state_model.dart';
@@ -16,6 +17,13 @@ class AuthController extends ChangeNotifier {
   bool saveChangesButton = false;
   CollectionReference ref = FirebaseFirestore.instance.collection("users");
   UserModel? user;
+  FirebaseMessaging fMessaging = FirebaseMessaging.instance;
+
+  Future<String?> getFirebaseMessagingToken() async {
+    await fMessaging.requestPermission();
+    String? token = await fMessaging.getToken();
+    return token;
+  }
 
   Future<void> signup(
     BuildContext context, {
@@ -42,6 +50,7 @@ class AuthController extends ChangeNotifier {
           .then((value) async {
         if (value.user != null) {
           var doc = ref.doc(FirebaseAuth.instance.currentUser!.uid);
+          String? token = await getFirebaseMessagingToken();
           UserModel model = UserModel(
               id: doc.id,
               location: location,
@@ -49,6 +58,7 @@ class AuthController extends ChangeNotifier {
               email: email,
               firstName: firstName,
               lastName: lastName,
+              fcmToken: token??"",
               phone: int.parse(phone),
               company: companyName,
               reference: reference,
@@ -94,6 +104,7 @@ class AuthController extends ChangeNotifier {
               Constants.userName =
                   user?.firstName ?? "" + (user?.lastName ?? "");
               Constants.userPosition = user?.position ?? "";
+              await updateUserToken(user!.id);
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -135,7 +146,7 @@ class AuthController extends ChangeNotifier {
         Map<String, dynamic> data = value.data() as Map<String, dynamic>;
         user = UserModel.fromJson(data);
         if (user != null) {
-          Constants.userType = user?.userType??"";
+          Constants.userType = user?.userType ?? "";
           await Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -193,6 +204,13 @@ class AuthController extends ChangeNotifier {
       // ignore: use_build_context_synchronously
       CustomSnackBar(false).showInSnackBar(error.toString(), context);
       notifyListeners();
+    }
+  }
+
+  updateUserToken(String userId) async {
+    String? token = await getFirebaseMessagingToken();
+    if (token != null) {
+     await ref.doc(userId).update({"fcmToken": token});
     }
   }
 }

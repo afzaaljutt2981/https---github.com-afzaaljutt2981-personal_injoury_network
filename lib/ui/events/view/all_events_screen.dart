@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../authentication/model/user_model.dart';
 import '../../create_event/models/event_model.dart';
 
 class AllEventScreen extends StatefulWidget {
@@ -23,7 +24,8 @@ class _AllEventScreenState extends State<AllEventScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   List<EventModel> events = [];
-
+  List<UserModel> users = [];
+  List<EventModel> allEvents = [];
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
@@ -38,19 +40,24 @@ class _AllEventScreenState extends State<AllEventScreen>
 
   @override
   Widget build(BuildContext context) {
+    users = context.watch<EventsController>().allUsers;
+    allEvents = context.watch<EventsController>().allEvents;
     if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
         Constants.adminEmail.toLowerCase()) {
+      if(allEvents.isNotEmpty && users.isNotEmpty && FirebaseAuth.instance.currentUser != null){
+      var uId = FirebaseAuth.instance.currentUser!.uid;
+      UserModel currentUser = users.firstWhere((element) => element.id == uId);
+      if(currentUser.userType == "user"){
       List<TicketModel> tickets =
           context.watch<EventsController>().userBookedEvents;
       events = [];
       for (var element in tickets) {
-        events.add(context
-            .watch<EventsController>()
-            .allEvents
-            .firstWhere((element1) => element.eId == element1.id));
+        events.add(allEvents.firstWhere((element1) => element.eId == element1.id));
+      }}else{
+        events = allEvents.where((element) => element.uId == currentUser.id).toList();
       }
-    } else {
-      events = context.watch<EventsController>().allEvents;
+    }} else {
+      events = allEvents;
     }
     return Scaffold(
         backgroundColor: Colors.white,

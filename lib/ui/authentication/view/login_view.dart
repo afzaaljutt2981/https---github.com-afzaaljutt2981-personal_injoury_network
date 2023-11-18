@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart' as firMessaging;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -335,7 +336,16 @@ class _LoginViewState extends State<LoginView> {
       return null;
     }
   }
+  // FirebaseMessaging fMessaging = FirebaseMessaging.instance;
+    firMessaging.FirebaseMessaging fMessaging = firMessaging.FirebaseMessaging.instance;
 
+  getFirebaseMessagingToken() async {
+    await fMessaging.requestPermission();
+    await fMessaging.getToken().then((value) =>{
+      print("here is fcm token"),
+      debugPrint(value)
+    });
+  }
   Future<User?> signInWithApple({List<Scope> scopes = const []}) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final result = await TheAppleSignIn.performRequests(
@@ -374,6 +384,7 @@ class _LoginViewState extends State<LoginView> {
         .get();
     if (res.exists) {
       UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
+      await context.read<AuthController>().updateUserToken(user.id);
       if (user.userName == "") {
         // ignore: use_build_context_synchronously
         Navigator.push(

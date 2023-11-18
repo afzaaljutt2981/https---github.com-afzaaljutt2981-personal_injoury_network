@@ -38,7 +38,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
   bool? isFollow = false;
   UserModel? user;
   String? followButton = "Follow";
-  List<EventModel?>? userEvents = [];
+  List<EventModel> userEvents = [];
   List<TicketModel?>? userTickets = [];
   String? notifyId = "";
   @override

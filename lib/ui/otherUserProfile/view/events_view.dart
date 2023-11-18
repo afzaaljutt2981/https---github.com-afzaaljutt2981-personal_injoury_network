@@ -10,7 +10,7 @@ import '../../authentication/model/user_model.dart';
 
 // ignore: must_be_immutable
 class OrganizerEvents extends StatelessWidget {
-  List<EventModel?>? userEvents;
+  List<EventModel> userEvents;
   UserModel? userModel;
 
   OrganizerEvents(
@@ -18,7 +18,7 @@ class OrganizerEvents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return userEvents?.isEmpty == true
+    return userEvents.isEmpty == true
         ? Column(
             children: [
               CustomSizeBox(30.h),
@@ -41,21 +41,21 @@ class OrganizerEvents extends StatelessWidget {
         : ListView.builder(
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
-            itemCount: userEvents?.length??0,
+            itemCount: userEvents.length??0,
             itemBuilder: (context, index) {
-              return eventBox(userEvents?[index]);
+              return eventBox(userEvents[index]);
             });
   }
 
-  Widget eventBox(EventModel? event) {
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(event?.dateTime ?? 0);
-    String status = event?.status ?? "";
-    if (date.isBefore(DateTime.now()) && status != "cancelled") {
-      status = "Completed";
-    }
+  Widget eventBox(EventModel event) {
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(event.dateTime ?? 0);
+    // String status = event?.status ?? "";
+    // if (date.isBefore(DateTime.now()) && status != "cancelled") {
+    //   status = "Completed";
+    // }
     String fDate = DateFormat("d MMM- EEEE").format(date);
     DateTime startTime =
-        DateTime.fromMillisecondsSinceEpoch(event?.startTime ?? 0);
+        DateTime.fromMillisecondsSinceEpoch(event.startTime ?? 0);
     String fStartTime = DateFormat("HH:mm a").format(startTime);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
@@ -107,7 +107,7 @@ class OrganizerEvents extends StatelessWidget {
                       ),
                       CustomSizeBox(10.h),
                       Text(
-                        event?.title ?? "",
+                        event.title ?? "",
                         style: AppTextStyles.josefin(
                             style: TextStyle(
                                 color: const Color(0xFF120D26),
@@ -119,23 +119,7 @@ class OrganizerEvents extends StatelessWidget {
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFF0AFF31)
-                                        .withOpacity(0.24),
-                                    borderRadius: BorderRadius.circular(20.sp),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.sp),
-                                    child: Text(
-                                      status,
-                                      style: AppTextStyles.josefin(
-                                          style: TextStyle(
-                                              color: const Color(0xFF17DF1F),
-                                              fontSize: 12.sp)),
-                                    ),
-                                  ),
-                                )
+                                eventStatus(event)
                               ],
                             )
                     ],
@@ -144,6 +128,47 @@ class OrganizerEvents extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+  Widget eventStatus(EventModel event){
+    Color? bgColor;
+    Color? textColor;
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(event.dateTime ?? 0);
+    DateTime startTime = DateTime.fromMillisecondsSinceEpoch(event.startTime!);
+    DateTime endTime = DateTime.fromMillisecondsSinceEpoch(event.endTime!);
+    String status = event.status ?? "";
+    if(startTime.isBefore(DateTime.now()) && DateTime.now().isBefore(endTime)){
+      status = "Started";
+      bgColor = const Color(0xFF0AFF31);
+      textColor = const Color(0xFF17DF1F);
+    }else if (date.isBefore(DateTime.now()) && status != "cancelled") {
+      status = "Completed";
+      bgColor = const Color(0xFF0AFF31);
+      textColor = const Color(0xFF17DF1F);
+    }
+    if(status == "upComing"){
+      bgColor = Colors.yellow.shade200;
+      // const Color(0xffF3F628);
+      textColor = Colors.yellow.shade600;
+    }else if(status == "cancelled"){
+      bgColor = Colors.red.shade200;
+      textColor = Colors.red.shade600;
+    }
+    return Container(
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(20.sp),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(8.sp),
+        child: Text(
+          status,
+          style: AppTextStyles.josefin(
+              style: TextStyle(
+                  color: textColor,
+                  fontSize: 12.sp)),
         ),
       ),
     );

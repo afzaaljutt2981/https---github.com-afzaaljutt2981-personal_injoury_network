@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
+import 'package:personal_injury_networking/global/helper/api_functions.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/helper/image_view.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
@@ -428,6 +429,11 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                 await context
                                     .read<EventDetailsController>()
                                     .deleteEvent(widget.event.id??"");
+                                eventParticipants?.forEach((element) async {
+                                  if(element!.fcmToken != null){
+                                 await CountryStateCityRepo.sendPushNotification(eventCreater!.firstName!,
+                                      "Cancel the ${widget.event.title}", element.fcmToken!);
+                                }});
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                               },
