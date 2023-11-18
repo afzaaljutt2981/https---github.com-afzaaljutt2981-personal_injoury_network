@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCXko8N3UyhrwKG_dmHCvYH5znuVOCRlOI',
-    appId: '1:423594580933:android:276390ee922afea2d289ac',
-    messagingSenderId: '423594580933',
-    projectId: 'personal-injoury',
-    storageBucket: 'personal-injoury.appspot.com',
+    apiKey: 'AIzaSyBtCJkkBL2qraYCUx7sAPnryEgASPM_06k',
+    appId: '1:84312334778:android:db7e6f4b75bb92b8773d83',
+    messagingSenderId: '84312334778',
+    projectId: 'personal-injury-65638',
+    storageBucket: 'personal-injury-65638.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDWDrueIEIC5jMgY5nNvOBfdXoQm-C6U9w',
-    appId: '1:423594580933:ios:b01520233813eaf0d289ac',
-    messagingSenderId: '423594580933',
-    projectId: 'personal-injoury',
-    storageBucket: 'personal-injoury.appspot.com',
+    apiKey: 'AIzaSyBtCJkkBL2qraYCUx7sAPnryEgASPM_06k',
+    appId: '1:84312334778:android:db7e6f4b75bb92b8773d83',
+    messagingSenderId: '84312334778',
+    projectId: 'personal-injury-65638',
+    storageBucket: 'personal-injury-65638.appspot.com',
     iosBundleId: 'com.example.personalInjuryNetworking',
   );
 }
