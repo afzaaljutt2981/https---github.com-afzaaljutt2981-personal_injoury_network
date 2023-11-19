@@ -417,7 +417,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                         startTime.isBefore(DateTime.now()) &&
                                         endTime.isAfter(DateTime.now()) &&
                                         widget.event.status == "UpComing") ||
-                                    ((endTime.isAfter(DateTime.now()) &&
+                                    ((date.isAfter(DateTime.now()) &&
                                         widget.event.status == "UpComing"))) {
                                   _showBottomSheet(context);
                                 }
@@ -425,7 +425,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                               child: Container(
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        color: (((date.year == today.year &&
+                                        color: (
+                                            ((date.year == today.year &&
                                                         date.month ==
                                                             today.month &&
                                                         date.day ==
@@ -436,11 +437,12 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                                         DateTime.now()) &&
                                                     widget.event.status ==
                                                         "UpComing") ||
-                                                ((endTime.isAfter(
+                                                ((date.isAfter(
                                                         DateTime.now()) &&
                                                     widget.event.status ==
                                                         "UpComing")))
-                                            ? AppColors.kPrimaryColor
+                                            ?
+                                        AppColors.kPrimaryColor
                                             : Colors.grey,
                                         width: 1.5.sp),
                                     color: Colors.white,
@@ -468,7 +470,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                                                 .now()) &&
                                                             widget.event.status ==
                                                                 "UpComing") ||
-                                                        ((endTime.isAfter(DateTime.now()) &&
+                                                        ((date.isAfter(DateTime.now()) &&
                                                             widget.event.status ==
                                                                 "UpComing")))
                                                     ? AppColors.kPrimaryColor
@@ -480,14 +482,19 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                             ),
                             InkWell(
                               onTap: () async {
-                                if (endTime.isAfter(DateTime.now()) &&
+                                if (date.isAfter(DateTime.now()) &&
                                     widget.event.status == "UpComing") {
                                   Functions.showLoaderDialog(context);
                                   await context
                                       .read<EventDetailsController>()
                                       .deleteEvent(widget.event.id ?? "");
+                                  print(eventParticipants?.length);
+                                  print("events ");
+
                                   eventParticipants?.forEach((element) async {
                                     if (element?.fcmToken != null) {
+                                      await context.read<EventDetailsController>().notifyCancelEvent(
+                                          element!.id!, widget.event.title!);
                                       await CountryStateCityRepo
                                           .sendPushNotification(
                                               eventCreater!.firstName!,
@@ -505,7 +512,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                 decoration: BoxDecoration(
                                     border: Border.all(
                                         color:
-                                            ((endTime.isAfter(DateTime.now()) &&
+                                            ((date.isAfter(DateTime.now()) &&
                                                     widget.event.status ==
                                                         "UpComing"))
                                                 ? const Color(0xFFD70E0E)
@@ -522,7 +529,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                       style: AppTextStyles.josefin(
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
-                                              color: ((endTime.isAfter(
+                                              color: ((date.isAfter(
                                                           DateTime.now()) &&
                                                       widget.event.status ==
                                                           "UpComing"))

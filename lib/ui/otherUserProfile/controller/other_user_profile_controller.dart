@@ -50,10 +50,10 @@ class OtherUserProfileController extends ChangeNotifier {
     });
   }
 
-  sendFollowRequest(String userId) {
+  sendFollowRequest(String userId) async {
     var doc = user.doc(userId).collection("notifications").doc();
     var senderId = FirebaseAuth.instance.currentUser!.uid;
-    doc.set(NotificationsModel(
+    await doc.set(NotificationsModel(
             id: doc.id,
             senderId: senderId,
             image: "",

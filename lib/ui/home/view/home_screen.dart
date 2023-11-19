@@ -40,7 +40,11 @@ class _HomeScreenState extends State<HomeScreen> {
           (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
     }
     if (user != null && user!.userType == "user") {
-      events = context.watch<EventsController>().allEvents;
+      events = context
+          .watch<EventsController>()
+          .allEvents
+          .where((element) => element.status == "UpComing")
+          .toList();
     } else if (FirebaseAuth.instance.currentUser != null) {
       events = context
           .watch<EventsController>()
@@ -384,14 +388,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                           extractedMonth.replaceAll(',', '');
                                     }
 
-                                    if (((date.year == today.year &&
-                                                date.month == today.month &&
-                                                date.day == today.day) &&
-                                            startTime
-                                                .isBefore(DateTime.now()) &&
-                                            endTime.isAfter(DateTime.now()) ||
-                                        (endTime.isAfter(DateTime.now()) &&
-                                            model.status == "UpComing"))) {
+                                    // if (((date.year == today.year &&
+                                    //             date.month == today.month &&
+                                    //             date.day == today.day) &&
+                                    //         startTime
+                                    //             .isBefore(DateTime.now()) &&
+                                    //         endTime.isAfter(DateTime.now()) ||
+                                    //     (date.isAfter(DateTime.now()) &&
+                                    //         model.status == "UpComing"))) {
                                       return Padding(
                                         padding: EdgeInsets.only(bottom: 25.h),
                                         child: Row(
@@ -596,9 +600,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ],
                                         ),
                                       );
-                                    } else {
-                                      return const SizedBox();
-                                    }
+                                    // } else {
+                                    //   return const SizedBox();
+                                    // }
                                     // return SingleEventWidget(event: events[index]);
                                   })
                             ]

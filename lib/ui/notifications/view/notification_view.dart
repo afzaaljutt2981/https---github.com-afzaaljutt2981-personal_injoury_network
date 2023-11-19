@@ -110,7 +110,7 @@ class _NotificationViewState extends State<NotificationView> {
         allUsers.firstWhere((element) => element.id == model.senderId);
     currentUser = allUsers.firstWhere(
         (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
-    DateTime time = DateTime.fromMillisecondsSinceEpoch(model.time??0);
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(model.time ?? 0);
     String formattedDate = formatDateTime(time);
     return Column(
       children: [
@@ -137,7 +137,7 @@ class _NotificationViewState extends State<NotificationView> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        user.lastName??"",
+                        user.lastName ?? "",
                         style: AppTextStyles.josefin(
                             style: TextStyle(
                                 color: AppColors.kBlackColor,
@@ -145,13 +145,19 @@ class _NotificationViewState extends State<NotificationView> {
                                 fontWeight: FontWeight.w500)),
                       ),
                       CustomSizeBox(5.h),
-                      Text(
-                        "started following you",
-                        style: AppTextStyles.josefin(
-                            style: TextStyle(fontSize: 12.sp)),
-                      ),
+                      if (model.notificationType == "Follow") ...[
+                        Text(
+                          "started following you",
+                          style: AppTextStyles.josefin(
+                              style: TextStyle(fontSize: 12.sp)),
+                        )
+                      ] else ...[
+                        Text(model.notificationContent!)
+                      ],
                       CustomSizeBox(10.h),
-                      if (model.status == "Pending") buttonRow(model, user)
+                      if (model.status == "Pending" &&
+                          model.notificationType == "Follow")
+                        buttonRow(model, user)
                     ],
                   ),
                 ),
@@ -183,7 +189,7 @@ class _NotificationViewState extends State<NotificationView> {
           onTap: () async {
             context
                 .read<NotificationsController>()
-                .respondRequest(model.id??"", "Rejected", context);
+                .respondRequest(model.id ?? "", "Rejected", context);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -208,11 +214,11 @@ class _NotificationViewState extends State<NotificationView> {
           onTap: () async {
             await context
                 .read<NotificationsController>()
-                .respondRequest(model.id??"", "Accepted", context);
+                .respondRequest(model.id ?? "", "Accepted", context);
             // ignore: use_build_context_synchronously
             await context
                 .read<NotificationsController>()
-                .followTap(currentUser, user.id??"", context);
+                .followTap(currentUser, user.id ?? "", context);
             // ignore: use_build_context_synchronously
             await context
                 .read<NotificationsController>()

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/create_event/models/event_model.dart';
 
+import '../../notifications/model/nitofications_model.dart';
 import '../models/ticket_model.dart';
 
 class EventDetailsController extends ChangeNotifier {
@@ -59,5 +60,20 @@ class EventDetailsController extends ChangeNotifier {
   deleteEvent(String eventId) async {
     await events.doc(eventId).update({"status": "Cancelled"});
     notifyListeners();
+  }
+  notifyCancelEvent(String userId,String eventName) async {
+    var doc = users.doc(userId).collection("notifications").doc();
+    var senderId = FirebaseAuth.instance.currentUser!.uid;
+    await doc.set(
+        NotificationsModel(
+        id: doc.id,
+        senderId: senderId,
+        image: "",
+        notificationContent: "Cancelled $eventName",
+        time: DateTime.now().millisecondsSinceEpoch,
+        notificationType: "cancel Event",
+        status: 'Pending')
+        .toJson());
+    print("i am here");
   }
 }
