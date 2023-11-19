@@ -42,19 +42,21 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 8.h),
       child: GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            PageTransition(
-              childCurrent: widget,
-              type: PageTransitionType.leftToRightWithFade,
-              alignment: Alignment.center,
-              duration: const Duration(milliseconds: 200),
-              reverseDuration: const Duration(milliseconds: 200),
-              child: CreateEventDetailsView(
-                event: widget.event,
-              ),
-            ),
-          );
+          widget.event.status != 'Cancelled'
+              ? Navigator.push(
+                  context,
+                  PageTransition(
+                    childCurrent: widget,
+                    type: PageTransitionType.leftToRightWithFade,
+                    alignment: Alignment.center,
+                    duration: const Duration(milliseconds: 200),
+                    reverseDuration: const Duration(milliseconds: 200),
+                    child: CreateEventDetailsView(
+                      event: widget.event,
+                    ),
+                  ),
+                )
+              : null;
         },
         child: Container(
           decoration: BoxDecoration(
@@ -182,7 +184,7 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
                         "${widget.event.participants} participants",
                         style: const TextStyle(color: Colors.grey),
                       ),
-                      eventStatus()
+                      eventStatus(widget.event.status ?? '', context)
                     ],
                   ),
                 )
@@ -194,7 +196,7 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
     );
   }
 
-  Widget eventStatus() {
+  Widget eventStatus(String status, BuildContext context) {
     Color? bgColor;
     Color? textColor;
     DateTime date =
@@ -203,29 +205,33 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
         DateTime.fromMillisecondsSinceEpoch(widget.event.startTime!);
     DateTime endTime =
         DateTime.fromMillisecondsSinceEpoch(widget.event.endTime!);
-    String status = widget.event.status ?? "";
-    if (startTime.isBefore(DateTime.now()) &&
-        DateTime.now().isBefore(endTime)) {
-      status = "Started";
-      bgColor = const Color(0xFF0AFF31);
-      textColor = const Color(0xFF17DF1F);
-    } else if (date.isBefore(DateTime.now()) && status != "Cancelled") {
-      status = "Completed";
-      bgColor = const Color(0xFF49E73C).withOpacity(0.4);
-      textColor = const Color(0xFF17DF1F);
-    }
-    if (status == "UpComing") {
-      // bgColor = Colors.yellow.shade200;
-      bgColor = const Color(0xffF3F633);
-      textColor = Colors.yellow.shade700;
-    } else if (status == "Cancelled") {
+    if (status == 'Cancelled') {
       bgColor = Colors.red.shade100;
       textColor = Colors.red.shade600;
+    } else {
+      if (startTime.isBefore(DateTime.now()) &&
+          DateTime.now().isBefore(endTime)) {
+        status = "Started";
+        bgColor = const Color(0xFF0AFF31);
+        textColor = const Color(0xFF17DF1F);
+      } else if (date.isBefore(DateTime.now()) && status != "cancelled") {
+        status = "Completed";
+        bgColor = const Color(0xFF49E73C).withOpacity(0.4);
+        textColor = const Color(0xFF17DF1F);
+      }
+      if (status == "UpComing") {
+        // bgColor = Colors.yellow.shade200;
+        bgColor = const Color(0xffF3F633);
+        textColor = Colors.yellow.shade700;
+      } else if (status == "Cancelled") {
+        bgColor = Colors.red.shade100;
+        textColor = Colors.red.shade600;
+      }
     }
     return Container(
       decoration: BoxDecoration(
         color: bgColor,
-        border: Border.all(color: textColor??Colors.yellow),
+        border: Border.all(color: textColor ?? Colors.yellow),
         borderRadius: BorderRadius.circular(20.sp),
       ),
       child: Padding(
