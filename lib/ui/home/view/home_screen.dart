@@ -353,11 +353,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                   padding: EdgeInsets.zero,
                                   shrinkWrap: true,
                                   itemBuilder: (context, index) {
+                                    var model = events[index];
                                     int timestamp = events[index].dateTime ??
                                         0; // Assuming events[index].dateTime is a timestamp
                                     DateTime dateTime =
                                         DateTime.fromMillisecondsSinceEpoch(
                                             timestamp);
+                                    DateTime time =
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            model.dateTime ?? 0);
+                                    DateTime startTime =
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            model.startTime ?? 0);
+                                    DateTime endTime =
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            model.endTime ?? 0);
+                                    DateTime today = DateTime.now();
+                                    DateTime date =
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            model.dateTime ?? 0);
                                     String formattedDate =
                                         DateFormat('d MMM, y').format(dateTime);
                                     List<String> parts =
@@ -370,53 +384,56 @@ class _HomeScreenState extends State<HomeScreen> {
                                           extractedMonth.replaceAll(',', '');
                                     }
 
-                                    return events[index].status == 'UpComing'
-                                        ? Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 25.h),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  //  height: 140.sp,
-                                                  width: 110.sp,
+                                    if (((date.year == today.year &&
+                                                date.month == today.month &&
+                                                date.day == today.day) &&
+                                            startTime
+                                                .isBefore(DateTime.now()) &&
+                                            endTime.isAfter(DateTime.now()) ||
+                                        (endTime.isAfter(DateTime.now()) &&
+                                            model.status == "UpComing"))) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(bottom: 25.h),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              //  height: 140.sp,
+                                              width: 110.sp,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.grey[300],
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20.sp),
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                          events[index]
+                                                                  .pImage ??
+                                                              ""),
+                                                      fit: BoxFit.cover)),
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 8.w,
+                                                    top: 8.h,
+                                                    bottom: 70.h,
+                                                    right: 55.w),
+                                                child: Container(
                                                   decoration: BoxDecoration(
-                                                      color: Colors.grey[300],
+                                                      color: Colors.white,
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              20.sp),
-                                                      image: DecorationImage(
-                                                          image: NetworkImage(
-                                                              events[index]
-                                                                      .pImage ??
-                                                                  ""),
-                                                          fit: BoxFit.cover)),
-                                                  child: Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 8.w,
-                                                        top: 8.h,
-                                                        bottom: 70.h,
-                                                        right: 55.w),
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      20.sp)),
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          CustomSizeBox(5.h),
-                                                          Text(
-                                                              firstPart
-                                                                  .toString(),
-                                                              style: GoogleFonts.sourceCodePro(
+                                                              20.sp)),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      CustomSizeBox(5.h),
+                                                      Text(firstPart.toString(),
+                                                          style: GoogleFonts
+                                                              .sourceCodePro(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w600,
@@ -424,10 +441,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       .black,
                                                                   fontSize:
                                                                       15.sp)),
-                                                          Text(
-                                                              extractedMonth
-                                                                  .toString(),
-                                                              style: GoogleFonts.sourceCodePro(
+                                                      Text(
+                                                          extractedMonth
+                                                              .toString(),
+                                                          style: GoogleFonts
+                                                              .sourceCodePro(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w600,
@@ -435,155 +453,152 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       .black,
                                                                   fontSize:
                                                                       12.sp)),
-                                                          CustomSizeBox(5.h),
-                                                        ],
-                                                      ),
-                                                    ),
+                                                      CustomSizeBox(5.h),
+                                                    ],
                                                   ),
                                                 ),
-                                                Expanded(
-                                                  child: Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 20.w),
-                                                    child: Column(
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 20.w),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        // Text(
+                                                        //   "1.4 KM AWAY",
+                                                        //   style: AppTextStyles.josefin(
+                                                        //       style: TextStyle(
+                                                        //           fontSize: 10.sp,
+                                                        //           color: const Color(
+                                                        //               0xFFACB1D9))),
+                                                        // ),
+                                                        SizedBox(
+                                                          width: 10.w,
+                                                        ),
+                                                        Container(
+                                                          height: 2,
+                                                          width: 200.w,
+                                                          color: const Color(
+                                                              0xFFF0F1FA),
+                                                        )
+                                                      ],
+                                                    ),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          right: 10.w,
+                                                          top: 10.h,
+                                                          bottom: 7.h),
+                                                      child: Text(
+                                                        events[index].title ??
+                                                            "",
+                                                        style: AppTextStyles.josefin(
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 20.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500)),
+                                                      ),
+                                                    ),
+                                                    Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
                                                       children: [
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .end,
-                                                          children: [
-                                                            // Text(
-                                                            //   "1.4 KM AWAY",
-                                                            //   style: AppTextStyles.josefin(
-                                                            //       style: TextStyle(
-                                                            //           fontSize: 10.sp,
-                                                            //           color: const Color(
-                                                            //               0xFFACB1D9))),
-                                                            // ),
-                                                            SizedBox(
-                                                              width: 10.w,
-                                                            ),
-                                                            Container(
-                                                              height: 2,
-                                                              width: 200.w,
-                                                              color: const Color(
-                                                                  0xFFF0F1FA),
-                                                            )
-                                                          ],
+                                                        Image(
+                                                          height: 18.sp,
+                                                          width: 18.sp,
+                                                          image: const AssetImage(
+                                                              'assets/images/location_blue.png'),
                                                         ),
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  right: 10.w,
-                                                                  top: 10.h,
-                                                                  bottom: 7.h),
+                                                        SizedBox(
+                                                          width: 7.w,
+                                                        ),
+                                                        Expanded(
                                                           child: Text(
                                                             events[index]
-                                                                    .title ??
+                                                                    .address ??
                                                                 "",
                                                             style: AppTextStyles.josefin(
                                                                 style: TextStyle(
-                                                                    color: Colors
-                                                                        .black,
+                                                                    color: const Color(
+                                                                        0xFF585DF9),
                                                                     fontSize:
-                                                                        20.sp,
+                                                                        12.sp,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w500)),
                                                           ),
                                                         ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Image(
-                                                              height: 18.sp,
-                                                              width: 18.sp,
-                                                              image: const AssetImage(
-                                                                  'assets/images/location_blue.png'),
-                                                            ),
-                                                            SizedBox(
-                                                              width: 7.w,
-                                                            ),
-                                                            Expanded(
-                                                              child: Text(
-                                                                events[index]
-                                                                        .address ??
-                                                                    "",
-                                                                style: AppTextStyles.josefin(
-                                                                    style: TextStyle(
-                                                                        color: const Color(
-                                                                            0xFF585DF9),
-                                                                        fontSize: 12
-                                                                            .sp,
-                                                                        fontWeight:
-                                                                            FontWeight.w500)),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        CustomSizeBox(12.h),
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  right: 60.w),
-                                                          child: GetButton(
-                                                            40.sp,
-                                                            () {
-                                                              Navigator.push(
-                                                                context,
-                                                                PageTransition(
-                                                                  childCurrent:
-                                                                      widget,
-                                                                  type: PageTransitionType
-                                                                      .leftToRightWithFade,
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
-                                                                  duration: const Duration(
-                                                                      milliseconds:
-                                                                          200),
-                                                                  reverseDuration:
-                                                                      const Duration(
-                                                                          milliseconds:
-                                                                              200),
-                                                                  child:
-                                                                      CreateEventDetailsView(
-                                                                    event: events[
-                                                                        index],
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                            Text(
-                                                              "View Event",
-                                                              style: AppTextStyles.josefin(
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          14.sp,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500)),
-                                                            ),
-                                                          ),
-                                                        )
                                                       ],
                                                     ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          )
-                                        : const SizedBox();
+                                                    CustomSizeBox(12.h),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          right: 60.w),
+                                                      child: GetButton(
+                                                        40.sp,
+                                                        () {
+                                                          Navigator.push(
+                                                            context,
+                                                            PageTransition(
+                                                              childCurrent:
+                                                                  widget,
+                                                              type: PageTransitionType
+                                                                  .leftToRightWithFade,
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              duration:
+                                                                  const Duration(
+                                                                      milliseconds:
+                                                                          200),
+                                                              reverseDuration:
+                                                                  const Duration(
+                                                                      milliseconds:
+                                                                          200),
+                                                              child:
+                                                                  CreateEventDetailsView(
+                                                                event: events[
+                                                                    index],
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        Text(
+                                                          "View Event",
+                                                          style: AppTextStyles.josefin(
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      14.sp,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500)),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    } else {
+                                      return const SizedBox();
+                                    }
                                     // return SingleEventWidget(event: events[index]);
                                   })
                             ]

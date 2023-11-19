@@ -411,30 +411,35 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                if ((date.year == today.year &&
-                                        date.month == today.month &&
-                                        date.day == today.day) &&
-                                    startTime.isBefore(DateTime.now()) &&
-                                    endTime.isAfter(DateTime.now()) &&
-                                    (endTime.isAfter(DateTime.now()) &&
-                                        widget.event.status == "UpComing")) {
+                                if (((date.year == today.year &&
+                                            date.month == today.month &&
+                                            date.day == today.day) &&
+                                        startTime.isBefore(DateTime.now()) &&
+                                        endTime.isAfter(DateTime.now()) &&
+                                        widget.event.status == "UpComing") ||
+                                    ((endTime.isAfter(DateTime.now()) &&
+                                        widget.event.status == "UpComing"))) {
                                   _showBottomSheet(context);
                                 }
                               },
                               child: Container(
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        color: ((date.year == today.year &&
-                                                    date.month == today.month &&
-                                                    date.day == today.day) &&
-                                                startTime
-                                                    .isBefore(DateTime.now()) &&
-                                                endTime
-                                                    .isAfter(DateTime.now()) &&
-                                                (endTime.isAfter(
+                                        color: (((date.year == today.year &&
+                                                        date.month ==
+                                                            today.month &&
+                                                        date.day ==
+                                                            today.day) &&
+                                                    startTime.isBefore(
+                                                        DateTime.now()) &&
+                                                    endTime.isAfter(
                                                         DateTime.now()) &&
                                                     widget.event.status ==
-                                                        "UpComing"))
+                                                        "UpComing") ||
+                                                ((endTime.isAfter(
+                                                        DateTime.now()) &&
+                                                    widget.event.status ==
+                                                        "UpComing")))
                                             ? AppColors.kPrimaryColor
                                             : Colors.grey,
                                         width: 1.5.sp),
@@ -449,22 +454,23 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                         style: AppTextStyles.josefin(
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400,
-                                                color: ((date.year ==
-                                                                today.year &&
-                                                            date.month ==
-                                                                today.month &&
-                                                            date.day ==
-                                                                today.day) &&
-                                                        startTime.isBefore(
-                                                            DateTime.now()) &&
-                                                        endTime.isAfter(
-                                                            DateTime.now()) &&
-                                                        (endTime.isAfter(
+                                                color: (((date.year == today.year &&
+                                                                date.month ==
+                                                                    today
+                                                                        .month &&
+                                                                date.day ==
+                                                                    today
+                                                                        .day) &&
+                                                            startTime.isBefore(
                                                                 DateTime
                                                                     .now()) &&
-                                                            widget.event
-                                                                    .status ==
-                                                                "UpComing"))
+                                                            endTime.isAfter(DateTime
+                                                                .now()) &&
+                                                            widget.event.status ==
+                                                                "UpComing") ||
+                                                        ((endTime.isAfter(DateTime.now()) &&
+                                                            widget.event.status ==
+                                                                "UpComing")))
                                                     ? AppColors.kPrimaryColor
                                                     : Colors.grey,
                                                 fontSize: 16.sp)),
@@ -474,7 +480,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                             ),
                             InkWell(
                               onTap: () async {
-                                if (startTime.isAfter(DateTime.now()) &&
+                                if (endTime.isAfter(DateTime.now()) &&
                                     widget.event.status == "UpComing") {
                                   Functions.showLoaderDialog(context);
                                   await context
@@ -498,12 +504,12 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                               child: Container(
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        color: ((startTime
-                                                    .isAfter(DateTime.now()) &&
-                                                widget.event.status ==
-                                                    "UpComing"))
-                                            ? const Color(0xFFD70E0E)
-                                            : Colors.grey,
+                                        color:
+                                            ((endTime.isAfter(DateTime.now()) &&
+                                                    widget.event.status ==
+                                                        "UpComing"))
+                                                ? const Color(0xFFD70E0E)
+                                                : Colors.grey,
                                         width: 1.5.sp),
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(12.sp)),
@@ -516,7 +522,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                       style: AppTextStyles.josefin(
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
-                                              color: ((startTime.isAfter(
+                                              color: ((endTime.isAfter(
                                                           DateTime.now()) &&
                                                       widget.event.status ==
                                                           "UpComing"))
