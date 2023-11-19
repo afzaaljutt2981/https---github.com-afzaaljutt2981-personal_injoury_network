@@ -11,7 +11,7 @@ class Functions {
   static showSnackBar(BuildContext context, String message, {Color? color}) {
     color ??= Colors.white;
     final snackBar = SnackBar(
-      backgroundColor: color,
+      backgroundColor: color, 
       content: Text(
         message,
         style: const TextStyle(

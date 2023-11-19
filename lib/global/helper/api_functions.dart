@@ -8,7 +8,7 @@ import '../utils/constants.dart';
 
 class CountryStateCityRepo {
   static const countriesStateURL =
-      'https://countriesnow.space/api/v0.1/countries/states';
+      'https://countriesnow.space/api/v0.1/countries/states'; 
   static const cityURL =
       'https://countriesnow.space/api/v0.1/countries/state/cities/q?country';
 
