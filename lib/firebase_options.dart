@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '84312334778',
     projectId: 'personal-injury-65638', 
     storageBucket: 'personal-injury-65638.appspot.com',
-    iosBundleId: 'com.example.personalInjuryNetworking',
+    iosBundleId: 'com.law.personalinjurynetworking',
+    // iosBundleId: 'com.example.personalInjuryNetworking',
   );
 }

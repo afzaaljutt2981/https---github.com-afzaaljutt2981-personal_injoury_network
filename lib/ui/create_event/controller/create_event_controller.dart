@@ -28,6 +28,7 @@ class CreateEventController extends ChangeNotifier {
             status: "upComing",
             invites: [],
             title: title,
+            participants: 0,
             dateTime: dateTime.millisecondsSinceEpoch,
             longitude: longitude,
             latitude: latitude)

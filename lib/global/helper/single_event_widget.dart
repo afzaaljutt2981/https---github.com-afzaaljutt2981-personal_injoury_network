@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/ui/create_event/models/event_model.dart';
+import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
+import 'package:provider/provider.dart';
 
+import '../../ui/events_details/models/ticket_model.dart';
 import '../../ui/events_details/view/create_event_details_view.dart';
 import '../app_buttons/app_primary_button.dart';
 import '../utils/app_text_styles.dart';
@@ -20,159 +24,208 @@ class SingleEventWidget extends StatefulWidget {
 
 class _SingleEventWidgetState extends State<SingleEventWidget> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  List<TicketModel> eventTickets = [];
+  @override
   Widget build(BuildContext context) {
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime!);
+    DateTime startTime =
+        DateTime.fromMillisecondsSinceEpoch(widget.event.startTime!);
+    String fStartTime = DateFormat("HH:mm a").format(startTime);
+    String fDate = DateFormat("EEE,MMM d").format(date);
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 8.h),
-      child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.sp),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF535990).withOpacity(0.1),
-                spreadRadius: 6,
-                blurRadius: 6,
-                offset: Offset(0, 10.sp),
-              )
-            ]),
-        child: Padding(
-          padding: EdgeInsets.all(10.sp),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 100.sp,
-                width: 100.sp,
-                decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(10.sp),
-                    image: DecorationImage(
-                        image: NetworkImage(widget.event.pImage??""),
-                        fit: BoxFit.cover)),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            PageTransition(
+              childCurrent: widget,
+              type: PageTransitionType.leftToRightWithFade,
+              alignment: Alignment.center,
+              duration: const Duration(milliseconds: 200),
+              reverseDuration: const Duration(milliseconds: 200),
+              child: CreateEventDetailsView(
+                event: widget.event,
               ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20.w, right: 10.w, top: 5.h),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomSizeBox(3.h),
-                      // Text(
-                      //   widget.event.title??"",
-                      //   style: AppTextStyles.josefin(
-                      //       style: TextStyle(
-                      //           color: const Color(0xFF3A51C8),
-                      //           fontSize: 13.sp,
-                      //           fontWeight: FontWeight.w500)),
-                      // ),
-                      // CustomSizeBox(10.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            widget.event.title??"",
-                            style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    color: const Color(0xFF120D26),
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w500)),
-                          ),
-                          eventStatus()
-                        ],
-                      ),
-                      CustomSizeBox(8.h),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.place,
-                            color: Colors.grey,
-                            size: 15.sp,
-                          ),
-                          SizedBox(
-                            width: 8.w,
-                          ),
-                          Expanded(
-                            child: Text(
-                              widget.event.address??"",
+            ),
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.sp),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF535990).withOpacity(0.07),
+                  spreadRadius: 6,
+                  blurRadius: 6,
+                  offset: Offset(0, 8.sp),
+                )
+              ]),
+          child: Padding(
+            padding: EdgeInsets.all(10.sp),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 90.sp,
+                      width: 90.sp,
+                      decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(10.sp),
+                          image: DecorationImage(
+                              image: NetworkImage(widget.event.pImage ?? ""),
+                              fit: BoxFit.cover)),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.only(left: 20.w, right: 10.w, top: 5.h),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomSizeBox(3.h),
+                            Text(
+                              "$fDate - $fStartTime",
                               style: AppTextStyles.josefin(
                                   style: TextStyle(
-                                      color: const Color(0xFF747688),
-                                      fontSize: 11.sp,
+                                      color: const Color(0xFF3A51C8),
+                                      fontSize: 13.sp,
                                       fontWeight: FontWeight.w500)),
                             ),
-                          ),
-                        ],
-                      ),
-                      CustomSizeBox(3.h),
-                      Padding(
-                        padding: EdgeInsets.only(right: 60.w),
-                        child: GetButton(
-                          40.sp,
-                          () {
-                            Navigator.push(
-                              context,
-                              PageTransition(
-                                childCurrent: widget,
-                                type: PageTransitionType.leftToRightWithFade,
-                                alignment: Alignment.center,
-                                duration: const Duration(milliseconds: 200),
-                                reverseDuration:
-                                    const Duration(milliseconds: 200),
-                                child: CreateEventDetailsView(
-                                  event: widget.event,
+                            CustomSizeBox(5.h),
+                            Text(
+                              widget.event.title ?? "",
+                              style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      color: const Color(0xFF120D26),
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+                            CustomSizeBox(12.h),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.place,
+                                  color: Colors.grey,
+                                  size: 15.sp,
                                 ),
-                              ),
-                            );
-                          },
-                          Text(
-                            "View Event",
-                            style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w500)),
-                          ),
+                                SizedBox(
+                                  width: 8.w,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    widget.event.address ?? "",
+                                    style: AppTextStyles.josefin(
+                                        style: TextStyle(
+                                            color: const Color(0xFF747688),
+                                            fontSize: 11.sp,
+                                            fontWeight: FontWeight.w500)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            CustomSizeBox(3.h),
+
+                            // Padding(
+                            //   padding: EdgeInsets.only(right: 60.w),
+                            //   child: GetButton(
+                            //     40.sp,
+                            //     () {
+                            //       Navigator.push(
+                            //         context,
+                            //         PageTransition(
+                            //           childCurrent: widget,
+                            //           type: PageTransitionType.leftToRightWithFade,
+                            //           alignment: Alignment.center,
+                            //           duration: const Duration(milliseconds: 200),
+                            //           reverseDuration:
+                            //               const Duration(milliseconds: 200),
+                            //           child: CreateEventDetailsView(
+                            //             event: widget.event,
+                            //           ),
+                            //         ),
+                            //       );
+                            //     },
+                            //     Text(
+                            //       "View Event",
+                            //       style: AppTextStyles.josefin(
+                            //           style: TextStyle(
+                            //               color: Colors.white,
+                            //               fontSize: 14.sp,
+                            //               fontWeight: FontWeight.w500)),
+                            //     ),
+                            //   ),
+                            // )
+                          ],
                         ),
-                      )
+                      ),
+                    )
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "${widget.event.participants} participants",
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                      eventStatus()
                     ],
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-  Widget eventStatus(){
+
+  Widget eventStatus() {
     Color? bgColor;
     Color? textColor;
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime ?? 0);
-    DateTime startTime = DateTime.fromMillisecondsSinceEpoch(widget.event.startTime!);
-    DateTime endTime = DateTime.fromMillisecondsSinceEpoch(widget.event.endTime!);
+    DateTime date =
+        DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime ?? 0);
+    DateTime startTime =
+        DateTime.fromMillisecondsSinceEpoch(widget.event.startTime!);
+    DateTime endTime =
+        DateTime.fromMillisecondsSinceEpoch(widget.event.endTime!);
     String status = widget.event.status ?? "";
-    if(startTime.isBefore(DateTime.now()) && DateTime.now().isBefore(endTime)){
+    if (startTime.isBefore(DateTime.now()) &&
+        DateTime.now().isBefore(endTime)) {
       status = "Started";
       bgColor = const Color(0xFF0AFF31);
       textColor = const Color(0xFF17DF1F);
-    }else if (date.isBefore(DateTime.now()) && status != "cancelled") {
+    } else if (date.isBefore(DateTime.now()) && status != "cancelled") {
       status = "Completed";
-      bgColor = const Color(0xFF0AFF31);
+      bgColor = const Color(0xFF49E73C).withOpacity(0.4);
       textColor = const Color(0xFF17DF1F);
     }
-    if(status == "upComing"){
-      bgColor = Colors.yellow.shade200;
-      // const Color(0xffF3F628);
-      textColor = Colors.yellow.shade600;
-    }else if(status == "cancelled"){
-      bgColor = Colors.red.shade200;
+    if (status == "upComing") {
+      // bgColor = Colors.yellow.shade200;
+      bgColor = const Color(0xffF3F633);
+      textColor = Colors.yellow.shade700;
+    } else if (status == "cancelled") {
+      bgColor = Colors.red.shade100;
       textColor = Colors.red.shade600;
     }
     return Container(
       decoration: BoxDecoration(
         color: bgColor,
+        border: Border.all(color: textColor??Colors.yellow),
         borderRadius: BorderRadius.circular(20.sp),
       ),
       child: Padding(
@@ -180,9 +233,7 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
         child: Text(
           status,
           style: AppTextStyles.josefin(
-              style: TextStyle(
-                  color: textColor,
-                  fontSize: 12.sp)),
+              style: TextStyle(color: textColor, fontSize: 12.sp)),
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
+import 'package:personal_injury_networking/ui/create_event/models/event_model.dart';
 
 import '../models/ticket_model.dart';
 
@@ -33,11 +34,14 @@ class EventDetailsController extends ChangeNotifier {
     });
   }
 
-  addEventTicket(String eventId) async {
-    var tickDoc = events.doc(eventId).collection("tickets").doc();
+  addEventTicket(EventModel event) async {
+    var tickDoc = events.doc(event.id).collection("tickets").doc();
+    await events.doc(event.id).update({
+      "participants": event.participants + 1
+    });
     await tickDoc.set(TicketModel(
             id: tickDoc.id,
-            eId: eventId,
+            eId: event.id,
             uId: FirebaseAuth.instance.currentUser!.uid)
         .toJson());
   }
