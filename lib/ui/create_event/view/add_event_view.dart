@@ -62,12 +62,13 @@ class _AddEventViewState extends State<AddEventView> {
                 height: 40.sp,
                 child: Icon(
                   Icons.arrow_back_ios,
-                  color: AppColors.kPrimaryColor,
+                  color: AppColors.kWhiteColor,
                   size: 18.sp,
                 ),
               ),
             ),
           ),
+
           title: Center(
             child: Padding(
               padding: EdgeInsets.only(right: 45.w),
@@ -82,6 +83,7 @@ class _AddEventViewState extends State<AddEventView> {
             ),
           ),
         ),
+
         body: Column(
           children: [
             Expanded(

@@ -116,7 +116,7 @@ class _ChatScreenState extends State<ChatScreen> {
           chats.first.dateTime?.day == DateTime.now().day) {
         print("condition true for today ${difference?.inDays}");
         modifiedChats.add(ChatMessage(
-            messageContent: "Today ${chats.first.dateTime?.day}, ${DateTime.now().day}",
+            messageContent: "Today",
             id: '',
             dateTime: null,
             messageType: 'date',
@@ -139,7 +139,7 @@ class _ChatScreenState extends State<ChatScreen> {
         if (chat.dateTime?.day != dateTimeTracking?.day ||
             chat.dateTime?.month != dateTimeTracking?.month) {
           print("A different date");
-          if (difference?.inDays == -1) {
+          if ((difference?.inDays == 0  && chat.dateTime?.day != DateTime.now().day) || difference?.inDays == -1) {
             print("condition true for  Yesterday" + difference.toString());
 
             modifiedChats.add(ChatMessage(
