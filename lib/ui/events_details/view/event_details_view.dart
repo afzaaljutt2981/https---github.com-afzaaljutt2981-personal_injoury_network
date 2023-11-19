@@ -434,7 +434,9 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                  await CountryStateCityRepo.sendPushNotification(eventCreater!.firstName!,
                                       "Cancel the ${widget.event.title}", element?.fcmToken??"");
                                 }});
+                                // ignore: use_build_context_synchronously
                                 Navigator.pop(context);
+                                // ignore: use_build_context_synchronously
                                 Navigator.pop(context);
                               },
                               child: Container(
