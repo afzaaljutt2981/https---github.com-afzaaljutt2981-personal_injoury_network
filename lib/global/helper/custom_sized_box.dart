@@ -14,7 +14,7 @@ class _CustomSizeBoxState extends State<CustomSizeBox> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: widget.height,
+      height: widget.height, 
     );
   }
 }
