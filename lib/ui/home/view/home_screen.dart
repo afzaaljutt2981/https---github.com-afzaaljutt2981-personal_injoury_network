@@ -46,7 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
           .watch<EventsController>()
           .allEvents
           .where((element) =>
-              element.uId == FirebaseAuth.instance.currentUser!.uid && element.status == "upComing")
+              element.uId == FirebaseAuth.instance.currentUser!.uid &&
+              element.status == "upComing")
           .toList();
     }
     var screenHeight = MediaQuery.of(context).size.height;
@@ -344,7 +345,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   padding: EdgeInsets.zero,
                                   shrinkWrap: true,
                                   itemBuilder: (context, index) {
-                                    int timestamp = events[index].dateTime??0; // Assuming events[index].dateTime is a timestamp
+                                    int timestamp = events[index].dateTime ??
+                                        0; // Assuming events[index].dateTime is a timestamp
                                     DateTime dateTime =
                                         DateTime.fromMillisecondsSinceEpoch(
                                             timestamp);
@@ -360,7 +362,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           extractedMonth.replaceAll(',', '');
                                     }
 
-                                    return Padding(
+                                    return events[index].status == 'UpComing'
+                                        ? Padding(
                                             padding:
                                                 EdgeInsets.only(bottom: 25.h),
                                             child: Row(
@@ -380,7 +383,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       image: DecorationImage(
                                                           image: NetworkImage(
                                                               events[index]
-                                                                  .pImage??""),
+                                                                      .pImage ??
+                                                                  ""),
                                                           fit: BoxFit.cover)),
                                                   child: Padding(
                                                     padding: EdgeInsets.only(
@@ -472,7 +476,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   top: 10.h,
                                                                   bottom: 7.h),
                                                           child: Text(
-                                                            events[index].title??"",
+                                                            events[index]
+                                                                    .title ??
+                                                                "",
                                                             style: AppTextStyles.josefin(
                                                                 style: TextStyle(
                                                                     color: Colors
@@ -501,7 +507,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             Expanded(
                                                               child: Text(
                                                                 events[index]
-                                                                    .address??"",
+                                                                        .address ??
+                                                                    "",
                                                                 style: AppTextStyles.josefin(
                                                                     style: TextStyle(
                                                                         color: const Color(
@@ -567,7 +574,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 )
                                               ],
                                             ),
-                                          );
+                                          )
+                                        : const SizedBox();
                                     // return SingleEventWidget(event: events[index]);
                                   })
                             ]

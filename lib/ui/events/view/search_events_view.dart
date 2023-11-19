@@ -35,7 +35,8 @@ class _SearchEventScreenState extends State<SearchEventScreen> {
 
     // Iterate through the eventList and check if the title contains the searchTerm.
     for (EventModel event in eventList) {
-      if (event.title?.toLowerCase().contains(searchTerm.toLowerCase()) == true) {
+      if (event.title?.toLowerCase().contains(searchTerm.toLowerCase()) ==
+          true) {
         matchingEvents.add(event);
       }
     }
@@ -167,78 +168,89 @@ class _SearchEventScreenState extends State<SearchEventScreen> {
                 itemBuilder: (context, index) {
                   var model = sEvents[index];
                   DateTime dateTime =
-                      DateTime.fromMillisecondsSinceEpoch(model.dateTime??0);
+                      DateTime.fromMillisecondsSinceEpoch(model.dateTime ?? 0);
                   DateTime startTime =
-                      DateTime.fromMillisecondsSinceEpoch(model.startTime??0);
+                      DateTime.fromMillisecondsSinceEpoch(model.startTime ?? 0);
                   String dateFormat = DateFormat("d MMM-EEE").format(dateTime);
                   String startFormat = DateFormat("HH:mm a").format(startTime);
-                  return Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.sp),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF535990).withOpacity(0.1),
-                              spreadRadius: 6,
-                              blurRadius: 6,
-                              offset: Offset(0, 10.sp),
-                            )
-                          ]),
-                      child: Padding(
-                        padding: EdgeInsets.all(10.sp),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 100.sp,
-                              width: 100.sp,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius: BorderRadius.circular(10.sp),
-                                  image: DecorationImage(
-                                      image: NetworkImage(model.pImage??""),
-                                      fit: BoxFit.cover)),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    left: 20.w, right: 10.w, top: 20.h),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CustomSizeBox(3.h),
-                                    Text(
-                                      "$dateFormat-$startFormat",
-                                      style: AppTextStyles.josefin(
-                                          style: TextStyle(
-                                              color: const Color(0xFF212E73),
-                                              fontSize: 13.sp,
-                                              fontWeight: FontWeight.w500)),
+                  return model.status == 'UpComing'
+                      ? Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 15.w, vertical: 10.h),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.sp),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF535990)
+                                        .withOpacity(0.1),
+                                    spreadRadius: 6,
+                                    blurRadius: 6,
+                                    offset: Offset(0, 10.sp),
+                                  )
+                                ]),
+                            child: Padding(
+                              padding: EdgeInsets.all(10.sp),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    height: 100.sp,
+                                    width: 100.sp,
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey[300],
+                                        borderRadius:
+                                            BorderRadius.circular(10.sp),
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                                model.pImage ?? ""),
+                                            fit: BoxFit.cover)),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 20.w, right: 10.w, top: 20.h),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          CustomSizeBox(3.h),
+                                          Text(
+                                            "$dateFormat-$startFormat",
+                                            style: AppTextStyles.josefin(
+                                                style: TextStyle(
+                                                    color:
+                                                        const Color(0xFF212E73),
+                                                    fontSize: 13.sp,
+                                                    fontWeight:
+                                                        FontWeight.w500)),
+                                          ),
+                                          CustomSizeBox(10.h),
+                                          Text(
+                                            model.title ?? "",
+                                            style: AppTextStyles.josefin(
+                                                style: TextStyle(
+                                                    color:
+                                                        const Color(0xFF120D26),
+                                                    fontSize: 18.sp,
+                                                    fontWeight:
+                                                        FontWeight.w500)),
+                                          ),
+                                          CustomSizeBox(3.h),
+                                        ],
+                                      ),
                                     ),
-                                    CustomSizeBox(10.h),
-                                    Text(
-                                      model.title??"",
-                                      style: AppTextStyles.josefin(
-                                          style: TextStyle(
-                                              color: const Color(0xFF120D26),
-                                              fontSize: 18.sp,
-                                              fontWeight: FontWeight.w500)),
-                                    ),
-                                    CustomSizeBox(3.h),
-                                  ],
-                                ),
+                                  )
+                                ],
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
+                            ),
+                          ),
+                        )
+                      : const SizedBox();
                 }),
           )
         ],
