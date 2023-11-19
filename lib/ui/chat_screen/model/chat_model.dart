@@ -14,13 +14,13 @@ class ChatMessage {
       required this.messageType,
       required this.senderId});
 
-  factory ChatMessage.fromJson(Map<String, dynamic> json) {
+  factory ChatMessage.fromJson(Map<String, dynamic>? json) {
     return ChatMessage(
-        messageContent: json['messageContent'],
-        id: json['id'],
-        dateTime: (json['dateTime'] as Timestamp).toDate(),
-        messageType: json['messageType'],
-        senderId: json['senderId']);
+        messageContent: json?['messageContent'],
+        id: json?['id'],
+        dateTime: (json?['dateTime'] as Timestamp).toDate(),
+        messageType: json?['messageType'],
+        senderId: json?['senderId']);
   }
 
   Map<String, dynamic> toJson() => {

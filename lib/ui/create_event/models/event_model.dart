@@ -29,21 +29,21 @@ class EventModel {
     required this.latitude,
     required this.uId,
 });
-  factory EventModel.fromJson(Map<String,dynamic> json){
-    List invites = json["invites"]??[];
+  factory EventModel.fromJson(Map<String,dynamic>? json){
+    List invites = json?["invites"]??[];
     return EventModel(
-        endTime: json['endTime'],
-        startTime: json['startTime'],
-        id: json['id'],
-        status: json['status'],
-        address: json['address'],
-        description: json['description'],
-        title: json['title'],
-        participants: json['participants'],
-        latitude: json['latitude'],
-        longitude: json['longitude'],
+        endTime: json?['endTime'],
+        startTime: json?['startTime'],
+        id: json?['id'],
+        status: json?['status'],
+        address: json?['address'],
+        description: json?['description'],
+        title: json?['title'],
+        participants: json?['participants'],
+        latitude: json?['latitude'],
+        longitude: json?['longitude'],
         invites: List.generate(invites.length, (index) => invites[index]),
-        dateTime: json['dateTime'], pImage:json['pImage'], uId: json['uId']);
+        dateTime: json?['dateTime'], pImage:json?['pImage'], uId: json?['uId']);
   }
   Map<String,dynamic> toJson()=>{
     "id":id,

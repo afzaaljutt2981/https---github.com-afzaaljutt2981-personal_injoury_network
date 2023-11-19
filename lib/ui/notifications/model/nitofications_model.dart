@@ -19,16 +19,16 @@ class NotificationsModel {
     required this.time,
     required this.notificationType,
   });
-  factory NotificationsModel.fromJson(Map<String,dynamic> json){
+  factory NotificationsModel.fromJson(Map<String,dynamic>? json){
     return NotificationsModel(
-        id: json['id'],
-        senderId: json['senderId'],
-        image: json['image'],
-        notificationContent: json['notificationContent'],
-        time: json['time'],
-        eId: json['eId'],
-        status: json['status'],
-        notificationType: json['notificationType']
+        id: json?['id'],
+        senderId: json?['senderId'],
+        image: json?['image'],
+        notificationContent: json?['notificationContent'],
+        time: json?['time'],
+        eId: json?['eId'],
+        status: json?['status'],
+        notificationType: json?['notificationType']
     );
   }
   Map<String,dynamic> toJson()=>{

@@ -14,13 +14,13 @@ class ChatData {
       required this.to,
       required this.image});
 
-  factory ChatData.fromJson(Map<String, dynamic> json) {
+  factory ChatData.fromJson(Map<String, dynamic>? json) {
     return ChatData(
-        lastMessage: json['lastMessage'],
-        to: json['to'],
-        name: json['name'],
-        dateTime: (json['dateTime'] as Timestamp).toDate(),
-        image: json['image']);
+        lastMessage: json?['lastMessage'],
+        to: json?['to'],
+        name: json?['name'],
+        dateTime: (json?['dateTime'] as Timestamp).toDate(),
+        image: json?['image']);
   }
 
   Map<String, dynamic> toJson() => {

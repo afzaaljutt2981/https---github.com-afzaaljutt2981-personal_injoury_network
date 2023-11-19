@@ -40,11 +40,11 @@ class _ChatScreenState extends State<ChatScreen> {
   List<ChatMessage> chats = [];
   List<ChatMessage> modifiedChats = [];
   Uint8List? image1;
-  late AudioRecorder audioRecord;
-  late AudioPlayer audioPlayer;
-  bool isRecording = false;
-  String audioPath = "";
-  bool pause = false;
+  // late AudioRecorder audioRecord;
+  // late AudioPlayer audioPlayer;
+  // bool isRecording = false;
+  // String audioPath = "";
+  // bool pause = false;
 
   @override
   void initState() {
@@ -56,18 +56,18 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   dispose() {
     super.dispose();
-    audioRecord.dispose();
-    audioPlayer.dispose();
+    // audioRecord.dispose();
+    // audioPlayer.dispose();
   }
 
   Future<void> stopRecording() async {
     try {
-      String? path = await audioRecord.stop();
+      // String? path = await audioRecord.stop();
       setState(() {
-        isRecording = false;
-        if (path != null) {
-          audioPath = path;
-        }
+        // isRecording = false;
+        // if (path != null) {
+        //   audioPath = path;
+        // }
       });
     } catch (e) {
       print("Error in stop recording:$e");
@@ -76,15 +76,15 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> startRecording() async {
     try {
-      if (await audioRecord.hasPermission()) {
-        Directory directory = await getTemporaryDirectory();
-        setState(() {
-          isRecording = true;
-        });
-        await audioRecord.start(const RecordConfig(),
-            path:
-                "${directory.path}/${DateTime.now().millisecondsSinceEpoch.toString()}.mp3");
-      }
+      // if (await audioRecord.hasPermission()) {
+      //   Directory directory = await getTemporaryDirectory();
+      //   setState(() {
+      //     isRecording = true;
+      //   });
+      //   await audioRecord.start(const RecordConfig(),
+      //       path:
+      //           "${directory.path}/${DateTime.now().millisecondsSinceEpoch.toString()}.mp3");
+      // }
     } catch (_) {}
   }
 
@@ -276,12 +276,12 @@ class _ChatScreenState extends State<ChatScreen> {
                           : (modifiedChats[index].messageType == "mp3")
                               ? IconButton(
                                   onPressed: () async {
-                                    await audioPlayer.play(
-                                        UrlSource(
-                                          modifiedChats[index].messageContent ??
-                                              "",
-                                        ),
-                                        mode: PlayerMode.mediaPlayer);
+                                    // await audioPlayer.play(
+                                    //     UrlSource(
+                                    //       modifiedChats[index].messageContent ??
+                                    //           "",
+                                    //     ),
+                                    //     mode: PlayerMode.mediaPlayer);
                                   },
                                   icon: const Icon(Icons.play_arrow))
                               : (modifiedChats[index].messageType == "date")

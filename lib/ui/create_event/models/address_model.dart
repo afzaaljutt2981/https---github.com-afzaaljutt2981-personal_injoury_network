@@ -17,13 +17,13 @@ class AddressModel {
     required this.country,
   });
 
-  AddressModel.fromMap(Map<String, dynamic> data) {
-    latitude = data["latitude"];
-    longitude = data["longitude"];
-    address = data["address"];
-    city = data["city"];
-    postalCode = data["postalCode"];
-    country = data["country"];
+  AddressModel.fromMap(Map<String, dynamic>? data) {
+    latitude = data?["latitude"];
+    longitude = data?["longitude"];
+    address = data?["address"];
+    city = data?["city"];
+    postalCode = data?["postalCode"];
+    country = data?["country"];
   }
 
   Map<String, dynamic> toMap() {
