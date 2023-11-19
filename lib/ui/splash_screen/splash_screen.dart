@@ -96,7 +96,7 @@ class _SplashScreenState extends State<SplashScreen> {
         .doc(FirebaseAuth.instance.currentUser?.uid)
         .snapshots()
         .listen((event) {
-      UserModel user = UserModel.fromJson(event.data() as Map<String, dynamic>);
+      UserModel? user = UserModel.fromJson(event.data() as Map<String, dynamic>?);
       if (user.userName == "") {
         Navigator.pushAndRemoveUntil(
             context,

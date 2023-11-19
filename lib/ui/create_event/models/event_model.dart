@@ -10,7 +10,7 @@ class EventModel {
   late String? pImage;
   late String? uId;
   late String? status;
-  late int participants;
+  late int? participants;
   double? latitude;
   double? longitude;
   EventModel({

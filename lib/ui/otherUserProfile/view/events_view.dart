@@ -143,16 +143,16 @@ class OrganizerEvents extends StatelessWidget {
       status = "Started";
       bgColor = const Color(0xFF0AFF31);
       textColor = const Color(0xFF17DF1F);
-    }else if (date.isBefore(DateTime.now()) && status != "cancelled") {
+    }else if (date.isBefore(DateTime.now()) && status != "Cancelled") {
       status = "Completed";
       bgColor = const Color(0xFF0AFF31);
       textColor = const Color(0xFF17DF1F);
     }
-    if(status == "upComing"){
+    if(status == "UpComing"){
       bgColor = Colors.yellow.shade200;
       // const Color(0xffF3F628);
       textColor = Colors.yellow.shade600;
-    }else if(status == "cancelled"){
+    }else if(status == "Cancelled"){
       bgColor = Colors.red.shade200;
       textColor = Colors.red.shade600;
     }

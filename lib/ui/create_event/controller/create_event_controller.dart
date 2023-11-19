@@ -25,7 +25,7 @@ class CreateEventController extends ChangeNotifier {
             address: address,
             description: description,
             uId: uId,
-            status: "upComing",
+            status: "UpComing",
             invites: [],
             title: title,
             participants: 0,

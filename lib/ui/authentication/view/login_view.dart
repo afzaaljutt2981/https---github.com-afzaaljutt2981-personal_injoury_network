@@ -384,7 +384,7 @@ class _LoginViewState extends State<LoginView> {
         .get();
     if (res.exists) {
       UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
-      await context.read<AuthController>().updateUserToken(user.id);
+      await context.read<AuthController>().updateUserToken(user.id??"");
       if (user.userName == "") {
         // ignore: use_build_context_synchronously
         Navigator.push(

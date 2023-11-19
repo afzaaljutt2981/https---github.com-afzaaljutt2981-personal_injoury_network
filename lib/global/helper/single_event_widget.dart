@@ -209,16 +209,16 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
       status = "Started";
       bgColor = const Color(0xFF0AFF31);
       textColor = const Color(0xFF17DF1F);
-    } else if (date.isBefore(DateTime.now()) && status != "cancelled") {
+    } else if (date.isBefore(DateTime.now()) && status != "Cancelled") {
       status = "Completed";
       bgColor = const Color(0xFF49E73C).withOpacity(0.4);
       textColor = const Color(0xFF17DF1F);
     }
-    if (status == "upComing") {
+    if (status == "UpComing") {
       // bgColor = Colors.yellow.shade200;
       bgColor = const Color(0xffF3F633);
       textColor = Colors.yellow.shade700;
-    } else if (status == "cancelled") {
+    } else if (status == "Cancelled") {
       bgColor = Colors.red.shade100;
       textColor = Colors.red.shade600;
     }

@@ -104,7 +104,7 @@ class AuthController extends ChangeNotifier {
               Constants.userName =
                   user?.firstName ?? "" + (user?.lastName ?? "");
               Constants.userPosition = user?.position ?? "";
-              await updateUserToken(user!.id);
+              await updateUserToken(user?.id??"");
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(

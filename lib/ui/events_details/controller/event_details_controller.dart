@@ -37,7 +37,7 @@ class EventDetailsController extends ChangeNotifier {
   addEventTicket(EventModel event) async {
     var tickDoc = events.doc(event.id).collection("tickets").doc();
     await events.doc(event.id).update({
-      "participants": event.participants + 1
+      "participants": (event.participants??0) + 1
     });
     await tickDoc.set(TicketModel(
             id: tickDoc.id,
@@ -57,7 +57,7 @@ class EventDetailsController extends ChangeNotifier {
   }
 
   deleteEvent(String eventId) async {
-    await events.doc(eventId).update({"status": "cancelled"});
+    await events.doc(eventId).update({"status": "Cancelled"});
     notifyListeners();
   }
 }

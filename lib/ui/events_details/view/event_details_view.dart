@@ -430,9 +430,9 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                     .read<EventDetailsController>()
                                     .deleteEvent(widget.event.id??"");
                                 eventParticipants?.forEach((element) async {
-                                  if(element!.fcmToken != null){
+                                  if(element?.fcmToken != null){
                                  await CountryStateCityRepo.sendPushNotification(eventCreater!.firstName!,
-                                      "Cancel the ${widget.event.title}", element.fcmToken!);
+                                      "Cancel the ${widget.event.title}", element?.fcmToken??"");
                                 }});
                                 Navigator.pop(context);
                                 Navigator.pop(context);

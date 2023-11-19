@@ -76,7 +76,7 @@ class EventsController extends ChangeNotifier {
               id: doc.id,
               senderId: senderId,
               image: "",
-              eId: event?.id??"",
+              eId: event?.id ?? "",
               notificationContent: "",
               time: DateTime.now().millisecondsSinceEpoch,
               notificationType: "Invite",
@@ -89,13 +89,13 @@ class EventsController extends ChangeNotifier {
       CustomSnackBar(false).showInSnackBar(e.toString(), context);
     }
   }
-updateEventInvite(EventModel? event,String? userId) async {
-    List<String?> invites = event?.invites??[];
+
+  updateEventInvite(EventModel? event, String? userId) async {
+    List<String?> invites = event?.invites ?? [];
     invites.add(userId);
-    await ref.doc(event?.id).update({
-      "invites":invites
-    });
-}
+    await ref.doc(event?.id).update({"invites": invites});
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose

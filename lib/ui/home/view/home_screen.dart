@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
           .watch<EventsController>()
           .allEvents
           .where((element) =>
-              element.uId == FirebaseAuth.instance.currentUser!.uid && element.status == "upComing")
+              element.uId == FirebaseAuth.instance.currentUser!.uid && element.status == "UpComing")
           .toList();
     }
     var screenHeight = MediaQuery.of(context).size.height;

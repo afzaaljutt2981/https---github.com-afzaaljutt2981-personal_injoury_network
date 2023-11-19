@@ -9,7 +9,7 @@ class UserModel {
   late String? website;
   late String? location;
   late String? userName;
-  late String id;
+  late String? id;
   late String? reference;
   late String? userType;
   late String? fcmToken;
@@ -29,32 +29,32 @@ class UserModel {
       required this.followers,
       required this.followings,
       this.pImage,
-        this.fcmToken,
+      this.fcmToken,
       required this.userName,
       required this.phone,
       required this.userType,
       required this.company,
       required this.website});
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    List hobbies = json['hobbies'] ?? [];
-    List followers = json['followers'] ?? [];
-    List followings = json['followings'] ?? [];
+  factory UserModel.fromJson(Map<String, dynamic>? json) {
+    List hobbies = json?['hobbies'] ?? [];
+    List followers = json?['followers'] ?? [];
+    List followings = json?['followings'] ?? [];
     return UserModel(
-      userName: json['userName'],
-      location: json['location'],
-      position: json['position'],
-      email: json['email'],
-      id: json['id'],
-      fcmToken: json['fcmToken'],
-      pImage: json['pImage'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      phone: json['phone'],
-      reference: json['reference'],
-      company: json['company'],
-      website: json['website'],
-      userType: json['userType'],
+      userName: json?['userName'],
+      location: json?['location'],
+      position: json?['position'],
+      email: json?['email'],
+      id: json?['id'],
+      fcmToken: json?['fcmToken'],
+      pImage: json?['pImage'],
+      firstName: json?['firstName'],
+      lastName: json?['lastName'],
+      phone: json?['phone'],
+      reference: json?['reference'],
+      company: json?['company'],
+      website: json?['website'],
+      userType: json?['userType'],
       hobbies: List.generate(hobbies.length, (index) => hobbies[index]),
       followings:
           List.generate(followings.length, (index) => followings[index]),
@@ -73,7 +73,7 @@ class UserModel {
       "id": id,
       "website": website,
       "email": email,
-      "fcmToken":fcmToken,
+      "fcmToken": fcmToken,
       "reference": reference,
       "userType": userType,
       "userName": userName,
