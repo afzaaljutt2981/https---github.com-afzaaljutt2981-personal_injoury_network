@@ -8,7 +8,7 @@ import '../utils/constants.dart';
 
 class CountryStateCityRepo {
   static const countriesStateURL =
-      'https://countriesnow.space/api/v0.1/countries/states'; 
+      'https://countriesnow.space/api/v0.1/countries/states';
   static const cityURL =
       'https://countriesnow.space/api/v0.1/countries/state/cities/q?country';
 
@@ -31,26 +31,30 @@ class CountryStateCityRepo {
       throw Exception(e.toString());
     }
   }
-  static Future<http.Response> sendPushNotification(String title,String body,String fcmToken) async {
-    Map<String,String> headers = {
-      "Authorization": "key=${Constants.serverKey}",
-      "Content-Type": "application/json",
-    };
-    Map<String, dynamic> notification = {
-      'title': title,
-      'body': body,
-    };
-    Map<String, dynamic> data = {
-      'notification': notification,
-      'to': fcmToken,
-    };
-    var response = await http.post(
-        Uri.parse(Constants.fcmApi),
-        headers: headers,
-       body: jsonEncode(data)
-    );
-    print(response.statusCode);
-    print("response is here");
-    return response;
+
+  static Future<http.Response?> sendPushNotification(
+      String title, String body, String fcmToken) async {
+    try {
+      Map<String, String> headers = {
+        "Authorization": "key=${Constants.serverKey}",
+        "Content-Type": "application/json",
+      };
+      Map<String, dynamic> notification = {
+        'title': title,
+        'body': body,
+      };
+      Map<String, dynamic> data = {
+        'notification': notification,
+        'to': fcmToken,
+      };
+      var response = await http.post(Uri.parse(Constants.fcmApi),
+          headers: headers, body: jsonEncode(data));
+      print(response.statusCode);
+      print("response is here");
+      return response;
+    } catch (e) {
+      print("Error while sending notification");
+      return null;
+    }
   }
 }

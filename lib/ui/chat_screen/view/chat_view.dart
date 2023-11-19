@@ -40,6 +40,7 @@ class _ChatScreenState extends State<ChatScreen> {
   List<ChatMessage> chats = [];
   List<ChatMessage> modifiedChats = [];
   Uint8List? image1;
+
   // late AudioRecorder audioRecord;
   // late AudioPlayer audioPlayer;
   // bool isRecording = false;
@@ -103,7 +104,9 @@ class _ChatScreenState extends State<ChatScreen> {
     print("Displaying chats");
     if (chats.length > 0) {
       Duration? difference = chats.first.dateTime?.difference(DateTime.now());
-      if ((difference?.inDays == 0  && chats.first.dateTime?.day != DateTime.now().day) || difference?.inDays == -1) {
+      if ((difference?.inDays == 0 &&
+              chats.first.dateTime?.day != DateTime.now().day) ||
+          difference?.inDays == -1) {
         print("condition true for  Yesterday" + difference.toString());
 
         modifiedChats.add(ChatMessage(
@@ -139,7 +142,9 @@ class _ChatScreenState extends State<ChatScreen> {
         if (chat.dateTime?.day != dateTimeTracking?.day ||
             chat.dateTime?.month != dateTimeTracking?.month) {
           print("A different date");
-          if ((difference?.inDays == 0  && chat.dateTime?.day != DateTime.now().day) || difference?.inDays == -1) {
+          if ((difference?.inDays == 0 &&
+                  chat.dateTime?.day != DateTime.now().day) ||
+              difference?.inDays == -1) {
             print("condition true for  Yesterday" + difference.toString());
 
             modifiedChats.add(ChatMessage(
@@ -517,11 +522,14 @@ class _ChatScreenState extends State<ChatScreen> {
                               widget.user.id ?? "",
                               textController.text,
                               "text");
+
                           if (widget.user.fcmToken != null) {
-                            await CountryStateCityRepo.sendPushNotification(
-                                currentUser.firstName!,
-                                textController.text,
-                                widget.user.fcmToken!);
+                            var response =
+                                await CountryStateCityRepo.sendPushNotification(
+                                    currentUser.firstName ?? "",
+                                    textController.text,
+                                    widget.user.fcmToken ?? "");
+                            print("Notification response -> ${response?.body.toString()}");
                           }
                           setState(() {
                             textController.clear();
