@@ -46,7 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
           .watch<EventsController>()
           .allEvents
           .where((element) =>
-              element.uId == FirebaseAuth.instance.currentUser!.uid && element.status == "UpComing")
+              element.uId == FirebaseAuth.instance.currentUser!.uid &&
+              element.status == "UpComing")
           .toList();
     }
     var screenHeight = MediaQuery.of(context).size.height;
@@ -336,7 +337,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             CustomSizeBox(13.h),
                             if (events.isEmpty) ...[
                               CustomSizeBox(100.h),
-                              const Center(child: Text("No Event Found!"))
+                              Center(
+                                  child: Text(
+                                "No Event Found!",
+                                style: AppTextStyles.josefin(
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w200)),
+                              ))
                             ] else ...[
                               ListView.builder(
                                   physics: const ClampingScrollPhysics(),

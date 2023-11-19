@@ -3,12 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/ui/create_event/models/event_model.dart';
-import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
-import 'package:provider/provider.dart';
-
 import '../../ui/events_details/models/ticket_model.dart';
 import '../../ui/events_details/view/create_event_details_view.dart';
-import '../app_buttons/app_primary_button.dart';
 import '../utils/app_text_styles.dart';
 import 'custom_sized_box.dart';
 
@@ -41,21 +37,19 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 8.h),
       child: GestureDetector(
         onTap: () {
-          widget.event.status != 'Cancelled'
-              ? Navigator.push(
-                  context,
-                  PageTransition(
-                    childCurrent: widget,
-                    type: PageTransitionType.leftToRightWithFade,
-                    alignment: Alignment.center,
-                    duration: const Duration(milliseconds: 200),
-                    reverseDuration: const Duration(milliseconds: 200),
-                    child: CreateEventDetailsView(
-                      event: widget.event,
-                    ),
-                  ),
-                )
-              : null;
+          Navigator.push(
+            context,
+            PageTransition(
+              childCurrent: widget,
+              type: PageTransitionType.leftToRightWithFade,
+              alignment: Alignment.center,
+              duration: const Duration(milliseconds: 200),
+              reverseDuration: const Duration(milliseconds: 200),
+              child: CreateEventDetailsView(
+                event: widget.event,
+              ),
+            ),
+          );
         },
         child: Container(
           decoration: BoxDecoration(
@@ -137,37 +131,6 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
                               ],
                             ),
                             CustomSizeBox(3.h),
-
-                            // Padding(
-                            //   padding: EdgeInsets.only(right: 60.w),
-                            //   child: GetButton(
-                            //     40.sp,
-                            //     () {
-                            //       Navigator.push(
-                            //         context,
-                            //         PageTransition(
-                            //           childCurrent: widget,
-                            //           type: PageTransitionType.leftToRightWithFade,
-                            //           alignment: Alignment.center,
-                            //           duration: const Duration(milliseconds: 200),
-                            //           reverseDuration:
-                            //               const Duration(milliseconds: 200),
-                            //           child: CreateEventDetailsView(
-                            //             event: widget.event,
-                            //           ),
-                            //         ),
-                            //       );
-                            //     },
-                            //     Text(
-                            //       "View Event",
-                            //       style: AppTextStyles.josefin(
-                            //           style: TextStyle(
-                            //               color: Colors.white,
-                            //               fontSize: 14.sp,
-                            //               fontWeight: FontWeight.w500)),
-                            //     ),
-                            //   ),
-                            // )
                           ],
                         ),
                       ),
@@ -203,6 +166,7 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
     Color? textColor;
     DateTime date =
         DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime ?? 0);
+    DateTime today = DateTime.now();
     DateTime startTime =
         DateTime.fromMillisecondsSinceEpoch(widget.event.startTime!);
     DateTime endTime =
@@ -211,17 +175,22 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
       bgColor = Colors.red.shade100;
       textColor = Colors.red.shade600;
     } else {
-      if (startTime.isBefore(DateTime.now()) &&
-          DateTime.now().isBefore(endTime)) {
+      if ((date.year == today.year &&
+              date.month == today.month &&
+              date.day == today.day) &&
+          startTime.isBefore(DateTime.now()) &&
+          endTime.isAfter(DateTime.now())) {
         status = "Started";
         bgColor = const Color(0xFF0AFF31);
         textColor = const Color(0xFF17DF1F);
-      } else if (date.isBefore(DateTime.now()) && status != "cancelled") {
+      } else if (date.isBefore(DateTime.now()) &&
+          endTime.isBefore(DateTime.now()) &&
+          status != "cancelled") {
         status = "Completed";
         bgColor = const Color(0xFF49E73C).withOpacity(0.4);
         textColor = const Color(0xFF17DF1F);
-      }
-      if (status == "UpComing") {
+      } else if (endTime.isAfter(DateTime.now()) && status == "UpComing") {
+        status = "Up Coming";
         // bgColor = Colors.yellow.shade200;
         bgColor = const Color(0xffF3F633);
         textColor = Colors.yellow.shade700;

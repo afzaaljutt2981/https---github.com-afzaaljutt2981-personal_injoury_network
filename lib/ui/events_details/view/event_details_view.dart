@@ -62,11 +62,14 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
     setData(notifications);
     setRegisterButton();
     DateTime dateTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime??0);
+        DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime ?? 0);
     DateTime startTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.event.startTime??0);
+        DateTime.fromMillisecondsSinceEpoch(widget.event.startTime ?? 0);
     DateTime endTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.event.endTime??0);
+        DateTime.fromMillisecondsSinceEpoch(widget.event.endTime ?? 0);
+    DateTime today = DateTime.now();
+    DateTime date =
+        DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime ?? 0);
     addWeekDates(dateTime);
     String formattedDiff = calculateDiff(endTime, startTime);
     String startFormat = DateFormat("HH:MM a").format(startTime);
@@ -156,7 +159,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => ImageView(
-                                      imageUrl: widget.event.pImage??"")));
+                                      imageUrl: widget.event.pImage ?? "")));
                         },
                         child: Stack(
                           children: [
@@ -170,8 +173,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10.sp),
                                 child: Image(
-                                  image: NetworkImage(widget.event
-                                      .pImage??""), // 'assets/images/background_events_admin.png'
+                                  image: NetworkImage(widget.event.pImage ??
+                                      ""), // 'assets/images/background_events_admin.png'
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -211,7 +214,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                     child: Padding(
                                       padding: EdgeInsets.only(right: 50.w),
                                       child: Text(
-                                        widget.event.title??"",
+                                        widget.event.title ?? "",
                                         style: AppTextStyles.josefin(
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w700,
@@ -229,49 +232,54 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                           ],
                         ),
                       ),
-                      if (Constants.userType == 'user' && FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
-                          Constants.adminEmail.toLowerCase())
+                      if (Constants.userType == 'user' &&
+                          FirebaseAuth.instance.currentUser?.email
+                                  ?.toLowerCase() !=
+                              Constants.adminEmail.toLowerCase())
                         Padding(
-                        padding: EdgeInsets.only(
-                          left: 8.w,
-                          right: 8.w,
-                          top: 15.h,
-                          bottom: 15.h,
+                          padding: EdgeInsets.only(
+                            left: 8.w,
+                            right: 8.w,
+                            top: 15.h,
+                            bottom: 15.h,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'About this event',
+                                style: AppTextStyles.josefin(
+                                    style: TextStyle(
+                                        color: AppColors.kBlackColor,
+                                        fontSize: 15.sp)),
+                              ),
+                              RatingStars(
+                                value: 0,
+                                starBuilder: (index, color) {
+                                  return Icon(
+                                    Icons.star_sharp,
+                                    color: color,
+                                    size: 15.sp,
+                                  );
+                                },
+                                starCount: 5,
+                                starSize: 15.sp,
+                                maxValue: 5,
+                                starSpacing: 1,
+                                maxValueVisibility: true,
+                                valueLabelVisibility: false,
+                                starOffColor: Colors.grey.shade400,
+                                starColor: const Color(0xFFF9C24B),
+                              )
+                            ],
+                          ),
+                        )
+                      else
+                        SizedBox(
+                          height: 20,
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'About this event',
-                              style: AppTextStyles.josefin(
-                                  style: TextStyle(
-                                      color: AppColors.kBlackColor,
-                                      fontSize: 15.sp)),
-                            ),
-                            RatingStars(
-                              value: 0,
-                              starBuilder: (index, color) {
-                                return Icon(
-                                  Icons.star_sharp,
-                                  color: color,
-                                  size: 15.sp,
-                                );
-                              },
-                              starCount: 5,
-                              starSize: 15.sp,
-                              maxValue: 5,
-                              starSpacing: 1,
-                              maxValueVisibility: true,
-                              valueLabelVisibility: false,
-                              starOffColor: Colors.grey.shade400,
-                              starColor: const Color(0xFFF9C24B),
-                            )
-                          ],
-                        ),
-                      )
-                      else SizedBox(height: 20,),
                       Text(
-                        widget.event.description??"",
+                        widget.event.description ?? "",
                         style: AppTextStyles.josefin(
                             style: TextStyle(
                                 color: AppColors.kBlackColor, fontSize: 12.sp)),
@@ -284,7 +292,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            for (var e in weekDates??[]) calenderView(e, dateTime),
+                            for (var e in weekDates ?? [])
+                              calenderView(e, dateTime),
                           ],
                         ),
                       ),
@@ -325,7 +334,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         ),
                       ),
                       CustomSizeBox(25.h),
-                      if ((eventParticipants?.length??0) > 2) ...[
+                      if ((eventParticipants?.length ?? 0) > 2) ...[
                         Row(
                           children: [
                             for (var i = 0; i < 2; i++)
@@ -336,12 +345,12 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (_) => AllParticipantsView(
-                                              users: eventParticipants??[],
+                                              users: eventParticipants ?? [],
                                               currentUser: currentUser!,
                                             )));
                               },
                               child: Text(
-                                "+${(eventParticipants?.length??0) - 2} Participants",
+                                "+${(eventParticipants?.length ?? 0) - 2} Participants",
                                 style: const TextStyle(color: Colors.black),
                               ),
                             )
@@ -349,7 +358,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         )
                       ] else ...[
                         Row(children: [
-                          for (var e in eventParticipants??[]) participant(e)
+                          for (var e in eventParticipants ?? []) participant(e)
                         ])
                       ],
                     ],
@@ -357,8 +366,9 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                 ),
               ),
             ),
-            currentUser!.userType == 'user' && FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
-                Constants.adminEmail.toLowerCase()
+            currentUser!.userType == 'user' &&
+                    FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
+                        Constants.adminEmail.toLowerCase()
                 ? Padding(
                     padding:
                         EdgeInsets.only(left: 40.w, right: 40.w, bottom: 20.h),
@@ -371,7 +381,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         // ignore: use_build_context_synchronously
                         await context
                             .read<EventDetailsController>()
-                            .addUserTicket(widget.event.id??"");
+                            .addUserTicket(widget.event.id ?? "");
                         // ignore: use_build_context_synchronously
                         Navigator.pop(context);
                         // ignore: use_build_context_synchronously
@@ -382,7 +392,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                       }
                     },
                         Text(
-                          buttonName??"",
+                          buttonName ?? "",
                           style: AppTextStyles.josefin(
                               style: TextStyle(
                                   color: Colors.white, fontSize: 18.sp)),
@@ -400,11 +410,35 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             GestureDetector(
-                              onTap: () => _showBottomSheet(context),
+                              onTap: () {
+                                if ((date.year == today.year &&
+                                            date.month == today.month &&
+                                            date.day == today.day) &&
+                                        startTime.isBefore(DateTime.now()) &&
+                                        endTime.isAfter(DateTime.now()) ||
+                                    (endTime.isAfter(DateTime.now()) &&
+                                        widget.event.status == "UpComing")) {
+                                  _showBottomSheet(context);
+                                }
+                              },
                               child: Container(
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        color: AppColors.kPrimaryColor,
+                                        color: ((date.year == today.year &&
+                                                        date.month ==
+                                                            today.month &&
+                                                        date.day ==
+                                                            today.day) &&
+                                                    startTime.isBefore(
+                                                        DateTime.now()) &&
+                                                    endTime.isAfter(
+                                                        DateTime.now()) ||
+                                                (endTime.isAfter(
+                                                        DateTime.now()) &&
+                                                    widget.event.status ==
+                                                        "UpComing"))
+                                            ? AppColors.kPrimaryColor
+                                            : Colors.grey,
                                         width: 1.5.sp),
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(12.sp)),
@@ -417,7 +451,25 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                         style: AppTextStyles.josefin(
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400,
-                                                color: AppColors.kPrimaryColor,
+                                                color: ((date.year == today.year &&
+                                                                date.month ==
+                                                                    today
+                                                                        .month &&
+                                                                date.day ==
+                                                                    today
+                                                                        .day) &&
+                                                            startTime.isBefore(
+                                                                DateTime
+                                                                    .now()) &&
+                                                            endTime.isAfter(
+                                                                DateTime
+                                                                    .now()) ||
+                                                        (endTime.isAfter(DateTime.now()) &&
+                                                            widget.event
+                                                                    .status ==
+                                                                "UpComing"))
+                                                    ? AppColors.kPrimaryColor
+                                                    : Colors.grey,
                                                 fontSize: 16.sp)),
                                       ),
                                     )),
@@ -425,24 +477,36 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                             ),
                             InkWell(
                               onTap: () async {
-                                Functions.showLoaderDialog(context);
-                                await context
-                                    .read<EventDetailsController>()
-                                    .deleteEvent(widget.event.id??"");
-                                eventParticipants?.forEach((element) async {
-                                  if(element?.fcmToken != null){
-                                 await CountryStateCityRepo.sendPushNotification(eventCreater!.firstName!,
-                                      "Cancel the ${widget.event.title}", element?.fcmToken??"");
-                                }});
-                                // ignore: use_build_context_synchronously
-                                Navigator.pop(context);
-                                // ignore: use_build_context_synchronously
-                                Navigator.pop(context);
+                                if (startTime.isAfter(DateTime.now()) &&
+                                    widget.event.status == "UpComing") {
+                                  Functions.showLoaderDialog(context);
+                                  await context
+                                      .read<EventDetailsController>()
+                                      .deleteEvent(widget.event.id ?? "");
+                                  eventParticipants?.forEach((element) async {
+                                    if (element?.fcmToken != null) {
+                                      await CountryStateCityRepo
+                                          .sendPushNotification(
+                                              eventCreater!.firstName!,
+                                              "Cancel the ${widget.event.title}",
+                                              element?.fcmToken ?? "");
+                                    }
+                                  });
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.pop(context);
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.pop(context);
+                                }
                               },
                               child: Container(
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        color: const Color(0xFFD70E0E),
+                                        color: ((startTime
+                                                    .isAfter(DateTime.now()) &&
+                                                widget.event.status ==
+                                                    "UpComing"))
+                                            ? const Color(0xFFD70E0E)
+                                            : Colors.grey,
                                         width: 1.5.sp),
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(12.sp)),
@@ -455,7 +519,12 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                       style: AppTextStyles.josefin(
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
-                                              color: const Color(0xFFD70E0E),
+                                              color: ((startTime.isAfter(
+                                                          DateTime.now()) &&
+                                                      widget.event.status ==
+                                                          "UpComing"))
+                                                  ? const Color(0xFFD70E0E)
+                                                  : Colors.grey,
                                               fontSize: 16.sp)),
                                     ),
                                   ),
@@ -548,7 +617,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
           return InviteGuests(
             currentUser: currentUser!,
             event: widget.event,
-            allUsers: allUsers??[],
+            allUsers: allUsers ?? [],
           );
         });
       },
@@ -581,7 +650,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      eventCreater?.userName??"",
+                      eventCreater?.userName ?? "",
                       style: AppTextStyles.josefin(
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
@@ -600,52 +669,53 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                   ],
                 )),
                 if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
-                    Constants.adminEmail.toLowerCase()) GestureDetector(
-                  onTap: () async {
-                    if (followButton == "Follow") {
-                      context
-                          .read<OtherUserProfileController>()
-                          .sendFollowRequest(
-                            eventCreater?.id??"",
-                          );
-                    } else if (followButton == "Following") {
-                      await context
-                          .read<OtherUserProfileController>()
-                          .followTap(eventCreater!);
-                      // ignore: use_build_context_synchronously
-                      await context
-                          .read<OtherUserProfileController>()
-                          .followingTap(currentUser!, eventCreater!.id);
-                      // ignore: use_build_context_synchronously
-                      await context
-                          .read<OtherUserProfileController>()
-                          .unFollow(eventCreater?.id??"", notifyId??"");
-                    }
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 30.w),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.sp),
-                          color: //Colors.purple.shade400
+                    Constants.adminEmail.toLowerCase())
+                  GestureDetector(
+                    onTap: () async {
+                      if (followButton == "Follow") {
+                        context
+                            .read<OtherUserProfileController>()
+                            .sendFollowRequest(
+                              eventCreater?.id ?? "",
+                            );
+                      } else if (followButton == "Following") {
+                        await context
+                            .read<OtherUserProfileController>()
+                            .followTap(eventCreater!);
+                        // ignore: use_build_context_synchronously
+                        await context
+                            .read<OtherUserProfileController>()
+                            .followingTap(currentUser!, eventCreater!.id);
+                        // ignore: use_build_context_synchronously
+                        await context
+                            .read<OtherUserProfileController>()
+                            .unFollow(eventCreater?.id ?? "", notifyId ?? "");
+                      }
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 30.w),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.sp),
+                            color: //Colors.purple.shade400
 
-                              const Color(0xFF3C4784).withOpacity(0.818)),
-                      child: Padding(
-                        padding: EdgeInsets.all(10.sp),
-                        child: Center(
-                          child: Text(
-                            followButton??"",
-                            style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                    fontSize: 11.sp)),
+                                const Color(0xFF3C4784).withOpacity(0.818)),
+                        child: Padding(
+                          padding: EdgeInsets.all(10.sp),
+                          child: Center(
+                            child: Text(
+                              followButton ?? "",
+                              style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                      fontSize: 11.sp)),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                )
+                  )
               ],
             ),
           )
@@ -675,7 +745,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
           child: (user?.pImage != null)
               ? CircleAvatar(
                   radius: 20,
-                  backgroundImage: NetworkImage(user?.pImage??""),
+                  backgroundImage: NetworkImage(user?.pImage ?? ""),
                 )
               : Image(
                   width: 40.sp,
@@ -684,7 +754,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   }
 
   setRegisterButton() {
-    for (var element in eventParticipants??[]) {
+    for (var element in eventParticipants ?? []) {
       if (element.id == currentUser!.id) {
         buttonName = "Registered";
       }
@@ -714,8 +784,9 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
       eventCreater =
           allUsers?.firstWhere((element) => element?.id == widget.event.uId);
       setFollowButton(notifications);
-      for (var element1 in eventTickets??[]) {
-        eventParticipants?.add(allUsers?.firstWhere((element) => element?.id == element1.uId));
+      for (var element1 in eventTickets ?? []) {
+        eventParticipants?.add(
+            allUsers?.firstWhere((element) => element?.id == element1.uId));
       }
     }
   }

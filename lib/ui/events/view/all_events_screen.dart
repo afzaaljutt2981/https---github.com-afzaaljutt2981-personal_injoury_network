@@ -113,7 +113,7 @@ class _AllEventScreenState extends State<AllEventScreen>
                 children: [
                   Center(
                     child: Text(
-                      "No Events found",
+                      "No Events found!",
                       style: AppTextStyles.josefin(
                           style: TextStyle(
                               color: Colors.black,
@@ -123,81 +123,6 @@ class _AllEventScreenState extends State<AllEventScreen>
                   )
                 ],
               )
-
-        // SizedBox(
-        //         //  height: MediaQuery.of(context).size.height,
-        //         child: Column(
-        //           children: [
-        //             CustomSizeBox(20.h),
-        //             Padding(
-        //               padding: EdgeInsets.symmetric(horizontal: 25.w),
-        //               child: Container(
-        //                 // height: 50,
-        //                 width: MediaQuery.of(context).size.height,
-        //                 decoration: BoxDecoration(
-        //                     color: Colors.black.withOpacity(0.0687),
-        //                     borderRadius: BorderRadius.circular(40.sp)),
-        //                 child: Column(
-        //                   children: [
-        //                     Padding(
-        //                       padding: EdgeInsets.only(
-        //                           left: 10.w,
-        //                           right: 10.w,
-        //                           top: 6.h,
-        //                           bottom: 6.h),
-        //                       child: TabBar(
-        //                         unselectedLabelColor: const Color(0xFF9B9B9B),
-        //                         labelColor: const Color(0xFF5669FF),
-        //                         indicatorColor: Colors.white,
-        //                         indicatorWeight: 2,
-        //                         indicator: BoxDecoration(
-        //                           boxShadow: [
-        //                             BoxShadow(
-        //                               color: const Color(0xFF535990)
-        //                                   .withOpacity(0.1),
-        //                               spreadRadius: 6,
-        //                               blurRadius: 6,
-        //                               offset: Offset(0, 8.sp),
-        //                             )
-        //                           ],
-        //                           color: Colors.white,
-        //                           borderRadius: BorderRadius.circular(40.sp),
-        //                         ),
-        //                         controller: tabController,
-        //                         tabs: [
-        //                           Tab(
-        //                             child: Text(
-        //                               'UP COMING',
-        //                               style: AppTextStyles.josefin(
-        //                                   style: TextStyle(fontSize: 14.sp)),
-        //                             ),
-        //                           ),
-        //                           Tab(
-        //                             child: Text(
-        //                               'PAST EVENTS',
-        //                               style: AppTextStyles.josefin(
-        //                                   style: TextStyle(fontSize: 14.sp)),
-        //                             ),
-        //                           ),
-        //                         ],
-        //                       ),
-        //                     ),
-        //                   ],
-        //                 ),
-        //               ),
-        //             ),
-        //             Expanded(
-        //               child: TabBarView(
-        //                 controller: tabController,
-        //                 children: const [
-        //                   UpComingEvents(),
-        //                   PastEvents(),
-        //                 ],
-        //               ),
-        //             )
-        //           ],
-        //         ),
-        //       )
         );
   }
 }
