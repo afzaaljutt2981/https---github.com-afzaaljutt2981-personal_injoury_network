@@ -87,20 +87,23 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     } catch (_) {}
   }
-List<UserModel> allUsers = [];
+
+  List<UserModel> allUsers = [];
+
   @override
   Widget build(BuildContext context) {
     chats = [];
     allUsers = [];
     allUsers = context.watch<EventsController>().allUsers;
-    UserModel currentUser = allUsers.firstWhere((element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+    UserModel currentUser = allUsers.firstWhere(
+        (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
     chats = context.watch<ChatController>().currentChat;
     modifiedChats = [];
 
     print("Displaying chats");
     if (chats.length > 0) {
       Duration? difference = chats.first.dateTime?.difference(DateTime.now());
-      if (difference?.inDays == -1) {
+      if ((difference?.inDays == 0  && chats.first.dateTime?.day != DateTime.now().day) || difference?.inDays == -1) {
         print("condition true for  Yesterday" + difference.toString());
 
         modifiedChats.add(ChatMessage(
@@ -109,10 +112,11 @@ List<UserModel> allUsers = [];
             dateTime: null,
             messageType: 'date',
             senderId: ''));
-      } else if (difference?.inDays == 0) {
+      } else if (difference?.inDays == 0 &&
+          chats.first.dateTime?.day == DateTime.now().day) {
         print("condition true for today ${difference?.inDays}");
         modifiedChats.add(ChatMessage(
-            messageContent: "Today",
+            messageContent: "Today ${chats.first.dateTime?.day}, ${DateTime.now().day}",
             id: '',
             dateTime: null,
             messageType: 'date',
@@ -144,7 +148,8 @@ List<UserModel> allUsers = [];
                 dateTime: null,
                 messageType: 'date',
                 senderId: ''));
-          } else if (difference?.inDays == 0) {
+          } else if (difference?.inDays == 0 &&
+              chat.dateTime?.day != dateTimeTracking?.day) {
             print("condition true for today ${difference?.inDays}");
             modifiedChats.add(ChatMessage(
                 messageContent: "Today",
@@ -512,9 +517,11 @@ List<UserModel> allUsers = [];
                               widget.user.id ?? "",
                               textController.text,
                               "text");
-                          if(widget.user.fcmToken != null){
-                         await CountryStateCityRepo.sendPushNotification(
-                              currentUser.firstName!, textController.text, widget.user.fcmToken!);
+                          if (widget.user.fcmToken != null) {
+                            await CountryStateCityRepo.sendPushNotification(
+                                currentUser.firstName!,
+                                textController.text,
+                                widget.user.fcmToken!);
                           }
                           setState(() {
                             textController.clear();
