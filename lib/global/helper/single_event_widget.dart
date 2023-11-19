@@ -25,7 +25,6 @@ class SingleEventWidget extends StatefulWidget {
 class _SingleEventWidgetState extends State<SingleEventWidget> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -176,13 +175,16 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: EdgeInsets.symmetric(horizontal: 8.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "${widget.event.participants} participants",
-                        style: const TextStyle(color: Colors.grey),
+                        style: AppTextStyles.josefin(
+                            style: TextStyle(
+                                color: Colors.black.withOpacity(0.5),
+                                fontSize: 12.sp)),
                       ),
                       eventStatus(widget.event.status ?? '', context)
                     ],
