@@ -25,7 +25,7 @@ class InviteGuests extends StatefulWidget {
 
 class _InviteGuestsState extends State<InviteGuests> {
   bool isInvited = false;
-  List<UserModel?>? tempList = [];
+  List<UserModel?> tempList = [];
   List<UserModel?>? friends = [];
   List<UserModel?>? sFriends = [];
   @override
@@ -203,24 +203,27 @@ class _InviteGuestsState extends State<InviteGuests> {
   }
 
   Widget friend(UserModel? friend) {
-    if (tempList?.contains(friend) ?? false || widget.event?.invites?.contains(friend?.id) == true) {
+    if (tempList.contains(friend) || widget.event?.invites?.contains(friend?.id) == true) {
       isInvited = true;
     }
     return GestureDetector(
       onTap: () {
-        print("object");
-        if (tempList?.isNotEmpty == true) {
-          tempList?.add(friend);
+        setState(() {
+        if (tempList.contains(friend)) {
+          tempList.remove(friend);
+        }else{
+          tempList.add(friend);
         }
+        });
       },
-      onLongPress: () {
-        print("here is long press");
-        if (tempList?.isEmpty == true) {
-          setState(() {
-            tempList?.add(friend);
-          });
-        }
-      },
+      // onLongPress: () {
+      //   print("here is long press");
+      //   if (tempList?.isEmpty == true) {
+      //     setState(() {
+      //       tempList?.add(friend);
+      //     });
+      //   }
+      // },
       child: Padding(
         padding: EdgeInsets.only(bottom: 20.h, top: 10.h),
         child: Row(
