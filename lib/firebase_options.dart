@@ -61,7 +61,7 @@ class DefaultFirebaseOptions {
     apiKey: 'AIzaSyBtCJkkBL2qraYCUx7sAPnryEgASPM_06k',
     appId: '1:84312334778:android:db7e6f4b75bb92b8773d83',
     messagingSenderId: '84312334778',
-    projectId: 'personal-injury-65638', 
+    projectId: 'personal-injury-65638',  
     storageBucket: 'personal-injury-65638.appspot.com',
     iosBundleId: 'com.example.personalInjuryNetworking',
   );
