@@ -30,7 +30,9 @@ import 'events_qr_view.dart';
 // ignore: must_be_immutable
 class EventsDetailsView extends StatefulWidget {
   EventsDetailsView({super.key, required this.event});
+
   EventModel event;
+
   @override
   State<EventsDetailsView> createState() => _EventsDetailsViewState();
 }
@@ -50,6 +52,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   String? notifyId = "";
   List<DateTime?>? weekDates = [];
   String? buttonName = "Register";
+
   @override
   Widget build(BuildContext context) {
     eventTickets = [];
@@ -114,23 +117,30 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                 ? Container()
                 : GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                          childCurrent: widget,
-                          type: PageTransitionType.rightToLeft,
-                          alignment: Alignment.center,
-                          duration: const Duration(milliseconds: 200),
-                          reverseDuration: const Duration(milliseconds: 200),
-                          child: EventsQrView(
-                            eventId: widget.event.id,
+                      if (date.isAfter(DateTime.now()) &&
+                          widget.event.status == "UpComing") {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            childCurrent: widget,
+                            type: PageTransitionType.rightToLeft,
+                            alignment: Alignment.center,
+                            duration: const Duration(milliseconds: 200),
+                            reverseDuration: const Duration(milliseconds: 200),
+                            child: EventsQrView(
+                              eventId: widget.event.id,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     },
                     child: Image(
                       height: 22.sp,
                       width: 22.sp,
+                      color: (date.isAfter(DateTime.now()) &&
+                              widget.event.status == "UpComing")
+                          ? null
+                          : Colors.grey,
                       image: const AssetImage('assets/images/qr_events.png'),
                     ),
                   ),
@@ -173,8 +183,9 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10.sp),
                                 child: Image(
-                                  image: NetworkImage(widget.event.pImage ??
-                                      ""), // 'assets/images/background_events_admin.png'
+                                  image:
+                                      NetworkImage(widget.event.pImage ?? ""),
+                                  // 'assets/images/background_events_admin.png'
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -425,8 +436,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                               child: Container(
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        color: (
-                                            ((date.year == today.year &&
+                                        color: (((date.year == today.year &&
                                                         date.month ==
                                                             today.month &&
                                                         date.day ==
@@ -441,8 +451,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                                         DateTime.now()) &&
                                                     widget.event.status ==
                                                         "UpComing")))
-                                            ?
-                                        AppColors.kPrimaryColor
+                                            ? AppColors.kPrimaryColor
                                             : Colors.grey,
                                         width: 1.5.sp),
                                     color: Colors.white,
@@ -493,8 +502,10 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
 
                                   eventParticipants?.forEach((element) async {
                                     if (element?.fcmToken != null) {
-                                      await context.read<EventDetailsController>().notifyCancelEvent(
-                                          element!.id!, widget.event.title!);
+                                      await context
+                                          .read<EventDetailsController>()
+                                          .notifyCancelEvent(element!.id!,
+                                              widget.event.title!);
                                       await CountryStateCityRepo
                                           .sendPushNotification(
                                               eventCreater!.firstName!,
@@ -511,12 +522,11 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                               child: Container(
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        color:
-                                            ((date.isAfter(DateTime.now()) &&
-                                                    widget.event.status ==
-                                                        "UpComing"))
-                                                ? const Color(0xFFD70E0E)
-                                                : Colors.grey,
+                                        color: ((date.isAfter(DateTime.now()) &&
+                                                widget.event.status ==
+                                                    "UpComing"))
+                                            ? const Color(0xFFD70E0E)
+                                            : Colors.grey,
                                         width: 1.5.sp),
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(12.sp)),

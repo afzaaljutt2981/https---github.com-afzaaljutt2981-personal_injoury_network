@@ -236,7 +236,7 @@ class _ChatScreenState extends State<ChatScreen> {
             itemBuilder: (context, index) {
               Alignment alignment = Alignment.topLeft;
               String? time = modifiedChats[index].dateTime != null
-                  ? DateFormat("HH:mm").format(modifiedChats[index].dateTime!)
+                  ? DateFormat("h:mm a").format(modifiedChats[index].dateTime!)
                   : "";
               bool match = false;
               if (modifiedChats[index].senderId ==
