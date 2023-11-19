@@ -25,6 +25,7 @@ class EventsController extends ChangeNotifier {
   StreamSubscription<QuerySnapshot<Object?>>? userEventsStream;
   StreamSubscription<QuerySnapshot<Object?>>? res;
   List<TicketModel> userBookedEvents = [];
+  List<TicketModel> eventTickets = [];
   List<EventModel> allEvents = [];
   List<UserModel> allUsers = [];
 

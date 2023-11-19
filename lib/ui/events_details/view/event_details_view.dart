@@ -367,7 +367,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         Functions.showLoaderDialog(context);
                         await context
                             .read<EventDetailsController>()
-                            .addEventTicket(widget.event.id??"");
+                            .addEventTicket(widget.event);
                         // ignore: use_build_context_synchronously
                         await context
                             .read<EventDetailsController>()
