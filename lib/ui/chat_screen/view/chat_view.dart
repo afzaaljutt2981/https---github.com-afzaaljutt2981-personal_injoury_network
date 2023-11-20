@@ -509,13 +509,11 @@ class _ChatScreenState extends State<ChatScreen> {
                               "text");
 
                           if (widget.user.fcmToken != null) {
-                            var response =
+                          
                                 await CountryStateCityRepo.sendPushNotification(
                                     currentUser.firstName ?? "",
                                     textController.text,
                                     widget.user.fcmToken ?? "");
-                            print(
-                                "Notification response -> ${response?.body.toString()}");
                           }
                           setState(() {
                             textController.clear();
