@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
@@ -15,6 +17,7 @@ import 'package:rxdart/rxdart.dart';
 // used to pass messages from event handler to the UI
 // final _messageStreamController = BehaviorSubject<RemoteMessage>();
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   Future<void> _firebaseMessagingBackgroundHandler(
       RemoteMessage message) async {
@@ -47,15 +50,16 @@ Future<void> main() async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     if (kDebugMode) {
-      print('Handling a foreground message: ${message.messageId}');
-      print('Message data: ${message.data}');
-      print('Message notification: ${message.notification?.title}');
-      print('Message notification: ${message.notification?.body}');
+      showOverlayNotification(navigatorKey.currentContext!, message);
     }
 
     // _messageStreamController.sink.add(message);
   });
-
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    if (kDebugMode) {
+       showOverlayNotification(navigatorKey.currentContext!, message);
+    }
+  });
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => AuthController()),
     ChangeNotifierProvider(create: (_) => MyProfileController()),
@@ -63,31 +67,58 @@ Future<void> main() async {
   ], child: MyApp()));
 }
 
+void showOverlayNotification(BuildContext context, RemoteMessage message) {
+  showSimpleNotification(
+      Text(
+        message.notification?.title ?? '',
+        style:
+            const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+      ),
+      subtitle: Text(
+        message.notification?.body ?? '',
+        style: const TextStyle(
+          color: Colors.black,
+        ),
+      ),
+      background: Colors.white,
+      duration: const Duration(seconds: 3),
+      position: NotificationPosition.top,
+      leading: Image(
+        height: 20.sp,
+        width: 20.sp,
+        image: const AssetImage('assets/images/logo_gif_final.gif'),
+      ),
+      context: context);
+}
+
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-          primarySwatch: const MaterialColor(
-        0xFF212E73,
-        <int, Color>{
-          50: Color(0xFF212E73),
-          100: Color(0xFF212E73),
-          200: Color(0xFF212E73),
-          300: Color(0xFF212E73),
-          400: Color(0xFF212E73),
-          500: Color(0xFF212E73),
-          600: Color(0xFF212E73),
-          700: Color(0xFF212E73),
-          800: Color(0xFF212E73),
-          900: Color(0xFF212E73),
-        },
-      )),
-      debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+    return OverlaySupport(
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+            primarySwatch: const MaterialColor(
+          0xFF212E73,
+          <int, Color>{
+            50: Color(0xFF212E73),
+            100: Color(0xFF212E73),
+            200: Color(0xFF212E73),
+            300: Color(0xFF212E73),
+            400: Color(0xFF212E73),
+            500: Color(0xFF212E73),
+            600: Color(0xFF212E73),
+            700: Color(0xFF212E73),
+            800: Color(0xFF212E73),
+            900: Color(0xFF212E73),
+          },
+        )),
+        debugShowCheckedModeBanner: false,
+        navigatorKey: navigatorKey,
+        home: const SplashScreen(),
+      ),
     );
   }
 }
