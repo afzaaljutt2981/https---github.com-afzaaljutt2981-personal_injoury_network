@@ -99,6 +99,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30.sp),
                     child: GetButton(50.h, () {
+                      Navigator.pop(context);
                       if (FirebaseAuth.instance.currentUser == null) {
                         Navigator.push(
                           context,

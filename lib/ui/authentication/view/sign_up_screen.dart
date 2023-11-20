@@ -170,7 +170,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           leading: GestureDetector(
             onTap: () => Navigator.pop(context),
             child: SizedBox(
-              width: 30.sp,
+              width: 40.sp,
               height: 40.sp,
               child: Icon(
                 Icons.arrow_back_ios,
@@ -189,20 +189,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 CustomSizeBox(10.h),
                 Column(
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        willPopCalled();
-                      },
-                      child: SizedBox(
-                        width: 30.sp,
-                        height: 40.sp,
-                        child: Icon(
-                          Icons.arrow_back_ios,
-                          color: AppColors.kPrimaryColor,
-                          size: 18.sp,
-                        ),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: () => willPopCalled(),
+                    //   child: SizedBox(
+                    //     width: 40.sp,
+                    //     height: 40.sp,
+                    //     child: Icon(
+                    //       Icons.arrow_back_ios,
+                    //       color: AppColors.kPrimaryColor,
+                    //       size: 18.sp,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 Center(

@@ -38,7 +38,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
           child: SizedBox(
-            width: 30.sp,
+            width: 40.sp,
             height: 40.sp,
             child: Icon(
               Icons.arrow_back_ios,
@@ -59,18 +59,18 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: SizedBox(
-                      width: 30.sp,
-                      height: 40.sp,
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        color: AppColors.kPrimaryColor,
-                        size: 18.sp,
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () => Navigator.pop(context),
+                  //   child: SizedBox(
+                  //     width: 40.sp,
+                  //     height: 40.sp,
+                  //     child: Icon(
+                  //       Icons.arrow_back_outlined,
+                  //       color: AppColors.kPrimaryColor,
+                  //       size: 18.sp,
+                  //     ),
+                  //   ),
+                  // ),
                   CustomSizeBox(20.h),
                   Padding(
                     padding: EdgeInsets.only(left: 5.w),
