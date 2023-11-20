@@ -339,12 +339,10 @@ class _LoginViewState extends State<LoginView> {
   // FirebaseMessaging fMessaging = FirebaseMessaging.instance;
     firMessaging.FirebaseMessaging fMessaging = firMessaging.FirebaseMessaging.instance;
 
-  getFirebaseMessagingToken() async {
+ Future<String?> getFirebaseMessagingToken() async {
     await fMessaging.requestPermission();
-    await fMessaging.getToken().then((value) =>{
-      print("here is fcm token"),
-      debugPrint(value)
-    });
+    String? token = await fMessaging.getToken();
+    return token;
   }
   Future<User?> signInWithApple({List<Scope> scopes = const []}) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -406,6 +404,9 @@ class _LoginViewState extends State<LoginView> {
       // });
     } else {
       try {
+        String? token = await getFirebaseMessagingToken();
+        print("here is token");
+        print(token);
         await FirebaseFirestore.instance.collection("users").doc(user.uid).set(
             UserModel(
                     location: "",
@@ -420,6 +421,7 @@ class _LoginViewState extends State<LoginView> {
                     followings: [],
                     userName: '',
                     phone: 0,
+                    fcmToken: token,
                     userType: "user",
                     company: "",
                     website: "")

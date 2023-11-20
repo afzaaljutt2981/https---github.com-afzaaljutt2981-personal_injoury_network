@@ -82,7 +82,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         : textFieldController[0].text = '';
     widget.screenType == 1
         ? textFieldController[5].text = Constants.userEmail.toString() != ''
-            ? Constants.userDisplayName.toString()
+            ? Constants.userEmail.toString()
             : ''
         : textFieldController[5].text = '';
     loadUserPositions();
