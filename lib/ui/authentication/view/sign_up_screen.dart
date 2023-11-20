@@ -164,13 +164,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.kPrimaryColor,
+        appBar: AppBar(
+          // backgroundColor: Colors.white,
+          elevation: 0,
+          leading: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: SizedBox(
+              width: 30.sp,
+              height: 40.sp,
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.kWhiteColor,
+                size: 18.sp,
+              ),
+            ),
+          ),
+        ),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomSizeBox(40.h),
+                CustomSizeBox(10.h),
                 Column(
                   children: [
                     GestureDetector(
@@ -189,7 +205,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ],
                 ),
-                CustomSizeBox(10.h),
                 Center(
                   child: Image(
                     height: 90.sp,
