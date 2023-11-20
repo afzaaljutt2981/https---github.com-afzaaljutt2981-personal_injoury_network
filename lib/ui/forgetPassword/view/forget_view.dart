@@ -32,6 +32,22 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.kPrimaryColor,
+      appBar: AppBar(
+        // backgroundColor: Colors.white,
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: SizedBox(
+            width: 40.sp,
+            height: 40.sp,
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: AppColors.kWhiteColor,
+              size: 18.sp,
+            ),
+          ),
+        ),
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
@@ -43,19 +59,18 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomSizeBox(40.h),
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: SizedBox(
-                      width: 30.sp,
-                      height: 40.sp,
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        color: AppColors.kPrimaryColor,
-                        size: 18.sp,
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () => Navigator.pop(context),
+                  //   child: SizedBox(
+                  //     width: 40.sp,
+                  //     height: 40.sp,
+                  //     child: Icon(
+                  //       Icons.arrow_back_outlined,
+                  //       color: AppColors.kPrimaryColor,
+                  //       size: 18.sp,
+                  //     ),
+                  //   ),
+                  // ),
                   CustomSizeBox(20.h),
                   Padding(
                     padding: EdgeInsets.only(left: 5.w),
