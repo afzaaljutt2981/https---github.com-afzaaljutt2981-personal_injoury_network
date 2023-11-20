@@ -100,15 +100,11 @@ class _ChatScreenState extends State<ChatScreen> {
         (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
     chats = context.watch<ChatController>().currentChat;
     modifiedChats = [];
-
-    print("Displaying chats");
     if (chats.length > 0) {
       Duration? difference = chats.first.dateTime?.difference(DateTime.now());
       if ((difference?.inDays == 0 &&
               chats.first.dateTime?.day != DateTime.now().day) ||
           difference?.inDays == -1) {
-        print("condition true for  Yesterday" + difference.toString());
-
         modifiedChats.add(ChatMessage(
             messageContent: "Yesterday",
             id: '',
@@ -117,7 +113,6 @@ class _ChatScreenState extends State<ChatScreen> {
             senderId: ''));
       } else if (difference?.inDays == 0 &&
           chats.first.dateTime?.day == DateTime.now().day) {
-        print("condition true for today ${difference?.inDays}");
         modifiedChats.add(ChatMessage(
             messageContent: "Today",
             id: '',
@@ -138,15 +133,11 @@ class _ChatScreenState extends State<ChatScreen> {
       DateTime? dateTimeTracking = chats.first.dateTime;
       for (var chat in chats) {
         Duration? difference = chat.dateTime?.difference(DateTime.now());
-        print("Difference in days: ${difference?.inDays}");
         if (chat.dateTime?.day != dateTimeTracking?.day ||
             chat.dateTime?.month != dateTimeTracking?.month) {
-          print("A different date");
           if ((difference?.inDays == 0 &&
                   chat.dateTime?.day != DateTime.now().day) ||
               difference?.inDays == -1) {
-            print("condition true for  Yesterday" + difference.toString());
-
             modifiedChats.add(ChatMessage(
                 messageContent: "Yesterday",
                 id: '',
@@ -155,7 +146,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 senderId: ''));
           } else if (difference?.inDays == 0 &&
               chat.dateTime?.day != dateTimeTracking?.day) {
-            print("condition true for today ${difference?.inDays}");
             modifiedChats.add(ChatMessage(
                 messageContent: "Today",
                 id: '',
@@ -163,7 +153,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 messageType: 'date',
                 senderId: ''));
           } else {
-            print("condition true for else ${difference?.inDays}");
             modifiedChats.add(ChatMessage(
                 messageContent:
                     "${chat.dateTime?.day.toString()}-${chat.dateTime?.month.toString()}-${chat.dateTime?.year.toString()}",
@@ -172,11 +161,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 messageType: 'date',
                 senderId: ''));
           }
-        } else {
-          print("Same date");
-        }
+        } else {}
         modifiedChats.add(chat);
-        print(chat.toJson());
         dateTimeTracking = chat.dateTime;
       }
     }
@@ -529,7 +515,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                     currentUser.firstName ?? "",
                                     textController.text,
                                     widget.user.fcmToken ?? "");
-                            print("Notification response -> ${response?.body.toString()}");
+                            print(
+                                "Notification response -> ${response?.body.toString()}");
                           }
                           setState(() {
                             textController.clear();
