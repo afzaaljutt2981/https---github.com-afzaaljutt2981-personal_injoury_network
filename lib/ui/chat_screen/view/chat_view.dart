@@ -120,7 +120,6 @@ class _ChatScreenState extends State<ChatScreen> {
             messageType: 'date',
             senderId: ''));
       } else {
-        print("condition true for else ${difference?.inDays}");
         modifiedChats.add(ChatMessage(
             messageContent:
                 "${chats.first.dateTime?.day.toString()}-${chats.first.dateTime?.month.toString()}-${chats.first.dateTime?.year.toString()}",
