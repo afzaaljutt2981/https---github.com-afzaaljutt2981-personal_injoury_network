@@ -4,8 +4,8 @@ import 'package:personal_injury_networking/ui/qr_scan_screen/view/qr_scan_view.d
 import 'package:provider/provider.dart';
 
 class CreateQrScanView extends StatefulWidget {
-  const CreateQrScanView({super.key});
-
+  CreateQrScanView({super.key, required this.from});
+  String from;
   @override
   State<CreateQrScanView> createState() => _CreateQrScanViewState();
 }
@@ -14,6 +14,6 @@ class _CreateQrScanViewState extends State<CreateQrScanView> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (_) => MyProfileController(), child: const HomeQrScanView());
+        create: (_) => MyProfileController(), child: HomeQrScanView(from: widget.from));
   }
 }

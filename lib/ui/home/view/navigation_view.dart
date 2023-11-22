@@ -70,7 +70,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
                   Constants.adminEmail.toLowerCase())
                 CreateChatView(),
-              CreateQrScanView(),
+              CreateQrScanView(from: "2"),
               CreateAllEventsView(),
               CreateMyProfileView()
             ],
