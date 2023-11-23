@@ -5,7 +5,10 @@ import '../controller/my_profile_controller.dart';
 import 'my_profile.dart';
 
 class CreateMyProfileView extends StatefulWidget {
-  const CreateMyProfileView({super.key});
+  CreateMyProfileView({super.key, required this.from, required this.uid});
+
+  String from;
+  String uid;
 
   @override
   State<CreateMyProfileView> createState() => _CreateMyProfileViewState();
@@ -15,6 +18,7 @@ class _CreateMyProfileViewState extends State<CreateMyProfileView> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (_) => MyProfileController(), child: const MyProfileInfo());
+        create: (_) => MyProfileController(),
+        child: MyProfileInfo(from: widget.from, uid: widget.uid));
   }
 }

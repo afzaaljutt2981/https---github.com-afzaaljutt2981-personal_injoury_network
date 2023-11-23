@@ -13,5 +13,6 @@ class Constants {
       ? "AIzaSyDielMrqePDtgCxZUHSbWkKr4SyTZjXWAk"
       : "AIzaSyCct6Mn9T-U4-wclBHsL7mx2hp1JII8kkA";
 
-  static String adminEmail = "wsshoppingclub@gmail.com";
+  // static String adminEmail = "wsshoppingclub@gmail.com";
+  static String adminEmail = "ali.usman32332@gmail.com";
 }

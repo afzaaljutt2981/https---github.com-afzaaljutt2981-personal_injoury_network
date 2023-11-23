@@ -14,8 +14,9 @@ import '../../authentication/model/user_model.dart';
 import '../../create_event/models/event_model.dart';
 
 class AllEventScreen extends StatefulWidget {
-  const AllEventScreen({super.key});
+  AllEventScreen({super.key, required this.from});
 
+  String from = "";
   @override
   State<AllEventScreen> createState() => _AllEventScreenState();
 }
@@ -65,8 +66,7 @@ class _AllEventScreenState extends State<AllEventScreen>
           backgroundColor: Colors.white,
           elevation: 0,
           automaticallyImplyLeading: false,
-          leading: FirebaseAuth.instance.currentUser?.email?.toLowerCase() ==
-                  Constants.adminEmail.toLowerCase()
+          leading: widget.from == "1"
               ? Padding(
                   padding: EdgeInsets.all(19.sp),
                   child: GestureDetector(

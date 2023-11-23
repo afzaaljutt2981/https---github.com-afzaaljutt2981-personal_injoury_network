@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
@@ -229,8 +230,10 @@ class _AllRegisteredUsersScreenState extends State<AllRegisteredUsersScreen> {
                                           ],
                                         ),
                                         GestureDetector(
-                                          onTap: () {
-                                            print("Delete should be initiated");
+                                          onTap: () async {
+                                            // print("Delete should be initiated");
+                                            //   await FirebaseAuth.instance.currentUser?.delete();
+
                                           },
                                           child: Image(
                                             height: 20.sp,

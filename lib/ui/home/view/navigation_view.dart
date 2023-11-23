@@ -64,15 +64,16 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               setState(() => selectedIndex = index);
             },
             children: <Widget>[
-              FirebaseAuth.instance.currentUser?.email?.toLowerCase() == Constants.adminEmail.toLowerCase()
+              FirebaseAuth.instance.currentUser?.email?.toLowerCase() ==
+                      Constants.adminEmail.toLowerCase()
                   ? CreateAdminHomeScreenView()
                   : CreateHomeScreenView(),
               if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
                   Constants.adminEmail.toLowerCase())
                 CreateChatView(),
-              CreateQrScanView(),
-              CreateAllEventsView(),
-              CreateMyProfileView()
+              CreateQrScanView(from: "2"),
+              CreateAllEventsView(from: "2"),
+              CreateMyProfileView(from: "2", uid: "",)
             ],
           ),
         ), //widgets[selectedIndex],

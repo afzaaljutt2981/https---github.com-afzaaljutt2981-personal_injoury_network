@@ -12,10 +12,12 @@ class EventDetailsController extends ChangeNotifier {
     getAllUsers();
     getEventTickets(eventId);
   }
+
   List<UserModel> allUsers = [];
   List<TicketModel> eventTickets = [];
   CollectionReference events = FirebaseFirestore.instance.collection("events");
   CollectionReference users = FirebaseFirestore.instance.collection("users");
+
   getAllUsers() {
     users.snapshots().listen((event) {
       for (var element in event.docs) {
@@ -37,9 +39,9 @@ class EventDetailsController extends ChangeNotifier {
 
   addEventTicket(EventModel event) async {
     var tickDoc = events.doc(event.id).collection("tickets").doc();
-    await events.doc(event.id).update({
-      "participants": (event.participants??0) + 1
-    });
+    await events
+        .doc(event.id)
+        .update({"participants": (event.participants ?? 0) + 1});
     await tickDoc.set(TicketModel(
             id: tickDoc.id,
             eId: event.id,
@@ -61,18 +63,18 @@ class EventDetailsController extends ChangeNotifier {
     await events.doc(eventId).update({"status": "Cancelled"});
     notifyListeners();
   }
-  notifyCancelEvent(String userId,String eventName) async {
+
+  notifyCancelEvent(String userId, String eventName) async {
     var doc = users.doc(userId).collection("notifications").doc();
     var senderId = FirebaseAuth.instance.currentUser!.uid;
-    await doc.set(
-        NotificationsModel(
-        id: doc.id,
-        senderId: senderId,
-        image: "",
-        notificationContent: "Cancelled $eventName",
-        time: DateTime.now().millisecondsSinceEpoch,
-        notificationType: "cancel Event",
-        status: 'Pending')
+    await doc.set(NotificationsModel(
+            id: doc.id,
+            senderId: senderId,
+            image: "",
+            notificationContent: "Cancelled $eventName",
+            time: DateTime.now().millisecondsSinceEpoch,
+            notificationType: "cancel Event",
+            status: 'Pending')
         .toJson());
     print("i am here");
   }

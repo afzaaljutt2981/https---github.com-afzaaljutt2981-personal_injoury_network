@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
+import 'package:personal_injury_networking/ui/admin/admin_home/admin_home_controller/view/user_scaning_screen_for_admin.dart';
 import 'package:personal_injury_networking/ui/admin/admin_home/all_registered_marketers/view/create_all_registered_users_view.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,6 @@ import '../../../../create_event/models/event_model.dart';
 import '../../../../drawer/view/create_drawer_view.dart';
 import '../../../../events/view/create_all_events_view.dart';
 import '../../../../notifications/view/create_notifications_view.dart';
-import '../../../../qr_scan_screen/view/create_qr_scan_view.dart';
 import '../../../all_registered_users/view/create_all_registered_users_view.dart';
 
 class AdminHomeScreen extends StatefulWidget {
@@ -327,7 +327,9 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                           const Duration(milliseconds: 200),
                                       reverseDuration:
                                           const Duration(milliseconds: 200),
-                                      child: const CreateAllEventsView(),
+                                      child: CreateAllEventsView(
+                                        from: "1",
+                                      ),
                                     ),
                                   );
                                 },
@@ -388,12 +390,13 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                     context,
                                     PageTransition(
                                       childCurrent: widget,
-                                      type: PageTransitionType.leftToRight,
+                                      type: PageTransitionType.bottomToTop,
+                                      alignment: Alignment.center,
                                       duration:
                                           const Duration(milliseconds: 200),
                                       reverseDuration:
                                           const Duration(milliseconds: 200),
-                                      child: const CreateQrScanView(),
+                                      child: const QRScannerScreenForAdmin(),
                                     ),
                                   );
                                 },

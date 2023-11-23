@@ -11,7 +11,9 @@ import '../../../global/helper/custom_sized_box.dart';
 import '../../authentication/model/user_model.dart';
 
 class HomeQrScanView extends StatefulWidget {
-  const HomeQrScanView({super.key});
+  HomeQrScanView({super.key, required this.from});
+
+  String from = "";
 
   @override
   State<HomeQrScanView> createState() => _HomeQrScanViewState();
@@ -27,6 +29,40 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: AppColors.kPrimaryColor,
+      appBar: widget.from == "1"
+          ? AppBar(
+              backgroundColor: AppColors.kPrimaryColor,
+              elevation: 0,
+              leading: Padding(
+                padding: EdgeInsets.all(10.sp),
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: SizedBox(
+                    width: 30.sp,
+                    height: 40.sp,
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: AppColors.kWhiteColor,
+                      size: 18.sp,
+                    ),
+                  ),
+                ),
+              ),
+              title: Center(
+                child: Padding(
+                  padding: EdgeInsets.only(right: 45.w),
+                  child: Text(
+                    "Create Event",
+                    style: AppTextStyles.josefin(
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w700)),
+                  ),
+                ),
+              ),
+            )
+          : null,
       body: (user != null)
           ? SingleChildScrollView(
               child: Column(
