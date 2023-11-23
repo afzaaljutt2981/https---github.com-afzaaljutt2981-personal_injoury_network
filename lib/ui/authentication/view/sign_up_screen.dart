@@ -678,9 +678,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.sp), color: Colors.white),
           child: TextFormField(
-            onChanged: (value) {
-              print(value.toString());
-            },
             inputFormatters: index == 4
                 ? [FilteringTextInputFormatter.deny(RegExp(r'\s'))]
                 : null,
