@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -20,6 +22,26 @@ class AuthController extends ChangeNotifier {
   FirebaseMessaging fMessaging = FirebaseMessaging.instance;
 
   Future<String?> getFirebaseMessagingToken() async {
+    if (Platform.isIOS) {
+      String? apnsToken = await fMessaging.getAPNSToken();
+      if (apnsToken != null) {
+        await fMessaging
+            .subscribeToTopic(FirebaseAuth.instance.currentUser!.uid);
+      } else {
+        await Future<void>.delayed(
+          const Duration(
+            seconds: 3,
+          ),
+        );
+        apnsToken = await fMessaging.getAPNSToken();
+        if (apnsToken != null) {
+          await fMessaging
+              .subscribeToTopic(FirebaseAuth.instance.currentUser!.uid);
+        }
+      }
+    } else {
+      await fMessaging.subscribeToTopic(FirebaseAuth.instance.currentUser!.uid);
+    }
     await fMessaging.requestPermission();
     String? token = await fMessaging.getToken();
     return token;
@@ -50,7 +72,9 @@ class AuthController extends ChangeNotifier {
           .then((value) async {
         if (value.user != null) {
           var doc = ref.doc(FirebaseAuth.instance.currentUser!.uid);
+
           String? token = await getFirebaseMessagingToken();
+          Future.delayed(Duration(seconds: 1));
           UserModel model = UserModel(
               id: doc.id,
               location: location,
@@ -58,7 +82,7 @@ class AuthController extends ChangeNotifier {
               email: email,
               firstName: firstName,
               lastName: lastName,
-              fcmToken: token??"",
+              fcmToken: token ?? "",
               phone: int.parse(phone),
               company: companyName,
               reference: reference,
@@ -83,9 +107,31 @@ class AuthController extends ChangeNotifier {
       });
     } on Exception catch (error) {
       Navigator.pop(context);
-      CustomSnackBar(false).showInSnackBar(error.toString(), context);
+
+      if (error is FirebaseAuthException) {
+        if (error.code == 'email-already-in-use') {
+          CustomSnackBar(false)
+              .showInSnackBar('Email is already registered!', context);
+        } else {
+          CustomSnackBar(false)
+              .showInSnackBar('Something went wrong!'.toString(), context);
+        }
+      } else {
+        CustomSnackBar(false).showInSnackBar(error.toString(), context);
+      }
+
       notifyListeners();
     }
+    // on Exception catch (error) {
+    //   Navigator.pop(context);
+    //   if (error.toString() ==
+    //     '[firebase_auth/email-already-in-use] The email address is already in use by another account') {
+    //   CustomSnackBar(false)
+    //       .showInSnackBar('Email is already registered!'.toString(), context);
+    //   }
+    //   CustomSnackBar(false).showInSnackBar(error.toString(), context);
+    //   notifyListeners();
+    // }
   }
 
   Future<void> signIn(
@@ -104,7 +150,7 @@ class AuthController extends ChangeNotifier {
               Constants.userName =
                   user?.firstName ?? "" + (user?.lastName ?? "");
               Constants.userPosition = user?.position ?? "";
-              await updateUserToken(user?.id??"");
+              await updateUserToken(user?.id ?? "");
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -209,8 +255,9 @@ class AuthController extends ChangeNotifier {
 
   updateUserToken(String userId) async {
     String? token = await getFirebaseMessagingToken();
+    Future.delayed(Duration(seconds: 1));
     if (token != null) {
-     await ref.doc(userId).update({"fcmToken": token});
+      await ref.doc(userId).update({"fcmToken": token});
     }
   }
 }
