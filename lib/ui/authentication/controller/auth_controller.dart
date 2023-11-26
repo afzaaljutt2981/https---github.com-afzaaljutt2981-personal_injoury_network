@@ -11,7 +11,6 @@ import 'package:personal_injury_networking/ui/home/view/navigation_view.dart';
 import '../../../global/utils/custom_snackbar.dart';
 import '../../../global/utils/functions.dart';
 import '../../forgetPassword/view/create_verify_identity_view.dart';
-import '../../forgetPassword/view/verify_identity.dart';
 import '../model/user_model.dart';
 
 class AuthController extends ChangeNotifier {
@@ -93,15 +92,8 @@ class AuthController extends ChangeNotifier {
               followers: [],
               followings: []);
           await doc.set(model.toJson());
-          getUserData(context);
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CreateVerifyIdentityView(
-                        email: email.toString(),
-                        from: 2,
-                      )),
-              (route) => false);
+          getUserData(context, email);
+
           notifyListeners();
         }
       });
@@ -186,18 +178,30 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  getUserData(context) {
+  getUserData(context, String email) {
     ref.doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) async {
       if (value.exists) {
         Map<String, dynamic> data = value.data() as Map<String, dynamic>;
         user = UserModel.fromJson(data);
         if (user != null) {
           Constants.userType = user?.userType ?? "";
-          await Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-              (route) => false);
+
+          if (FirebaseAuth.instance.currentUser?.emailVerified == true) {
+            await Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+                (route) => false);
+          } else {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CreateVerifyIdentityView(
+                          email: email.toString(),
+                          from: 2,
+                        )),
+                (route) => false);
+          }
         }
       } else {
         await FirebaseAuth.instance.signOut();
@@ -238,7 +242,7 @@ class AuthController extends ChangeNotifier {
         "hobbies": hobbies,
       });
       // ignore: use_build_context_synchronously
-      getUserData(context);
+      getUserData(context, email);
       // ignore: use_build_context_synchronously
       Navigator.pushAndRemoveUntil(
           context,
