@@ -9,6 +9,7 @@ import 'package:personal_injury_networking/ui/events/controller/events_controlle
 import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
 import 'package:personal_injury_networking/ui/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
 
@@ -30,13 +31,11 @@ Future<void> main() async {
       print('Message notification: ${message.notification?.body}');
     }
   }
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FirebaseMessaging fMessaging = FirebaseMessaging.instance;
-
   await fMessaging.requestPermission(
     alert: true,
     announcement: false,
@@ -46,18 +45,29 @@ Future<void> main() async {
     provisional: false,
     sound: true,
   );
+  var pref = await SharedPreferences.getInstance();
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     if (kDebugMode) {
       showOverlayNotification(navigatorKey.currentContext!, message);
+      if(message.notification != null){
+       if(message.notification!.body!.contains("Cancel")){
+         await pref.setBool("notifications",true);
+       }
+      }
     }
 
     // _messageStreamController.sink.add(message);
   });
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
     if (kDebugMode) {
        showOverlayNotification(navigatorKey.currentContext!, message);
+       if(message.notification != null){
+       if(message.notification!.body!.contains("Cancel")){
+           await pref.setBool("notifications",true);
+       }
+       }
     }
   });
   runApp(MultiProvider(providers: [
@@ -68,6 +78,7 @@ Future<void> main() async {
 }
 
 void showOverlayNotification(BuildContext context, RemoteMessage message) {
+  Provider.of<EventsController>(context,listen: false).notify = true;
   showSimpleNotification(
       Text(
         message.notification?.title ?? '',

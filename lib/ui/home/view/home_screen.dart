@@ -8,6 +8,7 @@ import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../global/app_buttons/app_primary_button.dart';
 import '../../../global/helper/custom_sized_box.dart';
@@ -19,6 +20,7 @@ import '../../events/view/search_events_view.dart';
 import '../../events_details/view/create_event_details_view.dart';
 import '../../notifications/view/create_notifications_view.dart';
 import 'navigation_view.dart';
+import 'package:badges/badges.dart' as badges;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,10 +33,12 @@ class _HomeScreenState extends State<HomeScreen> {
   List<EventModel> events = [];
   UserModel? user;
   List<UserModel> allUsers = [];
+  bool showBadge = false;
   @override
   Widget build(BuildContext context) {
     events = [];
     allUsers = context.watch<EventsController>().allUsers;
+    showBadge = context.watch<EventsController>().notify??false;
     if (allUsers.isNotEmpty && FirebaseAuth.instance.currentUser != null) {
       user = allUsers.firstWhere(
           (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
@@ -125,7 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               // Constants.userType == 'marketer'
                               //     ?
                               GestureDetector(
-                                onTap: () {
+                                onTap: () async {
+                                  context.read<EventsController>().clearNotifications();
                                   Navigator.push(
                                     context,
                                     PageTransition(
@@ -139,12 +144,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   );
                                 },
-                                child: Image(
-                                  height: 20.sp,
-                                  width: 20.sp,
-                                  image: const AssetImage(
-                                      'assets/images/notification.png'),
-                                ),
+                                child: badges.Badge(
+                                  showBadge: showBadge,
+                                  position: badges.BadgePosition.custom(end: 0,),
+                                  child:  Image(
+                                    height: 20.sp,
+                                    width: 20.sp,
+                                    image: const AssetImage(
+                                        'assets/images/notification.png'),
+                                  ),)
                               )
                               // : const SizedBox(),
                             ],
