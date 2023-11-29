@@ -78,7 +78,7 @@ Future<void> main() async {
 }
 
 void showOverlayNotification(BuildContext context, RemoteMessage message) {
-  Provider.of<EventsController>(context,listen: false).notify = true;
+  Provider.of<EventsController>(context,listen: false).getNotification();
   showSimpleNotification(
       Text(
         message.notification?.title ?? '',

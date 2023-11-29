@@ -61,7 +61,12 @@ class EventsController extends ChangeNotifier {
     });
    // notifyListeners();
   }
-
+getNotification(){
+    notify = true;
+    print(notify);
+    print("notify value is change");
+    notifyListeners();
+}
   getUserBookedEvents() {
     if (FirebaseAuth.instance.currentUser != null) {
       userEventsStream = users
