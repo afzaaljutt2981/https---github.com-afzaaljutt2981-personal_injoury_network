@@ -41,7 +41,6 @@ class AuthController extends ChangeNotifier {
     } else {
       await fMessaging.subscribeToTopic(FirebaseAuth.instance.currentUser!.uid);
     }
-    await fMessaging.requestPermission();
     String? token = await fMessaging.getToken();
     return token;
   }
