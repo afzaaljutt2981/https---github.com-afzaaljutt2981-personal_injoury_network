@@ -153,7 +153,7 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                                     const Duration(milliseconds: 200),
                                 child: CreateOtherUserProfileView(
                                   participant: users?[index],
-                                  currentUser: users?[index],
+                                  currentUser: widget.currentUser,
                                 ),
                               ),
                             );

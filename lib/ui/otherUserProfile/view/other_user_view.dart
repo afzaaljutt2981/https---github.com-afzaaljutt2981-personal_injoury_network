@@ -43,6 +43,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
   String? notifyId = "";
   @override
   Widget build(BuildContext context) {
+    print(widget.currentUser!.email);
     userEvents = [];
     List<EventModel> allEvents =
         Provider.of<EventsController>(context, listen: false).allEvents;
@@ -260,7 +261,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                 ),
                               ),
                             ),
-                            if (followButton == "Following") ...[
+                            if (followButton == "Following" || widget.currentUser!.followers!.contains(user!.id)) ...[
                               SizedBox(
                                 width: 7.w,
                               ),
