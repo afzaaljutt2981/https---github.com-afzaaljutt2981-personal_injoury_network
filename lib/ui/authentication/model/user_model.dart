@@ -7,6 +7,7 @@ class UserModel {
   late String? email;
   String? pImage;
   late String? website;
+  bool? showNotification;
   late String? location;
   late String? userName;
   late String? id;
@@ -25,6 +26,7 @@ class UserModel {
       required this.lastName,
       required this.id,
       required this.reference,
+         this.showNotification,
       required this.hobbies,
       required this.followers,
       required this.followings,
@@ -48,6 +50,7 @@ class UserModel {
       id: json?['id'],
       fcmToken: json?['fcmToken'],
       pImage: json?['pImage'],
+      showNotification: json?["showNotification"]??false,
       firstName: json?['firstName'],
       lastName: json?['lastName'],
       phone: json?['phone'],
@@ -74,6 +77,7 @@ class UserModel {
       "website": website,
       "email": email,
       "fcmToken": fcmToken,
+      "showNotification":showNotification??false,
       "reference": reference,
       "userType": userType,
       "userName": userName,

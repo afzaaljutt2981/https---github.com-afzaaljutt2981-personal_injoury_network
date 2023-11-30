@@ -52,12 +52,6 @@ Future<void> main() async {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     if (kDebugMode) {
       showOverlayNotification(navigatorKey.currentContext!, message);
-      if (message.notification != null) {
-        if (message.notification!.body!.contains("Cancel") ||
-            message.notification!.body!.contains("Started")) {
-          await pref.setBool("notifications", true);
-        }
-      }
     }
 
     // _messageStreamController.sink.add(message);
@@ -65,12 +59,6 @@ Future<void> main() async {
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
     if (kDebugMode) {
       showOverlayNotification(navigatorKey.currentContext!, message);
-      if (message.notification != null) {
-        if (message.notification!.body!.contains("Cancel") ||
-            message.notification!.body!.contains("Started")) {
-          await pref.setBool("notifications", true);
-        }
-      }
     }
   });
   runApp(MultiProvider(providers: [
@@ -83,7 +71,7 @@ Future<void> main() async {
 void showOverlayNotification(BuildContext context, RemoteMessage message) {
   if (message.notification!.body!.contains("Cancel") ||
       message.notification!.body!.contains("Started")) {
-    Provider.of<EventsController>(context, listen: false).getNotification();
+    Provider.of<MyProfileController>(context, listen: false).updateUserNotification(true);
   }
   showSimpleNotification(
       Text(

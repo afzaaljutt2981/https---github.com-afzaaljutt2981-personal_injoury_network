@@ -37,7 +37,13 @@ class MyProfileController extends ChangeNotifier {
       });
     }
   }
-
+  updateUserNotification(bool value) async {
+    ref.doc(FirebaseAuth.instance.currentUser!.uid).update(
+        {
+          "showNotification": value
+        });
+    notifyListeners();
+  }
   getOtherUserData(String uid) {
     if (FirebaseAuth.instance.currentUser != null) {
       otherUserProfileStream = ref.doc(uid).snapshots().listen((event) {

@@ -7,6 +7,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
+import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,7 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     events = [];
     allUsers = context.watch<EventsController>().allUsers;
-    showBadge = context.watch<EventsController>().notify??false;
     if (allUsers.isNotEmpty && FirebaseAuth.instance.currentUser != null) {
       user = allUsers.firstWhere(
           (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
@@ -130,22 +130,25 @@ class _HomeScreenState extends State<HomeScreen> {
                               //     ?
                               GestureDetector(
                                 onTap: () async {
-                                  context.read<EventsController>().clearNotifications();
-                                  Navigator.push(
-                                    context,
-                                    PageTransition(
-                                      childCurrent: widget,
-                                      type: PageTransitionType.rightToLeft,
-                                      duration:
-                                          const Duration(milliseconds: 200),
-                                      reverseDuration:
-                                          const Duration(milliseconds: 200),
-                                      child: const CreateNotificationsView(),
-                                    ),
-                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   PageTransition(
+                                  //     childCurrent: widget,
+                                  //     type: PageTransitionType.rightToLeft,
+                                  //     duration:
+                                  //         const Duration(milliseconds: 200),
+                                  //     reverseDuration:
+                                  //         const Duration(milliseconds: 200),
+                                  //     child: const CreateNotificationsView(),
+                                  //   ),
+                                  // );
+                                  Navigator.push(context, MaterialPageRoute(builder: (_)=>CreateNotificationsView()));
+                                  if(user!.showNotification!){
+                                    context.read<MyProfileController>().updateUserNotification(false);
+                                  }
                                 },
                                 child: badges.Badge(
-                                  showBadge: showBadge,
+                                  showBadge: user!.showNotification!,
                                   position: badges.BadgePosition.custom(end: 0,),
                                   child:  Image(
                                     height: 20.sp,

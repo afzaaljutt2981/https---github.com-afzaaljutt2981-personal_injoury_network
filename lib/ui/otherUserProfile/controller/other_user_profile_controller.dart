@@ -30,8 +30,8 @@ class OtherUserProfileController extends ChangeNotifier {
       for (var element in event.docs) {
         notifications.add(NotificationsModel.fromJson(element.data()));
       }
-      notifyListeners();
     });
+    notifyListeners();
   }
 
   getOtherUserData(String userId) {

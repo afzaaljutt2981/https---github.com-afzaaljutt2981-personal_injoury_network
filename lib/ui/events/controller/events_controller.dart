@@ -25,7 +25,6 @@ class EventsController extends ChangeNotifier {
   StreamSubscription<QuerySnapshot<Object?>>? eventStream;
   StreamSubscription<QuerySnapshot<Object?>>? userEventsStream;
   StreamSubscription<QuerySnapshot<Object?>>? res;
-  bool? notify = false;
   List<TicketModel> userBookedEvents = [];
   List<TicketModel> eventTickets = [];
   List<EventModel> allEvents = [];
@@ -41,12 +40,6 @@ class EventsController extends ChangeNotifier {
       notifyListeners();
     });
   }
-  clearNotifications() async {
-    notify = false;
-    var pref = await SharedPreferences.getInstance();
-    await pref.setBool("notifications", false);
-    notifyListeners();
-  }
   getAllEvents() async {
     allEvents = [];
     eventStream = ref.snapshots().listen((event) async {
@@ -55,18 +48,9 @@ class EventsController extends ChangeNotifier {
         allEvents
             .add(EventModel.fromJson(element.data() as Map<String, dynamic>));
       });
-      var pref = await SharedPreferences.getInstance();
-      notify = pref.getBool("notifications");
-      notifyListeners();
     });
    // notifyListeners();
   }
-getNotification(){
-    notify = true;
-    print(notify);
-    print("notify value is change");
-    notifyListeners();
-}
   getUserBookedEvents() {
     if (FirebaseAuth.instance.currentUser != null) {
       userEventsStream = users
