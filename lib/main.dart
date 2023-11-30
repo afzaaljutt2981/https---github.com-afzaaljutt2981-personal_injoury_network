@@ -31,6 +31,7 @@ Future<void> main() async {
       print('Message notification: ${message.notification?.body}');
     }
   }
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -51,10 +52,11 @@ Future<void> main() async {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     if (kDebugMode) {
       showOverlayNotification(navigatorKey.currentContext!, message);
-      if(message.notification != null){
-       if(message.notification!.body!.contains("Cancel")){
-         await pref.setBool("notifications",true);
-       }
+      if (message.notification != null) {
+        if (message.notification!.body!.contains("Cancel") ||
+            message.notification!.body!.contains("Started")) {
+          await pref.setBool("notifications", true);
+        }
       }
     }
 
@@ -62,12 +64,13 @@ Future<void> main() async {
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
     if (kDebugMode) {
-       showOverlayNotification(navigatorKey.currentContext!, message);
-       if(message.notification != null){
-       if(message.notification!.body!.contains("Cancel")){
-           await pref.setBool("notifications",true);
-       }
-       }
+      showOverlayNotification(navigatorKey.currentContext!, message);
+      if (message.notification != null) {
+        if (message.notification!.body!.contains("Cancel") ||
+            message.notification!.body!.contains("Started")) {
+          await pref.setBool("notifications", true);
+        }
+      }
     }
   });
   runApp(MultiProvider(providers: [
@@ -78,7 +81,10 @@ Future<void> main() async {
 }
 
 void showOverlayNotification(BuildContext context, RemoteMessage message) {
-  Provider.of<EventsController>(context,listen: false).getNotification();
+  if (message.notification!.body!.contains("Cancel") ||
+      message.notification!.body!.contains("Started")) {
+    Provider.of<EventsController>(context, listen: false).getNotification();
+  }
   showSimpleNotification(
       Text(
         message.notification?.title ?? '',

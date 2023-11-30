@@ -13,6 +13,7 @@ import 'package:personal_injury_networking/ui/otherUserProfile/view/about_view.d
 import 'package:personal_injury_networking/ui/otherUserProfile/view/events_view.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/view/reviews_view.dart';
 import 'package:provider/provider.dart';
+import '../../../global/helper/api_functions.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../../global/utils/constants.dart';
 import '../../create_event/models/event_model.dart';
@@ -202,7 +203,12 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                         .sendFollowRequest(
                                           user?.id??"",
                                         );
-                                  } else if (followButton == "Following") {
+                                    if(user!.fcmToken != null){
+                                    await CountryStateCityRepo.sendPushNotification(
+                                        widget.currentUser?.firstName ?? "",
+                                        "Started following you",
+                                        user!.fcmToken!);
+                                  }} else if (followButton == "Following") {
                                     await context
                                         .read<OtherUserProfileController>()
                                         .followTap(user!);
