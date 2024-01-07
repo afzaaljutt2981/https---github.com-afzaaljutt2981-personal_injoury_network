@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
+import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../global/utils/app_colors.dart';
@@ -30,14 +31,16 @@ class _AllRegisteredUsersScreenState
 
   @override
   Widget build(BuildContext context) {
+
     allUsers = context
         .watch<AllRegisteredMarketersController>()
         .allUsers
-        .where((element) => optionItemSelected.id == "1"
-            ? element.userType == Constants.userType
-            : optionItemSelected.id == "2"
-                ? element.userType != Constants.userType
-                : element.userType == Constants.userType)
+        .where((element) =>
+            (optionItemSelected.id == "1"
+                ? element.userType == Constants.userType
+                : optionItemSelected.id == "2"
+                    ? element.userType != Constants.userType
+                    : element.userType == Constants.userType) && (element.isDeleted??false) == false)
         .toList();
     return Scaffold(
         backgroundColor: const Color(0xFFf5f4ff),
@@ -142,7 +145,7 @@ class _AllRegisteredUsersScreenState
                                                           FontWeight.w500)),
                                             ),
                                             Text(
-                                              model.position??"",
+                                              model.position ?? "",
                                               style: AppTextStyles.josefin(
                                                   style: TextStyle(
                                                       fontSize: 10.sp,
@@ -156,6 +159,18 @@ class _AllRegisteredUsersScreenState
                                         GestureDetector(
                                           onTap: () {
                                             print("Delete should be initiated");
+                                            if (model.id?.isNotEmpty ?? false) {
+                                              context
+                                                  .read<
+                                                      AllRegisteredMarketersController>()
+                                                  .updateUser(context,
+                                                      userUidToUpdate:
+                                                          model.id!,
+                                                      isDeleted: true);
+                                            } else {
+                                              Functions.showSnackBar(context,
+                                                  "Invalid user, unable to delete this user");
+                                            }
                                           },
                                           child: Image(
                                             height: 20.sp,

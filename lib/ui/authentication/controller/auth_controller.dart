@@ -137,16 +137,24 @@ class AuthController extends ChangeNotifier {
           user = UserModel.fromJson(data);
           if (user != null) {
             if (FirebaseAuth.instance.currentUser?.emailVerified == true) {
-              Constants.userType = user?.userType ?? "";
-              Constants.userName =
-                  user?.firstName ?? "" + (user?.lastName ?? "");
-              Constants.userPosition = user?.position ?? "";
-              await updateUserToken(user?.id ?? "");
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-                  (route) => false);
+              if (user?.isDeleted ?? false) {
+                print("User is suspended, Logging out");
+                await FirebaseAuth.instance.signOut();
+                Navigator.of(context).pop();
+                Functions.showDialogueBox(context);
+              } else {
+                Constants.userType = user?.userType ?? "";
+                Constants.userName =
+                    user?.firstName ?? "" + (user?.lastName ?? "");
+                Constants.userPosition = user?.position ?? "";
+                await updateUserToken(user?.id ?? "");
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) =>
+                            BottomNavigationScreen(selectedIndex: 0)),
+                    (route) => false);
+              }
             } else {
               Constants.userType = user?.userType ?? "";
               Constants.userName =

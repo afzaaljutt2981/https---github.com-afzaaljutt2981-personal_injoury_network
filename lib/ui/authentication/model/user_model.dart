@@ -17,6 +17,7 @@ class UserModel {
   List<String?>? hobbies = [];
   List<String?>? followers = [];
   List<String?>? followings = [];
+  bool? isDeleted = false;
 
   UserModel(
       {required this.location,
@@ -36,7 +37,8 @@ class UserModel {
       required this.phone,
       required this.userType,
       required this.company,
-      required this.website});
+      required this.website,
+      this.isDeleted});
 
   factory UserModel.fromJson(Map<String, dynamic>? json) {
     List hobbies = json?['hobbies'] ?? [];
@@ -62,6 +64,7 @@ class UserModel {
       followings:
           List.generate(followings.length, (index) => followings[index]),
       followers: List.generate(followers.length, (index) => followers[index]),
+      isDeleted: json?['isDeleted'],
     );
   }
 
@@ -84,7 +87,8 @@ class UserModel {
       "position": position,
       "hobbies": hobbies,
       "followers": followers,
-      "followings": followings
+      "followings": followings,
+      "isDeleted": isDeleted
     };
   }
 }

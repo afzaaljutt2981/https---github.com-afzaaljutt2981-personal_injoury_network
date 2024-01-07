@@ -13,6 +13,7 @@ import 'package:personal_injury_networking/global/app_buttons/white_background_b
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
+import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:personal_injury_networking/ui/authentication/view/sign_up_screen.dart';
 import 'package:provider/provider.dart';
@@ -382,23 +383,31 @@ class _LoginViewState extends State<LoginView> {
     if (res.exists) {
       UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
       await context.read<AuthController>().updateUserToken(user.id??"");
-      if (user.userName == "") {
-        // ignore: use_build_context_synchronously
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => SignUpScreen(
-                    screenType: 1,
-                    isUpdate: true,
-                  )),
-        );
+      if (user.isDeleted ?? false) {
+        print("User is suspended, Logging out");
+        await FirebaseAuth.instance.signOut();
+        // Navigator.of(context).pop();
+        Functions.showDialogueBox(context);
       } else {
-        // ignore: use_build_context_synchronously
-        Navigator.pushAndRemoveUntil(
+        if (user.userName == "") {
+          // ignore: use_build_context_synchronously
+          Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-            (route) => false);
+                builder: (_) =>
+                    SignUpScreen(
+                      screenType: 1,
+                      isUpdate: true,
+                    )),
+          );
+        } else {
+          // ignore: use_build_context_synchronously
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+                  (route) => false);
+        }
       }
       // });
     } else {
@@ -423,7 +432,7 @@ class _LoginViewState extends State<LoginView> {
                     fcmToken: token,
                     userType: "user",
                     company: "",
-                    website: "")
+                    website: "",)
                 .toJson());
         Constants.userDisplayName = user.displayName ?? '';
         Constants.userEmail = userEmail ?? user.email ?? "";

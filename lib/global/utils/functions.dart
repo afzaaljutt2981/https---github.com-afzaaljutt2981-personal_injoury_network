@@ -3,7 +3,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebasestorage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
+import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 
 import 'app_strings.dart';
 import 'package:http/http.dart' as http;
@@ -75,5 +78,85 @@ class Functions {
       rethrow;
     }
   }
+
+  static showDialogueBox(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.sp),
+              ),
+              title: Column(
+                children: [
+                  Image(
+                      width: 40.sp,
+                      height: 40.sp,
+                      image: const AssetImage(
+                          'assets/images/question_icon_drawer.png')),
+                  CustomSizeBox(15.h),
+                  Text(
+                    "Your account is suspended by admin.",
+                    style: AppTextStyles.josefin(
+                        style: TextStyle(
+                            height: 1.3.sp,
+                            color: AppColors.kBlackColor,
+                            fontSize: 14.sp)),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, "ok");
+                      // context.read<MyProfileController>().becomeMarketer();
+                      // Navigator.pushAndRemoveUntil(
+                      //     context,
+                      //     PageTransition(
+                      //       childCurrent: widget,
+                      //       type: PageTransitionType.leftToRightJoined,
+                      //       alignment: Alignment.center,
+                      //       duration: const Duration(milliseconds: 200),
+                      //       reverseDuration:
+                      //       const Duration(milliseconds: 200),
+                      //       child: BottomNavigationScreen(
+                      //         selectedIndex: 0,
+                      //       ),
+                      //     ),
+                      //         (route) => false);
+                      // setState(() {
+                      //   userType = 'admin';
+                      //   Navigator.pushAndRemoveUntil(
+                      //       context,
+                      //       PageTransition(
+                      //         childCurrent: widget,
+                      //         type: PageTransitionType.leftToRightJoined,
+                      //         alignment: Alignment.center,
+                      //         duration: const Duration(milliseconds: 200),
+                      //         reverseDuration:
+                      //             const Duration(milliseconds: 200),
+                      //         child: BottomNavigationScreen(
+                      //           selectedIndex: 0,
+                      //         ),
+                      //       ),
+                      //       (route) => false);
+                      // });
+                    },
+                    child: Text(
+                      "Continue",
+                      style: AppTextStyles.josefin(
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.kPrimaryColor,
+                            fontSize: 14.sp),
+                      ),
+                    )),
+              ],
+            ),
+          );
+        });
+  }
+
 
 }
