@@ -17,6 +17,7 @@ class UserModel {
   List<String?>? hobbies = [];
   List<String?>? followers = [];
   List<String?>? followings = [];
+  List<String?>? followingRequests = [];
   bool? isDeleted = false;
 
   UserModel(
@@ -27,9 +28,10 @@ class UserModel {
       required this.lastName,
       required this.id,
       required this.reference,
-         this.showNotification,
+      this.showNotification,
       required this.hobbies,
       required this.followers,
+      required this.followingRequests,
       required this.followings,
       this.pImage,
       this.fcmToken,
@@ -44,6 +46,7 @@ class UserModel {
     List hobbies = json?['hobbies'] ?? [];
     List followers = json?['followers'] ?? [];
     List followings = json?['followings'] ?? [];
+    List followingRequests_ = json?['followingRequests'] ?? [];
     return UserModel(
       userName: json?['userName'],
       location: json?['location'],
@@ -52,7 +55,7 @@ class UserModel {
       id: json?['id'],
       fcmToken: json?['fcmToken'],
       pImage: json?['pImage'],
-      showNotification: json?["showNotification"]??false,
+      showNotification: json?["showNotification"] ?? false,
       firstName: json?['firstName'],
       lastName: json?['lastName'],
       phone: json?['phone'],
@@ -64,6 +67,8 @@ class UserModel {
       followings:
           List.generate(followings.length, (index) => followings[index]),
       followers: List.generate(followers.length, (index) => followers[index]),
+      followingRequests: List.generate(
+          followingRequests_.length, (index) => followingRequests_[index]),
       isDeleted: json?['isDeleted'],
     );
   }
@@ -80,7 +85,7 @@ class UserModel {
       "website": website,
       "email": email,
       "fcmToken": fcmToken,
-      "showNotification":showNotification??false,
+      "showNotification": showNotification ?? false,
       "reference": reference,
       "userType": userType,
       "userName": userName,
@@ -88,6 +93,7 @@ class UserModel {
       "hobbies": hobbies,
       "followers": followers,
       "followings": followings,
+      "followingRequests": followingRequests,
       "isDeleted": isDeleted
     };
   }

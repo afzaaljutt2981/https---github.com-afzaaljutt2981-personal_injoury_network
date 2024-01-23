@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,8 @@ Future<void> main() async {
       RemoteMessage message) async {
     await Firebase.initializeApp();
 
+
+
     if (kDebugMode) {
       print("Handling a background message: ${message.messageId}");
       print('Message data: ${message.data}');
@@ -36,6 +39,11 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Elsewhere in your code
+  // FirebaseCrashlytics.instance.crash();
+  // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
   FirebaseMessaging fMessaging = FirebaseMessaging.instance;
   await fMessaging.requestPermission(
     alert: true,

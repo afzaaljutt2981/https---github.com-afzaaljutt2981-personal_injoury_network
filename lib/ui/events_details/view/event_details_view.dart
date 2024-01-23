@@ -696,7 +696,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         context
                             .read<OtherUserProfileController>()
                             .sendFollowRequest(
-                              eventCreater?.id ?? "",
+                              eventCreater?.id ?? "",context
                             );
                       } else if (followButton == "Following") {
                         await context

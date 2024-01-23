@@ -89,7 +89,8 @@ class AuthController extends ChangeNotifier {
               userType: 'user',
               hobbies: hobbies,
               followers: [],
-              followings: []);
+              followings: [],
+              followingRequests: []);
           await doc.set(model.toJson());
           getUserData(context, email);
 

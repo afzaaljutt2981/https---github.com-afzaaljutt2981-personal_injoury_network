@@ -336,14 +336,17 @@ class _LoginViewState extends State<LoginView> {
       return null;
     }
   }
-  // FirebaseMessaging fMessaging = FirebaseMessaging.instance;
-    firMessaging.FirebaseMessaging fMessaging = firMessaging.FirebaseMessaging.instance;
 
- Future<String?> getFirebaseMessagingToken() async {
+  // FirebaseMessaging fMessaging = FirebaseMessaging.instance;
+  firMessaging.FirebaseMessaging fMessaging =
+      firMessaging.FirebaseMessaging.instance;
+
+  Future<String?> getFirebaseMessagingToken() async {
     await fMessaging.requestPermission();
     String? token = await fMessaging.getToken();
     return token;
   }
+
   Future<User?> signInWithApple({List<Scope> scopes = const []}) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final result = await TheAppleSignIn.performRequests(
@@ -382,7 +385,7 @@ class _LoginViewState extends State<LoginView> {
         .get();
     if (res.exists) {
       UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
-      await context.read<AuthController>().updateUserToken(user.id??"");
+      await context.read<AuthController>().updateUserToken(user.id ?? "");
       if (user.isDeleted ?? false) {
         print("User is suspended, Logging out");
         await FirebaseAuth.instance.signOut();
@@ -394,8 +397,7 @@ class _LoginViewState extends State<LoginView> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (_) =>
-                    SignUpScreen(
+                builder: (_) => SignUpScreen(
                       screenType: 1,
                       isUpdate: true,
                     )),
@@ -406,7 +408,7 @@ class _LoginViewState extends State<LoginView> {
               context,
               MaterialPageRoute(
                   builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-                  (route) => false);
+              (route) => false);
         }
       }
       // });
@@ -415,25 +417,28 @@ class _LoginViewState extends State<LoginView> {
         String? token = await getFirebaseMessagingToken();
         print("here is token");
         print(token);
-        await FirebaseFirestore.instance.collection("users").doc(user.uid).set(
-            UserModel(
-                    location: "",
-                    position: "",
-                    email: userEmail ?? user.email ?? '',
-                    firstName: user.displayName ?? "",
-                    lastName: "",
-                    id: user.uid,
-                    reference: "",
-                    hobbies: [],
-                    followers: [],
-                    followings: [],
-                    userName: '',
-                    phone: 0,
-                    fcmToken: token,
-                    userType: "user",
-                    company: "",
-                    website: "",)
-                .toJson());
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user.uid)
+            .set(UserModel(
+              location: "",
+              position: "",
+              email: userEmail ?? user.email ?? '',
+              firstName: user.displayName ?? "",
+              lastName: "",
+              id: user.uid,
+              reference: "",
+              hobbies: [],
+              followers: [],
+              followings: [],
+              followingRequests: [],
+              userName: '',
+              phone: 0,
+              fcmToken: token,
+              userType: "user",
+              company: "",
+              website: "",
+            ).toJson());
         Constants.userDisplayName = user.displayName ?? '';
         Constants.userEmail = userEmail ?? user.email ?? "";
         Constants.uId = user.uid;
