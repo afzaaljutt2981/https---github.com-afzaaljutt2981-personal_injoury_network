@@ -141,8 +141,82 @@ class _SignUpScreenState extends State<SignUpScreen> {
   List<String> countries = ["Select Country", "United States"];
   List<String> states = ["Select State", "Florida"];
 
+  // List<String> counties = ["Select county", "Florida"];
+
+  List<String> counties = [
+    "Select County",
+    'Alachua',
+    'Baker',
+    'Bay',
+    'Bradford',
+    'Brevard',
+    'Broward',
+    'Calhoun',
+    'Charlotte',
+    'Citrus',
+    'Clay',
+    'Collier',
+    'Columbia',
+    'DeSoto',
+    'Dixie',
+    'Duval',
+    'Escambia',
+    'Flagler',
+    'Franklin',
+    'Gadsden',
+    'Gilchrist',
+    'Glades',
+    'Gulf',
+    'Hamilton',
+    'Hardee',
+    'Hendry',
+    'Hernando',
+    'Highlands',
+    'Hillsborough',
+    'Holmes',
+    'Indian River',
+    'Jackson',
+    'Jefferson',
+    'Lafayette',
+    'Lake',
+    'Lee',
+    'Leon',
+    'Levy',
+    'Liberty',
+    'Madison',
+    'Manatee',
+    'Marion',
+    'Martin',
+    'Miami-Dade',
+    'Monroe',
+    'Nassau',
+    'Okaloosa',
+    'Okeechobee',
+    'Orange',
+    'Osceola',
+    'Palm Beach',
+    'Pasco',
+    'Pinellas',
+    'Polk',
+    'Putnam',
+    'St. Johns',
+    'St. Lucie',
+    'Santa Rosa',
+    'Sarasota',
+    'Seminole',
+    'Sumter',
+    'Suwannee',
+    'Taylor',
+    'Union',
+    'Volusia',
+    'Wakulla',
+    'Walton',
+    'Washington'
+  ];
+
   String selectedCountry = 'United States';
   String selectedState = 'Florida';
+  String selectedCounty = 'Alachua';
 
   willPopCalled() async {
     if (index > 1) {
@@ -382,7 +456,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               website: textFieldController[6].text,
                               phone: textFieldController[4].text,
                               position: textFieldController[3].text,
-                              location: "$selectedState,$selectedCountry",
+                              location: "$selectedState,$selectedCountry,$selectedCounty",
                               reference: textFieldController[9].text,
                               hobbies: selectedHobbies,
                               userName: textFieldController[10].text);
@@ -395,7 +469,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               phone: textFieldController[4].text,
                               email: textFieldController[5].text,
                               website: textFieldController[6].text,
-                              location: "$selectedState,$selectedCountry",
+                              location: "$selectedState,$selectedCountry,$selectedCounty",
                               reference: textFieldController[9].text,
                               password: textFieldController[11].text,
                               hobbies: selectedHobbies,
@@ -606,7 +680,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: DropdownButton2<String>(
               isExpanded: true,
               enableFeedback: selectedHobbies.length < 3,
-              hint: const Row(
+              hint: Row(
                 children: [
                   // Icon(
                   //   Icons.list,
@@ -617,16 +691,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     width: 4,
                   ),
                   Expanded(
-                    child: Text(
-                      'Select Item',
+                      child: Text(
+                    'Select Hobbies',
+                    style: AppTextStyles.josefin(
                       style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: const Color(0xFF1F314A).withOpacity(0.31),
+                        fontSize: 14.sp,
                       ),
-                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
+                    overflow: TextOverflow.ellipsis,
+                  ))
                 ],
               ),
               items: [...JobPositionModel.hobbiesDropDown]
@@ -659,11 +733,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ))
                   .toList(),
               // value: items[0],
-              onChanged: selectedHobbies.length < 3 ? (String? value) {
-                var selectedText = value.toString().substring(2);
-                if (selectedHobbies.contains(selectedText) == false &&
-                    selectedHobbies.length < 3) addItem(selectedText);
-              } : null,
+              onChanged: selectedHobbies.length < 3
+                  ? (String? value) {
+                      var selectedText = value.toString().substring(2);
+                      if (selectedHobbies.contains(selectedText) == false &&
+                          selectedHobbies.length < 3) addItem(selectedText);
+                    }
+                  : null,
               buttonStyleData: ButtonStyleData(
                 height: 50,
                 width: MediaQuery.of(context).size.width,
@@ -1038,9 +1114,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget locationField() {
-    return Flex(
-      direction: Axis.horizontal,
-      children: <Widget>[
+    return Column(children: [
+      Flex(direction: Axis.horizontal, children: <Widget>[
         Flexible(
           child: Container(
             decoration: BoxDecoration(
@@ -1116,8 +1191,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
         ),
-      ],
-    );
+      ]),
+      SizedBox(
+        height: 18.w,
+      ),
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15.sp),
+        ),
+        child: Padding(
+          padding: EdgeInsets.only(left: 5.w),
+          child: DropdownButton<String>(
+            isExpanded: true,
+            value: selectedCounty,
+            items: counties
+                .map((String state) =>
+                    DropdownMenuItem(value: state, child: Text(state)))
+                .toList(),
+            onChanged: (selectedValue) {
+              setState(() {
+                selectedCounty = selectedValue!;
+              });
+            },
+            underline: Container(),
+            style: AppTextStyles.josefin(
+              style: TextStyle(
+                color: const Color(0xFF1F314A),
+                fontSize: 15.sp,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ]);
   }
 
   loadUserPositions() {
