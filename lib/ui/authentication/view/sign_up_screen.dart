@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
   int hobbiesCount = 0;
   bool disableStateDropdown = true;
   List<String> selectedHobbies = [];
+  final List<String> items = [
+    'Item1',
+    'Item2',
+    'Item3',
+    'Item4',
+    'Item5',
+    'Item6',
+    'Item7',
+    'Item8',
+  ];
 
   void addItem(String item) {
     if (!selectedHobbies.contains(item)) {
@@ -257,8 +268,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       controller: controller,
                       physics: const NeverScrollableScrollPhysics(),
                       children: [
-                        process1(),
                         process2(),
+                        process1(),
                         process3(),
                       ],
                     ),
@@ -589,8 +600,114 @@ class _SignUpScreenState extends State<SignUpScreen> {
           CustomSizeBox(5.h),
           locationField(),
           CustomSizeBox(22.h),
-          textField('Hobbies/Interests', 'Click here to enter', 8,
-              textFieldController[8], true, false),
+          // textField('Hobbies/Interests', 'Click here to enter', 8,
+          //     textFieldController[8], true, false),
+          DropdownButtonHideUnderline(
+            child: DropdownButton2<String>(
+              isExpanded: true,
+              enableFeedback: selectedHobbies.length < 3,
+              hint: const Row(
+                children: [
+                  // Icon(
+                  //   Icons.list,
+                  //   size: 16,
+                  //   color: Colors.yellow,
+                  // ),
+                  SizedBox(
+                    width: 4,
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Select Item',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              items: [...JobPositionModel.hobbiesDropDown]
+                  .map((PopupMenuItem<String> item) => DropdownMenuItem<String>(
+                        value: item.value ?? "",
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              item.value ?? "",
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(width: 10),
+                            // Provides a space between the text and the icon
+                            selectedHobbies.contains(
+                                    item.value.toString().substring(2) ?? "")
+                                ? Icon(
+                                    Icons
+                                        .done, // Replace with your desired icon
+                                    size: 24,
+                                  )
+                                : SizedBox(),
+                          ],
+                        ),
+                      ))
+                  .toList(),
+              // value: items[0],
+              onChanged: selectedHobbies.length < 3 ? (String? value) {
+                var selectedText = value.toString().substring(2);
+                if (selectedHobbies.contains(selectedText) == false &&
+                    selectedHobbies.length < 3) addItem(selectedText);
+              } : null,
+              buttonStyleData: ButtonStyleData(
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.only(left: 14, right: 14),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: Colors.black26,
+                  ),
+                  color: Colors.white,
+                ),
+                elevation: 2,
+              ),
+              iconStyleData: const IconStyleData(
+                icon: Icon(
+                  Icons.arrow_drop_down,
+                ),
+                iconSize: 20,
+                iconEnabledColor: AppColors.kPrimaryColor,
+                iconDisabledColor: Colors.grey,
+              ),
+              dropdownStyleData: DropdownStyleData(
+                maxHeight: 200,
+                width: MediaQuery.of(context).size.width * 0.85,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  color: Colors.white,
+                ),
+                // offset: const Offset(-40, 0),
+                scrollbarTheme: ScrollbarThemeData(
+                  radius: const Radius.circular(40),
+                  thickness: MaterialStateProperty.all<double>(6),
+                  thumbVisibility: MaterialStateProperty.all<bool>(true),
+                ),
+              ),
+              menuItemStyleData: const MenuItemStyleData(
+                height: 40,
+                padding: EdgeInsets.only(left: 14, right: 14),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
           hobbiesCount != 0
               ? SizedBox(
                   height: 40.h,
