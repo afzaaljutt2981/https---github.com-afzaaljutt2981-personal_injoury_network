@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 
 import '../../../global/utils/app_text_styles.dart';
 import '../../../global/utils/custom_snackbar.dart';
+import '../../help_screen/view/help_screen.dart';
 import '../model/job_position_model.dart';
 
 // ignore: must_be_immutable
@@ -179,6 +180,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
           ),
+          actions: [
+            GestureDetector(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HelpScreen()),
+              ),
+              child: SizedBox(
+                width: 40.sp,
+                height: 40.sp,
+                child: Icon(
+                  Icons.help_outline,
+                  color: AppColors.kWhiteColor,
+                  size: 18.sp,
+                ),
+              ),
+            ),
+          ],
         ),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
