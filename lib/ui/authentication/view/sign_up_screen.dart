@@ -284,7 +284,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ],
         ),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,8 +308,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Center(
                   child: Image(
-                    height: 90.sp,
-                    width: 90.sp,
+                    height: 80.sp,
+                    width: 80.sp,
                     image: const AssetImage('assets/images/primary_icon.png'),
                   ),
                 ),
@@ -353,12 +353,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   padding: EdgeInsets.only(
                       left: 10.w,
                       right: 10.w,
-                      bottom: index == 3 ? 15.h : 30.h, //0.h,
+                      bottom: index == 3 ? 15.h : 20.h, //0.h,
                       top: index == 3
                           ? 15.h
                           : index == 2
                               ? 10.h
-                              : 25.h),
+                              : 15.h),
                   child: GetwhiteButton(50.sp, () async {
                     if (index == 1) {
                       if (textFieldController[0].text.isEmpty &&
@@ -405,6 +405,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         CustomSnackBar(false).showInSnackBar(
                             "please select your country", context);
                         return;
+                      }  else if (selectedCounty == "Select County") {
+                        CustomSnackBar(false).showInSnackBar(
+                            "please select your County", context);
+                        return;
                       } else if (selectedState == "Select State") {
                         CustomSnackBar(false).showInSnackBar(
                             "please select your state", context);
@@ -412,7 +416,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       } else if (textFieldController[8].text.isEmpty ||
                           selectedHobbies.length < 3) {
                         CustomSnackBar(false).showInSnackBar(
-                            "Please select atleast 3 hobbies!", context);
+                            "Please select at least 3 hobbies!", context);
                         return;
                       } else if (textFieldController[9].text.isEmpty) {
                         CustomSnackBar(false).showInSnackBar(
