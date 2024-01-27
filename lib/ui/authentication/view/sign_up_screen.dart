@@ -342,8 +342,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       controller: controller,
                       physics: const NeverScrollableScrollPhysics(),
                       children: [
-                        process2(),
                         process1(),
+                        process2(),
                         process3(),
                       ],
                     ),
@@ -413,7 +413,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         CustomSnackBar(false).showInSnackBar(
                             "please select your state", context);
                         return;
-                      } else if (textFieldController[8].text.isEmpty ||
+                      } else if (
                           selectedHobbies.length < 3) {
                         CustomSnackBar(false).showInSnackBar(
                             "Please select at least 3 hobbies!", context);

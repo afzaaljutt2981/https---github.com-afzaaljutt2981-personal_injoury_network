@@ -1,26 +1,22 @@
 import 'dart:core';
-import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:personal_injury_networking/global/helper/api_functions.dart';
-import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/chat_screen/controller/chat_controller.dart';
 import 'package:personal_injury_networking/ui/chat_screen/view/create-picked_image_view.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:provider/provider.dart';
+
 import '../../../global/helper/image_view.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
-import 'package:record/record.dart';
 import '../model/chat_model.dart';
 
 // ignore: must_be_immutable
@@ -110,7 +106,8 @@ class _ChatScreenState extends State<ChatScreen> {
             id: '',
             dateTime: null,
             messageType: 'date',
-            senderId: ''));
+            senderId: '',
+            isRead: true));
       } else if (difference?.inDays == 0 &&
           chats.first.dateTime?.day == DateTime.now().day) {
         modifiedChats.add(ChatMessage(
@@ -118,7 +115,8 @@ class _ChatScreenState extends State<ChatScreen> {
             id: '',
             dateTime: null,
             messageType: 'date',
-            senderId: ''));
+            senderId: '',
+            isRead: true));
       } else {
         modifiedChats.add(ChatMessage(
             messageContent:
@@ -126,7 +124,8 @@ class _ChatScreenState extends State<ChatScreen> {
             id: '',
             dateTime: null,
             messageType: 'date',
-            senderId: ''));
+            senderId: '',
+            isRead: true));
       }
 
       DateTime? dateTimeTracking = chats.first.dateTime;
@@ -142,7 +141,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 id: '',
                 dateTime: null,
                 messageType: 'date',
-                senderId: ''));
+                senderId: '',
+                isRead: true));
           } else if (difference?.inDays == 0 &&
               chat.dateTime?.day != dateTimeTracking?.day) {
             modifiedChats.add(ChatMessage(
@@ -150,7 +150,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 id: '',
                 dateTime: null,
                 messageType: 'date',
-                senderId: ''));
+                senderId: '',
+                isRead: true));
           } else {
             modifiedChats.add(ChatMessage(
                 messageContent:
@@ -158,7 +159,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 id: '',
                 dateTime: null,
                 messageType: 'date',
-                senderId: ''));
+                senderId: '',
+                isRead: true));
           }
         } else {}
         modifiedChats.add(chat);
@@ -509,11 +511,10 @@ class _ChatScreenState extends State<ChatScreen> {
                               "text");
 
                           if (widget.user.fcmToken != null) {
-                          
-                                await CountryStateCityRepo.sendPushNotification(
-                                    currentUser.firstName ?? "",
-                                    textController.text,
-                                    widget.user.fcmToken ?? "");
+                            await CountryStateCityRepo.sendPushNotification(
+                                currentUser.firstName ?? "",
+                                textController.text,
+                                widget.user.fcmToken ?? "");
                           }
                           setState(() {
                             textController.clear();

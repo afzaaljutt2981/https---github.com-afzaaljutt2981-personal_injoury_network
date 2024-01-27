@@ -6,13 +6,15 @@ class ChatData {
   DateTime? dateTime;
   String? lastMessage;
   String? to;
+  bool? isRead;
 
   ChatData(
       {required this.lastMessage,
       required this.name,
       required this.dateTime,
       required this.to,
-      required this.image});
+      required this.image,
+      required this.isRead});
 
   factory ChatData.fromJson(Map<String, dynamic>? json) {
     return ChatData(
@@ -20,7 +22,8 @@ class ChatData {
         to: json?['to'],
         name: json?['name'],
         dateTime: (json?['dateTime'] as Timestamp).toDate(),
-        image: json?['image']);
+        image: json?['image'],
+        isRead: json?['isRead']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -28,6 +31,7 @@ class ChatData {
         "dateTime": dateTime,
         "image": image,
         "to": to,
-        "lastMessage": lastMessage
+        "lastMessage": lastMessage,
+        "isRead": isRead
       };
 }

@@ -100,6 +100,18 @@ class _AllUsersChatState extends State<AllUsersChat> {
                                       right: 15.w,
                                       top: 14.h,
                                       bottom: 8.h),
+                                  margin:
+                                      EdgeInsets.only(left: 10.w, right: 10.w),
+                                  foregroundDecoration: chatUsers[index]
+                                              .isRead ==
+                                          false
+                                      ? BoxDecoration(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          // Adding a semi-transparent black overlay
+                                          borderRadius: BorderRadius.circular(
+                                              10), // Rounded corners
+                                        )
+                                      : null,
                                   child: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -129,7 +141,7 @@ class _AllUsersChatState extends State<AllUsersChat> {
                                                       CrossAxisAlignment.start,
                                                   children: <Widget>[
                                                     Text(
-                                                      user.lastName??"",
+                                                      user.lastName ?? "",
                                                       style: AppTextStyles.josefin(
                                                           style: TextStyle(
                                                               fontWeight:

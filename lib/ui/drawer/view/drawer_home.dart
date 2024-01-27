@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -82,7 +83,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    user!.firstName??"",
+                                    user!.firstName ?? "",
                                     style: AppTextStyles.josefin(
                                         style: TextStyle(
                                             color: AppColors.kBlackColor,
@@ -91,7 +92,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                   ),
                                   CustomSizeBox(5.h),
                                   Text(
-                                    user?.email??"",
+                                    user?.email ?? "",
                                     style: AppTextStyles.josefin(
                                         style: TextStyle(
                                             color: const Color(0xFF27261E),
@@ -215,7 +216,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                               selectedIndex: 1,
                                             )),
                                       );
-                                    }),
+                                    }, showBatch: false),
                                     CustomSizeBox(28.h),
                                     homeFeatures(
                                         'assets/images/friends_icon_drawer.png',
@@ -352,7 +353,8 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
     );
   }
 
-  Widget homeFeatures(String image, String text, {required Function onTap}) {
+  Widget homeFeatures(String image, String text,
+      {required Function onTap, bool showBatch = false}) {
     return GestureDetector(
       onTap: () {
         onTap();
@@ -360,7 +362,15 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Image(height: 24.sp, width: 24.sp, image: AssetImage(image)),
+          showBatch
+              ? badges.Badge(
+                  showBadge: ! (user?.showSimpleNotification ?? false),
+                  position: badges.BadgePosition.custom(
+                    end: 0,
+                  ),
+                  child: Image(
+                      height: 24.sp, width: 24.sp, image: AssetImage(image)))
+              : Image(height: 24.sp, width: 24.sp, image: AssetImage(image)),
           SizedBox(
             width: 10.w,
           ),
