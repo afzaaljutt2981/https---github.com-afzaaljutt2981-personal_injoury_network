@@ -461,6 +461,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               phone: textFieldController[4].text,
                               position: textFieldController[3].text,
                               location: "$selectedState,$selectedCountry,$selectedCounty",
+                              country: selectedCountry,
                               reference: textFieldController[9].text,
                               hobbies: selectedHobbies,
                               userName: textFieldController[10].text);
@@ -474,6 +475,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               email: textFieldController[5].text,
                               website: textFieldController[6].text,
                               location: "$selectedState,$selectedCountry,$selectedCounty",
+                              country: selectedCountry,
                               reference: textFieldController[9].text,
                               password: textFieldController[11].text,
                               hobbies: selectedHobbies,

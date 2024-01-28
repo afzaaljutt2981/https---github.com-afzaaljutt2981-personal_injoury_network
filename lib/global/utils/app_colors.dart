@@ -10,4 +10,6 @@ class AppColors {
   static const bottomSheetContianerColor = Color(0xffF9FDFF);
   static const kgreenColor = Color(0xff71C341);
   static const kSnackbarSuccessColor = Color(0xff00A2FF);
+  static const textFieldColor = Color(0xffF5F4FF);
+  static const dashedBorderColor = Color(0xffDFE1E8);
 }

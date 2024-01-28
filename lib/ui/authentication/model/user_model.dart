@@ -10,6 +10,7 @@ class UserModel {
   bool? showSimpleNotification;
   bool? showMessageNotification;
   late String? location;
+  late String? country;
   late String? userName;
   late String? id;
   late String? reference;
@@ -23,6 +24,7 @@ class UserModel {
 
   UserModel(
       {required this.location,
+      required this.country,
       required this.position,
       required this.email,
       required this.firstName,
@@ -30,7 +32,7 @@ class UserModel {
       required this.id,
       required this.reference,
       this.showSimpleNotification,
-        this.showMessageNotification,
+      this.showMessageNotification,
       required this.hobbies,
       required this.followers,
       required this.followingRequests,
@@ -52,6 +54,7 @@ class UserModel {
     return UserModel(
       userName: json?['userName'],
       location: json?['location'],
+      country: json?['country'],
       position: json?['position'],
       email: json?['email'],
       id: json?['id'],
@@ -82,6 +85,7 @@ class UserModel {
       "lastName": lastName,
       "company": company,
       "location": location,
+      "country": country,
       "pImage": pImage,
       "phone": phone,
       "id": id,
@@ -100,5 +104,10 @@ class UserModel {
       "followingRequests": followingRequests,
       "isDeleted": isDeleted
     };
+  }
+
+  @override
+  String toString() {
+    return 'UserModel{firstName: $firstName, lastName: $lastName, company: $company, position: $position, phone: $phone, email: $email, pImage: $pImage, website: $website, showSimpleNotification: $showSimpleNotification, showMessageNotification: $showMessageNotification, location: $location, country: $country, userName: $userName, id: $id, reference: $reference, userType: $userType, fcmToken: $fcmToken, hobbies: $hobbies, followers: $followers, followings: $followings, followingRequests: $followingRequests, isDeleted: $isDeleted}';
   }
 }

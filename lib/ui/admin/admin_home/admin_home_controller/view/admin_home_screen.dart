@@ -6,6 +6,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/admin/admin_home/admin_home_controller/view/user_scaning_screen_for_admin.dart';
 import 'package:personal_injury_networking/ui/admin/admin_home/all_registered_marketers/view/create_all_registered_users_view.dart';
+import 'package:personal_injury_networking/ui/admin/all_campaigns/view/create_all_created_campign_view.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,7 @@ import '../../../../../global/utils/app_text_styles.dart';
 import '../../../../../global/utils/functions.dart';
 import '../../../../authentication/model/user_model.dart';
 import '../../../../authentication/view/login_view.dart';
+import '../../../../compaign/view/create_compaign_view.dart';
 import '../../../../create_event/models/event_model.dart';
 import '../../../../drawer/view/create_drawer_view.dart';
 import '../../../../events/view/create_all_events_view.dart';
@@ -435,6 +437,74 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                       const SizedBox(height: 8),
                                       const Text(
                                         'QR Scan to Find\n Users',
+                                        style: TextStyle(
+                                          color: Color(0xFF111827),
+                                          fontSize: 14,
+                                          fontFamily: 'Josefin Sans',
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: 0.30,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              top: 280,
+                              left: 20,
+                              child: GestureDetector(
+                                onTap: () {
+                                  print("Button clicked");
+                                  Navigator.push(
+                                    context,
+                                    PageTransition(
+                                      childCurrent: widget,
+                                      type: PageTransitionType.leftToRight,
+                                      duration:
+                                      const Duration(milliseconds: 200),
+                                      reverseDuration:
+                                      const Duration(milliseconds: 200),
+                                      child: CreateAllCreatedCampaignView(
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  width: screenWidth * 0.4,
+                                  height: 114,
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: ShapeDecoration(
+                                    color: Color(0xFFFFFFFF),
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          width: 1, color: Color(0xFFE5E7EB)),
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: 32,
+                                        height: 32,
+                                        clipBehavior: Clip.antiAlias,
+                                        decoration: BoxDecoration(),
+                                        child: Center(
+                                          child: Image(
+                                            height: 80.sp,
+                                            width: 80.sp,
+                                            image: const AssetImage(
+                                                'assets/images/frame.png'),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      const Text(
+                                        'Create a \nCampaign',
                                         style: TextStyle(
                                           color: Color(0xFF111827),
                                           fontSize: 14,

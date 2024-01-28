@@ -45,8 +45,7 @@ class AuthController extends ChangeNotifier {
     return token;
   }
 
-  Future<void> signup(
-    BuildContext context, {
+  Future<void> signup(BuildContext context, {
     required String firstName,
     required String lastName,
     required String companyName,
@@ -54,6 +53,7 @@ class AuthController extends ChangeNotifier {
     required String phone,
     required String email,
     required String position,
+    required String country,
     required String location,
     required String password,
     required String reference,
@@ -76,6 +76,7 @@ class AuthController extends ChangeNotifier {
           UserModel model = UserModel(
               id: doc.id,
               location: location,
+              country: country,
               position: position,
               email: email,
               firstName: firstName,
@@ -126,8 +127,8 @@ class AuthController extends ChangeNotifier {
     // }
   }
 
-  Future<void> signIn(
-      String email, String password, BuildContext context) async {
+  Future<void> signIn(String email, String password,
+      BuildContext context) async {
     try {
       Functions.showLoaderDialog(context);
       await FirebaseAuth.instance
@@ -154,7 +155,7 @@ class AuthController extends ChangeNotifier {
                     MaterialPageRoute(
                         builder: (_) =>
                             BottomNavigationScreen(selectedIndex: 0)),
-                    (route) => false);
+                        (route) => false);
               }
             } else {
               Constants.userType = user?.userType ?? "";
@@ -164,11 +165,12 @@ class AuthController extends ChangeNotifier {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => CreateVerifyIdentityView(
+                      builder: (_) =>
+                          CreateVerifyIdentityView(
                             email: "",
                             from: 2,
                           )),
-                  (route) => false);
+                      (route) => false);
             }
           }
         } else {
@@ -199,16 +201,17 @@ class AuthController extends ChangeNotifier {
                 context,
                 MaterialPageRoute(
                     builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-                (route) => false);
+                    (route) => false);
           } else {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => CreateVerifyIdentityView(
+                    builder: (context) =>
+                        CreateVerifyIdentityView(
                           email: email.toString(),
                           from: 2,
                         )),
-                (route) => false);
+                    (route) => false);
           }
         }
       } else {
@@ -219,8 +222,7 @@ class AuthController extends ChangeNotifier {
     });
   }
 
-  Future<void> updateUser(
-    BuildContext context, {
+  Future<void> updateUser(BuildContext context, {
     required String firstName,
     required String lastName,
     required String companyName,
@@ -229,6 +231,7 @@ class AuthController extends ChangeNotifier {
     required String phone,
     required String position,
     required String location,
+    required String country,
     required String reference,
     required List<String> hobbies,
     required String userName,
@@ -242,6 +245,7 @@ class AuthController extends ChangeNotifier {
         "company": companyName,
         "email": email,
         "location": location,
+        "country": country,
         "phone": int.parse(phone),
         "website": website,
         "reference": reference,
@@ -256,7 +260,7 @@ class AuthController extends ChangeNotifier {
           context,
           MaterialPageRoute(
               builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-          (route) => false);
+              (route) => false);
       notifyListeners();
     } on Exception catch (error) {
       // ignore: use_build_context_synchronously
