@@ -43,14 +43,14 @@ class CampaignController extends ChangeNotifier {
       //   eventTickets.add(TicketModel.fromJson(element.data()));
       // }
       print(
-          "campaign new object -> ${CampaignModel(id: "campaignDoc.id", pImage: pImage, status: "UpComing", country: campaignCountry, jobOrPosition: campaignJob, message: campaignDescription, timeCreated: DateTime.now(), members: users).toJson()}");
+          "campaign new object -> ${CampaignModel(id: "campaignDoc.id", pImage: pImage, status: "Draft", country: campaignCountry, jobOrPosition: campaignJob, message: campaignDescription, timeCreated: DateTime.now(), members: users).toJson()}");
       var campaignDoc = campaignsRef.doc();
       var uId = FirebaseAuth.instance.currentUser!.uid;
 
       await campaignDoc.set(CampaignModel(
               id: campaignDoc.id,
               pImage: pImage,
-              status: "UpComing",
+              status: "Draft",
               country: campaignCountry,
               jobOrPosition: campaignJob,
               message: campaignDescription,

@@ -1,5 +1,4 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,26 +13,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
 
-import 'package:rxdart/rxdart.dart';
-
 // used to pass messages from event handler to the UI
 // final _messageStreamController = BehaviorSubject<RemoteMessage>();
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 Future<void> main() async {
-  Future<void> _firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
-    await Firebase.initializeApp();
-
-
-
-    if (kDebugMode) {
-      print("Handling a background message: ${message.messageId}");
-      print('Message data: ${message.data}');
-      print('Message notification: ${message.notification?.title}');
-      print('Message notification: ${message.notification?.body}');
-    }
-  }
+  // Future<void> _firebaseMessagingBackgroundHandler(
+  //     RemoteMessage message) async {
+  //   await Firebase.initializeApp();
+  //
+  //   if (kDebugMode) {
+  //     print("Handling a background message: ${message.messageId}");
+  //     print('Message data: ${message.data}');
+  //     print('Message notification: ${message.notification?.title}');
+  //     print('Message notification: ${message.notification?.body}');
+  //   }
+  // }
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -54,13 +50,13 @@ Future<void> main() async {
     provisional: false,
     sound: true,
   );
-  var pref = await SharedPreferences.getInstance();
+  // var pref = await SharedPreferences.getInstance();
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-    if (kDebugMode) {
-      showOverlayNotification(navigatorKey.currentContext!, message);
-    }
+    // if (kDebugMode) {
+    showOverlayNotification(navigatorKey.currentContext!, message);
+    // }
 
     // _messageStreamController.sink.add(message);
   });
@@ -79,7 +75,8 @@ Future<void> main() async {
 void showOverlayNotification(BuildContext context, RemoteMessage message) {
   if (message.notification!.body!.contains("Cancel") ||
       message.notification!.body!.contains("Started")) {
-    Provider.of<MyProfileController>(context, listen: false).updateUserNotification(true);
+    Provider.of<MyProfileController>(context, listen: false)
+        .updateUserNotification(true);
   }
   showSimpleNotification(
       Text(

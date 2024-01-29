@@ -205,7 +205,7 @@ class _AllCreatedCampaignsScreen extends State<AllCreatedCampaignsScreen> {
           height: 5.h,
         ),
         GestureDetector(
-          onTap: (model.members?.length ?? 0) > 0
+          onTap: (model.members?.length ?? 0) > 0 && model.status != "Completed"
               ? () async {
                   print("Button clicked..");
                   await context
@@ -223,7 +223,8 @@ class _AllCreatedCampaignsScreen extends State<AllCreatedCampaignsScreen> {
               : null,
           child: Container(
             decoration: BoxDecoration(
-                color: (model.members?.length ?? 0) > 0
+                color: (model.members?.length ?? 0) > 0 &&
+                        model.status != "Completed"
                     ? AppColors.kPrimaryColor
                     : AppColors.dashedBorderColor,
                 borderRadius: BorderRadius.circular(7.sp)),
@@ -233,7 +234,8 @@ class _AllCreatedCampaignsScreen extends State<AllCreatedCampaignsScreen> {
                 'Initiate',
                 style: AppTextStyles.josefin(
                     style: TextStyle(
-                        color: (model.members?.length ?? 0) > 0
+                        color: (model.members?.length ?? 0) > 0 &&
+                                model.status != "Completed"
                             ? Colors.white
                             : Colors.black,
                         fontSize: 12.sp)),

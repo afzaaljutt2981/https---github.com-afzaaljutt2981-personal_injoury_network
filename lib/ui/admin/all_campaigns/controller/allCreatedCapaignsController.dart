@@ -33,7 +33,7 @@ class AllCreatedCampaignsController extends ChangeNotifier {
   }) async {
     try {
       var doc = campaignsRef.doc(campaign.id);
-      await doc.update({"status": "Draft"});
+      await doc.update({"status": "initiated"});
       campaign.members?.forEach((userId) async {
         usersRef.doc(userId).get().then((userSnapShot) async {
           UserModel? user =
