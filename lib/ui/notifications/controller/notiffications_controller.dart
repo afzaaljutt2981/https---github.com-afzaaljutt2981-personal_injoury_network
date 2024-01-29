@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_injury_networking/global/utils/custom_snackbar.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
+import 'package:personal_injury_networking/ui/compaign/models/campaign_model.dart';
 import 'package:personal_injury_networking/ui/notifications/model/nitofications_model.dart';
 
 import '../../authentication/model/user_model.dart';
@@ -12,11 +13,29 @@ import '../../authentication/model/user_model.dart';
 class NotificationsController extends ChangeNotifier {
   NotificationsController() {
     getUserNotifications();
+    getAllCampaigns();
   }
 
   CollectionReference user = FirebaseFirestore.instance.collection("users");
+  CollectionReference campaignsRef =
+      FirebaseFirestore.instance.collection("campaigns");
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? notificationsStream;
+  StreamSubscription<QuerySnapshot<Object?>>? campaignsStream;
+
   List<NotificationsModel> notifications = [];
+  List<CampaignModel> allCampaigns = [];
+
+  getAllCampaigns() {
+    campaignsStream = campaignsRef.snapshots().listen((event) {
+      allCampaigns = [];
+      for (var element in event.docs) {
+        allCampaigns.add(
+            CampaignModel.fromJson(element.data() as Map<String, dynamic>));
+        print("Campaigns -> ${CampaignModel.fromJson(element.data() as Map<String, dynamic>).toString()}");
+      }
+      notifyListeners();
+    });
+  }
 
   getUserNotifications() {
     var uId = FirebaseAuth.instance.currentUser!.uid;
@@ -37,8 +56,8 @@ class NotificationsController extends ChangeNotifier {
 
   followTap(
       UserModel? userModel, String followerId, BuildContext context) async {
-    final collectionRef = user.doc(userModel?.id??"");
-    var fList = userModel?.followers??[];
+    final collectionRef = user.doc(userModel?.id ?? "");
+    var fList = userModel?.followers ?? [];
 
     if (fList?.contains(followerId) == true) {
       fList?.remove(followerId);
@@ -117,7 +136,8 @@ class NotificationsController extends ChangeNotifier {
 
   @override
   void dispose() {
-    super.dispose();
     notificationsStream?.cancel();
+    campaignsStream?.cancel();
+    super.dispose();
   }
 }

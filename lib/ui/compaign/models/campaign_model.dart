@@ -3,7 +3,7 @@ class CampaignModel {
   late String? country;
   late String? jobOrPosition;
   late String? message;
-  late DateTime? timeCreated;
+  late int? timeCreated;
   List<String?>? members;
   late String? pImage;
   late String? status;
@@ -42,4 +42,9 @@ class CampaignModel {
         "pImage": pImage,
         "status": status
       };
+
+  @override
+  String toString() {
+    return 'CampaignModel{id: $id, country: $country, jobOrPosition: $jobOrPosition, message: $message, timeCreated: $timeCreated, members: $members, pImage: $pImage, status: $status}';
+  }
 }

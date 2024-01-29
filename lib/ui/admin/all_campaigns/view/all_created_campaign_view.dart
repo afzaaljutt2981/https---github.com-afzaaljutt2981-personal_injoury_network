@@ -68,7 +68,8 @@ class _AllCreatedCampaignsScreen extends State<AllCreatedCampaignsScreen> {
                         itemCount: allCampaigns.length,
                         itemBuilder: (context, index) {
                           var model = allCampaigns[index];
-                          return Padding(
+                          return
+                            Padding(
                             padding: EdgeInsets.only(
                                 left: 15.w, right: 15.w, bottom: 10.h),
                             child: Container(

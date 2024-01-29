@@ -7,6 +7,7 @@ import 'package:personal_injury_networking/ui/authentication/model/user_model.da
 import '../../../compaign/models/campaign_model.dart';
 
 class AllCreatedCampaignsController extends ChangeNotifier {
+
   AllCreatedCampaignsController() {
     getAllCampaigns();
   }
