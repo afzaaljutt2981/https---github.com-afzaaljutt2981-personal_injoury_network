@@ -77,7 +77,7 @@ class _CreateCampaign extends State<CreateCampaign> {
                       children: [
                         CustomSizeBox(20.h),
                         Text(
-                          'Title',
+                          'Country',
                           style: AppTextStyles.josefin(
                               style: TextStyle(
                                   color: Colors.black, fontSize: 14.sp)),

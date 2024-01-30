@@ -135,8 +135,8 @@ class _AllCreatedCampaignsScreen extends State<AllCreatedCampaignsScreen> {
                   ),
                 ],
               )
-            : Center(
-                child: Text("No user found"),
+            : const Center(
+                child: Text("No Campaign found"),
               ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {

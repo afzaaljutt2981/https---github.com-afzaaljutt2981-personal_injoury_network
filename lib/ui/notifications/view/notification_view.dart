@@ -36,15 +36,23 @@ class _NotificationViewState extends State<NotificationView> {
 
   @override
   Widget build(BuildContext context) {
+    print(currentUser);
     notiList = [];
     notiList = context.watch<NotificationsController>().notifications;
     allCampaigns = context.watch<NotificationsController>().allCampaigns;
     allUsers = context.watch<EventsController>().allUsers;
+    currentUser = allUsers.firstWhere(
+        (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
     allNotificationsAndCampaigns = notiList
         .map((e) => GenericDataModel(
             notificationsModel: e, campaignModel: null, notificationType: "N"))
         .toList()
       ..addAll(allCampaigns
+          .where((element) =>
+              element.status == "Completed" &&
+              element.country == currentUser?.country &&
+              element.jobOrPosition == currentUser?.position)
+          .toList()
           .map((campaign) => GenericDataModel(
               notificationsModel: null,
               campaignModel: campaign,
