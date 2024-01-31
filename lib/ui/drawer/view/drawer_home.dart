@@ -362,15 +362,16 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          showBatch
-              ? badges.Badge(
-                  showBadge: ! (user?.showSimpleNotification ?? false),
-                  position: badges.BadgePosition.custom(
-                    end: 0,
-                  ),
-                  child: Image(
-                      height: 24.sp, width: 24.sp, image: AssetImage(image)))
-              : Image(height: 24.sp, width: 24.sp, image: AssetImage(image)),
+          // showBatch
+          //     ? badges.Badge(
+          //         showBadge: ! (user?.showSimpleNotification ?? false),
+          //         position: badges.BadgePosition.custom(
+          //           end: 0,
+          //         ),
+          //         child: Image(
+          //             height: 24.sp, width: 24.sp, image: AssetImage(image)))
+          //     :
+          Image(height: 24.sp, width: 24.sp, image: AssetImage(image)),
           SizedBox(
             width: 10.w,
           ),
