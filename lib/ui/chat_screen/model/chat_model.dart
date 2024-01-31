@@ -34,4 +34,9 @@ class ChatMessage {
         "dateTime": dateTime,
         "isRead": isRead
       };
+
+  @override
+  String toString() {
+    return 'ChatMessage{id: $id, messageContent: $messageContent, messageType: $messageType, senderId: $senderId, dateTime: $dateTime, isRead: $isRead}';
+  }
 }

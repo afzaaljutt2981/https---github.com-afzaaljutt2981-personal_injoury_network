@@ -34,4 +34,9 @@ class ChatData {
         "lastMessage": lastMessage,
         "isRead": isRead
       };
+
+  @override
+  String toString() {
+    return 'ChatData{name: $name, image: $image, dateTime: $dateTime, lastMessage: $lastMessage, to: $to, isRead: $isRead}';
+  }
 }

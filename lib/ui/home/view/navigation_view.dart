@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
+import 'package:personal_injury_networking/ui/chat_screen/model/chat_data.dart';
 
 import '../../../global/utils/constants.dart';
 import '../../admin/admin_home/admin_home_controller/view/admin_create_home_view.dart';
@@ -27,6 +28,8 @@ class BottomNavigationScreen extends StatefulWidget {
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   PageController? _pageController;
   int? selectedIndex;
+  List<ChatData> allChats = [];
+  int unreadChats = 0;
 
   @override
   void initState() {
@@ -67,13 +70,38 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               FirebaseAuth.instance.currentUser?.email?.toLowerCase() ==
                       Constants.adminEmail.toLowerCase()
                   ? CreateAdminHomeScreenView()
-                  : CreateHomeScreenView(),
+                  : CreateHomeScreenView(
+                      messagesCallBack: (List<ChatData> chats) {
+                        print("chats -> $chats");
+                        if (chats
+                                .where((element) => element?.isRead == false)
+                                .toList()
+                                .length !=
+                            allChats
+                                .where((element) => element?.isRead == false)
+                                .toList()
+                                .length) {
+                          Future.delayed(Duration.zero, () async {
+                            setState(() {
+                              allChats = chats;
+                              unreadChats = allChats
+                                  .where((element) => element?.isRead == false)
+                                  .toList()
+                                  .length;
+                            });
+                          });
+                        }
+                      },
+                    ),
               if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
                   Constants.adminEmail.toLowerCase())
                 CreateChatView(),
               CreateQrScanView(from: "2"),
               CreateAllEventsView(from: "2"),
-              CreateMyProfileView(from: "2", uid: "",)
+              CreateMyProfileView(
+                from: "2",
+                uid: "",
+              )
             ],
           ),
         ), //widgets[selectedIndex],
@@ -107,8 +135,34 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                 if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
                     Constants.adminEmail.toLowerCase())
                   BottomNavigationBarItem(
-                    icon: ImageIcon(
-                        AssetImage('assets/images/chat_icon_home_b.png')),
+                    icon: Stack(children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 25),
+                        child: Container(
+                          width: 20.0, // Diameter of the circle
+                          height: 20.0, // Diameter of the circle
+                          decoration: BoxDecoration(
+                            color: AppColors.redColor, // Circle color
+                            shape:
+                                BoxShape.circle, // Makes the container a circle
+                          ),
+                          child: Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(2),
+                              child: Text(
+                                unreadChats.toString(), // The counting number
+                                style: TextStyle(
+                                  color: Colors.white, // Number color
+                                  fontSize: 15, // Adjust the size of the number
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      ImageIcon(
+                          AssetImage('assets/images/chat_icon_home_b.png')),
+                    ]),
                     label: "Messages",
                   ),
                 BottomNavigationBarItem(

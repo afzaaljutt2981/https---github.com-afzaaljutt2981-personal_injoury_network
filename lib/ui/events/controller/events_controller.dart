@@ -5,8 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_injury_networking/global/utils/custom_snackbar.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
+import 'package:personal_injury_networking/ui/chat_screen/model/chat_data.dart';
+import 'package:personal_injury_networking/ui/chat_screen/model/chat_model.dart';
 import 'package:personal_injury_networking/ui/events_details/models/ticket_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../authentication/model/user_model.dart';
 import '../../create_event/models/event_model.dart';
@@ -17,18 +18,24 @@ class EventsController extends ChangeNotifier {
     getAllUsers();
     getAllEvents();
     getUserBookedEvents();
+    getAllChats();
   }
 
   CollectionReference ref = FirebaseFirestore.instance.collection("events");
   CollectionReference users = FirebaseFirestore.instance.collection("users");
+  CollectionReference messagesRef =
+      FirebaseFirestore.instance.collection("messages");
+
   StreamSubscription<QuerySnapshot<Object?>>? usersStream;
   StreamSubscription<QuerySnapshot<Object?>>? eventStream;
   StreamSubscription<QuerySnapshot<Object?>>? userEventsStream;
+  StreamSubscription<QuerySnapshot<Object?>>? messagesStream;
   StreamSubscription<QuerySnapshot<Object?>>? res;
   List<TicketModel> userBookedEvents = [];
   List<TicketModel> eventTickets = [];
   List<EventModel> allEvents = [];
   List<UserModel> allUsers = [];
+  List<ChatData> allMessages = [];
 
   getAllUsers() {
     usersStream = users.snapshots().listen((event) {
@@ -40,6 +47,21 @@ class EventsController extends ChangeNotifier {
       notifyListeners();
     });
   }
+
+  getAllChats() async {
+    messagesStream =  messagesRef
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .collection("chats")
+        .snapshots()
+        .listen((messages) {
+      allMessages = [];
+      for (var element in messages.docs) {
+        allMessages
+            .add(ChatData.fromJson(element.data() as Map<String, dynamic>));
+      }
+    });
+  }
+
   getAllEvents() async {
     allEvents = [];
     eventStream = ref.snapshots().listen((event) async {
@@ -49,8 +71,9 @@ class EventsController extends ChangeNotifier {
             .add(EventModel.fromJson(element.data() as Map<String, dynamic>));
       });
     });
-   // notifyListeners();
+    // notifyListeners();
   }
+
   getUserBookedEvents() {
     if (FirebaseAuth.instance.currentUser != null) {
       userEventsStream = users
@@ -103,5 +126,6 @@ class EventsController extends ChangeNotifier {
     usersStream?.cancel();
     eventStream?.cancel();
     userEventsStream?.cancel();
+    messagesStream?.cancel();
   }
 }

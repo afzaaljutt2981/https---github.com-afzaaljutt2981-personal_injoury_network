@@ -12,4 +12,5 @@ class AppColors {
   static const kSnackbarSuccessColor = Color(0xff00A2FF);
   static const textFieldColor = Color(0xffF5F4FF);
   static const dashedBorderColor = Color(0xffDFE1E8);
+  static const redColor = Color(0xC2B20303);
 }

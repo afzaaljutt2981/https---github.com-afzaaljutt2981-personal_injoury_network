@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
+import 'package:personal_injury_networking/ui/chat_screen/model/chat_data.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,8 @@ import '../../notifications/view/create_notifications_view.dart';
 import 'navigation_view.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key, required this.messagesCallBack});
+  Function(List<ChatData> chats) messagesCallBack;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -34,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   UserModel? user;
   List<UserModel> allUsers = [];
   bool showBadge = false;
-
+  List<ChatData> allChats = [];
   @override
   Widget build(BuildContext context) {
     events = [];
@@ -43,6 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
       user = allUsers.firstWhere(
           (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
     }
+    allChats = context.watch<EventsController>().allMessages;
+    widget.messagesCallBack.call(allChats);
     if (user != null && user!.userType == "user") {
       events = context
           .watch<EventsController>()
