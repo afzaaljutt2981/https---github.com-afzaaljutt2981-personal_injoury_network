@@ -32,7 +32,8 @@ class CampaignController extends ChangeNotifier {
       UserModel user;
       for (var element in event.docs) {
         user = UserModel.fromJson(element.data() as Map<String, dynamic>);
-        if ((user.county == county || county == "all") && (user.position == job || job == "all")) {
+        if ((user.county == county || county == "all") &&
+            (user.position == job || job == "all")) {
           allUsers.add(user);
         }
       }
@@ -52,8 +53,8 @@ class CampaignController extends ChangeNotifier {
     print("campaignDescription -> $campaignDescription");
     List<String?> users = [];
     usersRef
-        .where("position", isEqualTo: campaignJob)
-        .where("country", isEqualTo: campaignCountry)
+        // .where("position", isEqualTo: campaignJob)
+        // .where("country", isEqualTo: campaignCountry)
         .get()
         .then((usersSnapShot) async {
       // for (var element in usersSnapShot.docs) {
@@ -61,10 +62,14 @@ class CampaignController extends ChangeNotifier {
       //       .add(ChatMessage.fromJson(element.data() as Map<String, dynamic>?));
       // }
       // print("userSnapShot lenght ->  ${usersSnapShot.docs.length}");
+      UserModel parsedUser;
       usersSnapShot.docs.forEach((user) {
-        if (user.data() != null) {
-          users
-              .add(UserModel.fromJson(user.data() as Map<String, dynamic>?).id);
+        parsedUser = UserModel.fromJson(user.data() as Map<String, dynamic>?);
+        if (user.data() != null &&
+            (campaignCountry == "all" ||
+                parsedUser.county == campaignCountry) &&
+            (campaignJob == "all" || parsedUser.position == campaignJob)) {
+          users.add(parsedUser.id);
         }
       });
       users.forEach((element) {
