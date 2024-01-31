@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -9,7 +11,6 @@ import 'package:personal_injury_networking/ui/events/controller/events_controlle
 import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
 import 'package:personal_injury_networking/ui/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
 
@@ -75,8 +76,12 @@ Future<void> main() async {
 void showOverlayNotification(BuildContext context, RemoteMessage message) {
   if (message.notification!.body!.contains("Cancel") ||
       message.notification!.body!.contains("Started")) {
-    Provider.of<MyProfileController>(context, listen: false)
-        .updateUserNotification(true);
+    // Provider.of<MyProfileController>(context, listen: false)
+    //     .updateUserNotification(true);
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .update({"isNewNotificationReceived": true});
   }
   showSimpleNotification(
       Text(

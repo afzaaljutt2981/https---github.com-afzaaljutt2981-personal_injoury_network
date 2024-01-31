@@ -60,6 +60,7 @@ class AuthController extends ChangeNotifier {
     required String reference,
     required List<String> hobbies,
     required String userName,
+    required bool isNewNotificationReceived,
   }) async {
     try {
       Functions.showLoaderDialog(context);
@@ -73,7 +74,7 @@ class AuthController extends ChangeNotifier {
           var doc = ref.doc(FirebaseAuth.instance.currentUser!.uid);
 
           String? token = await getFirebaseMessagingToken();
-          Future.delayed(Duration(seconds: 1));
+          Future.delayed(const Duration(seconds: 1));
           UserModel model = UserModel(
               id: doc.id,
               location: location,
@@ -93,7 +94,8 @@ class AuthController extends ChangeNotifier {
               hobbies: hobbies,
               followers: [],
               followings: [],
-              followingRequests: []);
+              followingRequests: [],
+              isNewNotificationReceived:isNewNotificationReceived);
           await doc.set(model.toJson());
           getUserData(context, email);
 
@@ -275,7 +277,7 @@ class AuthController extends ChangeNotifier {
 
   updateUserToken(String userId) async {
     String? token = await getFirebaseMessagingToken();
-    Future.delayed(Duration(seconds: 1));
+    Future.delayed(const Duration(seconds: 1));
     if (token != null) {
       await ref.doc(userId).update({"fcmToken": token});
     }

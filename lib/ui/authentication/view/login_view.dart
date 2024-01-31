@@ -440,6 +440,7 @@ class _LoginViewState extends State<LoginView> {
               userType: "user",
               company: "",
               website: "",
+            isNewNotificationReceived: false
             ).toJson());
         Constants.userDisplayName = user.displayName ?? '';
         Constants.userEmail = userEmail ?? user.email ?? "";

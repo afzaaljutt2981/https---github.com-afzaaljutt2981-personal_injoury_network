@@ -18,13 +18,14 @@ class EventsController extends ChangeNotifier {
     getAllUsers();
     getAllEvents();
     getUserBookedEvents();
-    getAllChats();
+    // getAllChats();
   }
 
   CollectionReference ref = FirebaseFirestore.instance.collection("events");
   CollectionReference users = FirebaseFirestore.instance.collection("users");
-  CollectionReference messagesRef =
-      FirebaseFirestore.instance.collection("messages");
+
+  // CollectionReference messagesRef =
+  //     FirebaseFirestore.instance.collection("messages");
 
   StreamSubscription<QuerySnapshot<Object?>>? usersStream;
   StreamSubscription<QuerySnapshot<Object?>>? eventStream;
@@ -48,19 +49,20 @@ class EventsController extends ChangeNotifier {
     });
   }
 
-  getAllChats() async {
-    messagesStream =  messagesRef
-        .doc(FirebaseAuth.instance.currentUser?.uid)
-        .collection("chats")
-        .snapshots()
-        .listen((messages) {
-      allMessages = [];
-      for (var element in messages.docs) {
-        allMessages
-            .add(ChatData.fromJson(element.data() as Map<String, dynamic>));
-      }
-    });
-  }
+
+  // getAllChats() async {
+  //   messagesStream =  messagesRef
+  //       .doc(FirebaseAuth.instance.currentUser?.uid)
+  //       .collection("chats")
+  //       .snapshots()
+  //       .listen((messages) {
+  //     allMessages = [];
+  //     for (var element in messages.docs) {
+  //       allMessages
+  //           .add(ChatData.fromJson(element.data() as Map<String, dynamic>));
+  //     }
+  //   });
+  // }
 
   getAllEvents() async {
     allEvents = [];
@@ -104,6 +106,8 @@ class EventsController extends ChangeNotifier {
               notificationType: "Invite",
               status: '')
           .toJson());
+      users.doc(userId).update({"isNewNotificationReceived": true});
+
       await updateEventInvite(event, userId);
       Navigator.pop(context);
     } catch (e) {

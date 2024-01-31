@@ -75,6 +75,8 @@ class OtherUserProfileController extends ChangeNotifier {
           .toJson());
       print("sender.id ->  ${sender.id}");
       print("sender.followingRequests ->  ${sender.followingRequests}");
+
+      user.doc(userId).update({"isNewNotificationReceived": true});
       final collectionRef = user.doc(sender.id);
       var fList = sender.followingRequests;
       print("fList -> ${fList}");
@@ -130,18 +132,15 @@ class OtherUserProfileController extends ChangeNotifier {
     }
 
     print(allNotificationsOfCurrentUser);
-    var totalRequestsSentToday = allNotificationsOfCurrentUser
-        .where((element) =>
-    DateTime.now()
-        .difference(
-        DateTime.fromMillisecondsSinceEpoch(element.time ?? 0))
-        .inDays ==
-        0);
-    print(
-        "totalRequestsSentToday -> ${totalRequestsSentToday}");
-    print(
-        "len totalRequestsSentToday -> ${totalRequestsSentToday.length}");
-
+    var totalRequestsSentToday = allNotificationsOfCurrentUser.where(
+        (element) =>
+            DateTime.now()
+                .difference(
+                    DateTime.fromMillisecondsSinceEpoch(element.time ?? 0))
+                .inDays ==
+            0);
+    print("totalRequestsSentToday -> ${totalRequestsSentToday}");
+    print("len totalRequestsSentToday -> ${totalRequestsSentToday.length}");
 
     // return user.doc(senderId).collection("notifications").get().then((events) {
     //   for (var element in events.docs) {

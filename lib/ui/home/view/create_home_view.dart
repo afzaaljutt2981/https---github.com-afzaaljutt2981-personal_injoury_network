@@ -6,9 +6,11 @@ import '../../chat_screen/model/chat_data.dart';
 import 'home_screen.dart';
 
 class CreateHomeScreenView extends StatefulWidget {
-  CreateHomeScreenView({super.key, required this.messagesCallBack});
+  CreateHomeScreenView({super.key,
+    // required this.messagesCallBack
+  });
 
-  Function(List<ChatData> chats) messagesCallBack;
+  // Function(List<ChatData> chats) messagesCallBack;
 
   @override
   State<CreateHomeScreenView> createState() => _CreateHomeScreenViewState();
@@ -19,6 +21,8 @@ class _CreateHomeScreenViewState extends State<CreateHomeScreenView> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<EventsController>(
         create: (_) => EventsController(),
-        child: HomeScreen(messagesCallBack: widget.messagesCallBack));
+        child: HomeScreen(
+            // messagesCallBack: widget.messagesCallBack
+        ));
   }
 }

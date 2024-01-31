@@ -76,6 +76,8 @@ class EventDetailsController extends ChangeNotifier {
             notificationType: "cancel Event",
             status: 'Pending')
         .toJson());
+    await users.doc(userId).update({"isNewNotificationReceived": true});
+
     print("i am here");
   }
 }

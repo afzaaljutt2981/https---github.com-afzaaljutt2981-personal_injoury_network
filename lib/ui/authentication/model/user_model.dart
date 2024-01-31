@@ -22,11 +22,12 @@ class UserModel {
   List<String?>? followings = [];
   List<String?>? followingRequests = [];
   bool? isDeleted = false;
+  bool? isNewNotificationReceived = false;
 
   UserModel(
       {required this.location,
       required this.country,
-        required this.county,
+      required this.county,
       required this.position,
       required this.email,
       required this.firstName,
@@ -46,7 +47,8 @@ class UserModel {
       required this.userType,
       required this.company,
       required this.website,
-      this.isDeleted});
+      this.isDeleted,
+      required this.isNewNotificationReceived});
 
   factory UserModel.fromJson(Map<String, dynamic>? json) {
     List hobbies = json?['hobbies'] ?? [];
@@ -79,6 +81,7 @@ class UserModel {
       followingRequests: List.generate(
           followingRequests_.length, (index) => followingRequests_[index]),
       isDeleted: json?['isDeleted'],
+      isNewNotificationReceived: json?['isNewNotificationReceived'],
     );
   }
 
@@ -89,7 +92,7 @@ class UserModel {
       "company": company,
       "location": location,
       "country": country,
-      "county":county,
+      "county": county,
       "pImage": pImage,
       "phone": phone,
       "id": id,
@@ -106,12 +109,13 @@ class UserModel {
       "followers": followers,
       "followings": followings,
       "followingRequests": followingRequests,
-      "isDeleted": isDeleted
+      "isDeleted": isDeleted,
+      "isNewNotificationReceived": isNewNotificationReceived,
     };
   }
 
   @override
   String toString() {
-    return 'UserModel{firstName: $firstName, lastName: $lastName, company: $company, position: $position, phone: $phone, email: $email, pImage: $pImage, website: $website, showSimpleNotification: $showSimpleNotification, showMessageNotification: $showMessageNotification, location: $location, country: $country, county: $county, userName: $userName, id: $id, reference: $reference, userType: $userType, fcmToken: $fcmToken, hobbies: $hobbies, followers: $followers, followings: $followings, followingRequests: $followingRequests, isDeleted: $isDeleted}';
+    return 'UserModel{firstName: $firstName, lastName: $lastName, company: $company, position: $position, phone: $phone, email: $email, pImage: $pImage, website: $website, showSimpleNotification: $showSimpleNotification, showMessageNotification: $showMessageNotification, location: $location, country: $country, county: $county, userName: $userName, id: $id, reference: $reference, userType: $userType, fcmToken: $fcmToken, hobbies: $hobbies, followers: $followers, followings: $followings, followingRequests: $followingRequests, isDeleted: $isDeleted, isNewNotificationReceived: $isNewNotificationReceived}';
   }
 }

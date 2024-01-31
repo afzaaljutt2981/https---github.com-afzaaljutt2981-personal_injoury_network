@@ -404,7 +404,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               reference: textFieldController[9].text,
                               password: textFieldController[11].text,
                               hobbies: selectedHobbies,
-                              userName: textFieldController[10].text);
+                              userName: textFieldController[10].text,
+                              isNewNotificationReceived: false);
                         }
                       }
                     }

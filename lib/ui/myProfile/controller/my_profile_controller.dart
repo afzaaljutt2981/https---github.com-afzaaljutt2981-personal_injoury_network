@@ -38,9 +38,10 @@ class MyProfileController extends ChangeNotifier {
     }
   }
   updateUserNotification(bool value) async {
+    print("update isNewNotificationReceived called -->  $value");
     ref.doc(FirebaseAuth.instance.currentUser!.uid).update(
         {
-          "showNotification": value
+          "isNewNotificationReceived": value
         });
     notifyListeners();
   }

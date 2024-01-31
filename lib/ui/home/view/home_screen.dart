@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart' as badges;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +10,7 @@ import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/chat_screen/model/chat_data.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
-import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
+import 'package:personal_injury_networking/ui/notifications/view/create_notifications_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../../global/app_buttons/app_primary_button.dart';
@@ -20,12 +21,15 @@ import '../../create_event/models/event_model.dart';
 import '../../drawer/view/create_drawer_view.dart';
 import '../../events/view/search_events_view.dart';
 import '../../events_details/view/create_event_details_view.dart';
-import '../../notifications/view/create_notifications_view.dart';
 import 'navigation_view.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key, required this.messagesCallBack});
-  Function(List<ChatData> chats) messagesCallBack;
+  HomeScreen({
+    super.key,
+    // required this.messagesCallBack
+  });
+
+  // Function(List<ChatData> chats) messagesCallBack;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -37,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<UserModel> allUsers = [];
   bool showBadge = false;
   List<ChatData> allChats = [];
+
   @override
   Widget build(BuildContext context) {
     events = [];
@@ -45,8 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
       user = allUsers.firstWhere(
           (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
     }
-    allChats = context.watch<EventsController>().allMessages;
-    widget.messagesCallBack.call(allChats);
+    // allChats = context.watch<EventsController>().allMessages;
+    // widget.messagesCallBack.call(allChats);
     if (user != null && user!.userType == "user") {
       events = context
           .watch<EventsController>()
@@ -146,20 +151,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                     //     child: const CreateNotificationsView(),
                                     //   ),
                                     // );
+                                    // print(
+                                    //     "FirebaseAuth.instance.currentUser?.uid -> ${FirebaseAuth.instance.currentUser?.uid}");
+                                    // print("current user -> ${user.toString()}");
+
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (_) =>
                                                 CreateNotificationsView()));
-                                    if (user?.showSimpleNotification ?? false) {
-                                      context
-                                          .read<MyProfileController>()
-                                          .updateUserNotification(false);
+
+                                    if (user?.isNewNotificationReceived ==
+                                        true) {
+                                      // context
+                                      //     .read<MyProfileController>()
+                                      //     .updateUserNotification(false);
+                                      print(
+                                          "FirebaseAuth.instance.currentUser?.uid -> ${FirebaseAuth.instance.currentUser?.uid}");
+                                      FirebaseFirestore.instance
+                                          .collection("users")
+                                          .doc(FirebaseAuth
+                                              .instance.currentUser?.uid)
+                                          .update({
+                                        "isNewNotificationReceived": false
+                                      });
                                     }
                                   },
                                   child: badges.Badge(
                                     showBadge:
-                                        user?.showSimpleNotification ?? false,
+                                        user?.isNewNotificationReceived ??
+                                            false,
                                     position: badges.BadgePosition.custom(
                                       end: 0,
                                     ),

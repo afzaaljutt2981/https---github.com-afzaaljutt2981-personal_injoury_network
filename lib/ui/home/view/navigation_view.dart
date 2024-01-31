@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,17 +32,41 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   int? selectedIndex;
   List<ChatData> allChats = [];
   int unreadChats = 0;
+  CollectionReference messagesRef =
+      FirebaseFirestore.instance.collection("messages");
+  List<ChatData> allMessages = [];
+  StreamSubscription<QuerySnapshot<Object?>>? messagesStream;
+
+  late Function stateChange;
 
   @override
   void initState() {
     super.initState();
     selectedIndex = widget.selectedIndex;
     _pageController = PageController(initialPage: selectedIndex!);
+
+    messagesStream = messagesRef
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .collection("chats")
+        .snapshots()
+        .listen((messages) {
+      allMessages = [];
+      for (var element in messages.docs) {
+        allMessages
+            .add(ChatData.fromJson(element.data() as Map<String, dynamic>));
+      }
+      unreadChats = allMessages
+          .where((element) => element?.isRead == false)
+          .toList()
+          .length;
+      stateChange.call();
+    });
   }
 
   @override
   void dispose() {
     _pageController!.dispose();
+    messagesStream?.cancel();
     super.dispose();
   }
 
@@ -53,6 +79,11 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
             duration: const Duration(milliseconds: 200), curve: Curves.linear);
       });
     }
+
+    stateChange = () {
+      print("set state called");
+      setState(() {});
+    };
 
     return WillPopScope(
       onWillPop: () {
@@ -69,33 +100,33 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
             children: <Widget>[
               FirebaseAuth.instance.currentUser?.email?.toLowerCase() ==
                       Constants.adminEmail.toLowerCase()
-                  ? CreateAdminHomeScreenView()
+                  ? const CreateAdminHomeScreenView()
                   : CreateHomeScreenView(
-                      messagesCallBack: (List<ChatData> chats) {
-                        print("chats -> $chats");
-                        if (chats
-                                .where((element) => element?.isRead == false)
-                                .toList()
-                                .length !=
-                            allChats
-                                .where((element) => element?.isRead == false)
-                                .toList()
-                                .length) {
-                          Future.delayed(Duration.zero, () async {
-                            setState(() {
-                              allChats = chats;
-                              unreadChats = allChats
-                                  .where((element) => element?.isRead == false)
-                                  .toList()
-                                  .length;
-                            });
-                          });
-                        }
-                      },
-                    ),
+                      // messagesCallBack: (List<ChatData> chats) {
+                      //   print("chats -> $chats");
+                      //   if (chats
+                      //           .where((element) => element?.isRead == false)
+                      //           .toList()
+                      //           .length !=
+                      //       allChats
+                      //           .where((element) => element?.isRead == false)
+                      //           .toList()
+                      //           .length) {
+                      //     Future.delayed(Duration.zero, () async {
+                      //       setState(() {
+                      //         allChats = chats;
+                      //         unreadChats = allChats
+                      //             .where((element) => element?.isRead == false)
+                      //             .toList()
+                      //             .length;
+                      //       });
+                      //     });
+                      //   }
+                      // },
+                      ),
               if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
                   Constants.adminEmail.toLowerCase())
-                CreateChatView(),
+                const CreateChatView(),
               CreateQrScanView(from: "2"),
               CreateAllEventsView(from: "2"),
               CreateMyProfileView(
@@ -127,7 +158,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               showUnselectedLabels: true,
               elevation: 2,
               items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon: ImageIcon(
                       AssetImage('assets/images/home_icon_home_b.png')),
                   label: "Home",
@@ -136,46 +167,48 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                     Constants.adminEmail.toLowerCase())
                   BottomNavigationBarItem(
                     icon: Stack(children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 25),
-                        child: Container(
-                          width: 20.0, // Diameter of the circle
-                          height: 20.0, // Diameter of the circle
-                          decoration: BoxDecoration(
-                            color: AppColors.redColor, // Circle color
-                            shape:
-                                BoxShape.circle, // Makes the container a circle
-                          ),
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(2),
-                              child: Text(
-                                unreadChats.toString(), // The counting number
-                                style: TextStyle(
-                                  color: Colors.white, // Number color
-                                  fontSize: 15, // Adjust the size of the number
+                      if (unreadChats != 0)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 25),
+                          child: Container(
+                            width: 20.0, // Diameter of the circle
+                            height: 20.0, // Diameter of the circle
+                            decoration: const BoxDecoration(
+                              color: AppColors.redColor, // Circle color
+                              shape: BoxShape
+                                  .circle, // Makes the container a circle
+                            ),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: Text(
+                                  unreadChats.toString(), // The counting number
+                                  style: const TextStyle(
+                                    color: Colors.white, // Number color
+                                    fontSize:
+                                        15, // Adjust the size of the number
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      ImageIcon(
+                      const ImageIcon(
                           AssetImage('assets/images/chat_icon_home_b.png')),
                     ]),
                     label: "Messages",
                   ),
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon:
                       ImageIcon(AssetImage('assets/images/qr_icon_home_b.png')),
                   label: "QR Scan",
                 ),
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon: ImageIcon(
                       AssetImage('assets/images/events_icon_home_b.png')),
                   label: "Events",
                 ),
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon: ImageIcon(
                       AssetImage('assets/images/person_icon_home_b.png')),
                   label: "Profile",
