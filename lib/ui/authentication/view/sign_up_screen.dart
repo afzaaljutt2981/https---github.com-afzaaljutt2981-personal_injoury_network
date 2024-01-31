@@ -37,16 +37,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   int hobbiesCount = 0;
   bool disableStateDropdown = true;
   List<String> selectedHobbies = [];
-  final List<String> items = [
-    'Item1',
-    'Item2',
-    'Item3',
-    'Item4',
-    'Item5',
-    'Item6',
-    'Item7',
-    'Item8',
-  ];
 
   void addItem(String item) {
     if (!selectedHobbies.contains(item)) {
@@ -413,12 +403,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         CustomSnackBar(false).showInSnackBar(
                             "please select your state", context);
                         return;
-                      } else if (
-                          selectedHobbies.length < 3) {
-                        CustomSnackBar(false).showInSnackBar(
-                            "Please select at least 3 hobbies!", context);
-                        return;
-                      } else if (textFieldController[9].text.isEmpty) {
+                      }
+                      // else if (
+                      //     selectedHobbies.length < 3) {
+                      //   CustomSnackBar(false).showInSnackBar(
+                      //       "Please select at least 3 hobbies!", context);
+                      //   return;
+                      // }
+                      else if (textFieldController[9].text.isEmpty) {
                         CustomSnackBar(false).showInSnackBar(
                             "please enter your reference", context);
                         return;
@@ -680,6 +672,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
           CustomSizeBox(5.h),
           locationField(),
           CustomSizeBox(22.h),
+          Text(
+            "Hobbies (Optional)",
+            style: AppTextStyles.josefin(
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w500)),
+          ),
+          CustomSizeBox(5.h),
           // textField('Hobbies/Interests', 'Click here to enter', 8,
           //     textFieldController[8], true, false),
           DropdownButtonHideUnderline(
@@ -698,7 +699,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   Expanded(
                       child: Text(
-                    'Select Hobbies',
+                    'Select Hobbies (up to 3)',
                     style: AppTextStyles.josefin(
                       style: TextStyle(
                         color: const Color(0xFF1F314A).withOpacity(0.31),
