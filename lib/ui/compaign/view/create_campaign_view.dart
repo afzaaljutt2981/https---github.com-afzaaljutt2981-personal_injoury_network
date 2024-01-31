@@ -8,6 +8,8 @@ import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/custom_snackbar.dart';
 import 'package:personal_injury_networking/ui/authentication/model/job_position_model.dart';
+import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
+import 'package:personal_injury_networking/ui/chat_screen/view/view_users.dart';
 import 'package:personal_injury_networking/ui/compaign/controller/compaign_controller.dart';
 import 'package:provider/provider.dart';
 
@@ -26,11 +28,16 @@ class CreateCampaign extends StatefulWidget {
 class _CreateCampaign extends State<CreateCampaign> {
   TextEditingController descriptionController = TextEditingController();
   Uint8List? image1;
-  String selectedCountry = '';
+  String selectedCounty = '';
   String selectedJobPosition = '';
+  bool expandController = false;
+  List<UserModel?>? allUsers = [];
 
   @override
   Widget build(BuildContext context) {
+    allUsers = context.watch<CampaignController>().allUsers;
+    print("JobPositionModel.counties - >  ${JobPositionModel.counties}");
+    print("allUsers - >  ${allUsers}");
     return Scaffold(
         backgroundColor: AppColors.kWhiteColor,
         appBar: AppBar(
@@ -77,7 +84,7 @@ class _CreateCampaign extends State<CreateCampaign> {
                       children: [
                         CustomSizeBox(20.h),
                         Text(
-                          'Country',
+                          'County',
                           style: AppTextStyles.josefin(
                               style: TextStyle(
                                   color: Colors.black, fontSize: 14.sp)),
@@ -95,19 +102,19 @@ class _CreateCampaign extends State<CreateCampaign> {
                                 //   size: 16,
                                 //   color: Colors.yellow,
                                 // ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 4,
                                 ),
                                 Expanded(
                                     child: Text(
-                                  selectedCountry == ""
+                                  selectedCounty == ""
                                       ? 'Select here'
-                                      : selectedCountry,
+                                      : selectedCounty,
                                   style: AppTextStyles.josefin(
                                     style: TextStyle(
                                       color: const Color(0xFF1F314A)
                                           .withOpacity(
-                                              selectedCountry == "" ? 0.31 : 1),
+                                              selectedCounty == "" ? 0.31 : 1),
                                       fontSize: 14.sp,
                                     ),
                                   ),
@@ -115,7 +122,7 @@ class _CreateCampaign extends State<CreateCampaign> {
                                 ))
                               ],
                             ),
-                            items: JobPositionModel.countries
+                            items: JobPositionModel.counties
                                 .map((String item) => DropdownMenuItem<String>(
                                       value: item ?? "",
                                       child: Row(
@@ -131,28 +138,49 @@ class _CreateCampaign extends State<CreateCampaign> {
                                             ),
                                             overflow: TextOverflow.ellipsis,
                                           ),
-                                          SizedBox(width: 10),
+                                          const SizedBox(width: 10),
                                           // Provides a space between the text and the icon
-                                          selectedCountry == item.toString()
-                                              ? Icon(
-                                                  Icons.done,
+                                          item == "Select All"
+                                              ? const Icon(
+                                                  Icons.select_all_outlined,
                                                   // Replace with your desired icon
                                                   size: 24,
                                                 )
-                                              : SizedBox(),
+                                              : selectedCounty ==
+                                                          item.toString() ||
+                                                      selectedCounty == "all"
+                                                  ? const Icon(
+                                                      Icons.done,
+                                                      // Replace with your desired icon
+                                                      size: 24,
+                                                    )
+                                                  : const SizedBox(),
                                         ],
                                       ),
                                     ))
                                 .toList(),
                             // value: items[0],
                             onChanged: (String? value) {
+                              if (value == "Select All") {
+                                setState(() {
+                                  selectedCounty = "all";
+                                  context
+                                      .read<CampaignController>()
+                                      .setCounty(selectedCounty);
+                                });
+                                return;
+                              }
+                              ;
                               setState(() {
-                                selectedCountry = value ?? "";
+                                selectedCounty = value ?? "";
+                                context
+                                    .read<CampaignController>()
+                                    .setCounty(selectedCounty);
                               });
                             },
-                            dropdownSearchData: DropdownSearchData(
-                                searchController: TextEditingController(
-                                    text: "United States")),
+                            // dropdownSearchData: DropdownSearchData(
+                            //     searchController: TextEditingController(
+                            //         text: "United States")),
                             buttonStyleData: ButtonStyleData(
                               height: 50,
                               width: MediaQuery.of(context).size.width,
@@ -211,7 +239,7 @@ class _CreateCampaign extends State<CreateCampaign> {
                                 //   size: 16,
                                 //   color: Colors.yellow,
                                 // ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 4,
                                 ),
                                 Expanded(
@@ -248,27 +276,48 @@ class _CreateCampaign extends State<CreateCampaign> {
                                             ),
                                             overflow: TextOverflow.ellipsis,
                                           ),
-                                          SizedBox(width: 10),
+                                          const SizedBox(width: 10),
                                           // Provides a space between the text and the icon
-                                          selectedJobPosition ==
-                                                  (item ?? "")
-                                                      .split("- ")?[1]
-                                                      .toString()
-                                              ? Icon(
-                                                  Icons.done,
+                                          item == "- Select All"
+                                              ? const Icon(
+                                                  Icons.select_all_outlined,
                                                   // Replace with your desired icon
                                                   size: 24,
                                                 )
-                                              : SizedBox(),
+                                              : selectedJobPosition ==
+                                                          (item ?? "")
+                                                              .split("- ")?[1]
+                                                              .toString() ||
+                                                      selectedJobPosition ==
+                                                          "all"
+                                                  ? const Icon(
+                                                      Icons.done,
+                                                      // Replace with your desired icon
+                                                      size: 24,
+                                                    )
+                                                  : const SizedBox(),
                                         ],
                                       ),
                                     ))
                                 .toList(),
                             // value: items[0],
                             onChanged: (String? value) {
+                              if (value == "- Select All") {
+                                setState(() {
+                                  selectedJobPosition = "all";
+                                  context
+                                      .read<CampaignController>()
+                                      .setJob(selectedJobPosition);
+                                });
+                                return;
+                              }
+                              ;
                               setState(() {
                                 selectedJobPosition =
                                     (value ?? "").split("- ")?[1] ?? "";
+                                context
+                                    .read<CampaignController>()
+                                    .setJob(selectedJobPosition);
                               });
                             },
                             buttonStyleData: ButtonStyleData(
@@ -351,7 +400,7 @@ class _CreateCampaign extends State<CreateCampaign> {
                             decoration: BoxDecoration(
                               color: AppColors.kWhiteColor,
                               borderRadius: BorderRadius.circular(10.sp),
-                              border: DashedBorder(
+                              border: const DashedBorder(
                                 dashLength: 10,
                                 left: BorderSide(
                                     color: AppColors.dashedBorderColor,
@@ -400,6 +449,67 @@ class _CreateCampaign extends State<CreateCampaign> {
                                   ),
                           ),
                         ),
+                        CustomSizeBox(15.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.arrow_right_outlined,
+                                      // Replace with your desired icon
+                                      size: 24,
+                                    ),
+                                    Text(
+                                      'Selected users',
+                                      style: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              color: AppColors.kBlackColor,
+                                              fontSize: 14.sp)),
+                                    ),
+                                    SizedBox(
+                                      width: 20.sp,
+                                    ),
+                                    Text(
+                                      '${allUsers?.length ?? 0}',
+                                      style: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              color: AppColors
+                                                  .kSnackbarSuccessColor,
+                                              fontSize: 18.sp)),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _showBottomSheet(context);
+                              },
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'view',
+                                    style: AppTextStyles.josefin(
+                                        style: TextStyle(
+                                            color: AppColors.kBlackColor,
+                                            fontSize: 18.sp)),
+                                  ),
+                                  SizedBox(
+                                    width: 10.sp,
+                                  ),
+                                  const Icon(
+                                    Icons.remove_red_eye,
+                                    // Replace with your desired icon
+                                    size: 24,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ],
                     )),
               ),
@@ -412,7 +522,7 @@ class _CreateCampaign extends State<CreateCampaign> {
                 children: [
                   Container(
                     decoration: ShapeDecoration(
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         begin: Alignment(0.98, -0.22),
                         end: Alignment(-0.98, 0.22),
                         colors: [Color(0xFF212E73), Color(0xFF3047C0)],
@@ -421,7 +531,7 @@ class _CreateCampaign extends State<CreateCampaign> {
                         borderRadius: BorderRadius.circular(26),
                       ),
                       shadows: [
-                        BoxShadow(
+                        const BoxShadow(
                           color: Color(0x1A306D8A),
                           blurRadius: 30,
                           offset: Offset(0, 16),
@@ -431,7 +541,7 @@ class _CreateCampaign extends State<CreateCampaign> {
                     ),
                     width: MediaQuery.of(context).size.width * 0.85,
                     child: GetGradientButton(50.sp, () async {
-                      if (selectedCountry == "") {
+                      if (selectedCounty == "") {
                         Functions.showSnackBar(
                             context, "please select country");
                         return;
@@ -454,7 +564,7 @@ class _CreateCampaign extends State<CreateCampaign> {
                           await Functions.uploadPic(image1!, "campaigns");
                       // // ignore: use_build_context_synchronously
                       await context.read<CampaignController>().createCampaign(
-                          campaignCountry: selectedCountry,
+                          campaignCountry: selectedCounty,
                           campaignJob: selectedJobPosition,
                           campaignDescription: descriptionController.text,
                           pImage: url);
@@ -462,7 +572,7 @@ class _CreateCampaign extends State<CreateCampaign> {
                       Navigator.pop(context);
                       Navigator.pop(context);
                       CustomSnackBar(true).showInSnackBar(
-                          'Campaign created successfully For the people of ${selectedCountry} working as ${selectedJobPosition}."',
+                          'Campaign created successfully For the people of ${selectedCounty} working as ${selectedJobPosition}."',
                           context);
                       // eventCreated(
                       //     "For the people of ${selectedCountry} working as ${selectedJobPosition}.");
@@ -514,6 +624,28 @@ class _CreateCampaign extends State<CreateCampaign> {
                     color: const Color(0xFF1F314A).withOpacity(0.40),
                     fontSize: 15.sp))),
       ),
+    );
+  }
+
+  void _showBottomSheet(BuildContext context) {
+    print("allUsers -> $allUsers");
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.sp),
+          topRight: Radius.circular(30.sp),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+          return ViewUsers(
+            allUsers: allUsers ?? [],
+          );
+        });
+      },
     );
   }
 

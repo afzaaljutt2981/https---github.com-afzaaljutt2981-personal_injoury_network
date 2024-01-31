@@ -73,7 +73,7 @@ class _AllCreatedCampaignsScreen extends State<AllCreatedCampaignsScreen> {
                             padding: EdgeInsets.only(
                                 left: 15.w, right: 15.w, bottom: 10.h),
                             child: Container(
-                              decoration: BoxDecoration(
+                              decoration: BoxDecoration( 
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(15.sp),
                               ),
@@ -104,7 +104,7 @@ class _AllCreatedCampaignsScreen extends State<AllCreatedCampaignsScreen> {
                                   Expanded(
                                     child: Padding(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: 10.w),
+                                          horizontal: 0.w),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -230,7 +230,7 @@ class _AllCreatedCampaignsScreen extends State<AllCreatedCampaignsScreen> {
                     : AppColors.dashedBorderColor,
                 borderRadius: BorderRadius.circular(7.sp)),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 27.w, vertical: 9.h),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 9.h),
               child: Text(
                 'Initiate',
                 style: AppTextStyles.josefin(

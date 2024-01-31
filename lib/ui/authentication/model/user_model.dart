@@ -11,6 +11,7 @@ class UserModel {
   bool? showMessageNotification;
   late String? location;
   late String? country;
+  late String? county;
   late String? userName;
   late String? id;
   late String? reference;
@@ -25,6 +26,7 @@ class UserModel {
   UserModel(
       {required this.location,
       required this.country,
+        required this.county,
       required this.position,
       required this.email,
       required this.firstName,
@@ -55,6 +57,7 @@ class UserModel {
       userName: json?['userName'],
       location: json?['location'],
       country: json?['country'],
+      county: json?['county'],
       position: json?['position'],
       email: json?['email'],
       id: json?['id'],
@@ -86,6 +89,7 @@ class UserModel {
       "company": company,
       "location": location,
       "country": country,
+      "county":county,
       "pImage": pImage,
       "phone": phone,
       "id": id,
@@ -108,6 +112,6 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel{firstName: $firstName, lastName: $lastName, company: $company, position: $position, phone: $phone, email: $email, pImage: $pImage, website: $website, showSimpleNotification: $showSimpleNotification, showMessageNotification: $showMessageNotification, location: $location, country: $country, userName: $userName, id: $id, reference: $reference, userType: $userType, fcmToken: $fcmToken, hobbies: $hobbies, followers: $followers, followings: $followings, followingRequests: $followingRequests, isDeleted: $isDeleted}';
+    return 'UserModel{firstName: $firstName, lastName: $lastName, company: $company, position: $position, phone: $phone, email: $email, pImage: $pImage, website: $website, showSimpleNotification: $showSimpleNotification, showMessageNotification: $showMessageNotification, location: $location, country: $country, county: $county, userName: $userName, id: $id, reference: $reference, userType: $userType, fcmToken: $fcmToken, hobbies: $hobbies, followers: $followers, followings: $followings, followingRequests: $followingRequests, isDeleted: $isDeleted}';
   }
 }

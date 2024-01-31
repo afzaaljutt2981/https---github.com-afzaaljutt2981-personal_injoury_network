@@ -133,77 +133,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   // List<String> counties = ["Select county", "Florida"];
 
-  List<String> counties = [
-    "Select County",
-    'Alachua',
-    'Baker',
-    'Bay',
-    'Bradford',
-    'Brevard',
-    'Broward',
-    'Calhoun',
-    'Charlotte',
-    'Citrus',
-    'Clay',
-    'Collier',
-    'Columbia',
-    'DeSoto',
-    'Dixie',
-    'Duval',
-    'Escambia',
-    'Flagler',
-    'Franklin',
-    'Gadsden',
-    'Gilchrist',
-    'Glades',
-    'Gulf',
-    'Hamilton',
-    'Hardee',
-    'Hendry',
-    'Hernando',
-    'Highlands',
-    'Hillsborough',
-    'Holmes',
-    'Indian River',
-    'Jackson',
-    'Jefferson',
-    'Lafayette',
-    'Lake',
-    'Lee',
-    'Leon',
-    'Levy',
-    'Liberty',
-    'Madison',
-    'Manatee',
-    'Marion',
-    'Martin',
-    'Miami-Dade',
-    'Monroe',
-    'Nassau',
-    'Okaloosa',
-    'Okeechobee',
-    'Orange',
-    'Osceola',
-    'Palm Beach',
-    'Pasco',
-    'Pinellas',
-    'Polk',
-    'Putnam',
-    'St. Johns',
-    'St. Lucie',
-    'Santa Rosa',
-    'Sarasota',
-    'Seminole',
-    'Sumter',
-    'Suwannee',
-    'Taylor',
-    'Union',
-    'Volusia',
-    'Wakulla',
-    'Walton',
-    'Washington'
-  ];
-
   String selectedCountry = 'United States';
   String selectedState = 'Florida';
   String selectedCounty = 'Alachua';
@@ -395,7 +324,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         CustomSnackBar(false).showInSnackBar(
                             "please select your country", context);
                         return;
-                      }  else if (selectedCounty == "Select County") {
+                      } else if (selectedCounty == "Select County") {
                         CustomSnackBar(false).showInSnackBar(
                             "please select your County", context);
                         return;
@@ -452,8 +381,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               website: textFieldController[6].text,
                               phone: textFieldController[4].text,
                               position: textFieldController[3].text,
-                              location: "$selectedState,$selectedCountry,$selectedCounty",
+                              location:
+                                  "$selectedState,$selectedCountry,$selectedCounty",
                               country: selectedCountry,
+                              county: selectedCounty,
                               reference: textFieldController[9].text,
                               hobbies: selectedHobbies,
                               userName: textFieldController[10].text);
@@ -466,8 +397,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               phone: textFieldController[4].text,
                               email: textFieldController[5].text,
                               website: textFieldController[6].text,
-                              location: "$selectedState,$selectedCountry,$selectedCounty",
+                              location:
+                                  "$selectedState,$selectedCountry,$selectedCounty",
                               country: selectedCountry,
+                              county: selectedCounty,
                               reference: textFieldController[9].text,
                               password: textFieldController[11].text,
                               hobbies: selectedHobbies,
@@ -1212,7 +1145,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: DropdownButton<String>(
             isExpanded: true,
             value: selectedCounty,
-            items: counties
+            items: JobPositionModel.counties
                 .map((String state) =>
                     DropdownMenuItem(value: state, child: Text(state)))
                 .toList(),

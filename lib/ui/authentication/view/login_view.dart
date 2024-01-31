@@ -423,6 +423,7 @@ class _LoginViewState extends State<LoginView> {
             .set(UserModel(
               location: "",
               country: "",
+              county: "",
               position: "",
               email: userEmail ?? user.email ?? '',
               firstName: user.displayName ?? "",
