@@ -10,6 +10,7 @@ import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/allFriends/view/create_all_freinds_view.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
+import 'package:personal_injury_networking/ui/find_users/view/create_find_users_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../authentication/view/login_view.dart';
@@ -234,6 +235,26 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                               const Duration(milliseconds: 200),
                                           child: CreateAllFriendsView(
                                             user: user!,
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                    CustomSizeBox(28.h),
+                                    homeFeatures(
+                                        'assets/images/friends_icon_drawer.png',
+                                        'Find People', onTap: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        PageTransition(
+                                          childCurrent: widget,
+                                          type: PageTransitionType.rightToLeft,
+                                          alignment: Alignment.center,
+                                          duration:
+                                          const Duration(milliseconds: 200),
+                                          reverseDuration:
+                                          const Duration(milliseconds: 200),
+                                          child: CreateFindUserView(
                                           ),
                                         ),
                                       );

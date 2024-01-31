@@ -36,8 +36,8 @@ class _CreateCampaign extends State<CreateCampaign> {
   @override
   Widget build(BuildContext context) {
     allUsers = context.watch<CampaignController>().allUsers;
-    print("JobPositionModel.counties - >  ${JobPositionModel.counties}");
-    print("allUsers - >  ${allUsers}");
+    // print("JobPositionModel.counties - >  ${JobPositionModel.counties}");
+    // print("allUsers - >  ${allUsers}");
     return Scaffold(
         backgroundColor: AppColors.kWhiteColor,
         appBar: AppBar(
