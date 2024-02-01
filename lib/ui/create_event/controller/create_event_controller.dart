@@ -5,13 +5,14 @@ import 'package:personal_injury_networking/ui/create_event/models/event_model.da
 
 class CreateEventController extends ChangeNotifier {
   CollectionReference ref = FirebaseFirestore.instance.collection("events");
+
   addEvent(
       {required DateTime endTime,
       required DateTime startTime,
       required String address,
       required String description,
       required String title,
-        required String pImage,
+      required String pImage,
       required DateTime dateTime,
       required double latitude,
       required double longitude}) async {

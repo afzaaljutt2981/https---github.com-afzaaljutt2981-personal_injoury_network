@@ -121,7 +121,8 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                                   QrImage(
                                     foregroundColor: AppColors.kPrimaryColor,
                                     data: FirebaseAuth.instance.currentUser?.uid
-                                        .toString() ?? 'Q/A',
+                                            .toString() ??
+                                        'Q/A',
                                     version: QrVersions.auto,
                                     size: 180.sp,
                                     gapless: false,

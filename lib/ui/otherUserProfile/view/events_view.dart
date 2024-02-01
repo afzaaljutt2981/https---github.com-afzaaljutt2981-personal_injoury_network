@@ -5,7 +5,6 @@ import 'package:personal_injury_networking/ui/create_event/models/event_model.da
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
-import '../../../global/utils/constants.dart';
 import '../../authentication/model/user_model.dart';
 
 // ignore: must_be_immutable
@@ -41,7 +40,7 @@ class OrganizerEvents extends StatelessWidget {
         : ListView.builder(
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
-            itemCount: userEvents.length??0,
+            itemCount: userEvents.length ?? 0,
             itemBuilder: (context, index) {
               return eventBox(userEvents[index]);
             });
@@ -118,9 +117,7 @@ class OrganizerEvents extends StatelessWidget {
                           ? const SizedBox()
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                eventStatus(event)
-                              ],
+                              children: [eventStatus(event)],
                             )
                     ],
                   ),
@@ -132,27 +129,29 @@ class OrganizerEvents extends StatelessWidget {
       ),
     );
   }
-  Widget eventStatus(EventModel event){
+
+  Widget eventStatus(EventModel event) {
     Color? bgColor;
     Color? textColor;
     DateTime date = DateTime.fromMillisecondsSinceEpoch(event.dateTime ?? 0);
     DateTime startTime = DateTime.fromMillisecondsSinceEpoch(event.startTime!);
     DateTime endTime = DateTime.fromMillisecondsSinceEpoch(event.endTime!);
     String status = event.status ?? "";
-    if(startTime.isBefore(DateTime.now()) && DateTime.now().isBefore(endTime)){
+    if (startTime.isBefore(DateTime.now()) &&
+        DateTime.now().isBefore(endTime)) {
       status = "Started";
       bgColor = const Color(0xFF0AFF31);
       textColor = const Color(0xFF17DF1F);
-    }else if (date.isBefore(DateTime.now()) && status != "Cancelled") {
+    } else if (date.isBefore(DateTime.now()) && status != "Cancelled") {
       status = "Completed";
       bgColor = const Color(0xFF0AFF31);
       textColor = const Color(0xFF17DF1F);
     }
-    if(status == "UpComing"){
+    if (status == "UpComing") {
       bgColor = Colors.yellow.shade200;
       // const Color(0xffF3F628);
       textColor = Colors.yellow.shade600;
-    }else if(status == "Cancelled"){
+    } else if (status == "Cancelled") {
       bgColor = Colors.red.shade200;
       textColor = Colors.red.shade600;
     }
@@ -166,9 +165,7 @@ class OrganizerEvents extends StatelessWidget {
         child: Text(
           status,
           style: AppTextStyles.josefin(
-              style: TextStyle(
-                  color: textColor,
-                  fontSize: 12.sp)),
+              style: TextStyle(color: textColor, fontSize: 12.sp)),
         ),
       ),
     );

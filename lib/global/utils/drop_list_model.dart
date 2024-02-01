@@ -1,5 +1,3 @@
-
-
 class DropListModel {
   DropListModel(this.listOptionItems);
 

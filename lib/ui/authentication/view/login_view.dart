@@ -417,31 +417,29 @@ class _LoginViewState extends State<LoginView> {
         String? token = await getFirebaseMessagingToken();
         print("here is token");
         print(token);
-        await FirebaseFirestore.instance
-            .collection("users")
-            .doc(user.uid)
-            .set(UserModel(
-              location: "",
-              country: "",
-              county: "",
-              position: "",
-              email: userEmail ?? user.email ?? '',
-              firstName: user.displayName ?? "",
-              lastName: "",
-              id: user.uid,
-              reference: "",
-              hobbies: [],
-              followers: [],
-              followings: [],
-              followingRequests: [],
-              userName: '',
-              phone: 0,
-              fcmToken: token,
-              userType: "user",
-              company: "",
-              website: "",
-            isNewNotificationReceived: false
-            ).toJson());
+        await FirebaseFirestore.instance.collection("users").doc(user.uid).set(
+            UserModel(
+                    location: "",
+                    country: "",
+                    county: "",
+                    position: "",
+                    email: userEmail ?? user.email ?? '',
+                    firstName: user.displayName ?? "",
+                    lastName: "",
+                    id: user.uid,
+                    reference: "",
+                    hobbies: [],
+                    followers: [],
+                    followings: [],
+                    followingRequests: [],
+                    userName: '',
+                    phone: 0,
+                    fcmToken: token,
+                    userType: "user",
+                    company: "",
+                    website: "",
+                    isNewNotificationReceived: false)
+                .toJson());
         Constants.userDisplayName = user.displayName ?? '';
         Constants.userEmail = userEmail ?? user.email ?? "";
         Constants.uId = user.uid;

@@ -111,6 +111,5 @@ class ChatController extends ChangeNotifier {
   void dispose() {
     chatStream?.cancel();
     super.dispose();
-
   }
 }

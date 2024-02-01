@@ -53,10 +53,10 @@ class _SelectLocationState extends State<SelectLocation> {
         target: LatLng(position.latitude, position.longitude),
         zoom: 14.4746,
       );
-      country = widget.addressModel?.country??"";
-      city = widget.addressModel?.city??"";
-      postalCode = widget.addressModel?.postalCode??"";
-      searchResults = widget.addressModel?.address??"";
+      country = widget.addressModel?.country ?? "";
+      city = widget.addressModel?.city ?? "";
+      postalCode = widget.addressModel?.postalCode ?? "";
+      searchResults = widget.addressModel?.address ?? "";
       var markerIdVal = AppStrings.selectedLocation;
       final MarkerId markerId = MarkerId(markerIdVal);
       // creating a new MARKER

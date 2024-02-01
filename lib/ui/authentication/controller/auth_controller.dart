@@ -45,7 +45,8 @@ class AuthController extends ChangeNotifier {
     return token;
   }
 
-  Future<void> signup(BuildContext context, {
+  Future<void> signup(
+    BuildContext context, {
     required String firstName,
     required String lastName,
     required String companyName,
@@ -79,7 +80,7 @@ class AuthController extends ChangeNotifier {
               id: doc.id,
               location: location,
               country: country,
-              county:county,
+              county: county,
               position: position,
               email: email,
               firstName: firstName,
@@ -95,7 +96,7 @@ class AuthController extends ChangeNotifier {
               followers: [],
               followings: [],
               followingRequests: [],
-              isNewNotificationReceived:isNewNotificationReceived);
+              isNewNotificationReceived: isNewNotificationReceived);
           await doc.set(model.toJson());
           getUserData(context, email);
 
@@ -131,8 +132,8 @@ class AuthController extends ChangeNotifier {
     // }
   }
 
-  Future<void> signIn(String email, String password,
-      BuildContext context) async {
+  Future<void> signIn(
+      String email, String password, BuildContext context) async {
     try {
       Functions.showLoaderDialog(context);
       await FirebaseAuth.instance
@@ -159,7 +160,7 @@ class AuthController extends ChangeNotifier {
                     MaterialPageRoute(
                         builder: (_) =>
                             BottomNavigationScreen(selectedIndex: 0)),
-                        (route) => false);
+                    (route) => false);
               }
             } else {
               Constants.userType = user?.userType ?? "";
@@ -169,12 +170,11 @@ class AuthController extends ChangeNotifier {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                      builder: (_) =>
-                          CreateVerifyIdentityView(
+                      builder: (_) => CreateVerifyIdentityView(
                             email: "",
                             from: 2,
                           )),
-                      (route) => false);
+                  (route) => false);
             }
           }
         } else {
@@ -205,17 +205,16 @@ class AuthController extends ChangeNotifier {
                 context,
                 MaterialPageRoute(
                     builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-                    (route) => false);
+                (route) => false);
           } else {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        CreateVerifyIdentityView(
+                    builder: (context) => CreateVerifyIdentityView(
                           email: email.toString(),
                           from: 2,
                         )),
-                    (route) => false);
+                (route) => false);
           }
         }
       } else {
@@ -226,7 +225,8 @@ class AuthController extends ChangeNotifier {
     });
   }
 
-  Future<void> updateUser(BuildContext context, {
+  Future<void> updateUser(
+    BuildContext context, {
     required String firstName,
     required String lastName,
     required String companyName,
@@ -266,7 +266,7 @@ class AuthController extends ChangeNotifier {
           context,
           MaterialPageRoute(
               builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-              (route) => false);
+          (route) => false);
       notifyListeners();
     } on Exception catch (error) {
       // ignore: use_build_context_synchronously

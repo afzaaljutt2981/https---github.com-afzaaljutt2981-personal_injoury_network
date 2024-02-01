@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/ui/create_event/models/event_model.dart';
+
 import '../../ui/events_details/models/ticket_model.dart';
 import '../../ui/events_details/view/create_event_details_view.dart';
 import '../utils/app_text_styles.dart';
@@ -25,6 +26,7 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
   }
 
   List<TicketModel> eventTickets = [];
+
   @override
   Widget build(BuildContext context) {
     DateTime date = DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime!);

@@ -31,7 +31,8 @@ class NotificationsController extends ChangeNotifier {
       for (var element in event.docs) {
         allCampaigns.add(
             CampaignModel.fromJson(element.data() as Map<String, dynamic>));
-        print("Campaigns -> ${CampaignModel.fromJson(element.data() as Map<String, dynamic>).toString()}");
+        print(
+            "Campaigns -> ${CampaignModel.fromJson(element.data() as Map<String, dynamic>).toString()}");
       }
       notifyListeners();
     });

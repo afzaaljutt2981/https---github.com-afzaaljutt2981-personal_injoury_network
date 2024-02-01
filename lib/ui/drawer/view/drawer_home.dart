@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart' as badges;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -251,11 +250,10 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                           type: PageTransitionType.rightToLeft,
                                           alignment: Alignment.center,
                                           duration:
-                                          const Duration(milliseconds: 200),
+                                              const Duration(milliseconds: 200),
                                           reverseDuration:
-                                          const Duration(milliseconds: 200),
-                                          child: CreateFindUserView(
-                                          ),
+                                              const Duration(milliseconds: 200),
+                                          child: CreateFindUserView(),
                                         ),
                                       );
                                     }),

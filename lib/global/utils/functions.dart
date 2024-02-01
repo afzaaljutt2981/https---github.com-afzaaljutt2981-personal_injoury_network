@@ -9,12 +9,12 @@ import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 
 import 'app_strings.dart';
-import 'package:http/http.dart' as http;
+
 class Functions {
   static showSnackBar(BuildContext context, String message, {Color? color}) {
     color ??= Colors.white;
     final snackBar = SnackBar(
-      backgroundColor: color, 
+      backgroundColor: color,
       content: Text(
         message,
         style: const TextStyle(
@@ -56,7 +56,8 @@ class Functions {
     );
   }
 
-  static Future<String> uploadPic(Uint8List file,String name,{String? contentType}) async {
+  static Future<String> uploadPic(Uint8List file, String name,
+      {String? contentType}) async {
     try {
       final firebasestorage.FirebaseStorage _storage =
           firebasestorage.FirebaseStorage.instance;
@@ -66,7 +67,7 @@ class Functions {
       String mils = '$mills';
       var reference = _storage.ref().child(name).child(uid).child(mils);
       var r = await reference.putData(
-          file, SettableMetadata(contentType: contentType??'image/jpeg'));
+          file, SettableMetadata(contentType: contentType ?? 'image/jpeg'));
       if (r.state == firebasestorage.TaskState.success) {
         String url = await reference.getDownloadURL();
         return url;
@@ -157,6 +158,4 @@ class Functions {
           );
         });
   }
-
-
 }

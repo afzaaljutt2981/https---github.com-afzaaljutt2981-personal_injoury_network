@@ -68,12 +68,11 @@ class _AllCreatedCampaignsScreen extends State<AllCreatedCampaignsScreen> {
                         itemCount: allCampaigns.length,
                         itemBuilder: (context, index) {
                           var model = allCampaigns[index];
-                          return
-                            Padding(
+                          return Padding(
                             padding: EdgeInsets.only(
                                 left: 15.w, right: 15.w, bottom: 10.h),
                             child: Container(
-                              decoration: BoxDecoration( 
+                              decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(15.sp),
                               ),
@@ -103,8 +102,8 @@ class _AllCreatedCampaignsScreen extends State<AllCreatedCampaignsScreen> {
                                   ),
                                   Expanded(
                                     child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 0.w),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 0.w),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,

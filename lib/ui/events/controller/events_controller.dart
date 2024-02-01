@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:personal_injury_networking/global/utils/custom_snackbar.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/chat_screen/model/chat_data.dart';
-import 'package:personal_injury_networking/ui/chat_screen/model/chat_model.dart';
 import 'package:personal_injury_networking/ui/events_details/models/ticket_model.dart';
 
 import '../../authentication/model/user_model.dart';
@@ -48,7 +47,6 @@ class EventsController extends ChangeNotifier {
       notifyListeners();
     });
   }
-
 
   // getAllChats() async {
   //   messagesStream =  messagesRef

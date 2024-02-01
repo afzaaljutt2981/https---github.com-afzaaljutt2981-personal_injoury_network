@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_injury_networking/global/utils/custom_snackbar.dart';
-import 'package:personal_injury_networking/global/utils/functions.dart';
 
 import '../../../../authentication/model/user_model.dart';
 
@@ -27,17 +25,14 @@ class AllRegisteredMarketersController extends ChangeNotifier {
     });
   }
 
-
   Future<void> updateUser(
-      BuildContext context, {
-        required String userUidToUpdate,
-        required bool isDeleted,
-      }) async {
+    BuildContext context, {
+    required String userUidToUpdate,
+    required bool isDeleted,
+  }) async {
     try {
       var doc = users.doc(userUidToUpdate);
-      await doc.update({
-        "isDeleted": isDeleted
-      });
+      await doc.update({"isDeleted": isDeleted});
       getAllUsers();
       notifyListeners();
     } on Exception catch (error) {
@@ -46,5 +41,4 @@ class AllRegisteredMarketersController extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 }

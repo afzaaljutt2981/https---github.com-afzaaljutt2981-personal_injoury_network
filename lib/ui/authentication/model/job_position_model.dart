@@ -336,5 +336,4 @@ class JobPositionModel {
 
   static List<PopupMenuItem<String>> hobbiesDropDown = [];
   static List<PopupMenuItem<String>> countriesDropDown = [];
-
 }

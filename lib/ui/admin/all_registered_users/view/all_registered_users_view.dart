@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
@@ -38,11 +37,13 @@ class _AllRegisteredUsersScreenState extends State<AllRegisteredUsersScreen> {
     allUsers = context
         .watch<AllRegisteredUsersController>()
         .allUsers
-        .where((element) => (optionItemSelected.id == "1"
-            ? element.userType == Constants.userType
-            : optionItemSelected.id == "2"
-                ? element.userType != Constants.userType
-                : true) && (element.isDeleted??false) == false)
+        .where((element) =>
+            (optionItemSelected.id == "1"
+                ? element.userType == Constants.userType
+                : optionItemSelected.id == "2"
+                    ? element.userType != Constants.userType
+                    : true) &&
+            (element.isDeleted ?? false) == false)
         .toList();
     return Scaffold(
         backgroundColor: const Color(0xFFf5f4ff),
@@ -237,11 +238,11 @@ class _AllRegisteredUsersScreenState extends State<AllRegisteredUsersScreen> {
                                             if (model.id?.isNotEmpty ?? false) {
                                               context
                                                   .read<
-                                                  AllRegisteredUsersController>()
+                                                      AllRegisteredUsersController>()
                                                   .updateUser(context,
-                                                  userUidToUpdate:
-                                                  model.id!,
-                                                  isDeleted: true);
+                                                      userUidToUpdate:
+                                                          model.id!,
+                                                      isDeleted: true);
                                             } else {
                                               Functions.showSnackBar(context,
                                                   "Invalid user, unable to delete this user");

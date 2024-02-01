@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:provider/provider.dart';
 
-import '../../chat_screen/model/chat_data.dart';
 import 'home_screen.dart';
 
 class CreateHomeScreenView extends StatefulWidget {
-  CreateHomeScreenView({super.key,
+  CreateHomeScreenView({
+    super.key,
     // required this.messagesCallBack
   });
 
@@ -23,6 +23,6 @@ class _CreateHomeScreenViewState extends State<CreateHomeScreenView> {
         create: (_) => EventsController(),
         child: HomeScreen(
             // messagesCallBack: widget.messagesCallBack
-        ));
+            ));
   }
 }

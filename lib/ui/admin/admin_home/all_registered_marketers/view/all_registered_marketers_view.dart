@@ -31,7 +31,6 @@ class _AllRegisteredUsersScreenState
 
   @override
   Widget build(BuildContext context) {
-
     allUsers = context
         .watch<AllRegisteredMarketersController>()
         .allUsers
@@ -40,7 +39,8 @@ class _AllRegisteredUsersScreenState
                 ? element.userType == Constants.userType
                 : optionItemSelected.id == "2"
                     ? element.userType != Constants.userType
-                    : element.userType == Constants.userType) && (element.isDeleted??false) == false)
+                    : element.userType == Constants.userType) &&
+            (element.isDeleted ?? false) == false)
         .toList();
     return Scaffold(
         backgroundColor: const Color(0xFFf5f4ff),

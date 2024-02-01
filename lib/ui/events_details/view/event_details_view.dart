@@ -20,6 +20,7 @@ import 'package:personal_injury_networking/ui/events/controller/events_controlle
 import 'package:personal_injury_networking/ui/events_details/controller/event_details_controller.dart';
 import 'package:personal_injury_networking/ui/otherUserProfile/view/create_other_profile_view.dart';
 import 'package:provider/provider.dart';
+
 import '../../allParticipent/view/participants_view.dart';
 import '../../create_event/models/event_model.dart';
 import '../../notifications/model/nitofications_model.dart';
@@ -695,9 +696,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                       if (followButton == "Follow") {
                         context
                             .read<OtherUserProfileController>()
-                            .sendFollowRequest(
-                              eventCreater?.id ?? "",context
-                            );
+                            .sendFollowRequest(eventCreater?.id ?? "", context);
                       } else if (followButton == "Following") {
                         await context
                             .read<OtherUserProfileController>()

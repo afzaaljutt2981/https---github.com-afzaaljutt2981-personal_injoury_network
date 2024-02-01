@@ -28,8 +28,9 @@ class _AllFriendsScreenState extends State<AllFriendsScreen> {
     allUsers = [];
     friendsList = [];
     allUsers = context.watch<EventsController>().allUsers;
-    List<String?>? tempList = (widget.user.followers??[]) + (widget.user.followings??[]);
-    for (var element in allUsers??[]) {
+    List<String?>? tempList =
+        (widget.user.followers ?? []) + (widget.user.followings ?? []);
+    for (var element in allUsers ?? []) {
       if (tempList.contains(element.id)) {
         friendsList?.add(element);
       }
@@ -109,7 +110,7 @@ class _AllFriendsScreenState extends State<AllFriendsScreen> {
               if (user?.pImage != null) ...[
                 CircleAvatar(
                   radius: 25,
-                  backgroundImage: NetworkImage(user?.pImage??""),
+                  backgroundImage: NetworkImage(user?.pImage ?? ""),
                 )
               ] else ...[
                 Image(
@@ -124,7 +125,7 @@ class _AllFriendsScreenState extends State<AllFriendsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    user?.lastName??"",
+                    user?.lastName ?? "",
                     style: AppTextStyles.josefin(
                         style: TextStyle(
                             fontSize: 16.sp,
@@ -133,7 +134,7 @@ class _AllFriendsScreenState extends State<AllFriendsScreen> {
                   ),
                   CustomSizeBox(3.h),
                   Text(
-                    user?.position??"",
+                    user?.position ?? "",
                     style: AppTextStyles.josefin(
                         style: TextStyle(
                             fontSize: 10.sp,

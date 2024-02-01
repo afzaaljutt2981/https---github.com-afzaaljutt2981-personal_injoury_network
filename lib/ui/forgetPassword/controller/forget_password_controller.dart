@@ -5,7 +5,6 @@ import 'package:personal_injury_networking/ui/forgetPassword/view/create_verify_
 
 import '../../../global/utils/custom_snackbar.dart';
 import '../../selesction_screen/selection_screen.dart';
-import '../view/verify_identity.dart';
 
 class ForgetPasswordController extends ChangeNotifier {
   Future resetPassword(String email, BuildContext context) async {

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-class HelpScreen extends StatefulWidget {
-  HelpScreen({super.key,});
 
+class HelpScreen extends StatefulWidget {
+  HelpScreen({
+    super.key,
+  });
 
   @override
   State<HelpScreen> createState() => _HelpScreenViewState();
@@ -10,16 +12,15 @@ class HelpScreen extends StatefulWidget {
 
 // class _HelpScreenViewState extends State<HelpScreen> {
 
-
 class _HelpScreenViewState extends State<HelpScreen> {
   // Function to handle email launch
-
 
   Future<void> sendEmail() async {
     final Uri params = Uri(
       scheme: 'mailto',
       path: 'patauma@hotmail.com',
-      query: 'subject=Help and Support&body=Describe your issue here?', //add subject and body here
+      query:
+          'subject=Help and Support&body=Describe your issue here?', //add subject and body here
     );
 
     // var url = params.toString();
@@ -46,7 +47,10 @@ class _HelpScreenViewState extends State<HelpScreen> {
           children: <Widget>[
             Text(
               'How can we help you?',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.blueGrey),
+              style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueGrey),
             ),
             SizedBox(height: 20),
             Card(
@@ -57,7 +61,7 @@ class _HelpScreenViewState extends State<HelpScreen> {
                 subtitle: Text('Admin'),
                 trailing: IconButton(
                   icon: Icon(Icons.email, color: const Color(0xFF857FB4)),
-                  onPressed: ()  async {
+                  onPressed: () async {
                     print("Clicked");
                     sendEmail();
                   },
@@ -68,8 +72,6 @@ class _HelpScreenViewState extends State<HelpScreen> {
           ],
         ),
       ),
-
     );
   }
 }
-

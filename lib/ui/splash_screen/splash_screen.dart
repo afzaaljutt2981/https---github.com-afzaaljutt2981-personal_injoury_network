@@ -27,7 +27,8 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(const Duration(seconds: 7)).then((value) async {
       if (FirebaseAuth.instance.currentUser != null) {
-        print("FirebaseAuth.instance.currentUser?.emailVerified - ${FirebaseAuth.instance.currentUser?.emailVerified??""}");
+        print(
+            "FirebaseAuth.instance.currentUser?.emailVerified - ${FirebaseAuth.instance.currentUser?.emailVerified ?? ""}");
         if (FirebaseAuth.instance.currentUser?.emailVerified == false) {
           Navigator.pushAndRemoveUntil(
               context,
@@ -39,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         from: 2,
                       )),
               (route) => false);
-        } else { 
+        } else {
           getUserData();
         }
         // ignore: use_build_context_synchronously
@@ -96,7 +97,8 @@ class _SplashScreenState extends State<SplashScreen> {
         .doc(FirebaseAuth.instance.currentUser?.uid)
         .snapshots()
         .listen((event) {
-      UserModel? user = UserModel.fromJson(event.data() as Map<String, dynamic>?);
+      UserModel? user =
+          UserModel.fromJson(event.data() as Map<String, dynamic>?);
       if (user.userName == "") {
         Navigator.pushAndRemoveUntil(
             context,

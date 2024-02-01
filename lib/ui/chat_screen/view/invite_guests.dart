@@ -16,9 +16,11 @@ class InviteGuests extends StatefulWidget {
       required this.currentUser,
       required this.allUsers,
       required this.event});
+
   UserModel? currentUser;
   List<UserModel?>? allUsers;
   EventModel? event;
+
   @override
   State<InviteGuests> createState() => _InviteGuestsState();
 }
@@ -28,19 +30,21 @@ class _InviteGuestsState extends State<InviteGuests> {
   List<UserModel?> tempList = [];
   List<UserModel?>? friends = [];
   List<UserModel?>? sFriends = [];
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    List<String?>? friendsIds = widget.currentUser?.followers??[];
-    for (var element in widget.currentUser?.followings??[]) {
+    List<String?>? friendsIds = widget.currentUser?.followers ?? [];
+    for (var element in widget.currentUser?.followings ?? []) {
       if (friendsIds.contains(element)) {
       } else {
         friendsIds.add(element);
       }
     }
     for (var element1 in friendsIds) {
-      friends?.add(widget.allUsers?.firstWhere((element) => element?.id == element1));
+      friends?.add(
+          widget.allUsers?.firstWhere((element) => element?.id == element1));
     }
     sFriends = friends;
   }
@@ -153,7 +157,7 @@ class _InviteGuestsState extends State<InviteGuests> {
                                     MediaQuery.of(context).size.height * 0.7,
                                 child: ListView.builder(
                                     physics: const BouncingScrollPhysics(),
-                                    itemCount: sFriends?.length??0,
+                                    itemCount: sFriends?.length ?? 0,
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
                                       return friend(sFriends?[index]);
@@ -168,7 +172,7 @@ class _InviteGuestsState extends State<InviteGuests> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: GetButton(50.sp, () {
                                   if (tempList?.isNotEmpty == true) {
-                                    for (var element in tempList??[]) {
+                                    for (var element in tempList ?? []) {
                                       context
                                           .read<EventsController>()
                                           .sendInvite(element.id, widget.event,
@@ -203,17 +207,18 @@ class _InviteGuestsState extends State<InviteGuests> {
   }
 
   Widget friend(UserModel? friend) {
-    if (tempList.contains(friend) || widget.event?.invites?.contains(friend?.id) == true) {
+    if (tempList.contains(friend) ||
+        widget.event?.invites?.contains(friend?.id) == true) {
       isInvited = true;
     }
     return GestureDetector(
       onTap: () {
         setState(() {
-        if (tempList.contains(friend)) {
-          tempList.remove(friend);
-        }else{
-          tempList.add(friend);
-        }
+          if (tempList.contains(friend)) {
+            tempList.remove(friend);
+          } else {
+            tempList.add(friend);
+          }
         });
       },
       // onLongPress: () {
@@ -232,7 +237,7 @@ class _InviteGuestsState extends State<InviteGuests> {
           children: [
             if (friend?.pImage != null) ...[
               CircleAvatar(
-                backgroundImage: NetworkImage(friend?.pImage??""),
+                backgroundImage: NetworkImage(friend?.pImage ?? ""),
                 radius: 23,
               )
             ] else ...[
@@ -250,7 +255,7 @@ class _InviteGuestsState extends State<InviteGuests> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  friend?.firstName??"",
+                  friend?.firstName ?? "",
                   style: AppTextStyles.josefin(
                       style: TextStyle(
                           color: const Color(0xFF120D26),
@@ -293,13 +298,16 @@ class _InviteGuestsState extends State<InviteGuests> {
     );
   }
 
-  List<UserModel?>? searchUserByName(List<UserModel?>? users, String searchTerm) {
+  List<UserModel?>? searchUserByName(
+      List<UserModel?>? users, String searchTerm) {
     // Create an empty list to store the matching events.
     List<UserModel?>? matchingUsers = [];
 
     // Iterate through the eventList and check if the title contains the searchTerm.
-    for (UserModel? user in users??[]) {
-      if ((user?.firstName??"").toLowerCase().contains(searchTerm.toLowerCase())) {
+    for (UserModel? user in users ?? []) {
+      if ((user?.firstName ?? "")
+          .toLowerCase()
+          .contains(searchTerm.toLowerCase())) {
         matchingUsers.add(user);
       }
     }

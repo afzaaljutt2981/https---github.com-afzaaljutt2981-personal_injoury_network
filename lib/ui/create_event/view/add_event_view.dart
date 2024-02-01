@@ -68,7 +68,6 @@ class _AddEventViewState extends State<AddEventView> {
               ),
             ),
           ),
-
           title: Center(
             child: Padding(
               padding: EdgeInsets.only(right: 45.w),
@@ -83,7 +82,6 @@ class _AddEventViewState extends State<AddEventView> {
             ),
           ),
         ),
-
         body: Column(
           children: [
             Expanded(
@@ -479,10 +477,10 @@ class _AddEventViewState extends State<AddEventView> {
                       SelectLocation(primary: AppColors.kPrimaryColor)))
               .then((value) {
             if (value is AddressModel) {
-              locationController.text = value.address??"";
+              locationController.text = value.address ?? "";
               setState(() {
-                latitude = value.latitude??0;
-                longitude = value.longitude??0;
+                latitude = value.latitude ?? 0;
+                longitude = value.longitude ?? 0;
               });
             }
           });

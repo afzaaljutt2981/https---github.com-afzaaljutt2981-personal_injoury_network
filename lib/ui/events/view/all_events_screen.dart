@@ -8,7 +8,6 @@ import 'package:personal_injury_networking/ui/events/controller/events_controlle
 import 'package:personal_injury_networking/ui/events_details/models/ticket_model.dart';
 import 'package:provider/provider.dart';
 
-import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../authentication/model/user_model.dart';
 import '../../create_event/models/event_model.dart';
@@ -17,6 +16,7 @@ class AllEventScreen extends StatefulWidget {
   AllEventScreen({super.key, required this.from});
 
   String from = "";
+
   @override
   State<AllEventScreen> createState() => _AllEventScreenState();
 }
@@ -27,6 +27,7 @@ class _AllEventScreenState extends State<AllEventScreen>
   List<EventModel> events = [];
   List<UserModel> users = [];
   List<EventModel> allEvents = [];
+
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
@@ -45,19 +46,27 @@ class _AllEventScreenState extends State<AllEventScreen>
     allEvents = context.watch<EventsController>().allEvents;
     if (FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
         Constants.adminEmail.toLowerCase()) {
-      if(allEvents.isNotEmpty && users.isNotEmpty && FirebaseAuth.instance.currentUser != null){
-      var uId = FirebaseAuth.instance.currentUser!.uid;
-      UserModel currentUser = users.firstWhere((element) => element.id == uId);
-      if(currentUser.userType == "user"){
-      List<TicketModel> tickets =
-          context.watch<EventsController>().userBookedEvents;
-      events = [];
-      for (var element in tickets) {
-        events.add(allEvents.firstWhere((element1) => element.eId == element1.id));
-      }}else{
-        events = allEvents.where((element) => element.uId == currentUser.id).toList();
+      if (allEvents.isNotEmpty &&
+          users.isNotEmpty &&
+          FirebaseAuth.instance.currentUser != null) {
+        var uId = FirebaseAuth.instance.currentUser!.uid;
+        UserModel currentUser =
+            users.firstWhere((element) => element.id == uId);
+        if (currentUser.userType == "user") {
+          List<TicketModel> tickets =
+              context.watch<EventsController>().userBookedEvents;
+          events = [];
+          for (var element in tickets) {
+            events.add(
+                allEvents.firstWhere((element1) => element.eId == element1.id));
+          }
+        } else {
+          events = allEvents
+              .where((element) => element.uId == currentUser.id)
+              .toList();
+        }
       }
-    }} else {
+    } else {
       events = allEvents;
     }
     return Scaffold(
@@ -122,7 +131,6 @@ class _AllEventScreenState extends State<AllEventScreen>
                     ),
                   )
                 ],
-              )
-        );
+              ));
   }
 }

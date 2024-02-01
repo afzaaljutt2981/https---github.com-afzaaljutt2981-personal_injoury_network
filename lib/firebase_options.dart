@@ -61,9 +61,9 @@ class DefaultFirebaseOptions {
     apiKey: 'AIzaSyBBvVf1iGPseCkeXpR-x8SoRPbFQvpfXKg',
     appId: '1:84312334778:ios:337d630b623be78b773d83',
     messagingSenderId: '84312334778',
-    projectId: 'personal-injury-65638',  
+    projectId: 'personal-injury-65638',
     storageBucket: 'personal-injury-65638.appspot.com',
     iosBundleId: 'com.law.personalinjurynetworking',
     // iosBundleId: 'com.example.personalInjuryNetworking',
-  ); 
+  );
 }

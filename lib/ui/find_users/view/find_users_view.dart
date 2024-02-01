@@ -4,7 +4,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
-import 'package:personal_injury_networking/global/utils/custom_snackbar.dart';
 import 'package:personal_injury_networking/ui/authentication/model/job_position_model.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/chat_screen/view/view_users.dart';
@@ -103,57 +102,57 @@ class _FindUser extends State<FindUser> {
                                 ),
                                 Expanded(
                                     child: Text(
-                                      selectedCounty == ""
-                                          ? 'Select here'
-                                          : selectedCounty,
-                                      style: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                          color: const Color(0xFF1F314A)
-                                              .withOpacity(
+                                  selectedCounty == ""
+                                      ? 'Select here'
+                                      : selectedCounty,
+                                  style: AppTextStyles.josefin(
+                                    style: TextStyle(
+                                      color: const Color(0xFF1F314A)
+                                          .withOpacity(
                                               selectedCounty == "" ? 0.31 : 1),
-                                          fontSize: 14.sp,
-                                        ),
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ))
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ))
                               ],
                             ),
                             items: JobPositionModel.counties
                                 .map((String item) => DropdownMenuItem<String>(
-                              value: item ?? "",
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    item ?? "",
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  // Provides a space between the text and the icon
-                                  item == "Select All"
-                                      ? const Icon(
-                                    Icons.select_all_outlined,
-                                    // Replace with your desired icon
-                                    size: 24,
-                                  )
-                                      : selectedCounty ==
-                                      item.toString() ||
-                                      selectedCounty == "all"
-                                      ? const Icon(
-                                    Icons.done,
-                                    // Replace with your desired icon
-                                    size: 24,
-                                  )
-                                      : const SizedBox(),
-                                ],
-                              ),
-                            ))
+                                      value: item ?? "",
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            item ?? "",
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(width: 10),
+                                          // Provides a space between the text and the icon
+                                          item == "Select All"
+                                              ? const Icon(
+                                                  Icons.select_all_outlined,
+                                                  // Replace with your desired icon
+                                                  size: 24,
+                                                )
+                                              : selectedCounty ==
+                                                          item.toString() ||
+                                                      selectedCounty == "all"
+                                                  ? const Icon(
+                                                      Icons.done,
+                                                      // Replace with your desired icon
+                                                      size: 24,
+                                                    )
+                                                  : const SizedBox(),
+                                        ],
+                                      ),
+                                    ))
                                 .toList(),
                             // value: items[0],
                             onChanged: (String? value) {
@@ -181,7 +180,7 @@ class _FindUser extends State<FindUser> {
                               height: 50,
                               width: MediaQuery.of(context).size.width,
                               padding:
-                              const EdgeInsets.only(left: 14, right: 14),
+                                  const EdgeInsets.only(left: 14, right: 14),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(14),
                                 color: AppColors.textFieldColor,
@@ -207,7 +206,7 @@ class _FindUser extends State<FindUser> {
                                 radius: const Radius.circular(40),
                                 thickness: MaterialStateProperty.all<double>(6),
                                 thumbVisibility:
-                                MaterialStateProperty.all<bool>(true),
+                                    MaterialStateProperty.all<bool>(true),
                               ),
                             ),
                             menuItemStyleData: const MenuItemStyleData(
@@ -240,61 +239,61 @@ class _FindUser extends State<FindUser> {
                                 ),
                                 Expanded(
                                     child: Text(
-                                      selectedJobPosition == ""
-                                          ? 'Select here'
-                                          : selectedJobPosition,
-                                      style: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                          color: const Color(0xFF1F314A)
-                                              .withOpacity(selectedJobPosition == ""
+                                  selectedJobPosition == ""
+                                      ? 'Select here'
+                                      : selectedJobPosition,
+                                  style: AppTextStyles.josefin(
+                                    style: TextStyle(
+                                      color: const Color(0xFF1F314A)
+                                          .withOpacity(selectedJobPosition == ""
                                               ? 0.31
                                               : 1),
-                                          fontSize: 14.sp,
-                                        ),
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ))
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ))
                               ],
                             ),
                             items: JobPositionModel.jobList
                                 .map((String item) => DropdownMenuItem<String>(
-                              value: item ?? "",
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    item ?? "",
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  // Provides a space between the text and the icon
-                                  item == "- Select All"
-                                      ? const Icon(
-                                    Icons.select_all_outlined,
-                                    // Replace with your desired icon
-                                    size: 24,
-                                  )
-                                      : selectedJobPosition ==
-                                      (item ?? "")
-                                          .split("- ")?[1]
-                                          .toString() ||
-                                      selectedJobPosition ==
-                                          "all"
-                                      ? const Icon(
-                                    Icons.done,
-                                    // Replace with your desired icon
-                                    size: 24,
-                                  )
-                                      : const SizedBox(),
-                                ],
-                              ),
-                            ))
+                                      value: item ?? "",
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            item ?? "",
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(width: 10),
+                                          // Provides a space between the text and the icon
+                                          item == "- Select All"
+                                              ? const Icon(
+                                                  Icons.select_all_outlined,
+                                                  // Replace with your desired icon
+                                                  size: 24,
+                                                )
+                                              : selectedJobPosition ==
+                                                          (item ?? "")
+                                                              .split("- ")?[1]
+                                                              .toString() ||
+                                                      selectedJobPosition ==
+                                                          "all"
+                                                  ? const Icon(
+                                                      Icons.done,
+                                                      // Replace with your desired icon
+                                                      size: 24,
+                                                    )
+                                                  : const SizedBox(),
+                                        ],
+                                      ),
+                                    ))
                                 .toList(),
                             // value: items[0],
                             onChanged: (String? value) {
@@ -320,7 +319,7 @@ class _FindUser extends State<FindUser> {
                               height: 50,
                               width: MediaQuery.of(context).size.width,
                               padding:
-                              const EdgeInsets.only(left: 14, right: 14),
+                                  const EdgeInsets.only(left: 14, right: 14),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(14),
                                 color: AppColors.textFieldColor,
@@ -346,7 +345,7 @@ class _FindUser extends State<FindUser> {
                                 radius: const Radius.circular(40),
                                 thickness: MaterialStateProperty.all<double>(6),
                                 thumbVisibility:
-                                MaterialStateProperty.all<bool>(true),
+                                    MaterialStateProperty.all<bool>(true),
                               ),
                             ),
                             menuItemStyleData: const MenuItemStyleData(
@@ -423,7 +422,6 @@ class _FindUser extends State<FindUser> {
             ),
           ],
         ));
-
   }
 
   Widget textfield(TextEditingController controller, String hintText,
@@ -455,25 +453,25 @@ class _FindUser extends State<FindUser> {
     );
   }
 
-void _showBottomSheet(BuildContext context) {
-  print("allUsers -> $allUsers");
-  showModalBottomSheet(
-    isScrollControlled: true,
-    context: context,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(30.sp),
-        topRight: Radius.circular(30.sp),
+  void _showBottomSheet(BuildContext context) {
+    print("allUsers -> $allUsers");
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.sp),
+          topRight: Radius.circular(30.sp),
+        ),
       ),
-    ),
-    builder: (BuildContext context) {
-      return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-        return ViewUsers(
-          allUsers: allUsers ?? [],
-        );
-      });
-    },
-  );
-}
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+          return ViewUsers(
+            allUsers: allUsers ?? [],
+          );
+        });
+      },
+    );
+  }
 }

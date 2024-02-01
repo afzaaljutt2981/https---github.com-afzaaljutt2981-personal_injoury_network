@@ -37,14 +37,15 @@ class MyProfileController extends ChangeNotifier {
       });
     }
   }
+
   updateUserNotification(bool value) async {
     print("update isNewNotificationReceived called -->  $value");
-    ref.doc(FirebaseAuth.instance.currentUser!.uid).update(
-        {
-          "isNewNotificationReceived": value
-        });
+    ref
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({"isNewNotificationReceived": value});
     notifyListeners();
   }
+
   getOtherUserData(String uid) {
     if (FirebaseAuth.instance.currentUser != null) {
       otherUserProfileStream = ref.doc(uid).snapshots().listen((event) {

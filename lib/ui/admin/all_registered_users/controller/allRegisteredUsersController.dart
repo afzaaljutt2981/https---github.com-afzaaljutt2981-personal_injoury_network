@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_injury_networking/global/utils/custom_snackbar.dart';
-import 'package:personal_injury_networking/global/utils/functions.dart';
 
 import '../../../authentication/model/user_model.dart';
 

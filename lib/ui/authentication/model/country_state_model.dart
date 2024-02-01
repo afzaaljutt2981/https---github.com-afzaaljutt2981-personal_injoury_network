@@ -27,7 +27,7 @@ class CountryStateModel {
   Map<dynamic, dynamic> toJson() => {
         "error": error,
         "msg": msg,
-        "data": List<dynamic>.from((data??[]).map((x) => x?.toJson())),
+        "data": List<dynamic>.from((data ?? []).map((x) => x?.toJson())),
       };
 }
 

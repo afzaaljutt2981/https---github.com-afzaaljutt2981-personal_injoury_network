@@ -222,7 +222,8 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                                 width: 32,
                                                 height: 32,
                                                 clipBehavior: Clip.antiAlias,
-                                                decoration: const BoxDecoration(),
+                                                decoration:
+                                                    const BoxDecoration(),
                                                 child: Center(
                                                   child: Image(
                                                     height: 80.sp,
@@ -289,7 +290,8 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                                 width: 32,
                                                 height: 32,
                                                 clipBehavior: Clip.antiAlias,
-                                                decoration: const BoxDecoration(),
+                                                decoration:
+                                                    const BoxDecoration(),
                                                 child: Center(
                                                   child: Image(
                                                     height: 80.sp,
@@ -365,7 +367,8 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                                 width: 32,
                                                 height: 32,
                                                 clipBehavior: Clip.antiAlias,
-                                                decoration: const BoxDecoration(),
+                                                decoration:
+                                                    const BoxDecoration(),
                                                 child: Center(
                                                   child: Image(
                                                     height: 80.sp,
@@ -433,7 +436,8 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                                 width: 32,
                                                 height: 32,
                                                 clipBehavior: Clip.antiAlias,
-                                                decoration: const BoxDecoration(),
+                                                decoration:
+                                                    const BoxDecoration(),
                                                 child: Center(
                                                   child: Image(
                                                     height: 80.sp,
@@ -479,8 +483,7 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                                   milliseconds: 200),
                                               reverseDuration: const Duration(
                                                   milliseconds: 200),
-                                              child:
-                                                  const CreateCampaignView(),
+                                              child: const CreateCampaignView(),
                                             ),
                                           );
                                         },
@@ -509,7 +512,8 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                                 width: 32,
                                                 height: 32,
                                                 clipBehavior: Clip.antiAlias,
-                                                decoration: const BoxDecoration(),
+                                                decoration:
+                                                    const BoxDecoration(),
                                                 child: Center(
                                                   child: Image(
                                                     height: 80.sp,
@@ -577,7 +581,8 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                                 width: 32,
                                                 height: 32,
                                                 clipBehavior: Clip.antiAlias,
-                                                decoration: const BoxDecoration(),
+                                                decoration:
+                                                    const BoxDecoration(),
                                                 child: Center(
                                                   child: Image(
                                                     height: 80.sp,

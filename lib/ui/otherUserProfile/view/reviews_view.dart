@@ -44,7 +44,7 @@ class _OtherUserReviewScreenState extends State<OtherUserReviewScreen> {
         : ListView.builder(
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
-            itemCount: widget.userEvents?.length??0,
+            itemCount: widget.userEvents?.length ?? 0,
             itemBuilder: (context, index) {
               var model = widget.userEvents?[index];
               return Constants.userType == 'user'
@@ -141,9 +141,10 @@ class _OtherUserReviewScreenState extends State<OtherUserReviewScreen> {
   }
 
   Widget eventBox(EventModel? model) {
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(model?.dateTime??0);
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(model?.dateTime ?? 0);
     String fDate = DateFormat("d MMM- EEEE").format(date);
-    DateTime startTime = DateTime.fromMillisecondsSinceEpoch(model?.startTime??0);
+    DateTime startTime =
+        DateTime.fromMillisecondsSinceEpoch(model?.startTime ?? 0);
     String fStartTime = DateFormat("HH:mm a").format(startTime);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
@@ -172,7 +173,8 @@ class _OtherUserReviewScreenState extends State<OtherUserReviewScreen> {
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(20.sp),
                     image: DecorationImage(
-                        image: NetworkImage(model?.pImage??""), fit: BoxFit.cover)),
+                        image: NetworkImage(model?.pImage ?? ""),
+                        fit: BoxFit.cover)),
               ),
               Expanded(
                 child: Padding(
@@ -194,7 +196,7 @@ class _OtherUserReviewScreenState extends State<OtherUserReviewScreen> {
                       ),
                       CustomSizeBox(10.h),
                       Text(
-                        model?.title??"",
+                        model?.title ?? "",
                         style: AppTextStyles.josefin(
                             style: TextStyle(
                                 color: const Color(0xFF120D26),

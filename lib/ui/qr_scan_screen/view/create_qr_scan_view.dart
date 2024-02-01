@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 
 class CreateQrScanView extends StatefulWidget {
   CreateQrScanView({super.key, required this.from});
+
   String from;
+
   @override
   State<CreateQrScanView> createState() => _CreateQrScanViewState();
 }
@@ -14,6 +16,7 @@ class _CreateQrScanViewState extends State<CreateQrScanView> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (_) => MyProfileController(), child: HomeQrScanView(from: widget.from));
+        create: (_) => MyProfileController(),
+        child: HomeQrScanView(from: widget.from));
   }
 }

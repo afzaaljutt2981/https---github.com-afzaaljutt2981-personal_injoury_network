@@ -6,7 +6,7 @@ class GetGradientButton extends StatelessWidget {
   final VoidCallback onTap;
   Widget? buttonText;
 
-   GetGradientButton(this.height, this.onTap, this.buttonText, {Key? key})
+  GetGradientButton(this.height, this.onTap, this.buttonText, {Key? key})
       : super(key: key);
 
   @override
