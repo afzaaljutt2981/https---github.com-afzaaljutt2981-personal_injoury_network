@@ -9,19 +9,19 @@ class FindUserController extends ChangeNotifier {
       FirebaseFirestore.instance.collection("campaigns");
   CollectionReference users = FirebaseFirestore.instance.collection("users");
   List<UserModel> allUsers = [];
-  String? county;
-  String? job;
+  List<String> county = [];
+  List<String> job = [];
 
   FindUserController() {
     getAllUsers();
   }
 
-  setCounty(String county) {
+  setCounty(List<String> county) {
     this.county = county;
     getAllUsers();
   }
 
-  setJob(String job) {
+  setJob(List<String> job) {
     this.job = job;
     getAllUsers();
   }
@@ -32,8 +32,8 @@ class FindUserController extends ChangeNotifier {
       UserModel user;
       for (var element in event.docs) {
         user = UserModel.fromJson(element.data() as Map<String, dynamic>);
-        if ((user.county == county || county == "all") &&
-            (user.position == job || job == "all")) {
+        if ((county.contains(user.county) || county.contains("all")) &&
+            (job.contains(user.position) || job.contains("all"))) {
           allUsers.add(user);
         }
       }

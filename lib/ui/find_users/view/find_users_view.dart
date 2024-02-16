@@ -23,8 +23,8 @@ class FindUser extends StatefulWidget {
 class _FindUser extends State<FindUser> {
   TextEditingController descriptionController = TextEditingController();
   Uint8List? image1;
-  String selectedCounty = '';
-  String selectedJobPosition = '';
+  List<String> selectedCounty = [];
+  List<String> selectedJobPosition = [];
   bool expandController = false;
   List<UserModel?>? allUsers = [];
 
@@ -102,9 +102,7 @@ class _FindUser extends State<FindUser> {
                                 ),
                                 Expanded(
                                     child: Text(
-                                  selectedCounty == ""
-                                      ? 'Select here'
-                                      : selectedCounty,
+                                  'Select here',
                                   style: AppTextStyles.josefin(
                                     style: TextStyle(
                                       color: const Color(0xFF1F314A)
@@ -141,9 +139,10 @@ class _FindUser extends State<FindUser> {
                                                   // Replace with your desired icon
                                                   size: 24,
                                                 )
-                                              : selectedCounty ==
-                                                          item.toString() ||
-                                                      selectedCounty == "all"
+                                              : selectedCounty.contains(
+                                                          item.toString()) ||
+                                                      selectedCounty
+                                                          .contains("all")
                                                   ? const Icon(
                                                       Icons.done,
                                                       // Replace with your desired icon
@@ -158,7 +157,8 @@ class _FindUser extends State<FindUser> {
                             onChanged: (String? value) {
                               if (value == "Select All") {
                                 setState(() {
-                                  selectedCounty = "all";
+                                  selectedCounty = [];
+                                  selectedCounty.add("all");
                                   context
                                       .read<FindUserController>()
                                       .setCounty(selectedCounty);
@@ -166,8 +166,11 @@ class _FindUser extends State<FindUser> {
                                 return;
                               }
                               ;
+                              if (selectedCounty.contains("all")) {
+                                selectedCounty = [];
+                              }
                               setState(() {
-                                selectedCounty = value ?? "";
+                                selectedCounty.add(value ?? "");
                                 context
                                     .read<FindUserController>()
                                     .setCounty(selectedCounty);
@@ -239,9 +242,7 @@ class _FindUser extends State<FindUser> {
                                 ),
                                 Expanded(
                                     child: Text(
-                                  selectedJobPosition == ""
-                                      ? 'Select here'
-                                      : selectedJobPosition,
+                                  'Select here',
                                   style: AppTextStyles.josefin(
                                     style: TextStyle(
                                       color: const Color(0xFF1F314A)
@@ -279,12 +280,12 @@ class _FindUser extends State<FindUser> {
                                                   // Replace with your desired icon
                                                   size: 24,
                                                 )
-                                              : selectedJobPosition ==
+                                              : selectedJobPosition.contains(
                                                           (item ?? "")
                                                               .split("- ")?[1]
-                                                              .toString() ||
-                                                      selectedJobPosition ==
-                                                          "all"
+                                                              .toString()) ||
+                                                      selectedJobPosition
+                                                          .contains("all")
                                                   ? const Icon(
                                                       Icons.done,
                                                       // Replace with your desired icon
@@ -299,17 +300,20 @@ class _FindUser extends State<FindUser> {
                             onChanged: (String? value) {
                               if (value == "- Select All") {
                                 setState(() {
-                                  selectedJobPosition = "all";
+                                  selectedJobPosition = [];
+                                  selectedJobPosition.add("all");
                                   context
                                       .read<FindUserController>()
                                       .setJob(selectedJobPosition);
                                 });
                                 return;
                               }
-                              ;
+                              if (selectedJobPosition.contains("all")) {
+                                selectedJobPosition = [];
+                              }
                               setState(() {
-                                selectedJobPosition =
-                                    (value ?? "").split("- ")?[1] ?? "";
+                                selectedJobPosition
+                                    .add((value ?? "").split("- ")?[1] ?? "");
                                 context
                                     .read<FindUserController>()
                                     .setJob(selectedJobPosition);
