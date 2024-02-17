@@ -1,7 +1,7 @@
 class CampaignModel {
   late String? id;
-  late String? country;
-  late String? jobOrPosition;
+  List<String>? country;
+  List<String>? jobOrPosition;
   late String? message;
   late int? timeCreated;
   List<String?>? members;
@@ -21,10 +21,12 @@ class CampaignModel {
 
   factory CampaignModel.fromJson(Map<String, dynamic>? json) {
     List members = json?["members"] ?? [];
+    List country = json?["country"] ?? [];
+    List jobOrPosition = json?["jobOrPosition"] ?? [];
     return CampaignModel(
         id: json?['id'],
-        country: json?['country'],
-        jobOrPosition: json?['jobOrPosition'],
+        country: List.generate(country.length, (index) => country[index]),
+        jobOrPosition: List.generate(jobOrPosition.length, (index) => jobOrPosition[index]),
         message: json?['message'],
         timeCreated: json?['dateTime'],
         members: List.generate(members.length, (index) => members[index]),

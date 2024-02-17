@@ -9,19 +9,19 @@ class CampaignController extends ChangeNotifier {
       FirebaseFirestore.instance.collection("campaigns");
   CollectionReference users = FirebaseFirestore.instance.collection("users");
   List<UserModel> allUsers = [];
-  String? county;
-  String? job;
+  List<String> county = [];
+  List<String> job = [];
 
   CampaignController() {
     getAllUsers();
   }
 
-  setCounty(String county) {
+  setCounty(List<String> county) {
     this.county = county;
     getAllUsers();
   }
 
-  setJob(String job) {
+  setJob(List<String> job) {
     this.job = job;
     getAllUsers();
   }
@@ -32,8 +32,8 @@ class CampaignController extends ChangeNotifier {
       UserModel user;
       for (var element in event.docs) {
         user = UserModel.fromJson(element.data() as Map<String, dynamic>);
-        if ((user.county == county || county == "all") &&
-            (user.position == job || job == "all")) {
+        if ((county.contains(user.county) || county.contains("all")) &&
+            (job.contains(user.position) || job.contains("all"))) {
           allUsers.add(user);
         }
       }
@@ -42,8 +42,8 @@ class CampaignController extends ChangeNotifier {
   }
 
   createCampaign({
-    required String campaignCountry,
-    required String campaignJob,
+    required List<String> campaignCountry,
+    required List<String> campaignJob,
     required String campaignDescription,
     required String pImage,
   }) async {
@@ -66,9 +66,9 @@ class CampaignController extends ChangeNotifier {
       usersSnapShot.docs.forEach((user) {
         parsedUser = UserModel.fromJson(user.data() as Map<String, dynamic>?);
         if (user.data() != null &&
-            (campaignCountry == "all" ||
+            (campaignCountry[0] == "all" ||
                 parsedUser.county == campaignCountry) &&
-            (campaignJob == "all" || parsedUser.position == campaignJob)) {
+            (campaignJob[0] == "all" || parsedUser.position == campaignJob)) {
           users.add(parsedUser.id);
         }
       });
@@ -78,8 +78,8 @@ class CampaignController extends ChangeNotifier {
       // for (var element in event.docs) {
       //   eventTickets.add(TicketModel.fromJson(element.data()));
       // }
-      print(
-          "campaign new object -> ${CampaignModel(id: "campaignDoc.id", pImage: pImage, status: "Draft", country: campaignCountry, jobOrPosition: campaignJob, message: campaignDescription, timeCreated: DateTime.now().millisecondsSinceEpoch, members: users).toJson()}");
+      // print(
+      //     "campaign new object -> ${CampaignModel(id: "campaignDoc.id", pImage: pImage, status: "Draft", country: campaignCountry, jobOrPosition: campaignJob, message: campaignDescription, timeCreated: DateTime.now().millisecondsSinceEpoch, members: users).toJson()}");
       var campaignDoc = campaignsRef.doc();
 
       await campaignDoc.set(CampaignModel(

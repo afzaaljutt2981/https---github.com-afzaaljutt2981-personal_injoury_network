@@ -33,7 +33,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
     return Scaffold(
       backgroundColor: AppColors.kPrimaryColor,
       appBar: AppBar(
-        // backgroundColor: Colors.white,
+        backgroundColor: AppColors.kPrimaryColor,
         elevation: 0,
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),

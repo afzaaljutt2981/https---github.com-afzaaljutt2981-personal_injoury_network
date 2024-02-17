@@ -99,7 +99,8 @@ class EventsController extends ChangeNotifier {
               senderId: senderId,
               image: "",
               eId: event?.id ?? "",
-              notificationContent: "",
+              notificationContent:
+                  "You are invited for ${event?.title ?? "event"} scheduled on ${DateTime(event?.dateTime ?? 0).day} of ${DateTime(event?.dateTime ?? 0).month} at ${event?.address}",
               time: DateTime.now().millisecondsSinceEpoch,
               notificationType: "Invite",
               status: '')

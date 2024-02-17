@@ -28,8 +28,8 @@ class CreateCampaign extends StatefulWidget {
 class _CreateCampaign extends State<CreateCampaign> {
   TextEditingController descriptionController = TextEditingController();
   Uint8List? image1;
-  String selectedCounty = '';
-  String selectedJobPosition = '';
+  List<String> selectedCounty = [];
+  List<String> selectedJobPosition = [];
   bool expandController = false;
   List<UserModel?>? allUsers = [];
 
@@ -107,9 +107,7 @@ class _CreateCampaign extends State<CreateCampaign> {
                                 ),
                                 Expanded(
                                     child: Text(
-                                  selectedCounty == ""
-                                      ? 'Select here'
-                                      : selectedCounty,
+                                  'Select here',
                                   style: AppTextStyles.josefin(
                                     style: TextStyle(
                                       color: const Color(0xFF1F314A)
@@ -146,9 +144,10 @@ class _CreateCampaign extends State<CreateCampaign> {
                                                   // Replace with your desired icon
                                                   size: 24,
                                                 )
-                                              : selectedCounty ==
-                                                          item.toString() ||
-                                                      selectedCounty == "all"
+                                              : selectedCounty.contains(
+                                                          item.toString()) ||
+                                                      selectedCounty
+                                                          .contains("all")
                                                   ? const Icon(
                                                       Icons.done,
                                                       // Replace with your desired icon
@@ -163,7 +162,8 @@ class _CreateCampaign extends State<CreateCampaign> {
                             onChanged: (String? value) {
                               if (value == "Select All") {
                                 setState(() {
-                                  selectedCounty = "all";
+                                  selectedCounty = [];
+                                  selectedCounty.add("all");
                                   context
                                       .read<CampaignController>()
                                       .setCounty(selectedCounty);
@@ -171,8 +171,11 @@ class _CreateCampaign extends State<CreateCampaign> {
                                 return;
                               }
                               ;
+                              if (selectedCounty.contains("all")) {
+                                selectedCounty = [];
+                              }
                               setState(() {
-                                selectedCounty = value ?? "";
+                                selectedCounty.add(value ?? "");
                                 context
                                     .read<CampaignController>()
                                     .setCounty(selectedCounty);
@@ -244,9 +247,7 @@ class _CreateCampaign extends State<CreateCampaign> {
                                 ),
                                 Expanded(
                                     child: Text(
-                                  selectedJobPosition == ""
-                                      ? 'Select here'
-                                      : selectedJobPosition,
+                                  'Select here',
                                   style: AppTextStyles.josefin(
                                     style: TextStyle(
                                       color: const Color(0xFF1F314A)
@@ -284,12 +285,12 @@ class _CreateCampaign extends State<CreateCampaign> {
                                                   // Replace with your desired icon
                                                   size: 24,
                                                 )
-                                              : selectedJobPosition ==
+                                              : selectedJobPosition.contains(
                                                           (item ?? "")
                                                               .split("- ")?[1]
-                                                              .toString() ||
-                                                      selectedJobPosition ==
-                                                          "all"
+                                                              .toString()) ||
+                                                      selectedJobPosition
+                                                          .contains("all")
                                                   ? const Icon(
                                                       Icons.done,
                                                       // Replace with your desired icon
@@ -304,17 +305,20 @@ class _CreateCampaign extends State<CreateCampaign> {
                             onChanged: (String? value) {
                               if (value == "- Select All") {
                                 setState(() {
-                                  selectedJobPosition = "all";
+                                  selectedJobPosition = [];
+                                  selectedJobPosition.add("all");
                                   context
                                       .read<CampaignController>()
                                       .setJob(selectedJobPosition);
                                 });
                                 return;
                               }
-                              ;
+                              if (selectedJobPosition.contains("all")) {
+                                selectedJobPosition = [];
+                              }
                               setState(() {
-                                selectedJobPosition =
-                                    (value ?? "").split("- ")?[1] ?? "";
+                                selectedJobPosition
+                                    .add((value ?? "").split("- ")?[1] ?? "");
                                 context
                                     .read<CampaignController>()
                                     .setJob(selectedJobPosition);
@@ -541,11 +545,11 @@ class _CreateCampaign extends State<CreateCampaign> {
                     ),
                     width: MediaQuery.of(context).size.width * 0.85,
                     child: GetGradientButton(50.sp, () async {
-                      if (selectedCounty == "") {
+                      if (selectedCounty.isEmpty) {
                         Functions.showSnackBar(
                             context, "please select country");
                         return;
-                      } else if (selectedJobPosition == "") {
+                      } else if (selectedJobPosition.isEmpty) {
                         Functions.showSnackBar(
                             context, "please select job/position");
                         return;
@@ -572,7 +576,7 @@ class _CreateCampaign extends State<CreateCampaign> {
                       Navigator.pop(context);
                       Navigator.pop(context);
                       CustomSnackBar(true).showInSnackBar(
-                          'Campaign created successfully For the people of ${selectedCounty} working as ${selectedJobPosition}."',
+                          'Campaign created successfully For the people of $selectedCounty working as $selectedJobPosition."',
                           context);
                       // eventCreated(
                       //     "For the people of ${selectedCountry} working as ${selectedJobPosition}.");

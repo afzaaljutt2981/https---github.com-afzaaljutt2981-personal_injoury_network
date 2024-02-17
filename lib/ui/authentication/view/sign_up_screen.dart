@@ -259,7 +259,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     padding: EdgeInsets.symmetric(horizontal: 10.w),
                     child: PageView(
                       controller: controller,
-                      physics: const NeverScrollableScrollPhysics(),
+                      // physics: const NeverScrollableScrollPhysics(),
                       children: [
                         process1(),
                         process2(),
@@ -554,7 +554,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget process1() {
     return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       child: Column(
         children: [
           textField('First Name', 'Jon', 0, textFieldController[0],
@@ -584,7 +584,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget process2() {
     return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
