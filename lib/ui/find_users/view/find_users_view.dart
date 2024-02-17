@@ -14,8 +14,9 @@ import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
 
 class FindUser extends StatefulWidget {
-  const FindUser({super.key});
+  FindUser({super.key, required this.currentUser});
 
+  UserModel? currentUser;
   @override
   State<FindUser> createState() => _FindUser();
 }
@@ -473,6 +474,7 @@ class _FindUser extends State<FindUser> {
             builder: (BuildContext context, StateSetter setState) {
           return ViewUsers(
             allUsers: allUsers ?? [],
+            currentUser: widget.currentUser,
           );
         });
       },

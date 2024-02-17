@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
+import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/ui/home/view/navigation_view.dart';
 
@@ -133,7 +134,8 @@ class _SelectionScreenState extends State<SelectionScreen> {
                           style: AppTextStyles.josefin(
                               style: TextStyle(
                                   fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600)),
+                                  fontWeight: FontWeight.w600,
+                              color: AppColors.kWhiteColor)),
                         )),
                   ),
                   CustomSizeBox(10.h),

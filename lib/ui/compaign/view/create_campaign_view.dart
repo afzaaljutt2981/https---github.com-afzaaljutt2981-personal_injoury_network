@@ -643,6 +643,7 @@ class _CreateCampaign extends State<CreateCampaign> {
             builder: (BuildContext context, StateSetter setState) {
           return ViewUsers(
             allUsers: allUsers ?? [],
+            currentUser: null,
           );
         });
       },

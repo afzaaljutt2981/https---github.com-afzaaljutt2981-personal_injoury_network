@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
+import 'package:personal_injury_networking/ui/otherUserProfile/view/create_other_profile_view.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
@@ -113,58 +117,81 @@ class _ViewUsersState extends State<ViewUsers> {
   Widget friend(UserModel? friend) {
     return Padding(
       padding: EdgeInsets.only(bottom: 20.h, top: 10.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (friend?.pImage != null) ...[
-            CircleAvatar(
-              backgroundImage: NetworkImage(friend?.pImage ?? ""),
-              radius: 23,
-            )
-          ] else ...[
-            Image(
-              image: const AssetImage('assets/images/profile_pic.png'),
-              width: 45.sp,
-              height: 45.sp,
-            ),
-          ],
-          SizedBox(
-            width: 10.w,
-          ),
-          Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                (friend?.firstName ?? "") + " " + (friend?.lastName ?? ""),
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: const Color(0xFF120D26),
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500)),
-              ),
-              CustomSizeBox(5.h),
-              Text(
-                '${friend?.followers?.length ?? 0} Followers',
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: const Color(0xFF747688),
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w400)),
+      child: GestureDetector(
+        onTap: FirebaseAuth.instance.currentUser?.email?.toLowerCase() ==
+                Constants.adminEmail.toLowerCase()
+            ? null
+            : () {
+                print("clicked");
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    childCurrent: widget,
+                    type: PageTransitionType.rightToLeft,
+                    alignment: Alignment.center,
+                    duration: const Duration(milliseconds: 200),
+                    reverseDuration: const Duration(milliseconds: 200),
+                    child: CreateOtherUserProfileView(
+                      participant: friend,
+                      currentUser: widget.currentUser,
+                    ),
+                  ),
+                );
+              },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (friend?.pImage != null) ...[
+              CircleAvatar(
+                backgroundImage: NetworkImage(friend?.pImage ?? ""),
+                radius: 23,
+              )
+            ] else ...[
+              Image(
+                image: const AssetImage('assets/images/profile_pic.png'),
+                width: 45.sp,
+                height: 45.sp,
               ),
             ],
-          )),
-        ],
+            SizedBox(
+              width: 10.w,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  (friend?.firstName ?? "") + " " + (friend?.lastName ?? ""),
+                  style: AppTextStyles.josefin(
+                      style: TextStyle(
+                          color: const Color(0xFF120D26),
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500)),
+                ),
+                CustomSizeBox(5.h),
+                Text(
+                  '${friend?.followers?.length ?? 0} Followers',
+                  style: AppTextStyles.josefin(
+                      style: TextStyle(
+                          color: const Color(0xFF747688),
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400)),
+                ),
+              ],
+            )),
+          ],
+        ),
       ),
     );
   }
 }
 
 class ViewUsers extends StatefulWidget {
-  ViewUsers({super.key, required this.allUsers});
+  ViewUsers({super.key, required this.allUsers, required this.currentUser});
 
   List<UserModel?>? allUsers;
+  UserModel? currentUser;
 
   @override
   State<ViewUsers> createState() => _ViewUsersState();

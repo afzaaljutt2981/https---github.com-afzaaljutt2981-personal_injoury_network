@@ -253,7 +253,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                               const Duration(milliseconds: 200),
                                           reverseDuration:
                                               const Duration(milliseconds: 200),
-                                          child: CreateFindUserView(),
+                                          child: CreateFindUserView(user: user,),
                                         ),
                                       );
                                     }),
