@@ -28,7 +28,7 @@ class CampaignModel {
         country: List.generate(country.length, (index) => country[index]),
         jobOrPosition: List.generate(jobOrPosition.length, (index) => jobOrPosition[index]),
         message: json?['message'],
-        timeCreated: json?['dateTime'],
+        timeCreated: json?['timeCreated'],
         members: List.generate(members.length, (index) => members[index]),
         pImage: json?['pImage'],
         status: json?['status']);

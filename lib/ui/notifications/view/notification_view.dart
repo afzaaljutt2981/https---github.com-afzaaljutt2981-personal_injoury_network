@@ -25,6 +25,11 @@ class NotificationView extends StatefulWidget {
   State<NotificationView> createState() => _NotificationViewState();
 }
 
+extension MyIterable<E> on Iterable<E> {
+  Iterable<E> sortedBy(Comparable key(E e)) =>
+      toList()..sort((a, b) => key(a).compareTo(key(b)));
+}
+
 class _NotificationViewState extends State<NotificationView> {
   List<UserModel> allUsers = [];
   List<NotificationsModel> notiList = [];
@@ -49,19 +54,31 @@ class _NotificationViewState extends State<NotificationView> {
         (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
     allNotificationsAndCampaigns = notiList
         .map((e) => GenericDataModel(
-            notificationsModel: e, campaignModel: null, notificationType: "N"))
+            notificationsModel: e,
+            campaignModel: null,
+            timeCreated: e.time,
+            notificationType: "N"))
         .toList()
       ..addAll(allCampaigns
           .where((element) =>
               element.status == "Completed" &&
-              element.country == currentUser?.country &&
-              element.jobOrPosition == currentUser?.position)
+              ((element.country ?? []).contains(currentUser?.country) ||
+                  element.country?[0] == 'all') &&
+              ((element.jobOrPosition ?? []).contains(currentUser?.position) ||
+                  element.jobOrPosition?[0] == "all"))
           .toList()
           .map((campaign) => GenericDataModel(
               notificationsModel: null,
               campaignModel: campaign,
+              timeCreated: campaign.timeCreated,
               notificationType: "C"))
           .toList());
+    allNotificationsAndCampaigns = allNotificationsAndCampaigns
+        .sortedBy((it) => it.timeCreated ?? 0)
+        .toList()
+        .reversed
+        .toList();
+    print(allNotificationsAndCampaigns.toString());
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -340,100 +357,100 @@ class _NotificationViewState extends State<NotificationView> {
     );
   }
 
-  Widget campaignButtonRow(CampaignModel model) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget campaignButtonRow(CampaignModel model, String? formattedDate) {
+    return Column(
       children: [
-        GestureDetector(
-          onTap: () async {
-            // context
-            //     .read<NotificationsController>()
-            //     .respondRequest(model.id ?? "", "Rejected", context);
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Row(
             children: [
-              Row(children: [
-                Text(
-                  'Target Users: ',
-                  style: AppTextStyles.josefin(
-                      style: TextStyle(
-                          color: AppColors.kBlackColor, fontSize: 12.sp)),
-                ),
-                Text(
-                  '${model.members?.length ?? ""}',
-                  style: AppTextStyles.josefin(
-                      style: TextStyle(
-                          color: AppColors.kgreenColor, fontSize: 12.sp)),
-                ),
-              ]),
-              SizedBox(
-                height: 5.sp,
+              Text(
+                'Status: ',
+                style: AppTextStyles.josefin(
+                    style: TextStyle(
+                        color: AppColors.kBlackColor, fontSize: 12.sp)),
               ),
-              Row(children: [
-                Text(
-                  'Status: ',
-                  style: AppTextStyles.josefin(
-                      style: TextStyle(
-                          color: AppColors.kBlackColor, fontSize: 12.sp)),
-                ),
-                Text(
-                  '${model.status}',
-                  style: AppTextStyles.josefin(
-                      style: TextStyle(
-                          color: AppColors.kgreenColor, fontSize: 12.sp)),
-                ),
-              ])
+              Text(
+                '${model.status}',
+                style: AppTextStyles.josefin(
+                    style: TextStyle(
+                        color: AppColors.kgreenColor, fontSize: 12.sp)),
+              )
             ],
           ),
+          Text(
+            formattedDate ?? "",
+            style: AppTextStyles.josefin(
+                style:
+                    TextStyle(fontSize: 11.sp, color: AppColors.kBlackColor)),
+          ),
+        ]),
+        SizedBox(
+          height: 5.sp,
         ),
+        Row(children: [
+          Text(
+            'Target Users: ',
+            style: AppTextStyles.josefin(
+                style:
+                    TextStyle(color: AppColors.kBlackColor, fontSize: 12.sp)),
+          ),
+          Text(
+            '${model.members?.length ?? ""}',
+            style: AppTextStyles.josefin(
+                style:
+                    TextStyle(color: AppColors.kgreenColor, fontSize: 12.sp)),
+          ),
+        ]),
         SizedBox(
           height: 5.h,
         ),
-        GestureDetector(
-          onTap: (model.members?.length ?? 0) > 0 && model.status != "Completed"
-              ? () async {
-                  print("Button clicked..");
-                  // await context
-                  //     .read<AllCreatedCampaignsController>()
-                  //     .initiateCampaign(campaign: model, context);
-                  // // ignore: use_build_context_synchronously
-                  // await context
-                  //     .read<NotificationsController>()
-                  //     .followTap(currentUser, user.id ?? "", context);
-                  // // ignore: use_build_context_synchronously
-                  // await context
-                  //     .read<NotificationsController>()
-                  //     .followingTap(user, context);
-                }
-              : null,
-          child: Container(
-            decoration: BoxDecoration(
-                color: (model.members?.length ?? 0) > 0 &&
-                        model.status != "Completed"
-                    ? AppColors.kPrimaryColor
-                    : AppColors.dashedBorderColor,
-                borderRadius: BorderRadius.circular(7.sp)),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 27.w, vertical: 9.h),
-              child: Text(
-                'Initiate',
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: (model.members?.length ?? 0) > 0 &&
-                                model.status != "Completed"
-                            ? Colors.white
-                            : Colors.black,
-                        fontSize: 12.sp)),
-              ),
-            ),
-          ),
-        )
+        // GestureDetector(
+        //   onTap: (model.members?.length ?? 0) > 0 && model.status != "Completed"
+        //       ? () async {
+        //           print("Button clicked..");
+        //           // await context
+        //           //     .read<AllCreatedCampaignsController>()
+        //           //     .initiateCampaign(campaign: model, context);
+        //           // // ignore: use_build_context_synchronously
+        //           // await context
+        //           //     .read<NotificationsController>()
+        //           //     .followTap(currentUser, user.id ?? "", context);
+        //           // // ignore: use_build_context_synchronously
+        //           // await context
+        //           //     .read<NotificationsController>()
+        //           //     .followingTap(user, context);
+        //         }
+        //       : null,
+        //   child: Container(
+        //     decoration: BoxDecoration(
+        //         color: (model.members?.length ?? 0) > 0 &&
+        //                 model.status != "Completed"
+        //             ? AppColors.kPrimaryColor
+        //             : AppColors.dashedBorderColor,
+        //         borderRadius: BorderRadius.circular(7.sp)),
+        //     child: Padding(
+        //       padding: EdgeInsets.symmetric(horizontal: 27.w, vertical: 9.h),
+        //       child: Text(
+        //         'Initiate',
+        //         style: AppTextStyles.josefin(
+        //             style: TextStyle(
+        //                 color: (model.members?.length ?? 0) > 0 &&
+        //                         model.status != "Completed"
+        //                     ? Colors.white
+        //                     : Colors.black,
+        //                 fontSize: 12.sp)),
+        //       ),
+        //     ),
+        //   ),
+        // )
       ],
     );
   }
 
   Widget campaignItem(CampaignModel model) {
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(model.timeCreated ?? 0);
+    String formattedDate = formatDateTime(time);
+
     return Column(
       children: [
         Padding(
@@ -471,16 +488,17 @@ class _NotificationViewState extends State<NotificationView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        campaignButtonRow(model, formattedDate),
+                        CustomSizeBox(5.h),
                         Text(
-                          "Campaign created for people of ${model.country} doing job as ${model.jobOrPosition}",
+                          model.message ?? "",
+                          // "Campaign created for people of ${model.country} doing job as ${model.jobOrPosition}",
                           style: AppTextStyles.josefin(
                               style: TextStyle(
                                   color: AppColors.kBlackColor,
                                   fontSize: 14.sp,
                                   fontWeight: FontWeight.w500)),
                         ),
-                        CustomSizeBox(5.h),
-                        campaignButtonRow(model)
                       ],
                     ),
                   ),
