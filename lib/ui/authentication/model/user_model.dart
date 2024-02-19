@@ -23,6 +23,7 @@ class UserModel {
   List<String?>? followingRequests = [];
   bool? isDeleted = false;
   bool? isNewNotificationReceived = false;
+  late int? timeCreated;
 
   UserModel(
       {required this.location,
@@ -48,7 +49,8 @@ class UserModel {
       required this.company,
       required this.website,
       this.isDeleted,
-      required this.isNewNotificationReceived});
+      required this.isNewNotificationReceived,
+        required this.timeCreated,});
 
   factory UserModel.fromJson(Map<String, dynamic>? json) {
     List hobbies = json?['hobbies'] ?? [];
@@ -82,6 +84,7 @@ class UserModel {
           followingRequests_.length, (index) => followingRequests_[index]),
       isDeleted: json?['isDeleted'],
       isNewNotificationReceived: json?['isNewNotificationReceived'],
+      timeCreated: json?['timeCreated'],
     );
   }
 
@@ -111,11 +114,12 @@ class UserModel {
       "followingRequests": followingRequests,
       "isDeleted": isDeleted,
       "isNewNotificationReceived": isNewNotificationReceived,
+      "timeCreated": timeCreated,
     };
   }
 
   @override
   String toString() {
-    return 'UserModel{firstName: $firstName, lastName: $lastName, company: $company, position: $position, phone: $phone, email: $email, pImage: $pImage, website: $website, showSimpleNotification: $showSimpleNotification, showMessageNotification: $showMessageNotification, location: $location, country: $country, county: $county, userName: $userName, id: $id, reference: $reference, userType: $userType, fcmToken: $fcmToken, hobbies: $hobbies, followers: $followers, followings: $followings, followingRequests: $followingRequests, isDeleted: $isDeleted, isNewNotificationReceived: $isNewNotificationReceived}';
+    return 'UserModel{firstName: $firstName, lastName: $lastName, company: $company, position: $position, phone: $phone, email: $email, pImage: $pImage, website: $website, showSimpleNotification: $showSimpleNotification, showMessageNotification: $showMessageNotification, location: $location, country: $country, county: $county, userName: $userName, id: $id, reference: $reference, userType: $userType, fcmToken: $fcmToken, hobbies: $hobbies, followers: $followers, followings: $followings, followingRequests: $followingRequests, isDeleted: $isDeleted, isNewNotificationReceived: $isNewNotificationReceived, timeCreated: $timeCreated}';
   }
 }
