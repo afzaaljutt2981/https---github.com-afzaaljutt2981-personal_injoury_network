@@ -11,9 +11,9 @@ class FindUserController extends ChangeNotifier {
   List<String> county = [];
   List<String> job = [];
 
-  FindUserController() {
-    getAllUsers();
-  }
+  // FindUserController() {
+  //   getAllUsers();
+  // }
 
   setCounty(List<String> county) {
     this.county = county;
@@ -27,7 +27,7 @@ class FindUserController extends ChangeNotifier {
 
   getAllUsers() {
     allUsers = [];
-    users.snapshots().listen((event) {
+    users.get().then((event) {
       UserModel user;
       for (var element in event.docs) {
         user = UserModel.fromJson(element.data() as Map<String, dynamic>);

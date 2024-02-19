@@ -12,9 +12,7 @@ class CampaignController extends ChangeNotifier {
   List<String> county = [];
   List<String> job = [];
 
-  CampaignController() {
-    getAllUsers();
-  }
+
 
   setCounty(List<String> county) {
     this.county = county;

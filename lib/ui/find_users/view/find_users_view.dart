@@ -24,8 +24,8 @@ class FindUser extends StatefulWidget {
 class _FindUser extends State<FindUser> {
   TextEditingController descriptionController = TextEditingController();
   Uint8List? image1;
-  List<String> selectedCounty = [];
-  List<String> selectedJobPosition = [];
+  List<String> selectedCounty = ["all"];
+  List<String> selectedJobPosition = ["all"];
   bool expandController = false;
   List<UserModel?>? allUsers = [];
 
@@ -34,6 +34,12 @@ class _FindUser extends State<FindUser> {
     allUsers = context.watch<FindUserController>().allUsers;
     print("JobPositionModel.counties - >  ${JobPositionModel.counties}");
     print("allUsers - >  ${allUsers}");
+    context
+        .read<FindUserController>()
+        .setCounty(selectedCounty);
+    context
+        .read<FindUserController>()
+        .setJob(selectedJobPosition);
     return Scaffold(
         backgroundColor: AppColors.kWhiteColor,
         appBar: AppBar(

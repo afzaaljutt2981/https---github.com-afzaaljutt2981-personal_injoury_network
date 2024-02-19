@@ -496,7 +496,7 @@ class _NotificationViewState extends State<NotificationView> {
                           style: AppTextStyles.josefin(
                               style: TextStyle(
                                   color: AppColors.kBlackColor,
-                                  fontSize: 14.sp,
+                                  fontSize: 12.sp,
                                   fontWeight: FontWeight.w500)),
                         ),
                       ],

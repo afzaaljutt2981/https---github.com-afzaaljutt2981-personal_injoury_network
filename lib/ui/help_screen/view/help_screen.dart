@@ -18,7 +18,7 @@ class _HelpScreenViewState extends State<HelpScreen> {
   Future<void> sendEmail() async {
     final Uri params = Uri(
       scheme: 'mailto',
-      path: 'patauma@hotmail.com',
+      path: 'PINetworking@gmail.com ',
       query:
           'subject=Help and Support&body=Describe your issue here?', //add subject and body here
     );
