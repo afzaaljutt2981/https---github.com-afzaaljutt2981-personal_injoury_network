@@ -77,11 +77,11 @@ class _AllEventScreenState extends State<AllEventScreen>
           automaticallyImplyLeading: false,
           leading: widget.from == "1"
               ? Padding(
-                  padding: EdgeInsets.all(19.sp),
+                  padding: EdgeInsets.all(5.sp),
                   child: GestureDetector(
                     onTap: () => Navigator.pop(context),
                     child: SizedBox(
-                      width: 30.sp,
+                      width: 100.sp,
                       height: 40.sp,
                       child: Icon(
                         Icons.arrow_back_ios,

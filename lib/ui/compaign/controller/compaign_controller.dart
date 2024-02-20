@@ -12,9 +12,7 @@ class CampaignController extends ChangeNotifier {
   List<String> county = [];
   List<String> job = [];
 
-  CampaignController() {
-    getAllUsers();
-  }
+
 
   setCounty(List<String> county) {
     this.county = county;
@@ -67,8 +65,9 @@ class CampaignController extends ChangeNotifier {
         parsedUser = UserModel.fromJson(user.data() as Map<String, dynamic>?);
         if (user.data() != null &&
             (campaignCountry[0] == "all" ||
-                parsedUser.county == campaignCountry) &&
-            (campaignJob[0] == "all" || parsedUser.position == campaignJob)) {
+                campaignCountry.contains(parsedUser.county)) &&
+            (campaignJob[0] == "all" ||
+                campaignJob.contains(parsedUser.position))) {
           users.add(parsedUser.id);
         }
       });

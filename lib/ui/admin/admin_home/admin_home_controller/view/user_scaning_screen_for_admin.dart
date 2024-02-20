@@ -56,7 +56,7 @@ class _QRScannerScreenForAdminState extends State<QRScannerScreenForAdmin> {
             left: screenWidth * 0.025,
             child: IconButton(
               icon: Container(
-                width: 30.sp,
+                width: 100.sp,
                 height: 40.sp,
                 child: Icon(
                   Icons.navigate_before,

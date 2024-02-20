@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
+import 'package:personal_injury_networking/ui/notifications/view/notification_view.dart';
+import 'package:personal_injury_networking/ui/otherUserProfile/view/create_other_profile_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../global/utils/app_colors.dart';
@@ -44,6 +47,10 @@ class _AllRegisteredUsersScreenState extends State<AllRegisteredUsersScreen> {
                     ? element.userType != Constants.userType
                     : true) &&
             (element.isDeleted ?? false) == false)
+        .toList()
+        .sortedBy((it) => it.timeCreated ?? 0)
+        .toList()
+        .reversed
         .toList();
     return Scaffold(
         backgroundColor: const Color(0xFFf5f4ff),
@@ -51,11 +58,11 @@ class _AllRegisteredUsersScreenState extends State<AllRegisteredUsersScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: Padding(
-            padding: EdgeInsets.all(19.sp),
+            padding: EdgeInsets.all(5.sp),
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
               child: SizedBox(
-                width: 30.sp,
+                width: 100.sp,
                 height: 40.sp,
                 child: Icon(
                   Icons.arrow_back_ios,
@@ -178,87 +185,105 @@ class _AllRegisteredUsersScreenState extends State<AllRegisteredUsersScreen> {
                         itemCount: allUsers.length,
                         itemBuilder: (context, index) {
                           var model = allUsers[index];
-                          return Padding(
-                            padding: EdgeInsets.only(
-                                left: 15.w, right: 15.w, bottom: 10.h),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15.sp),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10.w, vertical: 10.h),
-                                child: Row(children: [
-                                  Image(
-                                      width: 50.sp,
-                                      height: 50.sp,
-                                      image: const AssetImage(
-                                          'assets/images/profile_pic.png')),
-                                  SizedBox(
-                                    width: 10.w,
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  childCurrent: widget,
+                                  type: PageTransitionType.rightToLeft,
+                                  alignment: Alignment.center,
+                                  duration: const Duration(milliseconds: 200),
+                                  reverseDuration: const Duration(milliseconds: 200),
+                                  child: CreateOtherUserProfileView(
+                                    participant: model,
+                                    currentUser: null,
                                   ),
-                                  Expanded(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "${model.firstName} ${model.lastName}",
-                                              style: AppTextStyles.josefin(
-                                                  style: TextStyle(
-                                                      fontSize: 14.sp,
-                                                      color: const Color(
-                                                          0xFF1A1167),
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                            ),
-                                            Text(
-                                              "${model.position}",
-                                              style: AppTextStyles.josefin(
-                                                  style: TextStyle(
-                                                      fontSize: 10.sp,
-                                                      color: const Color(
-                                                          0xFF847FB3),
-                                                      fontWeight:
-                                                          FontWeight.w400)),
-                                            ),
-                                          ],
-                                        ),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            // print("Delete should be initiated");
-                                            //   await FirebaseAuth.instance.currentUser?.delete();
-                                            if (model.id?.isNotEmpty ?? false) {
-                                              context
-                                                  .read<
-                                                      AllRegisteredUsersController>()
-                                                  .updateUser(context,
-                                                      userUidToUpdate:
-                                                          model.id!,
-                                                      isDeleted: true);
-                                            } else {
-                                              Functions.showSnackBar(context,
-                                                  "Invalid user, unable to delete this user");
-                                            }
-                                          },
-                                          child: Image(
-                                            height: 20.sp,
-                                            width: 20.sp,
-                                            image: const AssetImage(
-                                                'assets/images/delete.png'),
-                                          ),
-                                        ),
-                                      ],
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: 15.w, right: 15.w, bottom: 10.h),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15.sp),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10.w, vertical: 10.h),
+                                  child: Row(children: [
+                                    Image(
+                                        width: 50.sp,
+                                        height: 50.sp,
+                                        image: const AssetImage(
+                                            'assets/images/profile_pic.png')),
+                                    SizedBox(
+                                      width: 10.w,
                                     ),
-                                  )
-                                ]),
+                                    Expanded(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "${model.firstName} ${model.lastName}",
+                                                style: AppTextStyles.josefin(
+                                                    style: TextStyle(
+                                                        fontSize: 14.sp,
+                                                        color: const Color(
+                                                            0xFF1A1167),
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                              ),
+                                              Text(
+                                                "${model.position}",
+                                                style: AppTextStyles.josefin(
+                                                    style: TextStyle(
+                                                        fontSize: 10.sp,
+                                                        color: const Color(
+                                                            0xFF847FB3),
+                                                        fontWeight:
+                                                            FontWeight.w400)),
+                                              ),
+                                            ],
+                                          ),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              // print("Delete should be initiated");
+                                              //   await FirebaseAuth.instance.currentUser?.delete();
+                                              if (model.id?.isNotEmpty ?? false) {
+                                                context
+                                                    .read<
+                                                        AllRegisteredUsersController>()
+                                                    .updateUser(context,
+                                                        userUidToUpdate:
+                                                            model.id!,
+                                                        isDeleted: true);
+                                              } else {
+                                                Functions.showSnackBar(context,
+                                                    "Invalid user, unable to delete this user");
+                                              }
+                                            },
+                                            child: Image(
+                                              height: 20.sp,
+                                              width: 20.sp,
+                                              image: const AssetImage(
+                                                  'assets/images/delete.png'),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ]),
+                                ),
                               ),
                             ),
                           );

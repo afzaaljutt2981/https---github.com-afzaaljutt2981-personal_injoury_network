@@ -41,4 +41,9 @@ class NotificationsModel {
         "eId": eId,
         "notificationType": notificationType
       };
+
+  @override
+  String toString() {
+    return 'NotificationsModel{id: $id, senderId: $senderId, image: $image, eId: $eId, notificationContent: $notificationContent, time: $time, status: $status, notificationType: $notificationType}';
+  }
 }

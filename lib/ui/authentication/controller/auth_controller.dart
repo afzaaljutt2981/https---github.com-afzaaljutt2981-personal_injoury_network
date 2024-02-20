@@ -96,7 +96,8 @@ class AuthController extends ChangeNotifier {
               followers: [],
               followings: [],
               followingRequests: [],
-              isNewNotificationReceived: isNewNotificationReceived);
+              isNewNotificationReceived: isNewNotificationReceived,
+            timeCreated: DateTime.now().millisecondsSinceEpoch,);
           await doc.set(model.toJson());
           getUserData(context, email);
 

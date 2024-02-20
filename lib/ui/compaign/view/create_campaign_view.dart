@@ -28,8 +28,8 @@ class CreateCampaign extends StatefulWidget {
 class _CreateCampaign extends State<CreateCampaign> {
   TextEditingController descriptionController = TextEditingController();
   Uint8List? image1;
-  List<String> selectedCounty = [];
-  List<String> selectedJobPosition = [];
+  List<String> selectedCounty = ["all"];
+  List<String> selectedJobPosition = ["all"];
   bool expandController = false;
   List<UserModel?>? allUsers = [];
 
@@ -38,17 +38,19 @@ class _CreateCampaign extends State<CreateCampaign> {
     allUsers = context.watch<CampaignController>().allUsers;
     // print("JobPositionModel.counties - >  ${JobPositionModel.counties}");
     // print("allUsers - >  ${allUsers}");
+    context.read<CampaignController>().setCounty(selectedCounty);
+    context.read<CampaignController>().setJob(selectedJobPosition);
     return Scaffold(
         backgroundColor: AppColors.kWhiteColor,
         appBar: AppBar(
           backgroundColor: AppColors.kWhiteColor,
           elevation: 0,
           leading: Padding(
-            padding: EdgeInsets.all(10.sp),
+            padding: EdgeInsets.all(5.sp),
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
               child: SizedBox(
-                width: 30.sp,
+                width: 100.sp,
                 height: 40.sp,
                 child: Icon(
                   Icons.arrow_back_ios,

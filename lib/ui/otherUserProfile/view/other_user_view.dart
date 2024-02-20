@@ -49,7 +49,6 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
 
   @override
   Widget build(BuildContext context) {
-    print(widget.currentUser!.email);
     userEvents = [];
     List<EventModel> allEvents =
         Provider.of<EventsController>(context, listen: false).allEvents;
@@ -73,11 +72,11 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
         backgroundColor: Colors.white,
         elevation: 0,
         leading: Padding(
-          padding: EdgeInsets.all(19.sp),
+          padding: EdgeInsets.all(5.sp),
           child: GestureDetector(
             onTap: () => Navigator.pop(context),
             child: SizedBox(
-              width: 30.sp,
+              width: 100.sp,
               height: 40.sp,
               child: Icon(
                 Icons.arrow_back_ios,
@@ -278,58 +277,62 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                 ),
                               ),
                             if (followButton == "Following" ||
-                                widget.currentUser!.followers!
-                                    .contains(user!.id)) ...[
+                                (widget.currentUser?.followers ?? [])
+                                    .contains(user?.id) ||
+                                FirebaseAuth.instance.currentUser?.email ==
+                                    Constants.adminEmail) ...[
                               SizedBox(
                                 width: 7.w,
                               ),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) =>
-                                                SingleChatScreenView(
-                                                  user: user!,
-                                                )));
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: AppColors.kPrimaryColor,
-                                            width: 1.5.sp),
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(7.sp)),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 24.w, vertical: 10.h),
-                                      child: Row(
-                                        children: [
-                                          Image(
-                                            height: 20.sp,
-                                            width: 20.sp,
-                                            image: const AssetImage(
-                                                'assets/images/message_orgnizer_screen.png'),
-                                          ),
-                                          SizedBox(
-                                            width: 5.w,
-                                          ),
-                                          Text(
-                                            'Messages',
-                                            style: AppTextStyles.josefin(
-                                                style: TextStyle(
-                                                    color:
-                                                        AppColors.kPrimaryColor,
-                                                    fontSize: 16.sp)),
-                                          ),
-                                        ],
+                              if (FirebaseAuth.instance.currentUser?.email !=
+                                  Constants.adminEmail)
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) =>
+                                                  SingleChatScreenView(
+                                                    user: user!,
+                                                  )));
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: AppColors.kPrimaryColor,
+                                              width: 1.5.sp),
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(7.sp)),
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 24.w, vertical: 10.h),
+                                        child: Row(
+                                          children: [
+                                            Image(
+                                              height: 20.sp,
+                                              width: 20.sp,
+                                              image: const AssetImage(
+                                                  'assets/images/message_orgnizer_screen.png'),
+                                            ),
+                                            SizedBox(
+                                              width: 5.w,
+                                            ),
+                                            Text(
+                                              'Messages',
+                                              style: AppTextStyles.josefin(
+                                                  style: TextStyle(
+                                                      color: AppColors
+                                                          .kPrimaryColor,
+                                                      fontSize: 16.sp)),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
                             ],
                           ],
                         ),
