@@ -380,10 +380,12 @@ class _NotificationViewState extends State<NotificationView> {
       children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(
-            'Admin Campaign',
+            model.title ?? "No title found",
             style: AppTextStyles.josefin(
-                style:
-                    TextStyle(color: AppColors.kgreenColor, fontSize: 12.sp)),
+                style: TextStyle(
+                    color: AppColors.kBlackColor,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.bold)),
           ),
           Text(
             formattedDate ?? "",

@@ -27,6 +27,8 @@ class CreateCampaign extends StatefulWidget {
 
 class _CreateCampaign extends State<CreateCampaign> {
   TextEditingController descriptionController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
+
   Uint8List? image1;
   List<String> selectedCounty = ["all"];
   List<String> selectedJobPosition = ["all"];
@@ -368,6 +370,29 @@ class _CreateCampaign extends State<CreateCampaign> {
 
                         CustomSizeBox(20.h),
                         Text(
+                          'Title',
+                          style: AppTextStyles.josefin(
+                              style: TextStyle(
+                                  color: AppColors.kBlackColor,
+                                  fontSize: 14.sp)),
+                        ),
+                        CustomSizeBox(7.h),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: AppColors.textFieldColor,
+                              borderRadius: BorderRadius.circular(10.sp)),
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 14.h, bottom: 4.h),
+                            child: textfield(
+                                titleController,
+                                'Type here..',
+                                false,
+                                3,
+                                AppColors.textFieldColor),
+                          ),
+                        ),
+                        CustomSizeBox(20.h),
+                        Text(
                           'Message',
                           style: AppTextStyles.josefin(
                               style: TextStyle(
@@ -563,6 +588,10 @@ class _CreateCampaign extends State<CreateCampaign> {
                         Functions.showSnackBar(
                             context, "please add image of campaign");
                         return;
+                      }else if (titleController.text.isEmpty) {
+                        Functions.showSnackBar(
+                            context, "please add title of campaign");
+                        return;
                       }
                       print("Button clicked");
                       Functions.showLoaderDialog(context);
@@ -573,6 +602,7 @@ class _CreateCampaign extends State<CreateCampaign> {
                           campaignCountry: selectedCounty,
                           campaignJob: selectedJobPosition,
                           campaignDescription: descriptionController.text,
+                          title: titleController.text,
                           pImage: url);
                       // ignore: use_build_context_synchronously
                       Navigator.pop(context);

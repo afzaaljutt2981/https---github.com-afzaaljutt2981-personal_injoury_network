@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/ui/compaign/models/campaign_model.dart';
 import 'package:personal_injury_networking/ui/compaign/view/create_compaign_view.dart';
+import 'package:personal_injury_networking/ui/notifications/view/notification_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../global/helper/custom_sized_box.dart';
@@ -23,7 +24,14 @@ class _AllCreatedCampaignsScreen extends State<AllCreatedCampaignsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    allCampaigns = context.watch<AllCreatedCampaignsController>().allCampaigns;
+    allCampaigns = context
+        .watch<AllCreatedCampaignsController>()
+        .allCampaigns
+        .sortedBy((it) => it.timeCreated ?? 0)
+        .toList()
+        .reversed
+        .toList();
+    ;
     return Scaffold(
         backgroundColor: const Color(0xFFf5f4ff),
         appBar: AppBar(

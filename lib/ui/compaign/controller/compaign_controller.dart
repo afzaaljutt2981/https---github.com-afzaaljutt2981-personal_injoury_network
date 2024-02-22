@@ -43,12 +43,14 @@ class CampaignController extends ChangeNotifier {
     required List<String> campaignCountry,
     required List<String> campaignJob,
     required String campaignDescription,
+    required String title,
     required String pImage,
   }) async {
     print("campaignCountry -> $campaignCountry");
     print("campaignJob -> $campaignJob");
     print("pImage -> $pImage");
     print("campaignDescription -> $campaignDescription");
+    print("title -> $title");
     List<String?> users = [];
     usersRef
         // .where("position", isEqualTo: campaignJob)
@@ -88,6 +90,7 @@ class CampaignController extends ChangeNotifier {
               country: campaignCountry,
               jobOrPosition: campaignJob,
               message: campaignDescription,
+              title:title,
               timeCreated: DateTime.now().millisecondsSinceEpoch,
               members: users)
           .toJson());
