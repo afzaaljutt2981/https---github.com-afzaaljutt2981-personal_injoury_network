@@ -22,94 +22,96 @@ class _EventsQrViewState extends State<EventsQrView> {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: AppColors.kPrimaryColor,
-      body: Stack(
-        children: [
-          Container(color: Colors.white, height: screenHeight),
-          Positioned(
-            top: 0,
-            child: Container(
-              color: AppColors.kPrimaryColor,
-              width: screenWidth,
-              height: screenHeight,
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Image(
-                  height: 175.sp,
-                  width: 172.sp,
-                  image: const AssetImage(
-                      'assets/images/home_background_graph.png'),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: screenHeight * 0.19,
-            left: screenWidth * 0.1,
-            child: Image(
-              height: 285.sp,
-              width: 282.sp,
-              image: const AssetImage('assets/images/scan_events_qr_view.png'),
-            ),
-          ),
-          Positioned(
-              top: screenHeight * 0.65,
-              left: screenWidth * 0.33,
-              child: Text(
-                "Scan QR Code",
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w800)),
-              )),
-          Positioned(
-            top: screenHeight * 0.084,
-            left: screenWidth * 0.06,
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.kPrimaryColor,
+        body: Stack(
+          children: [
+            Container(color: Colors.white, height: screenHeight),
+            Positioned(
+              top: 0,
               child: Container(
-                width: 30.sp,
-                height: 40.sp,
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                  size: 18.sp,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-                top: screenHeight * 0.82, left: 30.w, right: 30.w),
-            child: GetwhiteButton(50.sp, () {
-              Navigator.push(
-                context,
-                PageTransition(
-                  childCurrent: widget,
-                  type: PageTransitionType.bottomToTop,
-                  alignment: Alignment.center,
-                  duration: const Duration(milliseconds: 200),
-                  reverseDuration: const Duration(milliseconds: 200),
-                  child: QRScannerScreen(
-                    eventId: widget.eventId,
+                color: AppColors.kPrimaryColor,
+                width: screenWidth,
+                height: screenHeight,
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Image(
+                    height: 175.sp,
+                    width: 172.sp,
+                    image: const AssetImage(
+                        'assets/images/home_background_graph.png'),
                   ),
                 ),
-              );
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => const EventScanQrScreen()));
-            },
-                Text(
-                  "QR Scan",
+              ),
+            ),
+            Positioned(
+              top: screenHeight * 0.19,
+              left: screenWidth * 0.1,
+              child: Image(
+                height: 285.sp,
+                width: 282.sp,
+                image: const AssetImage('assets/images/scan_events_qr_view.png'),
+              ),
+            ),
+            Positioned(
+                top: screenHeight * 0.65,
+                left: screenWidth * 0.33,
+                child: Text(
+                  "Scan QR Code",
                   style: AppTextStyles.josefin(
                       style: TextStyle(
-                          color: AppColors.kPrimaryColor, fontSize: 18.sp)),
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w800)),
                 )),
-          ),
-        ],
+            Positioned(
+              top: screenHeight * 0.084,
+              left: screenWidth * 0.06,
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  width: 30.sp,
+                  height: 40.sp,
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                    size: 18.sp,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: screenHeight * 0.82, left: 30.w, right: 30.w),
+              child: GetwhiteButton(50.sp, () {
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    childCurrent: widget,
+                    type: PageTransitionType.bottomToTop,
+                    alignment: Alignment.center,
+                    duration: const Duration(milliseconds: 200),
+                    reverseDuration: const Duration(milliseconds: 200),
+                    child: QRScannerScreen(
+                      eventId: widget.eventId,
+                    ),
+                  ),
+                );
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => const EventScanQrScreen()));
+              },
+                  Text(
+                    "QR Scan",
+                    style: AppTextStyles.josefin(
+                        style: TextStyle(
+                            color: AppColors.kPrimaryColor, fontSize: 18.sp)),
+                  )),
+            ),
+          ],
+        ),
       ),
     );
   }

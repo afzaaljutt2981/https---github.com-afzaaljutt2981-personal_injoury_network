@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
+import 'package:personal_injury_networking/ui/authentication/model/job_position_model.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
 import 'package:personal_injury_networking/ui/compaign/models/campaign_model.dart';
 import 'package:personal_injury_networking/ui/create_event/models/event_model.dart';
@@ -15,6 +16,7 @@ import 'package:provider/provider.dart';
 
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
+import '../../compaign/view/create_cmapaign_user_view.dart';
 import '../../events/controller/events_controller.dart';
 import '../model/generic_data_model.dart';
 
@@ -50,124 +52,155 @@ class _NotificationViewState extends State<NotificationView> {
     notiList = context.watch<NotificationsController>().notifications;
     allCampaigns = context.watch<NotificationsController>().allCampaigns;
     allUsers = context.watch<EventsController>().allUsers;
-    currentUser = allUsers.firstWhere(
-        (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
-    allNotificationsAndCampaigns = notiList
-        .map((e) => GenericDataModel(
-            notificationsModel: e,
-            campaignModel: null,
-            timeCreated: e.time,
-            notificationType: "N"))
-        .toList()
-      ..addAll(allCampaigns
-          .where((element) =>
-              element.status == "Completed" &&
-              ((element.country ?? []).contains(currentUser?.country) ||
-                  element.country?[0] == 'all') &&
-              ((element.jobOrPosition ?? []).contains(currentUser?.position) ||
-                  element.jobOrPosition?[0] == "all"))
+    if (allUsers.isNotEmpty) {
+      currentUser = allUsers.firstWhere(
+          (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+    }
+
+    if (notiList.isNotEmpty) {
+      allNotificationsAndCampaigns = notiList
+          .map((e) => GenericDataModel(
+              notificationsModel: e,
+              campaignModel: null,
+              timeCreated: e.time,
+              notificationType: "N"))
           .toList()
-          .map((campaign) => GenericDataModel(
-              notificationsModel: null,
-              campaignModel: campaign,
-              timeCreated: campaign.timeCreated,
-              notificationType: "C"))
-          .toList());
-    allNotificationsAndCampaigns = allNotificationsAndCampaigns
-        .sortedBy((it) => it.timeCreated ?? 0)
-        .toList()
-        .reversed
-        .toList();
-    print(allNotificationsAndCampaigns.toString());
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
+        ..addAll(allCampaigns
+            .where((element) =>
+                element.status == "Completed" &&
+                ((element.country ?? []).contains(currentUser?.country) ||
+                    element.country?[0] == 'all') &&
+                ((element.jobOrPosition ?? [])
+                        .contains(currentUser?.position) ||
+                    element.jobOrPosition?[0] == "all"))
+            .toList()
+            .map((campaign) => GenericDataModel(
+                notificationsModel: null,
+                campaignModel: campaign,
+                timeCreated: campaign.timeCreated,
+                notificationType: "C"))
+            .toList());
+
+      allNotificationsAndCampaigns = allNotificationsAndCampaigns
+          .sortedBy((it) => it.timeCreated ?? 0)
+          .toList()
+          .reversed
+          .toList();
+      print(allNotificationsAndCampaigns.toString());
+    }
+
+    return SafeArea(
+      child: Scaffold(
           backgroundColor: Colors.white,
-          elevation: 0,
-          leading: Padding(
-            padding: EdgeInsets.all(8.sp),
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: SizedBox(
-                width: 40.sp,
-                height: 40.sp,
-                child: Center(
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: const Color(0xFF120D26),
-                    size: 18.sp,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: Padding(
+              padding: EdgeInsets.all(8.sp),
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: SizedBox(
+                  width: 40.sp,
+                  height: 40.sp,
+                  child: Center(
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: const Color(0xFF120D26),
+                      size: 18.sp,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          title: Center(
-            child: Padding(
-              padding: EdgeInsets.only(right: 45.w),
-              child: Text(
-                "Notifications",
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: const Color(0xFF120D26),
-                        fontSize: 22.sp,
-                        fontWeight: FontWeight.w500)),
+            title: Center(
+              child: Padding(
+                padding: EdgeInsets.only(right: 45.w),
+                child: Text(
+                  "Notifications",
+                  style: AppTextStyles.josefin(
+                      style: TextStyle(
+                          color: const Color(0xFF120D26),
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.w500)),
+                ),
               ),
             ),
           ),
-        ),
-        body: (allUsers.isEmpty)
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : allNotificationsAndCampaigns.isEmpty
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CustomSizeBox(100.h),
-                      Center(
-                        child: Image(
-                          height: 200.sp,
-                          width: 250.sp,
-                          image: const AssetImage(
-                              'assets/images/no_notification_screen.png'),
+          body: (allUsers.isEmpty)
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : allNotificationsAndCampaigns.isEmpty
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CustomSizeBox(100.h),
+                        Center(
+                          child: Image(
+                            height: 200.sp,
+                            width: 250.sp,
+                            image: const AssetImage(
+                                'assets/images/no_notification_screen.png'),
+                          ),
                         ),
-                      ),
-                    ],
-                  )
-                : Column(
-                    children: [
-                      Expanded(
-                          child: ListView.builder(
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: allNotificationsAndCampaigns.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                var model = allNotificationsAndCampaigns[index];
-                                return model.notificationType == "N"
-                                    ? model.notificationsModel
-                                                ?.notificationType ==
-                                            "Invite"
-                                        ? FutureBuilder(
-                                            future: getEventData(
-                                                model.notificationsModel?.eId),
-                                            builder: (BuildContext context,
-                                                AsyncSnapshot<EventModel>
-                                                    snapshot) {
-                                              switch (
-                                                  snapshot.connectionState) {
-                                                case ConnectionState.waiting:
-                                                  return const Text("Loading");
-                                                default:
-                                                  return item(
-                                                      model.notificationsModel!,
-                                                      snapshot.data);
-                                              }
-                                            })
-                                        : item(model.notificationsModel!, null)
-                                    : campaignItem(model.campaignModel!);
-                              })),
-                    ],
-                  ));
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        Expanded(
+                            child: ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: allNotificationsAndCampaigns.length,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  var model = allNotificationsAndCampaigns[index];
+                                  return model.notificationType == "N"
+                                      ? model.notificationsModel
+                                                  ?.notificationType ==
+                                              "Invite"
+                                          ? FutureBuilder(
+                                              future: getEventData(
+                                                  model.notificationsModel?.eId),
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<EventModel>
+                                                      snapshot) {
+                                                switch (
+                                                    snapshot.connectionState) {
+                                                  case ConnectionState.waiting:
+                                                    return const Text("Loading");
+                                                  default:
+                                                    return item(
+                                                        model.notificationsModel!,
+                                                        snapshot.data);
+                                                }
+                                              })
+                                          : item(model.notificationsModel!, null)
+                                      : GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                childCurrent: widget,
+                                                type: PageTransitionType
+                                                    .leftToRightWithFade,
+                                                alignment: Alignment.center,
+                                                duration: const Duration(
+                                                    milliseconds: 200),
+                                                reverseDuration: const Duration(
+                                                    milliseconds: 200),
+                                                child: ViewCampaignView(
+                                                  campaignModel:
+                                                      model.campaignModel,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child:
+                                              campaignItem(model.campaignModel!));
+                                })),
+                      ],
+                    )),
+    );
   }
 
   Widget item(NotificationsModel model, EventModel? event) {
@@ -178,20 +211,6 @@ class _NotificationViewState extends State<NotificationView> {
     DateTime time = DateTime.fromMillisecondsSinceEpoch(model.time ?? 0);
     String formattedDate = formatDateTime(time);
 
-    List months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'Jun',
-      'July',
-      'Auguest',
-      'September',
-      'October',
-      'November',
-      'December'
-    ];
     return Column(
       children: [
         Padding(
@@ -247,7 +266,7 @@ class _NotificationViewState extends State<NotificationView> {
                         )
                       ] else ...[
                         Text(
-                            "You are invited for ${event?.title ?? ""} scheduled on ${DateTime.fromMicrosecondsSinceEpoch(event?.dateTime ?? 0).day} of ${months[DateTime.fromMicrosecondsSinceEpoch(event?.dateTime ?? 0).month - 1]} at ${event?.address ?? ""}")
+                            "You are invited for ${event?.title ?? ""} scheduled on ${DateTime.fromMicrosecondsSinceEpoch(event?.dateTime ?? 0).day} of ${JobPositionModel.months[DateTime.fromMicrosecondsSinceEpoch(event?.dateTime ?? 0).month - 1]} at ${event?.address ?? ""}")
                       ],
                       CustomSizeBox(10.h),
                       if ((model.status == "Pending" &&
@@ -282,6 +301,7 @@ class _NotificationViewState extends State<NotificationView> {
   Widget buttonRow(
       NotificationsModel model, UserModel user, EventModel? event) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         if (model.notificationType != "Invite")
           GestureDetector(
@@ -307,7 +327,7 @@ class _NotificationViewState extends State<NotificationView> {
             ),
           ),
         SizedBox(
-          width: 5.w,
+          width: 20.w,
         ),
         GestureDetector(
           onTap: () async {
@@ -361,21 +381,13 @@ class _NotificationViewState extends State<NotificationView> {
     return Column(
       children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Row(
-            children: [
-              Text(
-                'Status: ',
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: AppColors.kBlackColor, fontSize: 12.sp)),
-              ),
-              Text(
-                '${model.status}',
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: AppColors.kgreenColor, fontSize: 12.sp)),
-              )
-            ],
+          Text(
+            model.title ?? "No title found",
+            style: AppTextStyles.josefin(
+                style: TextStyle(
+                    color: AppColors.kBlackColor,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.bold)),
           ),
           Text(
             formattedDate ?? "",
@@ -387,20 +399,20 @@ class _NotificationViewState extends State<NotificationView> {
         SizedBox(
           height: 5.sp,
         ),
-        Row(children: [
-          Text(
-            'Target Users: ',
-            style: AppTextStyles.josefin(
-                style:
-                    TextStyle(color: AppColors.kBlackColor, fontSize: 12.sp)),
-          ),
-          Text(
-            '${model.members?.length ?? ""}',
-            style: AppTextStyles.josefin(
-                style:
-                    TextStyle(color: AppColors.kgreenColor, fontSize: 12.sp)),
-          ),
-        ]),
+        // Row(children: [
+        //   Text(
+        //     'Target Users: ',
+        //     style: AppTextStyles.josefin(
+        //         style:
+        //             TextStyle(color: AppColors.kBlackColor, fontSize: 12.sp)),
+        //   ),
+        //   Text(
+        //     '${model.members?.length ?? ""}',
+        //     style: AppTextStyles.josefin(
+        //         style:
+        //             TextStyle(color: AppColors.kgreenColor, fontSize: 12.sp)),
+        //   ),
+        // ]),
         SizedBox(
           height: 5.h,
         ),

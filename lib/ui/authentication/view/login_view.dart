@@ -16,6 +16,7 @@ import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:personal_injury_networking/ui/authentication/view/sign_up_screen.dart';
+import 'package:personal_injury_networking/ui/help_screen/view/help_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
@@ -40,182 +41,208 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: AppColors.kPrimaryColor,
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.w),
-          child: Column(
-            children: [
-              CustomSizeBox(65.h),
-              Center(
-                child: Image(
-                  height: 70.sp,
-                  width: 70.sp,
-                  image: const AssetImage('assets/images/primary_icon.png'),
-                ),
-              ),
-              CustomSizeBox(20.h),
-              Center(
-                child: Image(
-                  height: 30.sp,
-                  width: 130.sp,
-                  image: const AssetImage('assets/images/hi_login.png'),
-                ),
-              ),
-              CustomSizeBox(10.h),
-              Center(
-                  child: Text(
-                'Welcome back, Sign in to your account',
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w400)),
-              )),
-              CustomSizeBox(20.h),
-              textField('Username/Email', 'Enter username/Email', 0,
-                  textFieldController[0], false),
-              CustomSizeBox(15.h),
-              textField('Password', 'xxxxxxxxx', 1, textFieldController[1],
-                  hidePassword),
-              CustomSizeBox(10.h),
-              SizedBox(
-                width: screenWidth,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                        childCurrent: widget,
-                        type: PageTransitionType.rightToLeft,
-                        alignment: Alignment.center,
-                        duration: const Duration(milliseconds: 200),
-                        reverseDuration: const Duration(milliseconds: 200),
-                        child: CreateForgetPasswordView(email: ""),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'Forget Password?',
-                    style: AppTextStyles.josefin(
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    textAlign: TextAlign.end,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  left: 15.w,
-                  right: 15.w,
-                  top: 30.h,
-                ),
-                child: GetwhiteButton(50.h, () {
-                  if (textFieldController[0].text.isEmpty ||
-                      !(EmailValidator.validate(textFieldController[0].text))) {
-                    CustomSnackBar(false)
-                        .showInSnackBar('Please enter valid email!', context);
-                    return;
-                  } else if (textFieldController[1].text.isEmpty) {
-                    CustomSnackBar(false)
-                        .showInSnackBar('Password field is empty!', context);
-                    return;
-                  } else {
-                    context.read<AuthController>().signIn(
-                        textFieldController[0].text,
-                        textFieldController[1].text,
-                        context);
-                  }
-                },
-                    Text(
-                      "Login",
-                      style: AppTextStyles.josefin(
-                          style: TextStyle(
-                              color: AppColors.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16.sp)),
-                    )),
-              ),
-              CustomSizeBox(14.h),
-              Center(
-                child: Image(
-                  height: 30.sp,
-                  width: screenWidth,
-                  image: const AssetImage('assets/images/or_login.png'),
-                ),
-              ),
-              CustomSizeBox(14.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  loginGoogleApple('assets/images/google_login.png', onTap: () {
-                    signInWithGoogle();
-                  }),
-                  loginGoogleApple('assets/images/apple_login.png', onTap: () {
-                    if (Platform.isIOS) {
-                      signInWithApple();
-                    } else {
-                      CustomSnackBar(false)
-                          .showInSnackBar('Error platform'.toString(), context);
-                    }
-                  })
-                ],
-              ),
-              CustomSizeBox(24.h),
-              SizedBox(
-                width: screenWidth,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.kPrimaryColor,
+        body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.w),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      'Don’t have an account?',
-                      style: AppTextStyles.josefin(
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400),
-                      ),
-                      textAlign: TextAlign.end,
-                    ),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            childCurrent: widget,
-                            type: PageTransitionType.rightToLeft,
-                            alignment: Alignment.center,
-                            duration: const Duration(milliseconds: 200),
-                            reverseDuration: const Duration(milliseconds: 200),
-                            child: ChangeNotifierProvider(
-                                create: (_) => AuthController(),
-                                child: SignUpScreen(
-                                  screenType: 0,
-                                )),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        ' Sign Up',
-                        style: AppTextStyles.josefin(
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w700),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HelpScreen()),
+                      ),
+                      child: SizedBox(
+                        width: 40.sp,
+                        height: 40.sp,
+                        child: Icon(
+                          Icons.help_outline,
+                          color: AppColors.kWhiteColor,
+                          size: 18.sp,
                         ),
-                        textAlign: TextAlign.end,
                       ),
                     ),
                   ],
                 ),
-              ),
-              CustomSizeBox(20.h),
-            ],
+                CustomSizeBox(35.h),
+                Center(
+                  child: Image(
+                    height: 70.sp,
+                    width: 70.sp,
+                    image: const AssetImage('assets/images/primary_icon.png'),
+                  ),
+                ),
+                CustomSizeBox(20.h),
+                Center(
+                  child: Image(
+                    height: 30.sp,
+                    width: 130.sp,
+                    image: const AssetImage('assets/images/hi_login.png'),
+                  ),
+                ),
+                CustomSizeBox(10.h),
+                Center(
+                    child: Text(
+                  'Welcome back, Sign in to your account',
+                  style: AppTextStyles.josefin(
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400)),
+                )),
+                CustomSizeBox(20.h),
+                textField('Username/Email', 'Enter username/Email', 0,
+                    textFieldController[0], false),
+                CustomSizeBox(15.h),
+                textField('Password', 'xxxxxxxxx', 1, textFieldController[1],
+                    hidePassword),
+                CustomSizeBox(10.h),
+                SizedBox(
+                  width: screenWidth,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          childCurrent: widget,
+                          type: PageTransitionType.rightToLeft,
+                          alignment: Alignment.center,
+                          duration: const Duration(milliseconds: 200),
+                          reverseDuration: const Duration(milliseconds: 200),
+                          child: CreateForgetPasswordView(email: ""),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Forget Password?',
+                      style: AppTextStyles.josefin(
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: 15.w,
+                    right: 15.w,
+                    top: 30.h,
+                  ),
+                  child: GetwhiteButton(50.h, () {
+                    if (textFieldController[0].text.isEmpty ||
+                        !(EmailValidator.validate(
+                            textFieldController[0].text))) {
+                      CustomSnackBar(false)
+                          .showInSnackBar('Please enter valid email!', context);
+                      return;
+                    } else if (textFieldController[1].text.isEmpty) {
+                      CustomSnackBar(false)
+                          .showInSnackBar('Password field is empty!', context);
+                      return;
+                    } else {
+                      context.read<AuthController>().signIn(
+                          textFieldController[0].text,
+                          textFieldController[1].text,
+                          context);
+                    }
+                  },
+                      Text(
+                        "Login",
+                        style: AppTextStyles.josefin(
+                            style: TextStyle(
+                                color: AppColors.kPrimaryColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.sp)),
+                      )),
+                ),
+                CustomSizeBox(14.h),
+                Center(
+                  child: Image(
+                    height: 30.sp,
+                    width: screenWidth,
+                    image: const AssetImage('assets/images/or_login.png'),
+                  ),
+                ),
+                CustomSizeBox(14.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    loginGoogleApple('assets/images/google_login.png',
+                        onTap: () {
+                      signInWithGoogle();
+                    }),
+                    loginGoogleApple('assets/images/apple_login.png',
+                        onTap: () {
+                      if (Platform.isIOS) {
+                        signInWithApple();
+                      } else {
+                        CustomSnackBar(false).showInSnackBar(
+                            'Error platform'.toString(), context);
+                      }
+                    })
+                  ],
+                ),
+                CustomSizeBox(24.h),
+                SizedBox(
+                  width: screenWidth,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Don’t have an account?',
+                        style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        textAlign: TextAlign.end,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              childCurrent: widget,
+                              type: PageTransitionType.rightToLeft,
+                              alignment: Alignment.center,
+                              duration: const Duration(milliseconds: 200),
+                              reverseDuration:
+                                  const Duration(milliseconds: 200),
+                              child: ChangeNotifierProvider(
+                                  create: (_) => AuthController(),
+                                  child: SignUpScreen(
+                                    screenType: 0,
+                                  )),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          ' Sign Up',
+                          style: AppTextStyles.josefin(
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                CustomSizeBox(20.h),
+              ],
+            ),
           ),
         ),
       ),

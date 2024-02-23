@@ -49,6 +49,8 @@ dependencies:
   url_launcher: ^6.1.12
   dropdown_button2: ^2.3.9
   mobkit_dashed_border: ^0.0.5
+  readmore: ^2.2.0
+  flutter_faq: ^1.0.1+1
 dev_dependencies:
   flutter_test:
     sdk: flutter

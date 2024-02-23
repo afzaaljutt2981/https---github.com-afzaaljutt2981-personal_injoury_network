@@ -23,53 +23,55 @@ class _QRScannerScreenForAdminState extends State<QRScannerScreenForAdmin> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Expanded(
-                flex: 3,
-                child: QRView(
-                  key: qrKey,
-                  onQRViewCreated: _onQRViewCreated,
-                  overlay: QrScannerOverlayShape(
-                    borderColor: AppColors.kPrimaryColor,
-                    borderRadius: 10,
-                    borderLength: 30,
-                    borderWidth: 10,
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: QRView(
+                    key: qrKey,
+                    onQRViewCreated: _onQRViewCreated,
+                    overlay: QrScannerOverlayShape(
+                      borderColor: AppColors.kPrimaryColor,
+                      borderRadius: 10,
+                      borderLength: 30,
+                      borderWidth: 10,
+                    ),
+                    onPermissionSet: (ctrl, p) =>
+                        _onPermissionSet(context, ctrl, p),
                   ),
-                  onPermissionSet: (ctrl, p) =>
-                      _onPermissionSet(context, ctrl, p),
                 ),
-              ),
-              const Expanded(
-                flex: 1,
-                child: Center(
-                  child: Text('Scanning QR Code'),
+                const Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: Text('Scanning QR Code'),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Positioned(
-            top: screenHeight * 0.04,
-            left: screenWidth * 0.025,
-            child: IconButton(
-              icon: Container(
-                width: 100.sp,
-                height: 40.sp,
-                child: Icon(
-                  Icons.navigate_before,
-                  color: Colors.white,
-                  size: 35.sp,
-                ),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              ],
             ),
-          ),
-        ],
+            Positioned(
+              top: screenHeight * 0.04,
+              left: screenWidth * 0.025,
+              child: IconButton(
+                icon: Container(
+                  width: 100.sp,
+                  height: 40.sp,
+                  child: Icon(
+                    Icons.navigate_before,
+                    color: Colors.white,
+                    size: 35.sp,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
