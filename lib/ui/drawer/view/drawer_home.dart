@@ -134,177 +134,187 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      homeFeatures(
-                                          'assets/images/home_icon_drawer.png',
-                                          'Home', onTap: () {
-                                        Navigator.pop(context);
-                                      }),
-                                      CustomSizeBox(28.h),
-                                      user!.userType == 'user'
-                                          ? homeFeatures(
-                                              'assets/images/marketer_icon_drawer.png',
-                                              'Become a Marketer',
-                                              onTap: () async {
-                                              String? res =
-                                                  await _showDialogueBox(context);
-                                              if (res != null) {
-                                                // ignore: use_build_context_synchronously
-                                                context
-                                                    .read<MyProfileController>()
-                                                    .becomeMarketer();
-                                              }
-                                            })
-                                          : homeFeatures(
-                                              'assets/images/events_icon_drawer.png',
-                                              'Create Event', onTap: () {
-                                              Navigator.pop(context);
-                                              Navigator.push(
-                                                context,
-                                                PageTransition(
-                                                  childCurrent: widget,
-                                                  type: PageTransitionType
-                                                      .rightToLeft,
-                                                  alignment: Alignment.center,
-                                                  duration: const Duration(
-                                                      milliseconds: 200),
-                                                  reverseDuration: const Duration(
-                                                      milliseconds: 200),
-                                                  child:
-                                                      const CreateAddEventView(),
-                                                ),
-                                              );
-                                            }),
-                                      CustomSizeBox(28.h),
-                                      homeFeatures(
-                                          'assets/images/events_icon_drawer.png',
-                                          'Events', onTap: () {
-                                        Navigator.pop(context);
-                                        Navigator.push(
-                                          context,
-                                          PageTransition(
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        homeFeatures(
+                                            'assets/images/home_icon_drawer.png',
+                                            'Home', onTap: () {
+                                          Navigator.pop(context);
+                                        }),
+                                        CustomSizeBox(28.h),
+                                        user!.userType == 'user'
+                                            ? homeFeatures(
+                                                'assets/images/marketer_icon_drawer.png',
+                                                'Become a Marketer',
+                                                onTap: () async {
+                                                String? res =
+                                                    await _showDialogueBox(
+                                                        context);
+                                                if (res != null) {
+                                                  // ignore: use_build_context_synchronously
+                                                  context
+                                                      .read<
+                                                          MyProfileController>()
+                                                      .becomeMarketer();
+                                                }
+                                              })
+                                            : homeFeatures(
+                                                'assets/images/events_icon_drawer.png',
+                                                'Create Event', onTap: () {
+                                                Navigator.pop(context);
+                                                Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                    childCurrent: widget,
+                                                    type: PageTransitionType
+                                                        .rightToLeft,
+                                                    alignment: Alignment.center,
+                                                    duration: const Duration(
+                                                        milliseconds: 200),
+                                                    reverseDuration:
+                                                        const Duration(
+                                                            milliseconds: 200),
+                                                    child:
+                                                        const CreateAddEventView(),
+                                                  ),
+                                                );
+                                              }),
+                                        CustomSizeBox(28.h),
+                                        homeFeatures(
+                                            'assets/images/events_icon_drawer.png',
+                                            'Events', onTap: () {
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                            context,
+                                            PageTransition(
+                                                childCurrent: widget,
+                                                type: PageTransitionType
+                                                    .rightToLeft,
+                                                alignment: Alignment.center,
+                                                duration: const Duration(
+                                                    milliseconds: 200),
+                                                reverseDuration: const Duration(
+                                                    milliseconds: 200),
+                                                child: BottomNavigationScreen(
+                                                  selectedIndex: 3,
+                                                )),
+                                          );
+                                        }),
+                                        CustomSizeBox(28.h),
+                                        homeFeatures(
+                                            'assets/images/messages_icon_drawer.png',
+                                            'Messages', onTap: () {
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                            context,
+                                            PageTransition(
+                                                childCurrent: widget,
+                                                type: PageTransitionType
+                                                    .rightToLeft,
+                                                alignment: Alignment.center,
+                                                duration: const Duration(
+                                                    milliseconds: 200),
+                                                reverseDuration: const Duration(
+                                                    milliseconds: 200),
+                                                child: BottomNavigationScreen(
+                                                  selectedIndex: 1,
+                                                )),
+                                          );
+                                        }, showBatch: false),
+                                        CustomSizeBox(28.h),
+                                        homeFeatures(
+                                            'assets/images/friends_icon_drawer.png',
+                                            'Friends', onTap: () {
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                            context,
+                                            PageTransition(
                                               childCurrent: widget,
-                                              type:
-                                                  PageTransitionType.rightToLeft,
+                                              type: PageTransitionType
+                                                  .rightToLeft,
                                               alignment: Alignment.center,
                                               duration: const Duration(
                                                   milliseconds: 200),
                                               reverseDuration: const Duration(
                                                   milliseconds: 200),
-                                              child: BottomNavigationScreen(
-                                                selectedIndex: 3,
-                                              )),
-                                        );
-                                      }),
-                                      CustomSizeBox(28.h),
-                                      homeFeatures(
-                                          'assets/images/messages_icon_drawer.png',
-                                          'Messages', onTap: () {
-                                        Navigator.pop(context);
-                                        Navigator.push(
-                                          context,
-                                          PageTransition(
+                                              child: CreateAllFriendsView(
+                                                user: user!,
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                        CustomSizeBox(28.h),
+                                        homeFeatures(
+                                            'assets/images/friends_icon_drawer.png',
+                                            'Find People', onTap: () {
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                            context,
+                                            PageTransition(
                                               childCurrent: widget,
-                                              type:
-                                                  PageTransitionType.rightToLeft,
+                                              type: PageTransitionType
+                                                  .rightToLeft,
                                               alignment: Alignment.center,
                                               duration: const Duration(
                                                   milliseconds: 200),
                                               reverseDuration: const Duration(
                                                   milliseconds: 200),
-                                              child: BottomNavigationScreen(
-                                                selectedIndex: 1,
-                                              )),
-                                        );
-                                      }, showBatch: false),
-                                      CustomSizeBox(28.h),
-                                      homeFeatures(
-                                          'assets/images/friends_icon_drawer.png',
-                                          'Friends', onTap: () {
-                                        Navigator.pop(context);
-                                        Navigator.push(
-                                          context,
-                                          PageTransition(
-                                            childCurrent: widget,
-                                            type: PageTransitionType.rightToLeft,
-                                            alignment: Alignment.center,
-                                            duration:
-                                                const Duration(milliseconds: 200),
-                                            reverseDuration:
-                                                const Duration(milliseconds: 200),
-                                            child: CreateAllFriendsView(
-                                              user: user!,
+                                              child: CreateFindUserView(
+                                                user: user,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      }),
-                                      CustomSizeBox(28.h),
-                                      homeFeatures(
-                                          'assets/images/friends_icon_drawer.png',
-                                          'Find People', onTap: () {
-                                        Navigator.pop(context);
-                                        Navigator.push(
-                                          context,
-                                          PageTransition(
-                                            childCurrent: widget,
-                                            type: PageTransitionType.rightToLeft,
-                                            alignment: Alignment.center,
-                                            duration:
-                                                const Duration(milliseconds: 200),
-                                            reverseDuration:
-                                                const Duration(milliseconds: 200),
-                                            child: CreateFindUserView(
-                                              user: user,
+                                          );
+                                        }),
+                                        CustomSizeBox(28.h),
+                                        homeFeatures(
+                                            'assets/images/setting_icon_drawer.png',
+                                            'Settings', onTap: () {
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                            context,
+                                            PageTransition(
+                                              childCurrent: widget,
+                                              type: PageTransitionType
+                                                  .rightToLeft,
+                                              alignment: Alignment.center,
+                                              duration: const Duration(
+                                                  milliseconds: 200),
+                                              reverseDuration: const Duration(
+                                                  milliseconds: 200),
+                                              child: CreateForgetPasswordView(
+                                                email: FirebaseAuth.instance
+                                                        .currentUser?.email ??
+                                                    "",
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      }),
-                                      CustomSizeBox(28.h),
-                                      homeFeatures(
-                                          'assets/images/setting_icon_drawer.png',
-                                          'Settings', onTap: () {
-                                        Navigator.pop(context);
-                                        Navigator.push(
-                                          context,
-                                          PageTransition(
-                                            childCurrent: widget,
-                                            type: PageTransitionType.rightToLeft,
-                                            alignment: Alignment.center,
-                                            duration:
-                                                const Duration(milliseconds: 200),
-                                            reverseDuration:
-                                                const Duration(milliseconds: 200),
-                                            child: CreateForgetPasswordView(
-                                              email: FirebaseAuth.instance
-                                                      .currentUser?.email ??
-                                                  "",
+                                          );
+                                        }),
+                                        CustomSizeBox(28.h),
+                                        homeFeatures(
+                                            'assets/images/question_icon_drawer.png',
+                                            'Helps & FAQs', onTap: () {
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                            context,
+                                            PageTransition(
+                                              childCurrent: widget,
+                                              type: PageTransitionType
+                                                  .rightToLeft,
+                                              alignment: Alignment.center,
+                                              duration: const Duration(
+                                                  milliseconds: 200),
+                                              reverseDuration: const Duration(
+                                                  milliseconds: 200),
+                                              child: FaqScreenView(),
                                             ),
-                                          ),
-                                        );
-                                      }),
-                                      CustomSizeBox(28.h),
-                                      homeFeatures(
-                                          'assets/images/question_icon_drawer.png',
-                                          'Helps & FAQs', onTap: () {
-                                        Navigator.pop(context);
-                                        Navigator.push(
-                                          context,
-                                          PageTransition(
-                                            childCurrent: widget,
-                                            type: PageTransitionType.rightToLeft,
-                                            alignment: Alignment.center,
-                                            duration:
-                                                const Duration(milliseconds: 200),
-                                            reverseDuration:
-                                                const Duration(milliseconds: 200),
-                                            child: FaqScreenView(),
-                                          ),
-                                        );
-                                      }),
-                                      CustomSizeBox(28.h),
-                                    ],
+                                          );
+                                        }),
+                                        CustomSizeBox(28.h),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 GestureDetector(
@@ -316,7 +326,8 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                       Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (_) => const LoginView()),
+                                              builder: (_) =>
+                                                  const LoginView()),
                                           (route) => false);
                                     } catch (e) {
                                       // ignore: use_build_context_synchronously
