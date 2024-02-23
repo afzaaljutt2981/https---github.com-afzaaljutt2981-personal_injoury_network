@@ -30,202 +30,204 @@ class VerifyIdentity extends StatefulWidget {
 class _VerifyIdentityState extends State<VerifyIdentity> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.kPrimaryColor,
-      appBar: AppBar(
-        // backgroundColor: Colors.white,
-        elevation: 0,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-            // Navigator.pop(context);
-          },
-          child: SizedBox(
-            width: 40.sp,
-            height: 40.sp,
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: AppColors.kWhiteColor,
-              size: 18.sp,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.kPrimaryColor,
+        appBar: AppBar(
+          // backgroundColor: Colors.white,
+          elevation: 0,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+              // Navigator.pop(context);
+            },
+            child: SizedBox(
+              width: 40.sp,
+              height: 40.sp,
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.kWhiteColor,
+                size: 18.sp,
+              ),
             ),
           ),
         ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-                child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // CustomSizeBox(40.h),
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: SizedBox(
-                      width: 30.sp,
-                      height: 40.sp,
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        color: AppColors.kPrimaryColor,
-                        size: 18.sp,
-                      ),
-                    ),
-                  ),
-                  CustomSizeBox(20.h),
-                  Padding(
-                    padding: EdgeInsets.only(left: 5.w),
-                    child: Image(
-                      height: 65.sp,
-                      width: 65.sp,
-                      image: const AssetImage(
-                          'assets/images/peron_verify_identity.png'),
-                    ),
-                  ),
-                  CustomSizeBox(20.h),
-                  text('Verify your identity', FontWeight.w700, 24),
-                  CustomSizeBox(10.h),
-                  text(
-                      widget.from == 1
-                          ? "Password recovery link has been sent at your Email"
-                          : "Verification link will be sent at your Email",
-                      FontWeight.w400,
-                      14),
-                  CustomSizeBox(30.h),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15.sp)),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 25.h, horizontal: 17.w),
-                      child: Row(
-                        children: [
-                          Image(
-                            height: 20.sp,
-                            width: 20.sp,
-                            image: const AssetImage(
-                                'assets/images/check_verify_identity.png'),
-                          ),
-                          SizedBox(
-                            width: 15.w,
-                          ),
-                          Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              text('Email', FontWeight.w700, 16,
-                                  color: AppColors.kPrimaryColor),
-                              CustomSizeBox(7.h),
-                              text(
-                                  widget.email == ""
-                                      ? (FirebaseAuth
-                                                  .instance.currentUser?.email
-                                                  ?.substring(0, 4) ??
-                                              "") +
-                                          "***" +
-                                          "@gmail.com"
-                                      : widget.email.toString(),
-                                  FontWeight.w500,
-                                  12,
-                                  color: const Color(0xFF6B7280)),
-                            ],
-                          )),
-                          Image(
-                            height: 25.sp,
-                            width: 25.sp,
-                            image: const AssetImage(
-                                'assets/images/mail_verify_identity.png'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )),
-            if (widget.from == 2)
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
-                child: GetwhiteButton(50.sp, () async {
-                  if (widget.from == 2) {
-                    print("Button clicked");
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            const SelectionScreen()));
-                  }
-                  // Navigator.push(
-                  //   context,
-                  //   PageTransition(
-                  //     childCurrent: widget,
-                  //     type: PageTransitionType.rightToLeft,
-                  //     alignment: Alignment.center,
-                  //     duration: const Duration(milliseconds: 200),
-                  //     reverseDuration: const Duration(milliseconds: 200),
-                  //     child: const CreateAuthenticationView(),
-                  //   ),
-                  // );
-                },
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                  child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // CustomSizeBox(40.h),
                     GestureDetector(
-                      onTap: () async {},
-                      child: Text(
-                        "Change Email",
-                        style: AppTextStyles.josefin(
-                            style: TextStyle(
-                                color: AppColors.kPrimaryColor,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w600)),
-                      ),
-                    )),
-              ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-              child: GetwhiteButton(
-                50.sp,
-                () async {
-                  if (widget.from == 2) {
-                    print("Button clicked");
-                    await context
-                        .read<ForgetPasswordController>()
-                        .sendVerificationEmail(context);
-                  } else {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                        childCurrent: widget,
-                        type: PageTransitionType.rightToLeft,
-                        alignment: Alignment.center,
-                        duration: const Duration(milliseconds: 200),
-                        reverseDuration: const Duration(milliseconds: 200),
-                        child: const CreateAuthenticationView(),
-                      ),
-                    );
-                  }
-                },
-                Text(
-                  widget.from == 1 ? 'Done' : "Send Email",
-                  style: AppTextStyles.josefin(
-                      style: TextStyle(
+                      onTap: () => Navigator.pop(context),
+                      child: SizedBox(
+                        width: 30.sp,
+                        height: 40.sp,
+                        child: Icon(
+                          Icons.arrow_back_ios,
                           color: AppColors.kPrimaryColor,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600)),
+                          size: 18.sp,
+                        ),
+                      ),
+                    ),
+                    CustomSizeBox(20.h),
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.w),
+                      child: Image(
+                        height: 65.sp,
+                        width: 65.sp,
+                        image: const AssetImage(
+                            'assets/images/peron_verify_identity.png'),
+                      ),
+                    ),
+                    CustomSizeBox(20.h),
+                    text('Verify your identity', FontWeight.w700, 24),
+                    CustomSizeBox(10.h),
+                    text(
+                        widget.from == 1
+                            ? "Password recovery link has been sent at your Email"
+                            : "Verification link will be sent at your Email",
+                        FontWeight.w400,
+                        14),
+                    CustomSizeBox(30.h),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15.sp)),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 25.h, horizontal: 17.w),
+                        child: Row(
+                          children: [
+                            Image(
+                              height: 20.sp,
+                              width: 20.sp,
+                              image: const AssetImage(
+                                  'assets/images/check_verify_identity.png'),
+                            ),
+                            SizedBox(
+                              width: 15.w,
+                            ),
+                            Expanded(
+                                child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                text('Email', FontWeight.w700, 16,
+                                    color: AppColors.kPrimaryColor),
+                                CustomSizeBox(7.h),
+                                text(
+                                    widget.email == ""
+                                        ? (FirebaseAuth
+                                                    .instance.currentUser?.email
+                                                    ?.substring(0, 4) ??
+                                                "") +
+                                            "***" +
+                                            "@gmail.com"
+                                        : widget.email.toString(),
+                                    FontWeight.w500,
+                                    12,
+                                    color: const Color(0xFF6B7280)),
+                              ],
+                            )),
+                            Image(
+                              height: 25.sp,
+                              width: 25.sp,
+                              image: const AssetImage(
+                                  'assets/images/mail_verify_identity.png'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )),
+              if (widget.from == 2)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
+                  child: GetwhiteButton(50.sp, () async {
+                    if (widget.from == 2) {
+                      print("Button clicked");
+                      await FirebaseAuth.instance.signOut();
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              const SelectionScreen()));
+                    }
+                    // Navigator.push(
+                    //   context,
+                    //   PageTransition(
+                    //     childCurrent: widget,
+                    //     type: PageTransitionType.rightToLeft,
+                    //     alignment: Alignment.center,
+                    //     duration: const Duration(milliseconds: 200),
+                    //     reverseDuration: const Duration(milliseconds: 200),
+                    //     child: const CreateAuthenticationView(),
+                    //   ),
+                    // );
+                  },
+                      GestureDetector(
+                        onTap: () async {},
+                        child: Text(
+                          "Change Email",
+                          style: AppTextStyles.josefin(
+                              style: TextStyle(
+                                  color: AppColors.kPrimaryColor,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w600)),
+                        ),
+                      )),
+                ),
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                child: GetwhiteButton(
+                  50.sp,
+                  () async {
+                    if (widget.from == 2) {
+                      print("Button clicked");
+                      await context
+                          .read<ForgetPasswordController>()
+                          .sendVerificationEmail(context);
+                    } else {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          childCurrent: widget,
+                          type: PageTransitionType.rightToLeft,
+                          alignment: Alignment.center,
+                          duration: const Duration(milliseconds: 200),
+                          reverseDuration: const Duration(milliseconds: 200),
+                          child: const CreateAuthenticationView(),
+                        ),
+                      );
+                    }
+                  },
+                  Text(
+                    widget.from == 1 ? 'Done' : "Send Email",
+                    style: AppTextStyles.josefin(
+                        style: TextStyle(
+                            color: AppColors.kPrimaryColor,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600)),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-          ],
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
         ),
       ),
     );

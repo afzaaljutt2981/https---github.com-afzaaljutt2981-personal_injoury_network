@@ -32,134 +32,136 @@ class _AllCreatedCampaignsScreen extends State<AllCreatedCampaignsScreen> {
         .reversed
         .toList();
     ;
-    return Scaffold(
-        backgroundColor: const Color(0xFFf5f4ff),
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: Padding(
-            padding: EdgeInsets.all(5.sp),
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: SizedBox(
-                width: 100.sp,
-                height: 40.sp,
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: AppColors.kPrimaryColor,
-                  size: 18.sp,
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: const Color(0xFFf5f4ff),
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            leading: Padding(
+              padding: EdgeInsets.all(5.sp),
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: SizedBox(
+                  width: 100.sp,
+                  height: 40.sp,
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: AppColors.kPrimaryColor,
+                    size: 18.sp,
+                  ),
+                ),
+              ),
+            ),
+            title: Center(
+              child: Padding(
+                padding: EdgeInsets.only(right: 45.w),
+                child: Text(
+                  "All Created Campaigns",
+                  style: AppTextStyles.josefin(
+                      style: TextStyle(
+                          color: const Color(0xFF120D26),
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w500)),
                 ),
               ),
             ),
           ),
-          title: Center(
-            child: Padding(
-              padding: EdgeInsets.only(right: 45.w),
-              child: Text(
-                "All Created Campaigns",
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: const Color(0xFF120D26),
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w500)),
-              ),
-            ),
-          ),
-        ),
-        body: allCampaigns.isNotEmpty
-            ? Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: allCampaigns.length,
-                        itemBuilder: (context, index) {
-                          var model = allCampaigns[index];
-                          return Padding(
-                            padding: EdgeInsets.only(
-                                left: 15.w, right: 15.w, bottom: 10.h),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15.sp),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10.w, vertical: 10.h),
-                                child: Row(children: [
-                                  Container(
-                                    height: 70.sp,
-                                    width: 70.sp,
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[300],
-                                        borderRadius:
-                                            BorderRadius.circular(20.sp),
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                model?.pImage ?? ""),
-                                            fit: BoxFit.cover)),
-                                  ),
-                                  // Image(
-                                  //     width: 50.sp,
-                                  //     height: 50.sp,
-                                  //     image: const AssetImage(
-                                  //         'assets/images/profile_pic.png')),
-                                  SizedBox(
-                                    width: 10.w,
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 0.w),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Campaign created for people of ${model.country} doing job as ${model.jobOrPosition}",
-                                            style: AppTextStyles.josefin(
-                                                style: TextStyle(
-                                                    color:
-                                                        AppColors.kBlackColor,
-                                                    fontSize: 14.sp,
-                                                    fontWeight:
-                                                        FontWeight.w500)),
-                                          ),
-                                          CustomSizeBox(5.h),
-                                          buttonRow(model)
-                                        ],
+          body: allCampaigns.isNotEmpty
+              ? Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: allCampaigns.length,
+                          itemBuilder: (context, index) {
+                            var model = allCampaigns[index];
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                  left: 15.w, right: 15.w, bottom: 10.h),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15.sp),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10.w, vertical: 10.h),
+                                  child: Row(children: [
+                                    Container(
+                                      height: 70.sp,
+                                      width: 70.sp,
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius:
+                                              BorderRadius.circular(20.sp),
+                                          image: DecorationImage(
+                                              image: NetworkImage(
+                                                  model?.pImage ?? ""),
+                                              fit: BoxFit.cover)),
+                                    ),
+                                    // Image(
+                                    //     width: 50.sp,
+                                    //     height: 50.sp,
+                                    //     image: const AssetImage(
+                                    //         'assets/images/profile_pic.png')),
+                                    SizedBox(
+                                      width: 10.w,
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 0.w),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Campaign created for people of ${model.country} doing job as ${model.jobOrPosition}",
+                                              style: AppTextStyles.josefin(
+                                                  style: TextStyle(
+                                                      color:
+                                                          AppColors.kBlackColor,
+                                                      fontSize: 14.sp,
+                                                      fontWeight:
+                                                          FontWeight.w500)),
+                                            ),
+                                            CustomSizeBox(5.h),
+                                            buttonRow(model)
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ]),
+                                  ]),
+                                ),
                               ),
-                            ),
-                          );
-                        }),
-                  ),
-                ],
-              )
-            : const Center(
-                child: Text("No Campaign found"),
-              ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                childCurrent: widget,
-                type: PageTransitionType.leftToRight,
-                duration: const Duration(milliseconds: 200),
-                reverseDuration: const Duration(milliseconds: 200),
-                child: const CreateCampaignView(),
-              ),
-            );
-          },
-          child: const Icon(Icons.add),
-        ));
+                            );
+                          }),
+                    ),
+                  ],
+                )
+              : const Center(
+                  child: Text("No Campaign found"),
+                ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  childCurrent: widget,
+                  type: PageTransitionType.leftToRight,
+                  duration: const Duration(milliseconds: 200),
+                  reverseDuration: const Duration(milliseconds: 200),
+                  child: const CreateCampaignView(),
+                ),
+              );
+            },
+            child: const Icon(Icons.add),
+          )),
+    );
   }
 
   Widget buttonRow(CampaignModel model) {

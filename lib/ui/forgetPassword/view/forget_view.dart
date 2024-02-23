@@ -30,101 +30,103 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.kPrimaryColor,
-      appBar: AppBar(
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: AppColors.kPrimaryColor,
-        elevation: 0,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: SizedBox(
-            width: 40.sp,
-            height: 40.sp,
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: AppColors.kWhiteColor,
-              size: 18.sp,
+        appBar: AppBar(
+          backgroundColor: AppColors.kPrimaryColor,
+          elevation: 0,
+          leading: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: SizedBox(
+              width: 40.sp,
+              height: 40.sp,
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.kWhiteColor,
+                size: 18.sp,
+              ),
             ),
           ),
         ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-                child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // GestureDetector(
-                  //   onTap: () => Navigator.pop(context),
-                  //   child: SizedBox(
-                  //     width: 40.sp,
-                  //     height: 40.sp,
-                  //     child: Icon(
-                  //       Icons.arrow_back_outlined,
-                  //       color: AppColors.kPrimaryColor,
-                  //       size: 18.sp,
-                  //     ),
-                  //   ),
-                  // ),
-                  CustomSizeBox(20.h),
-                  Padding(
-                    padding: EdgeInsets.only(left: 5.w),
-                    child: Image(
-                      height: 65.sp,
-                      width: 65.sp,
-                      image: const AssetImage(
-                          'assets/images/lock_forget_password.png'),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                  child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // GestureDetector(
+                    //   onTap: () => Navigator.pop(context),
+                    //   child: SizedBox(
+                    //     width: 40.sp,
+                    //     height: 40.sp,
+                    //     child: Icon(
+                    //       Icons.arrow_back_outlined,
+                    //       color: AppColors.kPrimaryColor,
+                    //       size: 18.sp,
+                    //     ),
+                    //   ),
+                    // ),
+                    CustomSizeBox(20.h),
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.w),
+                      child: Image(
+                        height: 65.sp,
+                        width: 65.sp,
+                        image: const AssetImage(
+                            'assets/images/lock_forget_password.png'),
+                      ),
                     ),
-                  ),
-                  CustomSizeBox(20.h),
-                  text('Password Recovery', FontWeight.w700, 24),
-                  CustomSizeBox(10.h),
-                  text(
-                      'Enter your registered email below to receive password instructions',
-                      FontWeight.w400,
-                      14),
-                  CustomSizeBox(30.h),
-                  textField('Email', 'Enter Email', emailController),
-                ],
-              ),
-            )),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
-              child: GetwhiteButton(50.sp, () async {
-                if (emailController.text == ' ' ||
-                    emailController.text.isEmpty) {
-                  CustomSnackBar(false)
-                      .showInSnackBar('Email field is empty!', context);
-                } else {
-                  Functions.showLoaderDialog(context);
-                  bool isEmailValid = validateEmail(emailController.text);
-
-                  if (isEmailValid == false) {
-                    Navigator.pop(context);
+                    CustomSizeBox(20.h),
+                    text('Password Recovery', FontWeight.w700, 24),
+                    CustomSizeBox(10.h),
+                    text(
+                        'Enter your registered email below to receive password instructions',
+                        FontWeight.w400,
+                        14),
+                    CustomSizeBox(30.h),
+                    textField('Email', 'Enter Email', emailController),
+                  ],
+                ),
+              )),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
+                child: GetwhiteButton(50.sp, () async {
+                  if (emailController.text == ' ' ||
+                      emailController.text.isEmpty) {
                     CustomSnackBar(false)
-                        .showInSnackBar('Invalid email!', context);
+                        .showInSnackBar('Email field is empty!', context);
                   } else {
-                    await context
-                        .read<ForgetPasswordController>()
-                        .resetPassword(emailController.text, context);
+                    Functions.showLoaderDialog(context);
+                    bool isEmailValid = validateEmail(emailController.text);
+
+                    if (isEmailValid == false) {
+                      Navigator.pop(context);
+                      CustomSnackBar(false)
+                          .showInSnackBar('Invalid email!', context);
+                    } else {
+                      await context
+                          .read<ForgetPasswordController>()
+                          .resetPassword(emailController.text, context);
+                    }
                   }
-                }
-              },
-                  Text(
-                    'Send me email',
-                    style: AppTextStyles.josefin(
-                        style: TextStyle(
-                            color: AppColors.kPrimaryColor,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600)),
-                  )),
-            )
-          ],
+                },
+                    Text(
+                      'Send me email',
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              color: AppColors.kPrimaryColor,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600)),
+                    )),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -42,596 +42,598 @@ class _CreateCampaign extends State<CreateCampaign> {
     // print("allUsers - >  ${allUsers}");
     context.read<CampaignController>().setCounty(selectedCounty);
     context.read<CampaignController>().setJob(selectedJobPosition);
-    return Scaffold(
-        backgroundColor: AppColors.kWhiteColor,
-        appBar: AppBar(
+    return SafeArea(
+      child: Scaffold(
           backgroundColor: AppColors.kWhiteColor,
-          elevation: 0,
-          leading: Padding(
-            padding: EdgeInsets.all(5.sp),
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: SizedBox(
-                width: 100.sp,
-                height: 40.sp,
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: AppColors.kBlackColor,
-                  size: 18.sp,
+          appBar: AppBar(
+            backgroundColor: AppColors.kWhiteColor,
+            elevation: 0,
+            leading: Padding(
+              padding: EdgeInsets.all(5.sp),
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: SizedBox(
+                  width: 100.sp,
+                  height: 40.sp,
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: AppColors.kBlackColor,
+                    size: 18.sp,
+                  ),
+                ),
+              ),
+            ),
+            title: Center(
+              child: Padding(
+                padding: EdgeInsets.only(right: 45.w),
+                child: Text(
+                  "Create a Campaign",
+                  style: AppTextStyles.josefin(
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w700)),
                 ),
               ),
             ),
           ),
-          title: Center(
-            child: Padding(
-              padding: EdgeInsets.only(right: 45.w),
-              child: Text(
-                "Create a Campaign",
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w700)),
-              ),
-            ),
-          ),
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomSizeBox(20.h),
-                        Text(
-                          'County',
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: 14.sp)),
-                        ),
-                        CustomSizeBox(7.h),
-                        // textfield(titleController, 'Add title', false, 1,
-                        //     AppColors.textFieldColor),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton2<String>(
-                            isExpanded: true,
-                            hint: Row(
-                              children: [
-                                // Icon(
-                                //   Icons.list,
-                                //   size: 16,
-                                //   color: Colors.yellow,
-                                // ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Expanded(
-                                    child: Text(
-                                  'Select here',
-                                  style: AppTextStyles.josefin(
-                                    style: TextStyle(
-                                      color: const Color(0xFF1F314A)
-                                          .withOpacity(
-                                              selectedCounty == "" ? 0.31 : 1),
-                                      fontSize: 14.sp,
-                                    ),
+          body: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomSizeBox(20.h),
+                          Text(
+                            'County',
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 14.sp)),
+                          ),
+                          CustomSizeBox(7.h),
+                          // textfield(titleController, 'Add title', false, 1,
+                          //     AppColors.textFieldColor),
+                          DropdownButtonHideUnderline(
+                            child: DropdownButton2<String>(
+                              isExpanded: true,
+                              hint: Row(
+                                children: [
+                                  // Icon(
+                                  //   Icons.list,
+                                  //   size: 16,
+                                  //   color: Colors.yellow,
+                                  // ),
+                                  const SizedBox(
+                                    width: 4,
                                   ),
-                                  overflow: TextOverflow.ellipsis,
-                                ))
-                              ],
-                            ),
-                            items: JobPositionModel.counties
-                                .map((String item) => DropdownMenuItem<String>(
-                                      value: item ?? "",
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            item ?? "",
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          const SizedBox(width: 10),
-                                          // Provides a space between the text and the icon
-                                          item == "Select All"
-                                              ? const Icon(
-                                                  Icons.select_all_outlined,
-                                                  // Replace with your desired icon
-                                                  size: 24,
-                                                )
-                                              : selectedCounty.contains(
-                                                          item.toString()) ||
-                                                      selectedCounty
-                                                          .contains("all")
-                                                  ? const Icon(
-                                                      Icons.done,
-                                                      // Replace with your desired icon
-                                                      size: 24,
-                                                    )
-                                                  : const SizedBox(),
-                                        ],
+                                  Expanded(
+                                      child: Text(
+                                    'Select here',
+                                    style: AppTextStyles.josefin(
+                                      style: TextStyle(
+                                        color: const Color(0xFF1F314A)
+                                            .withOpacity(
+                                                selectedCounty == "" ? 0.31 : 1),
+                                        fontSize: 14.sp,
                                       ),
-                                    ))
-                                .toList(),
-                            // value: items[0],
-                            onChanged: (String? value) {
-                              if (value == "Select All") {
-                                setState(() {
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ))
+                                ],
+                              ),
+                              items: JobPositionModel.counties
+                                  .map((String item) => DropdownMenuItem<String>(
+                                        value: item ?? "",
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              item ?? "",
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            // Provides a space between the text and the icon
+                                            item == "Select All"
+                                                ? const Icon(
+                                                    Icons.select_all_outlined,
+                                                    // Replace with your desired icon
+                                                    size: 24,
+                                                  )
+                                                : selectedCounty.contains(
+                                                            item.toString()) ||
+                                                        selectedCounty
+                                                            .contains("all")
+                                                    ? const Icon(
+                                                        Icons.done,
+                                                        // Replace with your desired icon
+                                                        size: 24,
+                                                      )
+                                                    : const SizedBox(),
+                                          ],
+                                        ),
+                                      ))
+                                  .toList(),
+                              // value: items[0],
+                              onChanged: (String? value) {
+                                if (value == "Select All") {
+                                  setState(() {
+                                    selectedCounty = [];
+                                    selectedCounty.add("all");
+                                    context
+                                        .read<CampaignController>()
+                                        .setCounty(selectedCounty);
+                                  });
+                                  return;
+                                }
+                                ;
+                                if (selectedCounty.contains("all")) {
                                   selectedCounty = [];
-                                  selectedCounty.add("all");
+                                }
+                                setState(() {
+                                  selectedCounty.add(value ?? "");
                                   context
                                       .read<CampaignController>()
                                       .setCounty(selectedCounty);
                                 });
-                                return;
-                              }
-                              ;
-                              if (selectedCounty.contains("all")) {
-                                selectedCounty = [];
-                              }
-                              setState(() {
-                                selectedCounty.add(value ?? "");
-                                context
-                                    .read<CampaignController>()
-                                    .setCounty(selectedCounty);
-                              });
-                            },
-                            // dropdownSearchData: DropdownSearchData(
-                            //     searchController: TextEditingController(
-                            //         text: "United States")),
-                            buttonStyleData: ButtonStyleData(
-                              height: 50,
-                              width: MediaQuery.of(context).size.width,
-                              padding:
-                                  const EdgeInsets.only(left: 14, right: 14),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                                color: AppColors.textFieldColor,
+                              },
+                              // dropdownSearchData: DropdownSearchData(
+                              //     searchController: TextEditingController(
+                              //         text: "United States")),
+                              buttonStyleData: ButtonStyleData(
+                                height: 50,
+                                width: MediaQuery.of(context).size.width,
+                                padding:
+                                    const EdgeInsets.only(left: 14, right: 14),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  color: AppColors.textFieldColor,
+                                ),
                               ),
-                            ),
-                            iconStyleData: const IconStyleData(
-                              icon: Icon(
-                                Icons.keyboard_arrow_down,
+                              iconStyleData: const IconStyleData(
+                                icon: Icon(
+                                  Icons.keyboard_arrow_down,
+                                ),
+                                iconSize: 30,
+                                iconEnabledColor: AppColors.kPrimaryColor,
+                                iconDisabledColor: Colors.grey,
                               ),
-                              iconSize: 30,
-                              iconEnabledColor: AppColors.kPrimaryColor,
-                              iconDisabledColor: Colors.grey,
-                            ),
-                            dropdownStyleData: DropdownStyleData(
-                              maxHeight: 200,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                                color: Colors.white,
+                              dropdownStyleData: DropdownStyleData(
+                                maxHeight: 200,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  color: Colors.white,
+                                ),
+                                // offset: const Offset(-40, 0),
+                                scrollbarTheme: ScrollbarThemeData(
+                                  radius: const Radius.circular(40),
+                                  thickness: MaterialStateProperty.all<double>(6),
+                                  thumbVisibility:
+                                      MaterialStateProperty.all<bool>(true),
+                                ),
                               ),
-                              // offset: const Offset(-40, 0),
-                              scrollbarTheme: ScrollbarThemeData(
-                                radius: const Radius.circular(40),
-                                thickness: MaterialStateProperty.all<double>(6),
-                                thumbVisibility:
-                                    MaterialStateProperty.all<bool>(true),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                                padding: EdgeInsets.only(left: 14, right: 14),
                               ),
-                            ),
-                            menuItemStyleData: const MenuItemStyleData(
-                              height: 40,
-                              padding: EdgeInsets.only(left: 14, right: 14),
                             ),
                           ),
-                        ),
 
-                        CustomSizeBox(20.h),
-                        Text(
-                          'Select Position/Job',
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: 14.sp)),
-                        ),
-                        CustomSizeBox(7.h),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton2<String>(
-                            isExpanded: true,
-                            hint: Row(
-                              children: [
-                                // Icon(
-                                //   Icons.list,
-                                //   size: 16,
-                                //   color: Colors.yellow,
-                                // ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Expanded(
-                                    child: Text(
-                                  'Select here',
-                                  style: AppTextStyles.josefin(
-                                    style: TextStyle(
-                                      color: const Color(0xFF1F314A)
-                                          .withOpacity(selectedJobPosition == ""
-                                              ? 0.31
-                                              : 1),
-                                      fontSize: 14.sp,
-                                    ),
+                          CustomSizeBox(20.h),
+                          Text(
+                            'Select Position/Job',
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 14.sp)),
+                          ),
+                          CustomSizeBox(7.h),
+                          DropdownButtonHideUnderline(
+                            child: DropdownButton2<String>(
+                              isExpanded: true,
+                              hint: Row(
+                                children: [
+                                  // Icon(
+                                  //   Icons.list,
+                                  //   size: 16,
+                                  //   color: Colors.yellow,
+                                  // ),
+                                  const SizedBox(
+                                    width: 4,
                                   ),
-                                  overflow: TextOverflow.ellipsis,
-                                ))
-                              ],
-                            ),
-                            items: JobPositionModel.jobList
-                                .map((String item) => DropdownMenuItem<String>(
-                                      value: item ?? "",
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            item ?? "",
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          const SizedBox(width: 10),
-                                          // Provides a space between the text and the icon
-                                          item == "- Select All"
-                                              ? const Icon(
-                                                  Icons.select_all_outlined,
-                                                  // Replace with your desired icon
-                                                  size: 24,
-                                                )
-                                              : selectedJobPosition.contains(
-                                                          (item ?? "")
-                                                              .split("- ")?[1]
-                                                              .toString()) ||
-                                                      selectedJobPosition
-                                                          .contains("all")
-                                                  ? const Icon(
-                                                      Icons.done,
-                                                      // Replace with your desired icon
-                                                      size: 24,
-                                                    )
-                                                  : const SizedBox(),
-                                        ],
+                                  Expanded(
+                                      child: Text(
+                                    'Select here',
+                                    style: AppTextStyles.josefin(
+                                      style: TextStyle(
+                                        color: const Color(0xFF1F314A)
+                                            .withOpacity(selectedJobPosition == ""
+                                                ? 0.31
+                                                : 1),
+                                        fontSize: 14.sp,
                                       ),
-                                    ))
-                                .toList(),
-                            // value: items[0],
-                            onChanged: (String? value) {
-                              if (value == "- Select All") {
-                                setState(() {
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ))
+                                ],
+                              ),
+                              items: JobPositionModel.jobList
+                                  .map((String item) => DropdownMenuItem<String>(
+                                        value: item ?? "",
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              item ?? "",
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            // Provides a space between the text and the icon
+                                            item == "- Select All"
+                                                ? const Icon(
+                                                    Icons.select_all_outlined,
+                                                    // Replace with your desired icon
+                                                    size: 24,
+                                                  )
+                                                : selectedJobPosition.contains(
+                                                            (item ?? "")
+                                                                .split("- ")?[1]
+                                                                .toString()) ||
+                                                        selectedJobPosition
+                                                            .contains("all")
+                                                    ? const Icon(
+                                                        Icons.done,
+                                                        // Replace with your desired icon
+                                                        size: 24,
+                                                      )
+                                                    : const SizedBox(),
+                                          ],
+                                        ),
+                                      ))
+                                  .toList(),
+                              // value: items[0],
+                              onChanged: (String? value) {
+                                if (value == "- Select All") {
+                                  setState(() {
+                                    selectedJobPosition = [];
+                                    selectedJobPosition.add("all");
+                                    context
+                                        .read<CampaignController>()
+                                        .setJob(selectedJobPosition);
+                                  });
+                                  return;
+                                }
+                                if (selectedJobPosition.contains("all")) {
                                   selectedJobPosition = [];
-                                  selectedJobPosition.add("all");
+                                }
+                                setState(() {
+                                  selectedJobPosition
+                                      .add((value ?? "").split("- ")?[1] ?? "");
                                   context
                                       .read<CampaignController>()
                                       .setJob(selectedJobPosition);
                                 });
-                                return;
-                              }
-                              if (selectedJobPosition.contains("all")) {
-                                selectedJobPosition = [];
-                              }
-                              setState(() {
-                                selectedJobPosition
-                                    .add((value ?? "").split("- ")?[1] ?? "");
-                                context
-                                    .read<CampaignController>()
-                                    .setJob(selectedJobPosition);
-                              });
-                            },
-                            buttonStyleData: ButtonStyleData(
-                              height: 50,
-                              width: MediaQuery.of(context).size.width,
-                              padding:
-                                  const EdgeInsets.only(left: 14, right: 14),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                                color: AppColors.textFieldColor,
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                height: 50,
+                                width: MediaQuery.of(context).size.width,
+                                padding:
+                                    const EdgeInsets.only(left: 14, right: 14),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  color: AppColors.textFieldColor,
+                                ),
                               ),
-                            ),
-                            iconStyleData: const IconStyleData(
-                              icon: Icon(
-                                Icons.keyboard_arrow_down,
+                              iconStyleData: const IconStyleData(
+                                icon: Icon(
+                                  Icons.keyboard_arrow_down,
+                                ),
+                                iconSize: 30,
+                                iconEnabledColor: AppColors.kPrimaryColor,
+                                iconDisabledColor: Colors.grey,
                               ),
-                              iconSize: 30,
-                              iconEnabledColor: AppColors.kPrimaryColor,
-                              iconDisabledColor: Colors.grey,
-                            ),
-                            dropdownStyleData: DropdownStyleData(
-                              maxHeight: 200,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                                color: Colors.white,
+                              dropdownStyleData: DropdownStyleData(
+                                maxHeight: 200,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  color: Colors.white,
+                                ),
+                                // offset: const Offset(-40, 0),
+                                scrollbarTheme: ScrollbarThemeData(
+                                  radius: const Radius.circular(40),
+                                  thickness: MaterialStateProperty.all<double>(6),
+                                  thumbVisibility:
+                                      MaterialStateProperty.all<bool>(true),
+                                ),
                               ),
-                              // offset: const Offset(-40, 0),
-                              scrollbarTheme: ScrollbarThemeData(
-                                radius: const Radius.circular(40),
-                                thickness: MaterialStateProperty.all<double>(6),
-                                thumbVisibility:
-                                    MaterialStateProperty.all<bool>(true),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                                padding: EdgeInsets.only(left: 14, right: 14),
                               ),
-                            ),
-                            menuItemStyleData: const MenuItemStyleData(
-                              height: 40,
-                              padding: EdgeInsets.only(left: 14, right: 14),
                             ),
                           ),
-                        ),
 
-                        CustomSizeBox(20.h),
-                        Text(
-                          'Title',
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  color: AppColors.kBlackColor,
-                                  fontSize: 14.sp)),
-                        ),
-                        CustomSizeBox(7.h),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: AppColors.textFieldColor,
-                              borderRadius: BorderRadius.circular(10.sp)),
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 14.h, bottom: 4.h),
-                            child: textfield(
-                                titleController,
-                                'Type here..',
-                                false,
-                                3,
-                                AppColors.textFieldColor),
+                          CustomSizeBox(20.h),
+                          Text(
+                            'Title',
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    color: AppColors.kBlackColor,
+                                    fontSize: 14.sp)),
                           ),
-                        ),
-                        CustomSizeBox(20.h),
-                        Text(
-                          'Message',
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  color: AppColors.kBlackColor,
-                                  fontSize: 14.sp)),
-                        ),
-                        CustomSizeBox(7.h),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: AppColors.textFieldColor,
-                              borderRadius: BorderRadius.circular(10.sp)),
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 14.h, bottom: 4.h),
-                            child: textfield(
-                                descriptionController,
-                                'Type here..',
-                                false,
-                                5,
-                                AppColors.textFieldColor),
-                          ),
-                        ),
-                        CustomSizeBox(15.h),
-                        InkWell(
-                          onTap: () async {
-                            final ImagePicker _picker = ImagePicker();
-                            final XFile? pickedImage = await _picker.pickImage(
-                                source: ImageSource.gallery);
-                            if (pickedImage != null) {
-                              image1 = await pickedImage.readAsBytes();
-                              setState(() {});
-                            }
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            height: 110.h,
+                          CustomSizeBox(7.h),
+                          Container(
                             decoration: BoxDecoration(
-                              color: AppColors.kWhiteColor,
-                              borderRadius: BorderRadius.circular(10.sp),
-                              border: const DashedBorder(
-                                dashLength: 10,
-                                left: BorderSide(
-                                    color: AppColors.dashedBorderColor,
-                                    width: 2.5),
-                                top: BorderSide(
-                                    color: AppColors.dashedBorderColor,
-                                    width: 2.5),
-                                right: BorderSide(
-                                    color: AppColors.dashedBorderColor,
-                                    width: 2.5),
-                                bottom: BorderSide(
-                                    color: AppColors.dashedBorderColor,
-                                    width: 2.5),
-                              ),
+                                color: AppColors.textFieldColor,
+                                borderRadius: BorderRadius.circular(10.sp)),
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 14.h, bottom: 4.h),
+                              child: textfield(
+                                  titleController,
+                                  'Type here..',
+                                  false,
+                                  3,
+                                  AppColors.textFieldColor),
                             ),
-                            child: (image1 != null)
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.sp),
-                                    child: Image(
-                                      image: MemoryImage(image1!),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                : Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 20.h),
-                                    child: Column(
-                                      children: [
-                                        Image(
-                                          height: 30.sp,
-                                          width: 30.sp,
-                                          image: const AssetImage(
-                                              'assets/images/select_banner_campaign.png'),
-                                        ),
-                                        CustomSizeBox(10.h),
-                                        Text(
-                                          '+Add banner',
-                                          style: AppTextStyles.josefin(
-                                              style: TextStyle(
-                                                  color:
-                                                      const Color(0xFF7E8CA0),
-                                                  fontSize: 12.sp)),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                           ),
-                        ),
-                        CustomSizeBox(15.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.arrow_right_outlined,
-                                      // Replace with your desired icon
-                                      size: 24,
+                          CustomSizeBox(20.h),
+                          Text(
+                            'Message',
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    color: AppColors.kBlackColor,
+                                    fontSize: 14.sp)),
+                          ),
+                          CustomSizeBox(7.h),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: AppColors.textFieldColor,
+                                borderRadius: BorderRadius.circular(10.sp)),
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 14.h, bottom: 4.h),
+                              child: textfield(
+                                  descriptionController,
+                                  'Type here..',
+                                  false,
+                                  5,
+                                  AppColors.textFieldColor),
+                            ),
+                          ),
+                          CustomSizeBox(15.h),
+                          InkWell(
+                            onTap: () async {
+                              final ImagePicker _picker = ImagePicker();
+                              final XFile? pickedImage = await _picker.pickImage(
+                                  source: ImageSource.gallery);
+                              if (pickedImage != null) {
+                                image1 = await pickedImage.readAsBytes();
+                                setState(() {});
+                              }
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              height: 110.h,
+                              decoration: BoxDecoration(
+                                color: AppColors.kWhiteColor,
+                                borderRadius: BorderRadius.circular(10.sp),
+                                border: const DashedBorder(
+                                  dashLength: 10,
+                                  left: BorderSide(
+                                      color: AppColors.dashedBorderColor,
+                                      width: 2.5),
+                                  top: BorderSide(
+                                      color: AppColors.dashedBorderColor,
+                                      width: 2.5),
+                                  right: BorderSide(
+                                      color: AppColors.dashedBorderColor,
+                                      width: 2.5),
+                                  bottom: BorderSide(
+                                      color: AppColors.dashedBorderColor,
+                                      width: 2.5),
+                                ),
+                              ),
+                              child: (image1 != null)
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.sp),
+                                      child: Image(
+                                        image: MemoryImage(image1!),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 20.h),
+                                      child: Column(
+                                        children: [
+                                          Image(
+                                            height: 30.sp,
+                                            width: 30.sp,
+                                            image: const AssetImage(
+                                                'assets/images/select_banner_campaign.png'),
+                                          ),
+                                          CustomSizeBox(10.h),
+                                          Text(
+                                            '+Add banner',
+                                            style: AppTextStyles.josefin(
+                                                style: TextStyle(
+                                                    color:
+                                                        const Color(0xFF7E8CA0),
+                                                    fontSize: 12.sp)),
+                                          ),
+                                        ],
+                                      ),
                                     ),
+                            ),
+                          ),
+                          CustomSizeBox(15.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.arrow_right_outlined,
+                                        // Replace with your desired icon
+                                        size: 24,
+                                      ),
+                                      Text(
+                                        'Selected users',
+                                        style: AppTextStyles.josefin(
+                                            style: TextStyle(
+                                                color: AppColors.kBlackColor,
+                                                fontSize: 14.sp)),
+                                      ),
+                                      SizedBox(
+                                        width: 20.sp,
+                                      ),
+                                      Text(
+                                        '${allUsers?.length ?? 0}',
+                                        style: AppTextStyles.josefin(
+                                            style: TextStyle(
+                                                color: AppColors
+                                                    .kSnackbarSuccessColor,
+                                                fontSize: 18.sp)),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  _showBottomSheet(context);
+                                },
+                                child: Row(
+                                  children: [
                                     Text(
-                                      'Selected users',
+                                      'view',
                                       style: AppTextStyles.josefin(
                                           style: TextStyle(
                                               color: AppColors.kBlackColor,
-                                              fontSize: 14.sp)),
-                                    ),
-                                    SizedBox(
-                                      width: 20.sp,
-                                    ),
-                                    Text(
-                                      '${allUsers?.length ?? 0}',
-                                      style: AppTextStyles.josefin(
-                                          style: TextStyle(
-                                              color: AppColors
-                                                  .kSnackbarSuccessColor,
                                               fontSize: 18.sp)),
                                     ),
+                                    SizedBox(
+                                      width: 10.sp,
+                                    ),
+                                    const Icon(
+                                      Icons.remove_red_eye,
+                                      // Replace with your desired icon
+                                      size: 24,
+                                    ),
                                   ],
-                                )
-                              ],
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                _showBottomSheet(context);
-                              },
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'view',
-                                    style: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                            color: AppColors.kBlackColor,
-                                            fontSize: 18.sp)),
-                                  ),
-                                  SizedBox(
-                                    width: 10.sp,
-                                  ),
-                                  const Icon(
-                                    Icons.remove_red_eye,
-                                    // Replace with your desired icon
-                                    size: 24,
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      )),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: 20.w, right: 30.w, bottom: 30.h, top: 12.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      decoration: ShapeDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment(0.98, -0.22),
+                          end: Alignment(-0.98, 0.22),
+                          colors: [Color(0xFF212E73), Color(0xFF3047C0)],
                         ),
-                      ],
-                    )),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: 20.w, right: 30.w, bottom: 30.h, top: 12.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    decoration: ShapeDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment(0.98, -0.22),
-                        end: Alignment(-0.98, 0.22),
-                        colors: [Color(0xFF212E73), Color(0xFF3047C0)],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(26),
+                        ),
+                        shadows: [
+                          const BoxShadow(
+                            color: Color(0x1A306D8A),
+                            blurRadius: 30,
+                            offset: Offset(0, 16),
+                            spreadRadius: 0,
+                          )
+                        ],
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(26),
-                      ),
-                      shadows: [
-                        const BoxShadow(
-                          color: Color(0x1A306D8A),
-                          blurRadius: 30,
-                          offset: Offset(0, 16),
-                          spreadRadius: 0,
-                        )
-                      ],
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      child: GetGradientButton(50.sp, () async {
+                        if (selectedCounty.isEmpty) {
+                          Functions.showSnackBar(
+                              context, "please select country");
+                          return;
+                        } else if (selectedJobPosition.isEmpty) {
+                          Functions.showSnackBar(
+                              context, "please select job/position");
+                          return;
+                        } else if (descriptionController.text.isEmpty) {
+                          Functions.showSnackBar(
+                              context, "please add message of campaign");
+                          return;
+                        } else if (image1 == null) {
+                          Functions.showSnackBar(
+                              context, "please add image of campaign");
+                          return;
+                        }else if (titleController.text.isEmpty) {
+                          Functions.showSnackBar(
+                              context, "please add title of campaign");
+                          return;
+                        }
+                        print("Button clicked");
+                        Functions.showLoaderDialog(context);
+                        String url =
+                            await Functions.uploadPic(image1!, "campaigns");
+                        // // ignore: use_build_context_synchronously
+                        await context.read<CampaignController>().createCampaign(
+                            campaignCountry: selectedCounty,
+                            campaignJob: selectedJobPosition,
+                            campaignDescription: descriptionController.text,
+                            title: titleController.text,
+                            pImage: url);
+                        // ignore: use_build_context_synchronously
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        CustomSnackBar(true).showInSnackBar(
+                            'Campaign created successfully For the people of $selectedCounty working as $selectedJobPosition."',
+                            context);
+                        // eventCreated(
+                        //     "For the people of ${selectedCountry} working as ${selectedJobPosition}.");
+                      },
+                          Text(
+                            "Submit",
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    color: AppColors.kWhiteColor,
+                                    fontSize: 17.sp)),
+                          )),
                     ),
-                    width: MediaQuery.of(context).size.width * 0.85,
-                    child: GetGradientButton(50.sp, () async {
-                      if (selectedCounty.isEmpty) {
-                        Functions.showSnackBar(
-                            context, "please select country");
-                        return;
-                      } else if (selectedJobPosition.isEmpty) {
-                        Functions.showSnackBar(
-                            context, "please select job/position");
-                        return;
-                      } else if (descriptionController.text.isEmpty) {
-                        Functions.showSnackBar(
-                            context, "please add message of campaign");
-                        return;
-                      } else if (image1 == null) {
-                        Functions.showSnackBar(
-                            context, "please add image of campaign");
-                        return;
-                      }else if (titleController.text.isEmpty) {
-                        Functions.showSnackBar(
-                            context, "please add title of campaign");
-                        return;
-                      }
-                      print("Button clicked");
-                      Functions.showLoaderDialog(context);
-                      String url =
-                          await Functions.uploadPic(image1!, "campaigns");
-                      // // ignore: use_build_context_synchronously
-                      await context.read<CampaignController>().createCampaign(
-                          campaignCountry: selectedCounty,
-                          campaignJob: selectedJobPosition,
-                          campaignDescription: descriptionController.text,
-                          title: titleController.text,
-                          pImage: url);
-                      // ignore: use_build_context_synchronously
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      CustomSnackBar(true).showInSnackBar(
-                          'Campaign created successfully For the people of $selectedCounty working as $selectedJobPosition."',
-                          context);
-                      // eventCreated(
-                      //     "For the people of ${selectedCountry} working as ${selectedJobPosition}.");
-                    },
-                        Text(
-                          "Submit",
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  color: AppColors.kWhiteColor,
-                                  fontSize: 17.sp)),
-                        )),
-                  ),
-                  // Image(
-                  //   height: 45.sp,
-                  //   width: 45.sp,
-                  //   image: const AssetImage(
-                  //       'assets/images/frame_create_event.png'),
-                  // ),
-                ],
+                    // Image(
+                    //   height: 45.sp,
+                    //   width: 45.sp,
+                    //   image: const AssetImage(
+                    //       'assets/images/frame_create_event.png'),
+                    // ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ));
+            ],
+          )),
+    );
   }
 
   Widget textfield(TextEditingController controller, String hintText,

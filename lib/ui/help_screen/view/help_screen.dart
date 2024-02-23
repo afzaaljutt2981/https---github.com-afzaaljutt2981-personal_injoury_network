@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HelpScreen extends StatefulWidget {
@@ -35,41 +36,51 @@ class _HelpScreenViewState extends State<HelpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Help & Support'),
-        backgroundColor: const Color(0xFF857FB4),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'How can we help you?',
-              style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueGrey),
-            ),
-            SizedBox(height: 20),
-            Card(
-              elevation: 4,
-              child: ListTile(
-                leading: Icon(Icons.person, color: const Color(0xFF857FB4)),
-                title: Text('Patrick Tauma'),
-                subtitle: Text('Admin'),
-                trailing: IconButton(
-                  icon: Icon(Icons.email, color: const Color(0xFF857FB4)),
-                  onPressed: () async {
-                    print("Clicked");
-                    sendEmail();
-                  },
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Help & Support'),
+          backgroundColor: AppColors.kPrimaryColor,
+        ),
+        body: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'How can we help you?',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Write an email to our support email by clicking the email button below.',
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.black),
+              ),
+              SizedBox(height: 20),
+              Card(
+                elevation: 4,
+                child: ListTile(
+                  leading: Icon(Icons.person, color: AppColors.kPrimaryColor),
+                  title: Text('Patrick Tauma'),
+                  subtitle: Text('Admin'),
+                  trailing: IconButton(
+                    icon: Icon(Icons.email, color: AppColors.kPrimaryColor),
+                    onPressed: () async {
+                      print("Clicked");
+                      sendEmail();
+                    },
+                  ),
                 ),
               ),
-            ),
-            // Add more cards or information as needed
-          ],
+              // Add more cards or information as needed
+            ],
+          ),
         ),
       ),
     );

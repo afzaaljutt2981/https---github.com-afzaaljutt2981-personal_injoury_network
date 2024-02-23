@@ -84,131 +84,133 @@ class _SelectLocationState extends State<SelectLocation> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          GoogleMap(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
-            onCameraIdle: () {
-              if (latLng != null) {
-                if (!fromPlaces) {
-                  getAddress();
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            GoogleMap(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
+              onCameraIdle: () {
+                if (latLng != null) {
+                  if (!fromPlaces) {
+                    getAddress();
+                  }
+                  fromPlaces = false;
+                  addMarker(latLng!);
                 }
-                fromPlaces = false;
-                addMarker(latLng!);
-              }
-            },
-            onCameraMove: (CameraPosition position) {
-              latLng = position.target;
-            },
-            mapType: MapType.normal,
-            initialCameraPosition: position,
-            onMapCreated: (GoogleMapController controller) {
-              _controller = controller;
-            },
-            markers: Set<Marker>.of(markers.values),
-          ),
-          InkWell(
-            onTap: () async {
-              var p = await PlacesAutocomplete.show(
-                context: context,
-                apiKey: Constants.mapKey,
-                onError: (error) {},
-                mode: Mode.overlay,
-                language: "en",
-                decoration: InputDecoration(
-                  hintText: "Search",
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                types: [],
-                strictbounds: false,
-                components: [
-                  // Component(Component.country, "pk"),
-                ],
-              );
-              displayPrediction(p);
-            },
-            child: Padding(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.white,
-                ),
-                margin: EdgeInsets.symmetric(
-                    horizontal: width * 0.03, vertical: height * 0.01),
-                // decoration: Constants.shadowDecoration(),
-                padding: EdgeInsets.symmetric(
-                    horizontal: width * 0.03, vertical: height * 0.01),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.search,
-                      color: widget.primary,
-                    ),
-                    SizedBox(
-                      width: width * 0.03,
-                    ),
-                    Expanded(
-                      child: Text(
-                        searchResults,
-                        style: TextStyle(
-                          color: widget.primary,
-                          fontSize: 16,
-                          fontFamily: "jr",
-                        ),
+              },
+              onCameraMove: (CameraPosition position) {
+                latLng = position.target;
+              },
+              mapType: MapType.normal,
+              initialCameraPosition: position,
+              onMapCreated: (GoogleMapController controller) {
+                _controller = controller;
+              },
+              markers: Set<Marker>.of(markers.values),
+            ),
+            InkWell(
+              onTap: () async {
+                var p = await PlacesAutocomplete.show(
+                  context: context,
+                  apiKey: Constants.mapKey,
+                  onError: (error) {},
+                  mode: Mode.overlay,
+                  language: "en",
+                  decoration: InputDecoration(
+                    hintText: "Search",
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(
+                        color: Colors.white,
                       ),
                     ),
+                  ),
+                  types: [],
+                  strictbounds: false,
+                  components: [
+                    // Component(Component.country, "pk"),
                   ],
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: height * 0.015,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.03),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  padding: EdgeInsets.symmetric(vertical: height * 0.015),
-                  shape: const StadiumBorder(),
-                ),
-                onPressed: () {
-                  if (latLng == null || searchResults == "Search Address") {
-                    Functions.showSnackBar(
-                        context, AppStrings.pleaseSelectALocationToContinue);
-                  } else {
-                    AddressModel model = AddressModel(
-                      latitude: latLng!.latitude,
-                      longitude: latLng!.longitude,
-                      country: country,
-                      city: city,
-                      postalCode: postalCode,
-                      address: searchResults,
-                    );
-                    Navigator.of(context).pop(model);
-                  }
-                },
-                child: Text(
-                  AppStrings.selectLocation,
-                  style: const TextStyle(
-                    color: AppColors.kPrimaryColor,
-                    fontFamily: "jr",
-                    fontSize: 14,
+                );
+                displayPrediction(p);
+              },
+              child: Padding(
+                padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.white,
+                  ),
+                  margin: EdgeInsets.symmetric(
+                      horizontal: width * 0.03, vertical: height * 0.01),
+                  // decoration: Constants.shadowDecoration(),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.03, vertical: height * 0.01),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.search,
+                        color: widget.primary,
+                      ),
+                      SizedBox(
+                        width: width * 0.03,
+                      ),
+                      Expanded(
+                        child: Text(
+                          searchResults,
+                          style: TextStyle(
+                            color: widget.primary,
+                            fontSize: 16,
+                            fontFamily: "jr",
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: height * 0.015,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.03),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    padding: EdgeInsets.symmetric(vertical: height * 0.015),
+                    shape: const StadiumBorder(),
+                  ),
+                  onPressed: () {
+                    if (latLng == null || searchResults == "Search Address") {
+                      Functions.showSnackBar(
+                          context, AppStrings.pleaseSelectALocationToContinue);
+                    } else {
+                      AddressModel model = AddressModel(
+                        latitude: latLng!.latitude,
+                        longitude: latLng!.longitude,
+                        country: country,
+                        city: city,
+                        postalCode: postalCode,
+                        address: searchResults,
+                      );
+                      Navigator.of(context).pop(model);
+                    }
+                  },
+                  child: Text(
+                    AppStrings.selectLocation,
+                    style: const TextStyle(
+                      color: AppColors.kPrimaryColor,
+                      fontFamily: "jr",
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

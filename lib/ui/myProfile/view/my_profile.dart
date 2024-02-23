@@ -85,32 +85,55 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
       textFieldController[5].text = user?.firstName ?? "";
       textFieldController[6].text = hobbies ?? "";
     }
-    return Scaffold(
-        backgroundColor: const Color(0xFFf5f4ff),
-        appBar: widget.from == "1"
-            ? AppBar(
-                backgroundColor: const Color(0xFFf5f4ff),
-                elevation: 0,
-                leading: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: SizedBox(
-                    width: 40.sp,
-                    height: 40.sp,
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      color: AppColors.kPrimaryColor,
-                      size: 18.sp,
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: const Color(0xFFf5f4ff),
+          appBar: widget.from == "1"
+              ? AppBar(
+                  backgroundColor: const Color(0xFFf5f4ff),
+                  elevation: 0,
+                  leading: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: SizedBox(
+                      width: 40.sp,
+                      height: 40.sp,
+                      child: Icon(
+                        Icons.arrow_back_ios,
+                        color: AppColors.kPrimaryColor,
+                        size: 18.sp,
+                      ),
                     ),
                   ),
-                ),
-                title: widget.from == "1"
-                    ? Padding(
-                        padding: EdgeInsets.only(right: 40.sp),
+                  title: widget.from == "1"
+                      ? Padding(
+                          padding: EdgeInsets.only(right: 40.sp),
+                          child: Center(
+                            child: Text(
+                              'User Profile',
+                              style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      fontSize: 22.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.kBlackColor)),
+                            ),
+                          ),
+                        )
+                      : null,
+                )
+              : null,
+          body: (user != null)
+              ? Column(children: [
+                  if (widget.from == "2")
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      color: const Color(0xFFf5f4ff),
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 50.h, bottom: 15.h),
                         child: Center(
                           child: Text(
-                            'User Profile',
+                            'Profile',
                             style: AppTextStyles.josefin(
                                 style: TextStyle(
                                     fontSize: 22.sp,
@@ -118,304 +141,283 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                     color: AppColors.kBlackColor)),
                           ),
                         ),
-                      )
-                    : null,
-              )
-            : null,
-        body: (user != null)
-            ? Column(children: [
-                if (widget.from == "2")
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: const Color(0xFFf5f4ff),
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 50.h, bottom: 15.h),
-                      child: Center(
-                        child: Text(
-                          'Profile',
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  fontSize: 22.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.kBlackColor)),
+                      ),
+                    ),
+                  Expanded(
+                      child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(35.sp),
+                            topRight: Radius.circular(35.sp))),
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomSizeBox(20.h),
+                            Center(
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    height: 100.sp,
+                                    width: 100.sp,
+                                    decoration: const BoxDecoration(
+                                        shape: BoxShape.circle),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      imageEditAble
+                                          ? showBottomModelSheetWidget()
+                                          : null;
+                                    },
+                                    child: (image1 != null)
+                                        ? CircleAvatar(
+                                            radius: 50,
+                                            backgroundImage: MemoryImage(image1!),
+                                          )
+                                        : (user!.pImage != null)
+                                            ? CircleAvatar(
+                                                radius: 50,
+                                                backgroundImage: NetworkImage(
+                                                  user!.pImage!,
+                                                ),
+                                              )
+                                            : const CircleAvatar(
+                                                radius: 50,
+                                                backgroundImage: AssetImage(
+                                                    'assets/images/profile_pic.png'),
+                                              ),
+                                  ),
+                                  imageEditAble
+                                      ? Positioned(
+                                          right: 4.h,
+                                          top: 50.sp,
+                                          child: Container(
+                                            height: 25.sp,
+                                            width: 25.sp,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[400],
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                imageEditAble
+                                                    ? showBottomModelSheetWidget()
+                                                    : null;
+                                              },
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.edit,
+                                                  color: Colors.white,
+                                                  size: 17.sp,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : const SizedBox(),
+                                ],
+                              ),
+                            ),
+                            CustomSizeBox(10.h),
+                            Center(
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        user?.firstName ?? "",
+                                        style: AppTextStyles.josefin(
+                                            style: TextStyle(
+                                                color: const Color(0xFF27261E),
+                                                fontSize: 24.sp)),
+                                      ),
+                                      SizedBox(
+                                        width: 5.w,
+                                      ),
+                                      if (widget.from == "2")
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              imageEditAble = !imageEditAble;
+                                            });
+                                          },
+                                          child: Image(
+                                              width: 15.sp,
+                                              height: 15.sp,
+                                              image: const AssetImage(
+                                                  'assets/images/edit_my_profile.png')),
+                                        )
+                                    ],
+                                  ),
+                                  CustomSizeBox(4.h),
+                                  Text(
+                                    user?.email ?? "",
+                                    style: AppTextStyles.josefin(
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            color: const Color(0xFF27261E),
+                                            fontSize: 14.sp)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            CustomSizeBox(20.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(top: 10.h),
+                                  child: Text(
+                                    'User Name',
+                                    style: AppTextStyles.josefin(
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            color: const Color(0xFF1A1167),
+                                            fontSize: 12.sp)),
+                                  ),
+                                ),
+                                if (widget.from == "2")
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 20.w),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          readOnlyTextFields =
+                                              !readOnlyTextFields;
+                                        });
+                                      },
+                                      child: Image(
+                                          width: 16.sp,
+                                          height: 16.sp,
+                                          image: const AssetImage(
+                                              'assets/images/edit_my_profile.png')),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            textField("user name", 5, textFieldController[5]),
+                            Text(
+                              'Company',
+                              style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(0xFF1A1167),
+                                      fontSize: 12.sp)),
+                            ),
+                            textField("company", 0, textFieldController[0]),
+                            Text(
+                              'Hobbies',
+                              style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(0xFF1A1167),
+                                      fontSize: 12.sp)),
+                            ),
+                            textField("hobbies", 0, textFieldController[6]),
+                            Text(
+                              'Job/Position',
+                              style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(0xFF1A1167),
+                                      fontSize: 12.sp)),
+                            ),
+                            textField(
+                                'Enter Your Job', 1, textFieldController[1]),
+                            CustomSizeBox(5.h),
+                            Text(
+                              'Website',
+                              style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(0xFF1A1167),
+                                      fontSize: 12.sp)),
+                            ),
+                            textField(
+                                'Enter Your Website', 2, textFieldController[2]),
+                            CustomSizeBox(5.h),
+                            Text(
+                              'Cellphone',
+                              style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(0xFF1A1167),
+                                      fontSize: 12.sp)),
+                            ),
+                            textField('Enter Your Phone No.', 3,
+                                textFieldController[3]),
+                            CustomSizeBox(5.h),
+                            Text(
+                              'Location',
+                              style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(0xFF1A1167),
+                                      fontSize: 12.sp)),
+                            ),
+                            textField('Your Location', 4, textFieldController[4]),
+                            CustomSizeBox(5.h),
+                            if (widget.from == "2")
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: 25.w, right: 25.w, bottom: 20.w),
+                                child: GetButton(50.h, () async {
+                                  if (!readOnlyTextFields || imageEditAble) {
+                                    Functions.showLoaderDialog(context);
+                                    String? url;
+                                    if (image1 != null) {
+                                      url = await Functions.uploadPic(
+                                          image1!, "users");
+                                    }
+                                    // ignore: use_build_context_synchronously
+                                    await context
+                                        .read<MyProfileController>()
+                                        .updateUser(
+                                            firstName:
+                                                textFieldController[5].text,
+                                            company: textFieldController[0].text,
+                                            position: textFieldController[1].text,
+                                            cellPhone:
+                                                textFieldController[3].text,
+                                            website: textFieldController[2].text,
+                                            location: textFieldController[4].text,
+                                            pImage: url);
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pop(context);
+                                    // ignore: use_build_context_synchronously
+                                    CustomSnackBar(true).showInSnackBar(
+                                        'User updated Successfully!', context);
+                                    setState(() {
+                                      readOnlyTextFields = true;
+                                      imageEditAble = false;
+                                    });
+                                  } else {
+                                    Functions.showSnackBar(
+                                        context, "please edit profile");
+                                  }
+                                },
+                                    Text(
+                                      'Save',
+                                      style: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              fontSize: 16.sp,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w700)),
+                                    )),
+                              ),
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                Expanded(
-                    child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(35.sp),
-                          topRight: Radius.circular(35.sp))),
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomSizeBox(20.h),
-                          Center(
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 100.sp,
-                                  width: 100.sp,
-                                  decoration: const BoxDecoration(
-                                      shape: BoxShape.circle),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    imageEditAble
-                                        ? showBottomModelSheetWidget()
-                                        : null;
-                                  },
-                                  child: (image1 != null)
-                                      ? CircleAvatar(
-                                          radius: 50,
-                                          backgroundImage: MemoryImage(image1!),
-                                        )
-                                      : (user!.pImage != null)
-                                          ? CircleAvatar(
-                                              radius: 50,
-                                              backgroundImage: NetworkImage(
-                                                user!.pImage!,
-                                              ),
-                                            )
-                                          : const CircleAvatar(
-                                              radius: 50,
-                                              backgroundImage: AssetImage(
-                                                  'assets/images/profile_pic.png'),
-                                            ),
-                                ),
-                                imageEditAble
-                                    ? Positioned(
-                                        right: 4.h,
-                                        top: 50.sp,
-                                        child: Container(
-                                          height: 25.sp,
-                                          width: 25.sp,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[400],
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              imageEditAble
-                                                  ? showBottomModelSheetWidget()
-                                                  : null;
-                                            },
-                                            child: Center(
-                                              child: Icon(
-                                                Icons.edit,
-                                                color: Colors.white,
-                                                size: 17.sp,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    : const SizedBox(),
-                              ],
-                            ),
-                          ),
-                          CustomSizeBox(10.h),
-                          Center(
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      user?.firstName ?? "",
-                                      style: AppTextStyles.josefin(
-                                          style: TextStyle(
-                                              color: const Color(0xFF27261E),
-                                              fontSize: 24.sp)),
-                                    ),
-                                    SizedBox(
-                                      width: 5.w,
-                                    ),
-                                    if (widget.from == "2")
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            imageEditAble = !imageEditAble;
-                                          });
-                                        },
-                                        child: Image(
-                                            width: 15.sp,
-                                            height: 15.sp,
-                                            image: const AssetImage(
-                                                'assets/images/edit_my_profile.png')),
-                                      )
-                                  ],
-                                ),
-                                CustomSizeBox(4.h),
-                                Text(
-                                  user?.email ?? "",
-                                  style: AppTextStyles.josefin(
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          color: const Color(0xFF27261E),
-                                          fontSize: 14.sp)),
-                                ),
-                              ],
-                            ),
-                          ),
-                          CustomSizeBox(20.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 10.h),
-                                child: Text(
-                                  'User Name',
-                                  style: AppTextStyles.josefin(
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          color: const Color(0xFF1A1167),
-                                          fontSize: 12.sp)),
-                                ),
-                              ),
-                              if (widget.from == "2")
-                                Padding(
-                                  padding: EdgeInsets.only(right: 20.w),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        readOnlyTextFields =
-                                            !readOnlyTextFields;
-                                      });
-                                    },
-                                    child: Image(
-                                        width: 16.sp,
-                                        height: 16.sp,
-                                        image: const AssetImage(
-                                            'assets/images/edit_my_profile.png')),
-                                  ),
-                                ),
-                            ],
-                          ),
-                          textField("user name", 5, textFieldController[5]),
-                          Text(
-                            'Company',
-                            style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xFF1A1167),
-                                    fontSize: 12.sp)),
-                          ),
-                          textField("company", 0, textFieldController[0]),
-                          Text(
-                            'Hobbies',
-                            style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xFF1A1167),
-                                    fontSize: 12.sp)),
-                          ),
-                          textField("hobbies", 0, textFieldController[6]),
-                          Text(
-                            'Job/Position',
-                            style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xFF1A1167),
-                                    fontSize: 12.sp)),
-                          ),
-                          textField(
-                              'Enter Your Job', 1, textFieldController[1]),
-                          CustomSizeBox(5.h),
-                          Text(
-                            'Website',
-                            style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xFF1A1167),
-                                    fontSize: 12.sp)),
-                          ),
-                          textField(
-                              'Enter Your Website', 2, textFieldController[2]),
-                          CustomSizeBox(5.h),
-                          Text(
-                            'Cellphone',
-                            style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xFF1A1167),
-                                    fontSize: 12.sp)),
-                          ),
-                          textField('Enter Your Phone No.', 3,
-                              textFieldController[3]),
-                          CustomSizeBox(5.h),
-                          Text(
-                            'Location',
-                            style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xFF1A1167),
-                                    fontSize: 12.sp)),
-                          ),
-                          textField('Your Location', 4, textFieldController[4]),
-                          CustomSizeBox(5.h),
-                          if (widget.from == "2")
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.w, right: 25.w, bottom: 20.w),
-                              child: GetButton(50.h, () async {
-                                if (!readOnlyTextFields || imageEditAble) {
-                                  Functions.showLoaderDialog(context);
-                                  String? url;
-                                  if (image1 != null) {
-                                    url = await Functions.uploadPic(
-                                        image1!, "users");
-                                  }
-                                  // ignore: use_build_context_synchronously
-                                  await context
-                                      .read<MyProfileController>()
-                                      .updateUser(
-                                          firstName:
-                                              textFieldController[5].text,
-                                          company: textFieldController[0].text,
-                                          position: textFieldController[1].text,
-                                          cellPhone:
-                                              textFieldController[3].text,
-                                          website: textFieldController[2].text,
-                                          location: textFieldController[4].text,
-                                          pImage: url);
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.pop(context);
-                                  // ignore: use_build_context_synchronously
-                                  CustomSnackBar(true).showInSnackBar(
-                                      'User updated Successfully!', context);
-                                  setState(() {
-                                    readOnlyTextFields = true;
-                                    imageEditAble = false;
-                                  });
-                                } else {
-                                  Functions.showSnackBar(
-                                      context, "please edit profile");
-                                }
-                              },
-                                  Text(
-                                    'Save',
-                                    style: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                            fontSize: 16.sp,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w700)),
-                                  )),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ))
-              ])
-            : const Center(child: CircularProgressIndicator()));
+                  ))
+                ])
+              : const Center(child: CircularProgressIndicator())),
+    );
   }
 
   showBottomModelSheetWidget() {

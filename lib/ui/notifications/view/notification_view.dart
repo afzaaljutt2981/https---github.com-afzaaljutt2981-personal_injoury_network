@@ -89,116 +89,118 @@ class _NotificationViewState extends State<NotificationView> {
       print(allNotificationsAndCampaigns.toString());
     }
 
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
+    return SafeArea(
+      child: Scaffold(
           backgroundColor: Colors.white,
-          elevation: 0,
-          leading: Padding(
-            padding: EdgeInsets.all(8.sp),
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: SizedBox(
-                width: 40.sp,
-                height: 40.sp,
-                child: Center(
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: const Color(0xFF120D26),
-                    size: 18.sp,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: Padding(
+              padding: EdgeInsets.all(8.sp),
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: SizedBox(
+                  width: 40.sp,
+                  height: 40.sp,
+                  child: Center(
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: const Color(0xFF120D26),
+                      size: 18.sp,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          title: Center(
-            child: Padding(
-              padding: EdgeInsets.only(right: 45.w),
-              child: Text(
-                "Notifications",
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: const Color(0xFF120D26),
-                        fontSize: 22.sp,
-                        fontWeight: FontWeight.w500)),
+            title: Center(
+              child: Padding(
+                padding: EdgeInsets.only(right: 45.w),
+                child: Text(
+                  "Notifications",
+                  style: AppTextStyles.josefin(
+                      style: TextStyle(
+                          color: const Color(0xFF120D26),
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.w500)),
+                ),
               ),
             ),
           ),
-        ),
-        body: (allUsers.isEmpty)
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : allNotificationsAndCampaigns.isEmpty
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CustomSizeBox(100.h),
-                      Center(
-                        child: Image(
-                          height: 200.sp,
-                          width: 250.sp,
-                          image: const AssetImage(
-                              'assets/images/no_notification_screen.png'),
+          body: (allUsers.isEmpty)
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : allNotificationsAndCampaigns.isEmpty
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CustomSizeBox(100.h),
+                        Center(
+                          child: Image(
+                            height: 200.sp,
+                            width: 250.sp,
+                            image: const AssetImage(
+                                'assets/images/no_notification_screen.png'),
+                          ),
                         ),
-                      ),
-                    ],
-                  )
-                : Column(
-                    children: [
-                      Expanded(
-                          child: ListView.builder(
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: allNotificationsAndCampaigns.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                var model = allNotificationsAndCampaigns[index];
-                                return model.notificationType == "N"
-                                    ? model.notificationsModel
-                                                ?.notificationType ==
-                                            "Invite"
-                                        ? FutureBuilder(
-                                            future: getEventData(
-                                                model.notificationsModel?.eId),
-                                            builder: (BuildContext context,
-                                                AsyncSnapshot<EventModel>
-                                                    snapshot) {
-                                              switch (
-                                                  snapshot.connectionState) {
-                                                case ConnectionState.waiting:
-                                                  return const Text("Loading");
-                                                default:
-                                                  return item(
-                                                      model.notificationsModel!,
-                                                      snapshot.data);
-                                              }
-                                            })
-                                        : item(model.notificationsModel!, null)
-                                    : GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            PageTransition(
-                                              childCurrent: widget,
-                                              type: PageTransitionType
-                                                  .leftToRightWithFade,
-                                              alignment: Alignment.center,
-                                              duration: const Duration(
-                                                  milliseconds: 200),
-                                              reverseDuration: const Duration(
-                                                  milliseconds: 200),
-                                              child: ViewCampaignView(
-                                                campaignModel:
-                                                    model.campaignModel,
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        Expanded(
+                            child: ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: allNotificationsAndCampaigns.length,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  var model = allNotificationsAndCampaigns[index];
+                                  return model.notificationType == "N"
+                                      ? model.notificationsModel
+                                                  ?.notificationType ==
+                                              "Invite"
+                                          ? FutureBuilder(
+                                              future: getEventData(
+                                                  model.notificationsModel?.eId),
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<EventModel>
+                                                      snapshot) {
+                                                switch (
+                                                    snapshot.connectionState) {
+                                                  case ConnectionState.waiting:
+                                                    return const Text("Loading");
+                                                  default:
+                                                    return item(
+                                                        model.notificationsModel!,
+                                                        snapshot.data);
+                                                }
+                                              })
+                                          : item(model.notificationsModel!, null)
+                                      : GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                childCurrent: widget,
+                                                type: PageTransitionType
+                                                    .leftToRightWithFade,
+                                                alignment: Alignment.center,
+                                                duration: const Duration(
+                                                    milliseconds: 200),
+                                                reverseDuration: const Duration(
+                                                    milliseconds: 200),
+                                                child: ViewCampaignView(
+                                                  campaignModel:
+                                                      model.campaignModel,
+                                                ),
                                               ),
-                                            ),
-                                          );
-                                        },
-                                        child:
-                                            campaignItem(model.campaignModel!));
-                              })),
-                    ],
-                  ));
+                                            );
+                                          },
+                                          child:
+                                              campaignItem(model.campaignModel!));
+                                })),
+                      ],
+                    )),
+    );
   }
 
   Widget item(NotificationsModel model, EventModel? event) {

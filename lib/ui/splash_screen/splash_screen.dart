@@ -58,35 +58,37 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
-    return Scaffold(
-      backgroundColor: AppColors.kPrimaryColor,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Image(
-              height: 130.sp,
-              width: 130.sp,
-              image: const AssetImage('assets/images/logo_gif_final.gif'),
-            ),
-          ),
-          CustomSizeBox(25.h),
-          Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.sp),
-              child: Text(
-                'PERSONAL INJURY\n NETWORKING',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        height: 1.1.sp,
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white)),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.kPrimaryColor,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Image(
+                height: 130.sp,
+                width: 130.sp,
+                image: const AssetImage('assets/images/logo_gif_final.gif'),
               ),
             ),
-          ),
-        ],
+            CustomSizeBox(25.h),
+            Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30.sp),
+                child: Text(
+                  'PERSONAL INJURY\n NETWORKING',
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.josefin(
+                      style: TextStyle(
+                          height: 1.1.sp,
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white)),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

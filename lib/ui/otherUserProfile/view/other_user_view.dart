@@ -66,265 +66,209 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
       }
     }
     setFollowButton(notifications);
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: Colors.white,
-        elevation: 0,
-        leading: Padding(
-          padding: EdgeInsets.all(5.sp),
-          child: GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: SizedBox(
-              width: 100.sp,
-              height: 40.sp,
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: AppColors.kPrimaryColor,
-                size: 18.sp,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: Padding(
+            padding: EdgeInsets.all(5.sp),
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: SizedBox(
+                width: 100.sp,
+                height: 40.sp,
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: AppColors.kPrimaryColor,
+                  size: 18.sp,
+                ),
               ),
             ),
           ),
         ),
-      ),
-      body: (user != null)
-          ? Column(
-              children: [
-                CustomSizeBox(10.h),
-                if (user!.pImage == null) ...[
-                  Center(
-                      child: Image(
-                    height: 90.sp,
-                    width: 90.sp,
-                    image: const AssetImage('assets/images/profile_pic.png'),
-                  ))
-                ] else ...[
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) =>
-                                  ImageView(imageUrl: user?.pImage ?? '')));
-                    },
-                    child: CircleAvatar(
-                      radius: 50.sp,
-                      backgroundImage: NetworkImage(user!.pImage!),
-                    ),
-                  )
-                ],
-                CustomSizeBox(20.h),
-                Text(
-                  (user?.userName ?? ""),
-                  style: AppTextStyles.josefin(
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.w600)),
-                ),
-                CustomSizeBox(20.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          (user!.followings?.length ?? 0).toString(),
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0xFF120D26))),
-                        ),
-                        CustomSizeBox(5.h),
-                        Text(
-                          'Following',
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0xFF747688))),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      width: 20.w,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
-                      child: Container(
-                        width: 1.w,
-                        height: 30.h,
-                        color: const Color(0xFFDDDDDD),
+        body: (user != null)
+            ? Column(
+                children: [
+                  CustomSizeBox(10.h),
+                  if (user!.pImage == null) ...[
+                    Center(
+                        child: Image(
+                      height: 90.sp,
+                      width: 90.sp,
+                      image: const AssetImage('assets/images/profile_pic.png'),
+                    ))
+                  ] else ...[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) =>
+                                    ImageView(imageUrl: user?.pImage ?? '')));
+                      },
+                      child: CircleAvatar(
+                        radius: 50.sp,
+                        backgroundImage: NetworkImage(user!.pImage!),
                       ),
-                    ),
-                    SizedBox(
-                      width: 20.w,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          (user?.followers?.length ?? 0).toString(),
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0xFF120D26))),
-                        ),
-                        CustomSizeBox(5.h),
-                        Text(
-                          'Followers',
-                          style: AppTextStyles.josefin(
-                              style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0xFF747688))),
-                        )
-                      ],
-                    ),
+                    )
                   ],
-                ),
-                if (user!.id != FirebaseAuth.instance.currentUser!.uid)
-                  Column(
+                  CustomSizeBox(20.h),
+                  Text(
+                    (user?.userName ?? ""),
+                    style: AppTextStyles.josefin(
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.w600)),
+                  ),
+                  CustomSizeBox(20.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CustomSizeBox(15.h),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            (user!.followings?.length ?? 0).toString(),
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: const Color(0xFF120D26))),
+                          ),
+                          CustomSizeBox(5.h),
+                          Text(
+                            'Following',
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: const Color(0xFF747688))),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        width: 20.w,
+                      ),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            if (FirebaseAuth.instance.currentUser?.email
-                                    ?.toLowerCase() !=
-                                Constants.adminEmail.toLowerCase())
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    if (followButton == "Follow") {
-                                      context
-                                          .read<OtherUserProfileController>()
-                                          .sendFollowRequest(
-                                              user?.id ?? "", context);
-                                      if (user!.fcmToken != null) {
-                                        await CountryStateCityRepo
-                                            .sendPushNotification(
-                                                widget.currentUser?.firstName ??
-                                                    "",
-                                                "Started following you",
-                                                user!.fcmToken!);
-                                      }
-                                    } else if (followButton == "Following") {
-                                      await context
-                                          .read<OtherUserProfileController>()
-                                          .followTap(user!);
-
-                                      // ignore: use_build_context_synchronously
-                                      await context
-                                          .read<OtherUserProfileController>()
-                                          .followingTap(
-                                              widget.currentUser, user?.id);
-                                      // ignore: use_build_context_synchronously
-                                      await context
-                                          .read<OtherUserProfileController>()
-                                          .unFollow(
-                                              user?.id ?? "", notifyId ?? "");
-                                    }
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: AppColors.kPrimaryColor,
-                                        borderRadius:
-                                            BorderRadius.circular(7.sp)),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              isFollow == false ? 30.w : 23.w,
-                                          vertical: 12.h),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          isFollow == false
-                                              ? Image(
-                                                  height: 20.sp,
-                                                  width: 20.sp,
-                                                  image: const AssetImage(
-                                                      'assets/images/follow_orgnizer_screen.png'),
-                                                )
-                                              : Image(
-                                                  height: 20.sp,
-                                                  width: 20.sp,
-                                                  image: const AssetImage(
-                                                      'assets/images/followed_other_user.png'),
-                                                ),
-                                          SizedBox(
-                                            width: 7.w,
-                                          ),
-                                          Text(
-                                            followButton ?? "",
-                                            style: AppTextStyles.josefin(
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16.sp)),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            if (followButton == "Following" ||
-                                (widget.currentUser?.followers ?? [])
-                                    .contains(user?.id) ||
-                                FirebaseAuth.instance.currentUser?.email ==
-                                    Constants.adminEmail) ...[
-                              SizedBox(
-                                width: 7.w,
-                              ),
-                              if (FirebaseAuth.instance.currentUser?.email !=
-                                  Constants.adminEmail)
+                        padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+                        child: Container(
+                          width: 1.w,
+                          height: 30.h,
+                          color: const Color(0xFFDDDDDD),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20.w,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            (user?.followers?.length ?? 0).toString(),
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: const Color(0xFF120D26))),
+                          ),
+                          CustomSizeBox(5.h),
+                          Text(
+                            'Followers',
+                            style: AppTextStyles.josefin(
+                                style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: const Color(0xFF747688))),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  if (user!.id != FirebaseAuth.instance.currentUser!.uid)
+                    Column(
+                      children: [
+                        CustomSizeBox(15.h),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              if (FirebaseAuth.instance.currentUser?.email
+                                      ?.toLowerCase() !=
+                                  Constants.adminEmail.toLowerCase())
                                 Expanded(
                                   child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (_) =>
-                                                  SingleChatScreenView(
-                                                    user: user!,
-                                                  )));
+                                    onTap: () async {
+                                      if (followButton == "Follow") {
+                                        context
+                                            .read<OtherUserProfileController>()
+                                            .sendFollowRequest(
+                                                user?.id ?? "", context);
+                                        if (user!.fcmToken != null) {
+                                          await CountryStateCityRepo
+                                              .sendPushNotification(
+                                                  widget.currentUser?.firstName ??
+                                                      "",
+                                                  "Started following you",
+                                                  user!.fcmToken!);
+                                        }
+                                      } else if (followButton == "Following") {
+                                        await context
+                                            .read<OtherUserProfileController>()
+                                            .followTap(user!);
+
+                                        // ignore: use_build_context_synchronously
+                                        await context
+                                            .read<OtherUserProfileController>()
+                                            .followingTap(
+                                                widget.currentUser, user?.id);
+                                        // ignore: use_build_context_synchronously
+                                        await context
+                                            .read<OtherUserProfileController>()
+                                            .unFollow(
+                                                user?.id ?? "", notifyId ?? "");
+                                      }
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: AppColors.kPrimaryColor,
-                                              width: 1.5.sp),
-                                          color: Colors.white,
+                                          color: AppColors.kPrimaryColor,
                                           borderRadius:
                                               BorderRadius.circular(7.sp)),
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
-                                            horizontal: 24.w, vertical: 10.h),
+                                            horizontal:
+                                                isFollow == false ? 30.w : 23.w,
+                                            vertical: 12.h),
                                         child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
-                                            Image(
-                                              height: 20.sp,
-                                              width: 20.sp,
-                                              image: const AssetImage(
-                                                  'assets/images/message_orgnizer_screen.png'),
-                                            ),
+                                            isFollow == false
+                                                ? Image(
+                                                    height: 20.sp,
+                                                    width: 20.sp,
+                                                    image: const AssetImage(
+                                                        'assets/images/follow_orgnizer_screen.png'),
+                                                  )
+                                                : Image(
+                                                    height: 20.sp,
+                                                    width: 20.sp,
+                                                    image: const AssetImage(
+                                                        'assets/images/followed_other_user.png'),
+                                                  ),
                                             SizedBox(
-                                              width: 5.w,
+                                              width: 7.w,
                                             ),
                                             Text(
-                                              'Messages',
+                                              followButton ?? "",
                                               style: AppTextStyles.josefin(
                                                   style: TextStyle(
-                                                      color: AppColors
-                                                          .kPrimaryColor,
+                                                      color: Colors.white,
                                                       fontSize: 16.sp)),
                                             ),
                                           ],
@@ -333,88 +277,146 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                     ),
                                   ),
                                 ),
+                              if (followButton == "Following" ||
+                                  (widget.currentUser?.followers ?? [])
+                                      .contains(user?.id) ||
+                                  FirebaseAuth.instance.currentUser?.email ==
+                                      Constants.adminEmail) ...[
+                                SizedBox(
+                                  width: 7.w,
+                                ),
+                                if (FirebaseAuth.instance.currentUser?.email !=
+                                    Constants.adminEmail)
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    SingleChatScreenView(
+                                                      user: user!,
+                                                    )));
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: AppColors.kPrimaryColor,
+                                                width: 1.5.sp),
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(7.sp)),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 24.w, vertical: 10.h),
+                                          child: Row(
+                                            children: [
+                                              Image(
+                                                height: 20.sp,
+                                                width: 20.sp,
+                                                image: const AssetImage(
+                                                    'assets/images/message_orgnizer_screen.png'),
+                                              ),
+                                              SizedBox(
+                                                width: 5.w,
+                                              ),
+                                              Text(
+                                                'Messages',
+                                                style: AppTextStyles.josefin(
+                                                    style: TextStyle(
+                                                        color: AppColors
+                                                            .kPrimaryColor,
+                                                        fontSize: 16.sp)),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             ],
-                          ],
-                        ),
-                      ),
-                      CustomSizeBox(20.h),
-                    ],
-                  ),
-                SizedBox(
-                  height: 45.h,
-                  child: AppBar(
-                    backgroundColor: Colors.white,
-                    elevation: 0,
-                    bottom: TabBar(
-                      unselectedLabelColor: Colors.grey,
-                      labelColor: AppColors.kPrimaryColor,
-                      controller: tabController,
-                      indicatorSize: TabBarIndicatorSize.label,
-                      indicatorColor: AppColors.kPrimaryColor,
-                      indicatorWeight: 2.sp,
-                      tabs: [
-                        Tab(
-                          child: Text(
-                            'ABOUT',
-                            style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15.sp)),
-                            textScaleFactor: 1,
                           ),
                         ),
-                        Tab(
-                          child: Text(
-                            'EVENT',
-                            style: AppTextStyles.josefin(),
-                            textScaleFactor: 1,
-                          ),
-                        ),
-                        Tab(
-                          child: Text(
-                            'REVIEWS',
-                            style: AppTextStyles.josefin(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15.sp)),
-                            textScaleFactor: 1,
-                          ),
-                        ),
+                        CustomSizeBox(20.h),
                       ],
                     ),
+                  SizedBox(
+                    height: 45.h,
+                    child: AppBar(
+                      backgroundColor: Colors.white,
+                      elevation: 0,
+                      bottom: TabBar(
+                        unselectedLabelColor: Colors.grey,
+                        labelColor: AppColors.kPrimaryColor,
+                        controller: tabController,
+                        indicatorSize: TabBarIndicatorSize.label,
+                        indicatorColor: AppColors.kPrimaryColor,
+                        indicatorWeight: 2.sp,
+                        tabs: [
+                          Tab(
+                            child: Text(
+                              'ABOUT',
+                              style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15.sp)),
+                              textScaleFactor: 1,
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
+                              'EVENT',
+                              style: AppTextStyles.josefin(),
+                              textScaleFactor: 1,
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
+                              'REVIEWS',
+                              style: AppTextStyles.josefin(
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15.sp)),
+                              textScaleFactor: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-                if (followButton == "Following" ||
-                    FirebaseAuth.instance.currentUser!.uid == user!.id ||
-                    FirebaseAuth.instance.currentUser?.email?.toLowerCase() ==
-                        Constants.adminEmail.toLowerCase()) ...[
-                  Expanded(
-                      child: TabBarView(controller: tabController, children: [
-                    OrganizerAbout(
-                      user: user!,
-                    ),
-                    OrganizerEvents(
-                      userEvents: userEvents,
-                      userModel: user!,
-                    ),
-                    OtherUserReviewScreen(
-                      userEvents: userEvents,
-                    )
-                  ]))
-                ] else if (followButton == "Follow") ...[
-                  const Expanded(
-                      child: Center(
-                          child:
-                              Text("Send a follow req to view hidden content")))
-                ] else ...[
-                  const Expanded(
-                      child: Center(
-                          child: Text(
-                              "Wait for user response to view hidden content")))
-                ]
-              ],
-            )
-          : const Center(child: CircularProgressIndicator()),
+                  if (followButton == "Following" ||
+                      FirebaseAuth.instance.currentUser!.uid == user!.id ||
+                      FirebaseAuth.instance.currentUser?.email?.toLowerCase() ==
+                          Constants.adminEmail.toLowerCase()) ...[
+                    Expanded(
+                        child: TabBarView(controller: tabController, children: [
+                      OrganizerAbout(
+                        user: user!,
+                      ),
+                      OrganizerEvents(
+                        userEvents: userEvents,
+                        userModel: user!,
+                      ),
+                      OtherUserReviewScreen(
+                        userEvents: userEvents,
+                      )
+                    ]))
+                  ] else if (followButton == "Follow") ...[
+                    const Expanded(
+                        child: Center(
+                            child:
+                                Text("Send a follow req to view hidden content")))
+                  ] else ...[
+                    const Expanded(
+                        child: Center(
+                            child: Text(
+                                "Wait for user response to view hidden content")))
+                  ]
+                ],
+              )
+            : const Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 

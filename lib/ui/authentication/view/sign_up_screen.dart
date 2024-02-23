@@ -167,305 +167,307 @@ class _SignUpScreenState extends State<SignUpScreen> {
       onWillPop: () {
         return willPopCalled();
       },
-      child: Scaffold(
-        backgroundColor: AppColors.kPrimaryColor,
-        appBar: AppBar(
-          // backgroundColor: Colors.white,
-          elevation: 0,
-          leading: GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: SizedBox(
-              width: 40.sp,
-              height: 40.sp,
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: AppColors.kWhiteColor,
-                size: 18.sp,
-              ),
-            ),
-          ),
-          actions: [
-            GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HelpScreen()),
-              ),
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: AppColors.kPrimaryColor,
+          appBar: AppBar(
+            backgroundColor: AppColors.kPrimaryColor,
+            elevation: 0,
+            leading: GestureDetector(
+              onTap: () => Navigator.pop(context),
               child: SizedBox(
-                width: 40.sp,
+                width: 100.sp,
                 height: 40.sp,
                 child: Icon(
-                  Icons.help_outline,
+                  Icons.arrow_back_ios,
                   color: AppColors.kWhiteColor,
                   size: 18.sp,
                 ),
               ),
             ),
-          ],
-        ),
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.w),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomSizeBox(10.h),
-                Column(
-                  children: [
-                    // GestureDetector(
-                    //   onTap: () => willPopCalled(),
-                    //   child: SizedBox(
-                    //     width: 40.sp,
-                    //     height: 40.sp,
-                    //     child: Icon(
-                    //       Icons.arrow_back_ios,
-                    //       color: AppColors.kPrimaryColor,
-                    //       size: 18.sp,
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
+            actions: [
+              GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HelpScreen()),
                 ),
-                Center(
-                  child: Image(
-                    height: 80.sp,
-                    width: 80.sp,
-                    image: const AssetImage('assets/images/primary_icon.png'),
+                child: SizedBox(
+                  width: 40.sp,
+                  height: 40.sp,
+                  child: Icon(
+                    Icons.help_outline,
+                    color: AppColors.kWhiteColor,
+                    size: 18.sp,
                   ),
                 ),
-                CustomSizeBox(20.h),
-                Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30.sp),
-                    child: Text(
-                      'Create Account',
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.josefin(
-                        style: TextStyle(
-                          height: 1.1.sp,
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
+              ),
+            ],
+          ),
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.w),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomSizeBox(10.h),
+                  Column(
+                    children: [
+                      // GestureDetector(
+                      //   onTap: () => willPopCalled(),
+                      //   child: SizedBox(
+                      //     width: 40.sp,
+                      //     height: 40.sp,
+                      //     child: Icon(
+                      //       Icons.arrow_back_ios,
+                      //       color: AppColors.kPrimaryColor,
+                      //       size: 18.sp,
+                      //     ),
+                      //   ),
+                      // ),
+                    ],
+                  ),
+                  Center(
+                    child: Image(
+                      height: 80.sp,
+                      width: 80.sp,
+                      image: const AssetImage('assets/images/primary_icon.png'),
+                    ),
+                  ),
+                  CustomSizeBox(20.h),
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30.sp),
+                      child: Text(
+                        'Create Account',
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.josefin(
+                          style: TextStyle(
+                            height: 1.1.sp,
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                CustomSizeBox(15.h),
-                processStagesCount(index),
-                CustomSizeBox(25.h),
-                SizedBox(
-                  height: index == 2 ? 350.h : 320.h,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w),
-                    child: PageView(
-                      controller: controller,
-                      // physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        process1(),
-                        process2(),
-                        process3(),
-                      ],
+                  CustomSizeBox(15.h),
+                  processStagesCount(index),
+                  CustomSizeBox(25.h),
+                  SizedBox(
+                    height: index == 2 ? 350.h : 320.h,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      child: PageView(
+                        controller: controller,
+                        // physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          process1(),
+                          process2(),
+                          process3(),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: 10.w,
-                      right: 10.w,
-                      bottom: index == 3 ? 15.h : 20.h, //0.h,
-                      top: index == 3
-                          ? 15.h
-                          : index == 2
-                              ? 10.h
-                              : 15.h),
-                  child: GetwhiteButton(50.sp, () async {
-                    if (index == 1) {
-                      if (textFieldController[0].text.isEmpty &&
-                              widget.isUpdate == null ||
-                          textFieldController[0].text == '') {
-                        CustomSnackBar(false)
-                            .showInSnackBar('please enter first name', context);
-                        return;
-                      } else if (textFieldController[1].text.isEmpty) {
-                        CustomSnackBar(false)
-                            .showInSnackBar("please enter last name", context);
-                        return;
-                      } else if (textFieldController[2].text.isEmpty) {
-                        CustomSnackBar(false).showInSnackBar(
-                            "please enter company name", context);
-                        return;
-                      } else if (textFieldController[3].text.isEmpty) {
-                        CustomSnackBar(false).showInSnackBar(
-                            "please select your position or job", context);
-                        return;
-                      } else {
-                        setState(() {
-                          index = index + 1;
-                          controller.nextPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.easeInOut,
-                          );
-                        });
-                      }
-                    } else if (index == 2) {
-                      if (textFieldController[4].text.isEmpty) {
-                        CustomSnackBar(false)
-                            .showInSnackBar('please enter cell phone', context);
-                        return;
-                      } else if (widget.isUpdate == null &&
-                          (textFieldController[5].text.isEmpty ||
-                              !EmailValidator.validate(
-                                  textFieldController[5].text) ||
-                              textFieldController[5].text == '')) {
-                        CustomSnackBar(false).showInSnackBar(
-                            "please enter valid email", context);
-                        return;
-                      } else if (selectedCountry == "Select Country") {
-                        CustomSnackBar(false).showInSnackBar(
-                            "please select your country", context);
-                        return;
-                      } else if (selectedCounty == "Select County") {
-                        CustomSnackBar(false).showInSnackBar(
-                            "please select your County", context);
-                        return;
-                      } else if (selectedState == "Select State") {
-                        CustomSnackBar(false).showInSnackBar(
-                            "please select your state", context);
-                        return;
-                      }
-                      // else if (
-                      //     selectedHobbies.length < 3) {
-                      //   CustomSnackBar(false).showInSnackBar(
-                      //       "Please select at least 3 hobbies!", context);
-                      //   return;
-                      // }
-                      else if (textFieldController[9].text.isEmpty) {
-                        CustomSnackBar(false).showInSnackBar(
-                            "please enter your reference", context);
-                        return;
-                      } else {
-                        setState(() {
-                          index = index + 1;
-                          controller.nextPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.easeInOut,
-                          );
-                        });
-                      }
-                    }
-                    if (index == 3) {
-                      if (textFieldController[10].text.isEmpty) {
-                        CustomSnackBar(false)
-                            .showInSnackBar('please enter user name', context);
-                        return;
-                      } else if (textFieldController[11].text.length < 6 &&
-                          widget.screenType == 0) {
-                        CustomSnackBar(false).showInSnackBar(
-                            'Password is too short! must be greater than 6 digits',
-                            context);
-                        return;
-                      } else if (textFieldController[11].text !=
-                              textFieldController[12].text &&
-                          widget.screenType == 0) {
-                        CustomSnackBar(false).showInSnackBar(
-                            'password and confirm password should be same!',
-                            context);
-                        return;
-                      } else {
-                        if (FirebaseAuth.instance.currentUser != null) {
-                          context.read<AuthController>().updateUser(context,
-                              firstName: textFieldController[0].text,
-                              email: textFieldController[5].text,
-                              lastName: textFieldController[1].text,
-                              companyName: textFieldController[2].text,
-                              website: textFieldController[6].text,
-                              phone: textFieldController[4].text,
-                              position: textFieldController[3].text,
-                              location:
-                                  "$selectedState,$selectedCountry,$selectedCounty",
-                              country: selectedCountry,
-                              county: selectedCounty,
-                              reference: textFieldController[9].text,
-                              hobbies: selectedHobbies,
-                              userName: textFieldController[10].text);
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: 10.w,
+                        right: 10.w,
+                        bottom: index == 3 ? 15.h : 20.h, //0.h,
+                        top: index == 3
+                            ? 15.h
+                            : index == 2
+                                ? 10.h
+                                : 15.h),
+                    child: GetwhiteButton(50.sp, () async {
+                      if (index == 1) {
+                        if (textFieldController[0].text.isEmpty &&
+                                widget.isUpdate == null ||
+                            textFieldController[0].text == '') {
+                          CustomSnackBar(false).showInSnackBar(
+                              'please enter first name', context);
+                          return;
+                        } else if (textFieldController[1].text.isEmpty) {
+                          CustomSnackBar(false).showInSnackBar(
+                              "please enter last name", context);
+                          return;
+                        } else if (textFieldController[2].text.isEmpty) {
+                          CustomSnackBar(false).showInSnackBar(
+                              "please enter company name", context);
+                          return;
+                        } else if (textFieldController[3].text.isEmpty) {
+                          CustomSnackBar(false).showInSnackBar(
+                              "please select your position or job", context);
+                          return;
                         } else {
-                          context.read<AuthController>().signup(context,
-                              firstName: textFieldController[0].text,
-                              lastName: textFieldController[1].text,
-                              companyName: textFieldController[2].text,
-                              position: textFieldController[3].text,
-                              phone: textFieldController[4].text,
-                              email: textFieldController[5].text,
-                              website: textFieldController[6].text,
-                              location:
-                                  "$selectedState,$selectedCountry,$selectedCounty",
-                              country: selectedCountry,
-                              county: selectedCounty,
-                              reference: textFieldController[9].text,
-                              password: textFieldController[11].text,
-                              hobbies: selectedHobbies,
-                              userName: textFieldController[10].text,
-                              isNewNotificationReceived: false);
+                          setState(() {
+                            index = index + 1;
+                            controller.nextPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeInOut,
+                            );
+                          });
+                        }
+                      } else if (index == 2) {
+                        if (textFieldController[4].text.isEmpty) {
+                          CustomSnackBar(false).showInSnackBar(
+                              'please enter cell phone', context);
+                          return;
+                        } else if (widget.isUpdate == null &&
+                            (textFieldController[5].text.isEmpty ||
+                                !EmailValidator.validate(
+                                    textFieldController[5].text) ||
+                                textFieldController[5].text == '')) {
+                          CustomSnackBar(false).showInSnackBar(
+                              "please enter valid email", context);
+                          return;
+                        } else if (selectedCountry == "Select Country") {
+                          CustomSnackBar(false).showInSnackBar(
+                              "please select your country", context);
+                          return;
+                        } else if (selectedCounty == "Select County") {
+                          CustomSnackBar(false).showInSnackBar(
+                              "please select your County", context);
+                          return;
+                        } else if (selectedState == "Select State") {
+                          CustomSnackBar(false).showInSnackBar(
+                              "please select your state", context);
+                          return;
+                        }
+                        // else if (
+                        //     selectedHobbies.length < 3) {
+                        //   CustomSnackBar(false).showInSnackBar(
+                        //       "Please select at least 3 hobbies!", context);
+                        //   return;
+                        // }
+                        else if (textFieldController[9].text.isEmpty) {
+                          CustomSnackBar(false).showInSnackBar(
+                              "please enter your reference", context);
+                          return;
+                        } else {
+                          setState(() {
+                            index = index + 1;
+                            controller.nextPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeInOut,
+                            );
+                          });
                         }
                       }
-                    }
-                  },
-                      Text(
-                        index < 3 ? "Next" : "Save",
-                        style: AppTextStyles.josefin(
-                          style: TextStyle(
-                            color: AppColors.kPrimaryColor,
-                            fontSize: 18.sp,
+                      if (index == 3) {
+                        if (textFieldController[10].text.isEmpty) {
+                          CustomSnackBar(false).showInSnackBar(
+                              'please enter user name', context);
+                          return;
+                        } else if (textFieldController[11].text.length < 6 &&
+                            widget.screenType == 0) {
+                          CustomSnackBar(false).showInSnackBar(
+                              'Password is too short! must be greater than 6 digits',
+                              context);
+                          return;
+                        } else if (textFieldController[11].text !=
+                                textFieldController[12].text &&
+                            widget.screenType == 0) {
+                          CustomSnackBar(false).showInSnackBar(
+                              'password and confirm password should be same!',
+                              context);
+                          return;
+                        } else {
+                          if (FirebaseAuth.instance.currentUser != null) {
+                            context.read<AuthController>().updateUser(context,
+                                firstName: textFieldController[0].text,
+                                email: textFieldController[5].text,
+                                lastName: textFieldController[1].text,
+                                companyName: textFieldController[2].text,
+                                website: textFieldController[6].text,
+                                phone: textFieldController[4].text,
+                                position: textFieldController[3].text,
+                                location:
+                                    "$selectedState,$selectedCountry,$selectedCounty",
+                                country: selectedCountry,
+                                county: selectedCounty,
+                                reference: textFieldController[9].text,
+                                hobbies: selectedHobbies,
+                                userName: textFieldController[10].text);
+                          } else {
+                            context.read<AuthController>().signup(context,
+                                firstName: textFieldController[0].text,
+                                lastName: textFieldController[1].text,
+                                companyName: textFieldController[2].text,
+                                position: textFieldController[3].text,
+                                phone: textFieldController[4].text,
+                                email: textFieldController[5].text,
+                                website: textFieldController[6].text,
+                                location:
+                                    "$selectedState,$selectedCountry,$selectedCounty",
+                                country: selectedCountry,
+                                county: selectedCounty,
+                                reference: textFieldController[9].text,
+                                password: textFieldController[11].text,
+                                hobbies: selectedHobbies,
+                                userName: textFieldController[10].text,
+                                isNewNotificationReceived: false);
+                          }
+                        }
+                      }
+                    },
+                        Text(
+                          index < 3 ? "Next" : "Save",
+                          style: AppTextStyles.josefin(
+                            style: TextStyle(
+                              color: AppColors.kPrimaryColor,
+                              fontSize: 18.sp,
+                            ),
                           ),
-                        ),
-                      )),
-                ),
-                index == 3
-                    ? Center(
-                        child: SizedBox(
-                          width: 250.w,
-                          child: Column(
-                            children: [
-                              Text(
-                                'By click Save you are agree with ',
-                                textAlign: TextAlign.center,
-                                style: AppTextStyles.josefin(
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 10.sp)),
-                              ),
-                              CustomSizeBox(5.h),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'our ',
-                                    textAlign: TextAlign.center,
-                                    style: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 10.sp)),
-                                  ),
-                                  Text(
-                                    'Terms and Condition ',
-                                    textAlign: TextAlign.center,
-                                    style: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                            color: const Color(0xFFF63636),
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 10.sp)),
-                                  )
-                                ],
-                              ),
-                              CustomSizeBox(20.h),
-                            ],
+                        )),
+                  ),
+                  index == 3
+                      ? Center(
+                          child: SizedBox(
+                            width: 250.w,
+                            child: Column(
+                              children: [
+                                Text(
+                                  'By click Save you are agree with ',
+                                  textAlign: TextAlign.center,
+                                  style: AppTextStyles.josefin(
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 10.sp)),
+                                ),
+                                CustomSizeBox(5.h),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'our ',
+                                      textAlign: TextAlign.center,
+                                      style: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 10.sp)),
+                                    ),
+                                    Text(
+                                      'Terms and Condition ',
+                                      textAlign: TextAlign.center,
+                                      style: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              color: const Color(0xFFF63636),
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 10.sp)),
+                                    )
+                                  ],
+                                ),
+                                CustomSizeBox(20.h),
+                              ],
+                            ),
                           ),
-                        ),
-                      )
-                    : const SizedBox(),
-              ],
+                        )
+                      : const SizedBox(),
+                ],
+              ),
             ),
           ),
         ),
