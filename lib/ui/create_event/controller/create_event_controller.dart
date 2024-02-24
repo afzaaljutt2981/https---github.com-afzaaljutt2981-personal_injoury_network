@@ -32,7 +32,8 @@ class CreateEventController extends ChangeNotifier {
             participants: 0,
             dateTime: dateTime.millisecondsSinceEpoch,
             longitude: longitude,
-            latitude: latitude)
+            latitude: latitude,
+            isDeleted: false)
         .toJson());
   }
 }

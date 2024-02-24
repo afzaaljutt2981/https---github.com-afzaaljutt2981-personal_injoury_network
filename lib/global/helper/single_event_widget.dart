@@ -1,12 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/create_event/models/event_model.dart';
+import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
+import 'package:provider/provider.dart';
 
 import '../../ui/events_details/models/ticket_model.dart';
 import '../../ui/events_details/view/create_event_details_view.dart';
 import '../utils/app_text_styles.dart';
+import '../utils/constants.dart';
 import 'custom_sized_box.dart';
 
 // ignore: must_be_immutable
@@ -92,13 +97,47 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomSizeBox(3.h),
-                            Text(
-                              "$fDate - $fStartTime",
-                              style: AppTextStyles.josefin(
-                                  style: TextStyle(
-                                      color: const Color(0xFF3A51C8),
-                                      fontSize: 13.sp,
-                                      fontWeight: FontWeight.w500)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "$fDate - $fStartTime",
+                                  style: AppTextStyles.josefin(
+                                      style: TextStyle(
+                                          color: const Color(0xFF3A51C8),
+                                          fontSize: 13.sp,
+                                          fontWeight: FontWeight.w500)),
+                                ),
+                                if (FirebaseAuth.instance.currentUser?.email
+                                        ?.toLowerCase() ==
+                                    Constants.adminEmail.toLowerCase())
+                                  GestureDetector(
+                                    onTap: () async {
+                                      print("Delete should be initiated");
+                                      if (widget.event.id?.isNotEmpty ??
+                                          false) {
+                                        String? res = await Functions()
+                                            .showConfirmDialogueBox(context,
+                                                "Are you sure, you want to delete this event?");
+                                        if (res != null) {
+                                          context
+                                              .read<EventsController>()
+                                              .updateEventToDeleted(
+                                                  widget.event, context);
+                                        }
+                                      } else {
+                                        Functions.showSnackBar(context,
+                                            "Invalid event, unable to delete this event");
+                                      }
+                                    },
+                                    child: Image(
+                                      height: 20.sp,
+                                      width: 20.sp,
+                                      image: const AssetImage(
+                                          'assets/images/delete.png'),
+                                    ),
+                                  ),
+                              ],
                             ),
                             CustomSizeBox(5.h),
                             Text(

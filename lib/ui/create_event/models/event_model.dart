@@ -13,23 +13,24 @@ class EventModel {
   late int? participants;
   double? latitude;
   double? longitude;
+  bool? isDeleted;
 
-  EventModel({
-    required this.endTime,
-    required this.startTime,
-    required this.id,
-    required this.address,
-    required this.description,
-    required this.title,
-    required this.participants,
-    required this.invites,
-    required this.dateTime,
-    required this.pImage,
-    required this.status,
-    required this.longitude,
-    required this.latitude,
-    required this.uId,
-  });
+  EventModel(
+      {required this.endTime,
+      required this.startTime,
+      required this.id,
+      required this.address,
+      required this.description,
+      required this.title,
+      required this.participants,
+      required this.invites,
+      required this.dateTime,
+      required this.pImage,
+      required this.status,
+      required this.longitude,
+      required this.latitude,
+      required this.uId,
+      required this.isDeleted});
 
   factory EventModel.fromJson(Map<String, dynamic>? json) {
     List invites = json?["invites"] ?? [];
@@ -47,7 +48,8 @@ class EventModel {
         invites: List.generate(invites.length, (index) => invites[index]),
         dateTime: json?['dateTime'],
         pImage: json?['pImage'],
-        uId: json?['uId']);
+        uId: json?['uId'],
+        isDeleted: json?['isDeleted']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -64,6 +66,12 @@ class EventModel {
         "participants": participants,
         "status": status,
         "invites": invites,
-        "uId": uId
+        "uId": uId,
+        "isDeleted": isDeleted
       };
+
+  @override
+  String toString() {
+    return 'EventModel{id: $id, title: $title, address: $address, description: $description, dateTime: $dateTime, startTime: $startTime, endTime: $endTime, invites: $invites, pImage: $pImage, uId: $uId, status: $status, participants: $participants, latitude: $latitude, longitude: $longitude, isDeleted: $isDeleted}';
+  }
 }
