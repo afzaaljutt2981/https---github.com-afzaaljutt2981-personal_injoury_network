@@ -47,6 +47,7 @@ class AllCreatedCampaignsController extends ChangeNotifier {
                 "Admin Campaign",
                 "Campaign created for people of ${campaign.country} working as ${campaign.jobOrPosition}",
                 user.fcmToken ?? "");
+            usersRef.doc(userId).update({"isNewNotificationReceived": true});
           }
         });
       });

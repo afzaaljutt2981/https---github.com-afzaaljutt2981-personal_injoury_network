@@ -144,7 +144,7 @@ class _FAQNewState extends State<FAQNew> {
                           image: DecorationImage(
                             image: NetworkImage(snapshot.data ?? ""),
                             // Replace with your image URL
-                            fit: BoxFit.fitWidth,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ),

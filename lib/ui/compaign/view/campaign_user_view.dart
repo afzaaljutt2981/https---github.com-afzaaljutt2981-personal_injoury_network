@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:personal_injury_networking/global/helper/image_view.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/ui/compaign/models/campaign_model.dart';
@@ -67,15 +68,24 @@ class _ViewCampaign extends State<ViewCampaign> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.width / 1.7,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  image: DecorationImage(
-                    image: NetworkImage(widget.campaignModel?.pImage ?? ""),
-                    // Replace with your image URL
-                    fit: BoxFit.fitWidth,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => ImageView(
+                              imageUrl: widget.campaignModel?.pImage ?? "")));
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.width / 1.7,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    image: DecorationImage(
+                      image: NetworkImage(widget.campaignModel?.pImage ?? ""),
+                      // Replace with your image URL
+                      fit: BoxFit.fitWidth,
+                    ),
                   ),
                 ),
               ),
@@ -113,7 +123,6 @@ class _ViewCampaign extends State<ViewCampaign> {
                           fontWeight: FontWeight.w500,
                           height: 0.15,
                           letterSpacing: 0.22,
-
                         ),
                         postDataTextStyle: TextStyle(
                           color: Color(0xFF3C3760),
