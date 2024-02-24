@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/compaign/models/campaign_model.dart';
 import 'package:personal_injury_networking/ui/compaign/view/create_compaign_view.dart';
 import 'package:personal_injury_networking/ui/notifications/view/notification_view.dart';
@@ -111,8 +112,8 @@ class _AllCreatedCampaignsScreen extends State<AllCreatedCampaignsScreen> {
                                     ),
                                     Expanded(
                                       child: Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 0.w),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 0.w),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -214,44 +215,76 @@ class _AllCreatedCampaignsScreen extends State<AllCreatedCampaignsScreen> {
         SizedBox(
           height: 5.h,
         ),
-        GestureDetector(
-          onTap: (model.members?.length ?? 0) > 0 && model.status != "Completed"
-              ? () async {
-                  print("Button clicked..");
-                  await context
-                      .read<AllCreatedCampaignsController>()
-                      .initiateCampaign(campaign: model, context);
-                  // // ignore: use_build_context_synchronously
-                  // await context
-                  //     .read<NotificationsController>()
-                  //     .followTap(currentUser, user.id ?? "", context);
-                  // // ignore: use_build_context_synchronously
-                  // await context
-                  //     .read<NotificationsController>()
-                  //     .followingTap(user, context);
-                }
-              : null,
-          child: Container(
-            decoration: BoxDecoration(
-                color: (model.members?.length ?? 0) > 0 &&
-                        model.status != "Completed"
-                    ? AppColors.kPrimaryColor
-                    : AppColors.dashedBorderColor,
-                borderRadius: BorderRadius.circular(7.sp)),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 9.h),
-              child: Text(
-                'Initiate',
-                style: AppTextStyles.josefin(
-                    style: TextStyle(
-                        color: (model.members?.length ?? 0) > 0 &&
-                                model.status != "Completed"
-                            ? Colors.white
-                            : Colors.black,
-                        fontSize: 12.sp)),
+        Row(
+          children: [
+            GestureDetector(
+              onTap: (model.members?.length ?? 0) > 0 &&
+                      model.status != "Completed"
+                  ? () async {
+                      print("Button clicked..");
+                      await context
+                          .read<AllCreatedCampaignsController>()
+                          .initiateCampaign(campaign: model, context);
+                      // // ignore: use_build_context_synchronously
+                      // await context
+                      //     .read<NotificationsController>()
+                      //     .followTap(currentUser, user.id ?? "", context);
+                      // // ignore: use_build_context_synchronously
+                      // await context
+                      //     .read<NotificationsController>()
+                      //     .followingTap(user, context);
+                    }
+                  : null,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: (model.members?.length ?? 0) > 0 &&
+                            model.status != "Completed"
+                        ? AppColors.kPrimaryColor
+                        : AppColors.dashedBorderColor,
+                    borderRadius: BorderRadius.circular(7.sp)),
+                child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 9.h),
+                  child: Text(
+                    'Initiate',
+                    style: AppTextStyles.josefin(
+                        style: TextStyle(
+                            color: (model.members?.length ?? 0) > 0 &&
+                                    model.status != "Completed"
+                                ? Colors.white
+                                : Colors.black,
+                            fontSize: 12.sp)),
+                  ),
+                ),
               ),
             ),
-          ),
+            SizedBox(
+              width: 10,
+            ),
+            GestureDetector(
+              onTap: () async {
+                print("Delete should be initiated");
+                if (model.id?.isNotEmpty ?? false) {
+                  String? res = await Functions().showConfirmDialogueBox(
+                      context,
+                      "Are you sure, you want to delete this campaign?");
+                  if (res != null) {
+                    context
+                        .read<AllCreatedCampaignsController>()
+                        .deleteCampaign(context, campaign: model);
+                  }
+                } else {
+                  Functions.showSnackBar(context,
+                      "Invalid Campaign, unable to delete this Campaign");
+                }
+              },
+              child: Image(
+                height: 20.sp,
+                width: 20.sp,
+                image: const AssetImage('assets/images/delete.png'),
+              ),
+            ),
+          ],
         )
       ],
     );

@@ -12,8 +12,6 @@ class CampaignController extends ChangeNotifier {
   List<String> county = [];
   List<String> job = [];
 
-
-
   setCounty(List<String> county) {
     this.county = county;
     getAllUsers();
@@ -90,9 +88,10 @@ class CampaignController extends ChangeNotifier {
               country: campaignCountry,
               jobOrPosition: campaignJob,
               message: campaignDescription,
-              title:title,
+              title: title,
               timeCreated: DateTime.now().millisecondsSinceEpoch,
-              members: users)
+              members: users,
+              isDeleted: false)
           .toJson());
       notifyListeners();
     });

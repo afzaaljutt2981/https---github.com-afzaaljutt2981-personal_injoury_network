@@ -29,8 +29,11 @@ class NotificationsController extends ChangeNotifier {
     campaignsStream = campaignsRef.snapshots().listen((event) {
       allCampaigns = [];
       for (var element in event.docs) {
-        allCampaigns.add(
-            CampaignModel.fromJson(element.data() as Map<String, dynamic>));
+        final campaign =
+            CampaignModel.fromJson(element.data() as Map<String, dynamic>);
+        if (campaign.isDeleted == false)
+          allCampaigns.add(
+              CampaignModel.fromJson(element.data() as Map<String, dynamic>));
         print(
             "Campaigns -> ${CampaignModel.fromJson(element.data() as Map<String, dynamic>).toString()}");
       }

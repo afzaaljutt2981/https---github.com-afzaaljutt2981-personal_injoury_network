@@ -8,6 +8,7 @@ class CampaignModel {
   List<String?>? members;
   late String? pImage;
   late String? status;
+  bool? isDeleted;
 
   CampaignModel({
     required this.id,
@@ -19,6 +20,7 @@ class CampaignModel {
     required this.members,
     required this.pImage,
     required this.status,
+    required this.isDeleted,
   });
 
   factory CampaignModel.fromJson(Map<String, dynamic>? json) {
@@ -35,7 +37,8 @@ class CampaignModel {
         timeCreated: json?['timeCreated'],
         members: List.generate(members.length, (index) => members[index]),
         pImage: json?['pImage'],
-        status: json?['status']);
+        status: json?['status'],
+        isDeleted: json?['isDeleted']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -47,11 +50,12 @@ class CampaignModel {
         "timeCreated": timeCreated,
         "members": members,
         "pImage": pImage,
-        "status": status
+        "status": status,
+        "isDeleted": isDeleted
       };
 
   @override
   String toString() {
-    return 'CampaignModel{id: $id, country: $country, jobOrPosition: $jobOrPosition, message: $message, title: $title, timeCreated: $timeCreated, members: $members, pImage: $pImage, status: $status}';
+    return 'CampaignModel{id: $id, country: $country, jobOrPosition: $jobOrPosition, message: $message, title: $title, timeCreated: $timeCreated, members: $members, pImage: $pImage, status: $status, isDeleted: $isDeleted}';
   }
 }
