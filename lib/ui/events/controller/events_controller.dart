@@ -67,11 +67,27 @@ class EventsController extends ChangeNotifier {
     eventStream = ref.snapshots().listen((event) async {
       allEvents = [];
       event.docs.forEach((element) {
-        allEvents
-            .add(EventModel.fromJson(element.data() as Map<String, dynamic>));
+        final event =
+            EventModel.fromJson(element.data() as Map<String, dynamic>);
+        if (event.isDeleted == false) allEvents.add(event);
       });
     });
     // notifyListeners();
+  }
+
+  getAllEventsOnce() async {
+    allEvents = [];
+    await ref.get().then((event) {
+      print("events -> ${event.docs.length}");
+      for (var element in event.docs) {
+        final event =
+        EventModel.fromJson(element.data() as Map<String, dynamic>);
+        if (event.isDeleted == false) allEvents
+            .add(event);
+      }
+    });
+
+    notifyListeners();
   }
 
   getUserBookedEvents() {
@@ -119,6 +135,19 @@ class EventsController extends ChangeNotifier {
     List<String?> invites = event?.invites ?? [];
     invites.add(userId);
     await ref.doc(event?.id).update({"invites": invites});
+  }
+
+  updateEventToDeleted(EventModel? event, BuildContext context) async {
+    try {
+      print("updateEventToDeleted called");
+      await ref.doc(event?.id).update({"isDeleted": true});
+      getAllEventsOnce();
+      notifyListeners();
+    } on Exception catch (error) {
+      // ignore: use_build_context_synchronously
+      CustomSnackBar(false).showInSnackBar(error.toString(), context);
+      notifyListeners();
+    }
   }
 
   @override

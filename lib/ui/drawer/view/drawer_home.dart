@@ -151,8 +151,8 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                                 'Become a Marketer',
                                                 onTap: () async {
                                                 String? res =
-                                                    await _showDialogueBox(
-                                                        context);
+                                                    await Functions().showConfirmDialogueBox(
+                                                        context, "You are going to become a marketer, Press continue to confirm");
                                                 if (res != null) {
                                                   // ignore: use_build_context_synchronously
                                                   context
@@ -437,82 +437,4 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
     );
   }
 
-  Future _showDialogueBox(BuildContext context) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-            child: AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.sp),
-              ),
-              title: Column(
-                children: [
-                  Image(
-                      width: 40.sp,
-                      height: 40.sp,
-                      image: const AssetImage(
-                          'assets/images/question_icon_drawer.png')),
-                  CustomSizeBox(15.h),
-                  Text(
-                    "You are going to become a marketer, Press continue to confirm",
-                    style: AppTextStyles.josefin(
-                        style: TextStyle(
-                            height: 1.3.sp,
-                            color: AppColors.kBlackColor,
-                            fontSize: 14.sp)),
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context, "ok");
-                      // context.read<MyProfileController>().becomeMarketer();
-                      // Navigator.pushAndRemoveUntil(
-                      //     context,
-                      //     PageTransition(
-                      //       childCurrent: widget,
-                      //       type: PageTransitionType.leftToRightJoined,
-                      //       alignment: Alignment.center,
-                      //       duration: const Duration(milliseconds: 200),
-                      //       reverseDuration:
-                      //       const Duration(milliseconds: 200),
-                      //       child: BottomNavigationScreen(
-                      //         selectedIndex: 0,
-                      //       ),
-                      //     ),
-                      //         (route) => false);
-                      // setState(() {
-                      //   userType = 'admin';
-                      //   Navigator.pushAndRemoveUntil(
-                      //       context,
-                      //       PageTransition(
-                      //         childCurrent: widget,
-                      //         type: PageTransitionType.leftToRightJoined,
-                      //         alignment: Alignment.center,
-                      //         duration: const Duration(milliseconds: 200),
-                      //         reverseDuration:
-                      //             const Duration(milliseconds: 200),
-                      //         child: BottomNavigationScreen(
-                      //           selectedIndex: 0,
-                      //         ),
-                      //       ),
-                      //       (route) => false);
-                      // });
-                    },
-                    child: Text(
-                      "Continue",
-                      style: AppTextStyles.josefin(
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.kPrimaryColor,
-                            fontSize: 14.sp),
-                      ),
-                    )),
-              ],
-            ),
-          );
-        });
-  }
 }

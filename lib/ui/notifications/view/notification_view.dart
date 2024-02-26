@@ -153,28 +153,32 @@ class _NotificationViewState extends State<NotificationView> {
                                 itemCount: allNotificationsAndCampaigns.length,
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
-                                  var model = allNotificationsAndCampaigns[index];
+                                  var model =
+                                      allNotificationsAndCampaigns[index];
                                   return model.notificationType == "N"
                                       ? model.notificationsModel
                                                   ?.notificationType ==
                                               "Invite"
                                           ? FutureBuilder(
-                                              future: getEventData(
-                                                  model.notificationsModel?.eId),
+                                              future: getEventData(model
+                                                  .notificationsModel?.eId),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<EventModel>
                                                       snapshot) {
                                                 switch (
                                                     snapshot.connectionState) {
                                                   case ConnectionState.waiting:
-                                                    return const Text("Loading");
+                                                    return const Text(
+                                                        "Loading");
                                                   default:
                                                     return item(
-                                                        model.notificationsModel!,
+                                                        model
+                                                            .notificationsModel!,
                                                         snapshot.data);
                                                 }
                                               })
-                                          : item(model.notificationsModel!, null)
+                                          : item(
+                                              model.notificationsModel!, null)
                                       : GestureDetector(
                                           onTap: () {
                                             Navigator.push(
@@ -195,8 +199,8 @@ class _NotificationViewState extends State<NotificationView> {
                                               ),
                                             );
                                           },
-                                          child:
-                                              campaignItem(model.campaignModel!));
+                                          child: campaignItem(
+                                              model.campaignModel!));
                                 })),
                       ],
                     )),
@@ -397,7 +401,7 @@ class _NotificationViewState extends State<NotificationView> {
           ),
         ]),
         SizedBox(
-          height: 5.sp,
+          height: 10.sp,
         ),
         // Row(children: [
         //   Text(
@@ -413,9 +417,7 @@ class _NotificationViewState extends State<NotificationView> {
         //             TextStyle(color: AppColors.kgreenColor, fontSize: 12.sp)),
         //   ),
         // ]),
-        SizedBox(
-          height: 5.h,
-        ),
+
         // GestureDetector(
         //   onTap: (model.members?.length ?? 0) > 0 && model.status != "Completed"
         //       ? () async {
@@ -490,9 +492,7 @@ class _NotificationViewState extends State<NotificationView> {
                 //     height: 50.sp,
                 //     image: const AssetImage(
                 //         'assets/images/profile_pic.png')),
-                SizedBox(
-                  width: 10.w,
-                ),
+
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -501,9 +501,10 @@ class _NotificationViewState extends State<NotificationView> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         campaignButtonRow(model, formattedDate),
-                        CustomSizeBox(5.h),
                         Text(
-                          model.message ?? "",
+                          (model.message?.length ?? 0) > 60
+                              ? "${model.message?.substring(0, 60) ?? ""}..."
+                              : model.message ?? "",
                           // "Campaign created for people of ${model.country} doing job as ${model.jobOrPosition}",
                           style: AppTextStyles.josefin(
                               style: TextStyle(

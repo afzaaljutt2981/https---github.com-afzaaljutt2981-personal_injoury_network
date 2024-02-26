@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_injury_networking/global/helper/api_functions.dart';
@@ -15,13 +17,29 @@ class AllCreatedCampaignsController extends ChangeNotifier {
       FirebaseFirestore.instance.collection("campaigns");
   CollectionReference usersRef = FirebaseFirestore.instance.collection("users");
   List<CampaignModel> allCampaigns = [];
+  StreamSubscription<QuerySnapshot<Object?>>? campaignsStream;
 
   getAllCampaigns() {
-    campaignsRef.snapshots().listen((event) {
+    campaignsStream = campaignsRef.snapshots().listen((event) {
       allCampaigns = [];
       for (var element in event.docs) {
-        allCampaigns.add(
-            CampaignModel.fromJson(element.data() as Map<String, dynamic>));
+        final campaign =
+            CampaignModel.fromJson(element.data() as Map<String, dynamic>);
+        if (campaign.isDeleted == false)
+          allCampaigns.add(
+              CampaignModel.fromJson(element.data() as Map<String, dynamic>));
+      }
+      notifyListeners();
+    });
+  }
+
+  getAllCampaignsOnce() {
+    campaignsRef.get().then((event) {
+      allCampaigns = [];
+      for (var element in event.docs) {
+        final campaign =
+            CampaignModel.fromJson(element.data() as Map<String, dynamic>);
+        if (campaign.isDeleted == false) allCampaigns.add(campaign);
       }
       notifyListeners();
     });
@@ -44,9 +62,10 @@ class AllCreatedCampaignsController extends ChangeNotifier {
             // .notifyCancelEvent(element!.id!,
             // widget.event.title!);
             await CountryStateCityRepo.sendPushNotification(
-                "Admin Campaign",
-                "Campaign created for people of ${campaign.country} working as ${campaign.jobOrPosition}",
+                campaign.title??"Admin Campaign",
+                "",
                 user.fcmToken ?? "");
+            await usersRef.doc(userId).update({"isNewNotificationReceived": true});
           }
         });
       });
@@ -60,7 +79,30 @@ class AllCreatedCampaignsController extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteCampaign(
+    BuildContext context, {
+    required CampaignModel campaign,
+  }) async {
+    try {
+      print("deleteCampaign initiated");
+      var doc = campaignsRef.doc(campaign.id);
+      await doc.update({"isDeleted": true});
+      getAllCampaignsOnce();
+      notifyListeners();
+    } on Exception catch (error) {
+      // ignore: use_build_context_synchronously
+      CustomSnackBar(false).showInSnackBar(error.toString(), context);
+      notifyListeners();
+    }
+  }
+
   refreshState() {
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    campaignsStream?.cancel();
+    super.dispose();
   }
 }
