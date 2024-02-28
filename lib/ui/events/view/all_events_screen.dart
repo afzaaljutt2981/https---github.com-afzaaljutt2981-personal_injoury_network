@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,9 +25,9 @@ class AllEventScreen extends StatefulWidget {
 class _AllEventScreenState extends State<AllEventScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
-  List<EventModel> events = [];
+  List<EventModel?> events = [];
   List<UserModel> users = [];
-  List<EventModel> allEvents = [];
+  List<EventModel?> allEvents = [];
 
   @override
   void initState() {
@@ -57,12 +58,15 @@ class _AllEventScreenState extends State<AllEventScreen>
               context.watch<EventsController>().userBookedEvents;
           events = [];
           for (var element in tickets) {
-            events.add(
-                allEvents.firstWhere((element1) => element.eId == element1.id));
+            if (allEvents.isNotEmpty) {
+              EventModel? event = allEvents
+                  .firstWhereOrNull((element1) => element.eId == element1?.id);
+              if (event != null) events.add(event);
+            }
           }
         } else {
           events = allEvents
-              .where((element) => element.uId == currentUser.id)
+              .where((element) => element?.uId == currentUser.id)
               .toList();
         }
       }

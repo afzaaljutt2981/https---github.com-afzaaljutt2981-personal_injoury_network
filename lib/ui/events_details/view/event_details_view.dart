@@ -32,7 +32,7 @@ import 'events_qr_view.dart';
 class EventsDetailsView extends StatefulWidget {
   EventsDetailsView({super.key, required this.event});
 
-  EventModel event;
+  EventModel? event;
 
   @override
   State<EventsDetailsView> createState() => _EventsDetailsViewState();
@@ -66,14 +66,14 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
     setData(notifications);
     setRegisterButton();
     DateTime dateTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime ?? 0);
+        DateTime.fromMillisecondsSinceEpoch(widget.event?.dateTime ?? 0);
     DateTime startTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.event.startTime ?? 0);
+        DateTime.fromMillisecondsSinceEpoch(widget.event?.startTime ?? 0);
     DateTime endTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.event.endTime ?? 0);
+        DateTime.fromMillisecondsSinceEpoch(widget.event?.endTime ?? 0);
     DateTime today = DateTime.now();
     DateTime date =
-        DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime ?? 0);
+        DateTime.fromMillisecondsSinceEpoch(widget.event?.dateTime ?? 0);
     addWeekDates(dateTime);
     String formattedDiff = calculateDiff(endTime, startTime);
     String startFormat = DateFormat("HH:MM a").format(startTime);
@@ -120,7 +120,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                   : GestureDetector(
                       onTap: () {
                         if (date.isAfter(DateTime.now()) &&
-                            widget.event.status == "UpComing") {
+                            widget.event?.status == "UpComing") {
                           Navigator.push(
                             context,
                             PageTransition(
@@ -130,7 +130,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                               duration: const Duration(milliseconds: 200),
                               reverseDuration: const Duration(milliseconds: 200),
                               child: EventsQrView(
-                                eventId: widget.event.id,
+                                eventId: widget.event?.id,
                               ),
                             ),
                           );
@@ -140,7 +140,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         height: 22.sp,
                         width: 22.sp,
                         color: (date.isAfter(DateTime.now()) &&
-                                widget.event.status == "UpComing")
+                                widget.event?.status == "UpComing")
                             ? null
                             : Colors.grey,
                         image: const AssetImage('assets/images/qr_events.png'),
@@ -171,7 +171,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => ImageView(
-                                        imageUrl: widget.event.pImage ?? "")));
+                                        imageUrl: widget.event?.pImage ?? "")));
                           },
                           child: Stack(
                             children: [
@@ -186,7 +186,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                   borderRadius: BorderRadius.circular(10.sp),
                                   child: Image(
                                     image:
-                                        NetworkImage(widget.event.pImage ?? ""),
+                                        NetworkImage(widget.event?.pImage ?? ""),
                                     // 'assets/images/background_events_admin.png'
                                     fit: BoxFit.cover,
                                   ),
@@ -227,7 +227,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                       child: Padding(
                                         padding: EdgeInsets.only(right: 50.w),
                                         child: Text(
-                                          widget.event.title ?? "",
+                                          widget.event?.title ?? "",
                                           style: AppTextStyles.josefin(
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w700,
@@ -292,7 +292,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                             height: 20,
                           ),
                         Text(
-                          widget.event.description ?? "",
+                          widget.event?.description ?? "",
                           style: AppTextStyles.josefin(
                               style: TextStyle(
                                   color: AppColors.kBlackColor, fontSize: 12.sp)),
@@ -390,11 +390,11 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                           Functions.showLoaderDialog(context);
                           await context
                               .read<EventDetailsController>()
-                              .addEventTicket(widget.event);
+                              .addEventTicket(widget?.event);
                           // ignore: use_build_context_synchronously
                           await context
                               .read<EventDetailsController>()
-                              .addUserTicket(widget.event.id ?? "");
+                              .addUserTicket(widget.event?.id ?? "");
                           // ignore: use_build_context_synchronously
                           Navigator.pop(context);
                           // ignore: use_build_context_synchronously
@@ -411,7 +411,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                     color: Colors.white, fontSize: 18.sp)),
                           )),
                     )
-                  : (currentUser!.id != widget.event.uId)
+                  : (currentUser!.id != widget.event?.uId)
                       ? const SizedBox()
                       : Padding(
                           padding: EdgeInsets.only(
@@ -429,9 +429,9 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                               date.day == today.day) &&
                                           startTime.isBefore(DateTime.now()) &&
                                           endTime.isAfter(DateTime.now()) &&
-                                          widget.event.status == "UpComing") ||
+                                          widget.event?.status == "UpComing") ||
                                       ((date.isAfter(DateTime.now()) &&
-                                          widget.event.status == "UpComing"))) {
+                                          widget.event?.status == "UpComing"))) {
                                     _showBottomSheet(context);
                                   }
                                 },
@@ -447,11 +447,11 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                                           DateTime.now()) &&
                                                       endTime.isAfter(
                                                           DateTime.now()) &&
-                                                      widget.event.status ==
+                                                      widget.event?.status ==
                                                           "UpComing") ||
                                                   ((date.isAfter(
                                                           DateTime.now()) &&
-                                                      widget.event.status ==
+                                                      widget.event?.status ==
                                                           "UpComing")))
                                               ? AppColors.kPrimaryColor
                                               : Colors.grey,
@@ -479,10 +479,10 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                                                       .now()) &&
                                                               endTime.isAfter(DateTime
                                                                   .now()) &&
-                                                              widget.event.status ==
+                                                              widget.event?.status ==
                                                                   "UpComing") ||
                                                           ((date.isAfter(DateTime.now()) &&
-                                                              widget.event.status ==
+                                                              widget.event?.status ==
                                                                   "UpComing")))
                                                       ? AppColors.kPrimaryColor
                                                       : Colors.grey,
@@ -494,11 +494,11 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                               InkWell(
                                 onTap: () async {
                                   if (date.isAfter(DateTime.now()) &&
-                                      widget.event.status == "UpComing") {
+                                      widget.event?.status == "UpComing") {
                                     Functions.showLoaderDialog(context);
                                     await context
                                         .read<EventDetailsController>()
-                                        .deleteEvent(widget.event.id ?? "");
+                                        .deleteEvent(widget.event?.id ?? "");
                                     print(eventParticipants?.length);
                                     print("events ");
 
@@ -507,11 +507,11 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                         await context
                                             .read<EventDetailsController>()
                                             .notifyCancelEvent(element!.id!,
-                                                widget.event.title!);
+                                                widget.event?.title??"");
                                         await CountryStateCityRepo
                                             .sendPushNotification(
                                                 eventCreater!.firstName!,
-                                                "Cancel the ${widget.event.title}",
+                                                "Cancel the ${widget.event?.title}",
                                                 element?.fcmToken ?? "");
                                       }
                                     });
@@ -525,7 +525,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                   decoration: BoxDecoration(
                                       border: Border.all(
                                           color: ((date.isAfter(DateTime.now()) &&
-                                                  widget.event.status ==
+                                                  widget.event?.status ==
                                                       "UpComing"))
                                               ? const Color(0xFFD70E0E)
                                               : Colors.grey,
@@ -543,7 +543,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                                 fontWeight: FontWeight.w400,
                                                 color: ((date.isAfter(
                                                             DateTime.now()) &&
-                                                        widget.event.status ==
+                                                        widget.event?.status ==
                                                             "UpComing"))
                                                     ? const Color(0xFFD70E0E)
                                                     : Colors.grey,
@@ -803,7 +803,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
       currentUser = allUsers?.firstWhere(
           (element) => element?.id == FirebaseAuth.instance.currentUser!.uid);
       eventCreater =
-          allUsers?.firstWhere((element) => element?.id == widget.event.uId);
+          allUsers?.firstWhere((element) => element?.id == widget.event?.uId);
       setFollowButton(notifications);
       for (var element1 in eventTickets ?? []) {
         eventParticipants?.add(

@@ -9,7 +9,7 @@ import 'event_details_view.dart';
 class CreateEventDetailsView extends StatefulWidget {
   CreateEventDetailsView({super.key, required this.event});
 
-  EventModel event;
+  EventModel? event;
 
   @override
   State<CreateEventDetailsView> createState() => _CreateEventDetailsViewState();
@@ -19,9 +19,9 @@ class _CreateEventDetailsViewState extends State<CreateEventDetailsView> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<EventDetailsController>(
-        create: (_) => EventDetailsController(widget.event.id ?? ""),
+        create: (_) => EventDetailsController(widget.event?.id ?? ""),
         child: ChangeNotifierProvider(
-          create: (_) => OtherUserProfileController(userId: widget.event.uId),
+          create: (_) => OtherUserProfileController(userId: widget.event?.uId),
           child: EventsDetailsView(
             event: widget.event,
           ),

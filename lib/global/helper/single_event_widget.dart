@@ -18,7 +18,7 @@ import 'custom_sized_box.dart';
 class SingleEventWidget extends StatefulWidget {
   SingleEventWidget({super.key, required this.event});
 
-  EventModel event;
+  EventModel? event;
 
   @override
   State<SingleEventWidget> createState() => _SingleEventWidgetState();
@@ -34,9 +34,9 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime!);
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(widget.event?.dateTime??0);
     DateTime startTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.event.startTime!);
+        DateTime.fromMillisecondsSinceEpoch(widget.event?.startTime??0);
     String fStartTime = DateFormat("HH:mm a").format(startTime);
     String fDate = DateFormat("EEE,MMM d").format(date);
 
@@ -85,7 +85,7 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
                           color: Colors.grey[300],
                           borderRadius: BorderRadius.circular(10.sp),
                           image: DecorationImage(
-                              image: NetworkImage(widget.event.pImage ?? ""),
+                              image: NetworkImage(widget.event?.pImage ?? ""),
                               fit: BoxFit.cover)),
                     ),
                     Expanded(
@@ -114,7 +114,7 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
                                   GestureDetector(
                                     onTap: () async {
                                       print("Delete should be initiated");
-                                      if (widget.event.id?.isNotEmpty ??
+                                      if (widget.event?.id?.isNotEmpty ??
                                           false) {
                                         String? res = await Functions()
                                             .showConfirmDialogueBox(context,
@@ -141,7 +141,7 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
                             ),
                             CustomSizeBox(5.h),
                             Text(
-                              widget.event.title ?? "",
+                              widget.event?.title ?? "",
                               style: AppTextStyles.josefin(
                                   style: TextStyle(
                                       color: const Color(0xFF120D26),
@@ -161,7 +161,7 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    widget.event.address ?? "",
+                                    widget.event?.address ?? "",
                                     style: AppTextStyles.josefin(
                                         style: TextStyle(
                                             color: const Color(0xFF747688),
@@ -184,13 +184,13 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "${widget.event.participants} participants",
+                        "${widget.event?.participants} participants",
                         style: AppTextStyles.josefin(
                             style: TextStyle(
                                 color: Colors.black.withOpacity(0.5),
                                 fontSize: 12.sp)),
                       ),
-                      eventStatus(widget.event.status ?? '', context)
+                      eventStatus(widget.event?.status ?? '', context)
                     ],
                   ),
                 )
@@ -206,12 +206,12 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
     Color? bgColor;
     Color? textColor;
     DateTime date =
-        DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime ?? 0);
+        DateTime.fromMillisecondsSinceEpoch(widget.event?.dateTime ?? 0);
     DateTime today = DateTime.now();
     DateTime startTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.event.startTime!);
+        DateTime.fromMillisecondsSinceEpoch(widget.event?.startTime??0);
     DateTime endTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.event.endTime!);
+        DateTime.fromMillisecondsSinceEpoch(widget.event?.endTime??0);
     if (status == 'Cancelled') {
       bgColor = Colors.red.shade100;
       textColor = Colors.red.shade600;

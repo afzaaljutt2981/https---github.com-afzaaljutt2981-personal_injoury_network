@@ -7,6 +7,7 @@ import 'package:personal_injury_networking/global/utils/custom_snackbar.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/chat_screen/model/chat_data.dart';
 import 'package:personal_injury_networking/ui/events_details/models/ticket_model.dart';
+import 'package:personal_injury_networking/ui/notifications/view/notification_view.dart';
 
 import '../../authentication/model/user_model.dart';
 import '../../create_event/models/event_model.dart';
@@ -71,6 +72,7 @@ class EventsController extends ChangeNotifier {
             EventModel.fromJson(element.data() as Map<String, dynamic>);
         if (event.isDeleted == false) allEvents.add(event);
       });
+      allEvents = allEvents.sortedBy((event) => event.startTime??0).toList();
     });
     // notifyListeners();
   }
@@ -86,7 +88,7 @@ class EventsController extends ChangeNotifier {
             .add(event);
       }
     });
-
+    allEvents = allEvents.sortedBy((event) => event.startTime??0).toList();
     notifyListeners();
   }
 

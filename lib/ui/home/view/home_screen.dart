@@ -366,7 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     },
                                     child: Text(
                                       Constants.userType == 'user'
-                                          ? "See All"
+                                          ? "See All booked events"
                                           : "See All Events",
                                       style: AppTextStyles.josefin(
                                         style: TextStyle(
@@ -403,7 +403,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   shrinkWrap: true,
                                   itemBuilder: (context, index) {
                                     var model = events[index];
-                                    int timestamp = events[index].dateTime ??
+                                    int timestamp = events[index].startTime ??
                                         0; // Assuming events[index].dateTime is a timestamp
                                     DateTime dateTime =
                                         DateTime.fromMillisecondsSinceEpoch(

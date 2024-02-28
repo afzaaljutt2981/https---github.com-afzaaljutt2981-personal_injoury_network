@@ -37,14 +37,14 @@ class EventDetailsController extends ChangeNotifier {
     });
   }
 
-  addEventTicket(EventModel event) async {
-    var tickDoc = events.doc(event.id).collection("tickets").doc();
+  addEventTicket(EventModel? event) async {
+    var tickDoc = events.doc(event?.id).collection("tickets").doc();
     await events
-        .doc(event.id)
-        .update({"participants": (event.participants ?? 0) + 1});
+        .doc(event?.id)
+        .update({"participants": (event?.participants ?? 0) + 1});
     await tickDoc.set(TicketModel(
             id: tickDoc.id,
-            eId: event.id,
+            eId: event?.id,
             uId: FirebaseAuth.instance.currentUser!.uid)
         .toJson());
   }

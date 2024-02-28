@@ -51,6 +51,7 @@ dependencies:
   mobkit_dashed_border: ^0.0.5
   readmore: ^2.2.0
   flutter_faq: ^1.0.1+1
+  expandable_text: 2.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
