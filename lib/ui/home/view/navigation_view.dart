@@ -43,7 +43,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   void initState() {
     super.initState();
     selectedIndex = widget.selectedIndex;
-    _pageController = PageController(initialPage: selectedIndex!);
+    _pageController = PageController(initialPage: selectedIndex ?? 0);
 
     messagesStream = messagesRef
         .doc(FirebaseAuth.instance.currentUser?.uid)
@@ -65,7 +65,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
 
   @override
   void dispose() {
-    _pageController!.dispose();
+    _pageController?.dispose();
     messagesStream?.cancel();
     super.dispose();
   }
@@ -75,7 +75,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     void onItemTapped(int index) {
       setState(() {
         selectedIndex = index;
-        _pageController!.animateToPage(index,
+        _pageController?.animateToPage(index,
             duration: const Duration(milliseconds: 200), curve: Curves.linear);
       });
     }
@@ -216,7 +216,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               ],
               selectedItemColor: AppColors.kPrimaryColor,
               unselectedItemColor: AppColors.kBlackColor,
-              currentIndex: selectedIndex!,
+              currentIndex: selectedIndex ?? 0,
               onTap: onItemTapped,
             ),
           ),

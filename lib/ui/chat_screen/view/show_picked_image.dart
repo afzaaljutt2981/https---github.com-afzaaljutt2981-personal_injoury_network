@@ -14,8 +14,8 @@ import '../controller/chat_controller.dart';
 class ShowPickedImage extends StatelessWidget {
   ShowPickedImage({super.key, required this.image, required this.chatUser});
 
-  Uint8List image;
-  UserModel chatUser;
+  Uint8List? image;
+  UserModel? chatUser;
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +25,18 @@ class ShowPickedImage extends StatelessWidget {
       child: Scaffold(
         body: Stack(
           children: [
-            Image(
-              image: MemoryImage(image),
-              fit: BoxFit.cover,
-              height: height,
-              width: width,
-            ),
+            if (image != null)
+              Image(
+                image: MemoryImage(image!),
+                fit: BoxFit.cover,
+                height: height,
+                width: width,
+              ),
             Positioned(
               bottom: 15,
               left: 20,
               child: Text(
-                chatUser.userName ?? "",
+                chatUser?.userName ?? "",
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -49,15 +50,23 @@ class ShowPickedImage extends StatelessWidget {
                 onTap: () async {
                   Functions.showLoaderDialog(context);
                   try {
-                    String url = await Functions.uploadPic(image, "chatImages");
-                    // ignore: use_build_context_synchronously
-                    await context
-                        .read<ChatController>()
-                        .sendMessage(chatUser.id ?? "", url, "image");
-                    // ignore: use_build_context_synchronously
-                    Navigator.pop(context);
-                    // ignore: use_build_context_synchronously
-                    Navigator.pop(context);
+                    if (image != null) {
+                      String url =
+                          await Functions.uploadPic(image!, "chatImages");
+                      // ignore: use_build_context_synchronously
+                      await context
+                          .read<ChatController>()
+                          .sendMessage(chatUser?.id ?? "", url, "image");
+                      // ignore: use_build_context_synchronously
+                      Navigator.pop(context);
+                      // ignore: use_build_context_synchronously
+                      Navigator.pop(context);
+                    } else {
+                      Navigator.pop(context);
+                      // ignore: use_build_context_synchronously
+                      CustomSnackBar(false)
+                          .showInSnackBar("Faild to load image", context);
+                    }
                   } catch (e) {
                     // ignore: use_build_context_synchronously
                     Navigator.pop(context);

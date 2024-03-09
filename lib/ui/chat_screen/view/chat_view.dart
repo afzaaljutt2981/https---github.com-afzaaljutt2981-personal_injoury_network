@@ -23,7 +23,7 @@ import '../model/chat_model.dart';
 class ChatScreen extends StatefulWidget {
   ChatScreen({super.key, required this.user});
 
-  UserModel user;
+  UserModel? user;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -93,7 +93,7 @@ class _ChatScreenState extends State<ChatScreen> {
     allUsers = [];
     allUsers = context.watch<EventsController>().allUsers;
     UserModel currentUser = allUsers.firstWhere(
-        (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+        (element) => element.id == FirebaseAuth.instance.currentUser?.uid);
     chats = context.watch<ChatController>().currentChat;
     modifiedChats = [];
     if (chats.length > 0) {
@@ -190,7 +190,7 @@ class _ChatScreenState extends State<ChatScreen> {
             title: Row(
               children: [
                 Text(
-                  widget.user.lastName ?? "",
+                  widget.user?.lastName ?? "",
                   style: AppTextStyles.josefin(
                       style: TextStyle(
                           color: Colors.black,
@@ -224,11 +224,12 @@ class _ChatScreenState extends State<ChatScreen> {
               itemBuilder: (context, index) {
                 Alignment alignment = Alignment.topLeft;
                 String? time = modifiedChats[index].dateTime != null
-                    ? DateFormat("h:mm a").format(modifiedChats[index].dateTime!)
+                    ? DateFormat("h:mm a")
+                        .format(modifiedChats[index].dateTime!)
                     : "";
                 bool match = false;
                 if (modifiedChats[index].senderId ==
-                    FirebaseAuth.instance.currentUser!.uid) {
+                    FirebaseAuth.instance.currentUser?.uid) {
                   alignment = Alignment.topRight;
                   match = true;
                 }
@@ -247,8 +248,8 @@ class _ChatScreenState extends State<ChatScreen> {
                             ? Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.only(
-                                    topLeft:
-                                        Radius.circular((!match ? 0.sp : 20.sp)),
+                                    topLeft: Radius.circular(
+                                        (!match ? 0.sp : 20.sp)),
                                     topRight:
                                         Radius.circular((match ? 0.sp : 20.sp)),
                                     bottomLeft: Radius.circular(20.sp),
@@ -263,7 +264,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                   modifiedChats[index].messageContent ?? "",
                                   style: TextStyle(
                                     fontSize: 12.sp,
-                                    color: (!match ? Colors.black : Colors.white),
+                                    color:
+                                        (!match ? Colors.black : Colors.white),
                                   ),
                                 ))
                             : (modifiedChats[index].messageType == "mp3")
@@ -323,7 +325,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                            color: Colors.grey[200]!, //const Color(0xFFFAFAFA),
+                            color: Colors.grey[200], //const Color(0xFFFAFAFA),
                             borderRadius: BorderRadius.circular(10.sp)),
                         height: 60,
                         child: Row(
@@ -364,7 +366,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                     hintText: "Write message...",
                                     hintStyle: AppTextStyles.josefin(
                                       style: TextStyle(
-                                          color: Colors.black54, fontSize: 12.sp),
+                                          color: Colors.black54,
+                                          fontSize: 12.sp),
                                     ),
                                     border: InputBorder.none),
                               ),
@@ -507,15 +510,15 @@ class _ChatScreenState extends State<ChatScreen> {
                         onTap: () async {
                           if (emplyList) {
                             context.read<ChatController>().sendMessage(
-                                widget.user.id ?? "",
+                                widget.user?.id ?? "",
                                 textController.text,
                                 "text");
 
-                            if (widget.user.fcmToken != null) {
+                            if (widget.user?.fcmToken != null) {
                               await CountryStateCityRepo.sendPushNotification(
                                   currentUser.firstName ?? "",
                                   textController.text,
-                                  widget.user.fcmToken ?? "");
+                                  widget.user?.fcmToken ?? "");
                             }
                             setState(() {
                               textController.clear();
@@ -564,8 +567,8 @@ class _ChatScreenState extends State<ChatScreen> {
           context,
           MaterialPageRoute(
               builder: (_) => CreatePickedImageView(
-                    image: image1!,
-                    chatUser: widget.user,
+                    image: image1,
+                    chatUser: widget?.user,
                   )));
     }
   }

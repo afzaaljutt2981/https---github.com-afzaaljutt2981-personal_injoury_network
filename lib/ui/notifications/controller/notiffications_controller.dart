@@ -42,7 +42,7 @@ class NotificationsController extends ChangeNotifier {
   }
 
   getUserNotifications() {
-    var uId = FirebaseAuth.instance.currentUser!.uid;
+    var uId = FirebaseAuth.instance.currentUser?.uid;
     notificationsStream = user
         .doc(uId)
         .collection("notifications")
@@ -85,7 +85,7 @@ class NotificationsController extends ChangeNotifier {
   }
 
   followingTap(UserModel userModel, BuildContext context) async {
-    String id = FirebaseAuth.instance.currentUser!.uid;
+    String? id = FirebaseAuth.instance.currentUser?.uid;
     final collectionRef = user.doc(userModel.id);
     var fList = userModel.followings;
 
@@ -117,7 +117,7 @@ class NotificationsController extends ChangeNotifier {
   respondRequest(
       String notificationId, String status, BuildContext context) async {
     Functions.showLoaderDialog(context);
-    var uId = FirebaseAuth.instance.currentUser!.uid;
+    var uId = FirebaseAuth.instance.currentUser?.uid;
     try {
       await user
           .doc(uId)

@@ -176,13 +176,14 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                     child: (image1 != null)
                                         ? CircleAvatar(
                                             radius: 50,
-                                            backgroundImage: MemoryImage(image1!),
+                                            backgroundImage:
+                                                MemoryImage(image1!),
                                           )
-                                        : (user!.pImage != null)
+                                        : (user?.pImage != null)
                                             ? CircleAvatar(
                                                 radius: 50,
                                                 backgroundImage: NetworkImage(
-                                                  user!.pImage!,
+                                                  user?.pImage ?? "",
                                                 ),
                                               )
                                             : const CircleAvatar(
@@ -338,8 +339,8 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                       color: const Color(0xFF1A1167),
                                       fontSize: 12.sp)),
                             ),
-                            textField(
-                                'Enter Your Website', 2, textFieldController[2]),
+                            textField('Enter Your Website', 2,
+                                textFieldController[2]),
                             CustomSizeBox(5.h),
                             Text(
                               'Cellphone',
@@ -360,7 +361,8 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                       color: const Color(0xFF1A1167),
                                       fontSize: 12.sp)),
                             ),
-                            textField('Your Location', 4, textFieldController[4]),
+                            textField(
+                                'Your Location', 4, textFieldController[4]),
                             CustomSizeBox(5.h),
                             if (widget.from == "2")
                               Padding(
@@ -380,12 +382,16 @@ class _MyProfileInfoState extends State<MyProfileInfo> {
                                         .updateUser(
                                             firstName:
                                                 textFieldController[5].text,
-                                            company: textFieldController[0].text,
-                                            position: textFieldController[1].text,
+                                            company:
+                                                textFieldController[0].text,
+                                            position:
+                                                textFieldController[1].text,
                                             cellPhone:
                                                 textFieldController[3].text,
-                                            website: textFieldController[2].text,
-                                            location: textFieldController[4].text,
+                                            website:
+                                                textFieldController[2].text,
+                                            location:
+                                                textFieldController[4].text,
                                             pImage: url);
                                     // ignore: use_build_context_synchronously
                                     Navigator.pop(context);

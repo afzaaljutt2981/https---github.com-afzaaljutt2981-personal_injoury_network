@@ -231,7 +231,7 @@ class _ListExpandableWidgetState extends State<ListExpandableWidget> {
   @override
   void initState() {
     super.initState();
-    _updateExpandState(widget.isExpanded!);
+    _updateExpandState(widget.isExpanded ?? false);
   }
 
   void _updateExpandState(bool isExpanded) =>
@@ -239,12 +239,12 @@ class _ListExpandableWidgetState extends State<ListExpandableWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _isExpanded! ? _buildListItems(context) : _wrapHeader();
+    return (_isExpanded ?? false) ? _buildListItems(context) : _wrapHeader();
   }
 
   Widget _wrapHeader() {
     List<Widget> children = [];
-    if (!widget.isExpanded!) {
+    if (!(widget.isExpanded ?? false)) {
       children.add(widget.showDivider == false
           ? const SizedBox(
               height: 5,
@@ -256,8 +256,9 @@ class _ListExpandableWidgetState extends State<ListExpandableWidget> {
       child: ListTile(
         style: ListTileStyle.drawer,
         title: widget.header,
-        trailing: _isExpanded! ? widget.expandedIcon : widget.collapsedIcon,
-        onTap: () => _updateExpandState(!_isExpanded!),
+        trailing:
+            (_isExpanded ?? false) ? widget.expandedIcon : widget.collapsedIcon,
+        onTap: () => _updateExpandState(!(_isExpanded ?? false)),
       ),
     ));
     return Ink(

@@ -48,11 +48,11 @@ class _HomeScreenState extends State<HomeScreen> {
     allUsers = context.watch<EventsController>().allUsers;
     if (allUsers.isNotEmpty && FirebaseAuth.instance.currentUser != null) {
       user = allUsers.firstWhere(
-          (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+          (element) => element.id == FirebaseAuth.instance.currentUser?.uid);
     }
     // allChats = context.watch<EventsController>().allMessages;
     // widget.messagesCallBack.call(allChats);
-    if (user != null && user!.userType == "user") {
+    if (user != null && user?.userType == "user") {
       events = context
           .watch<EventsController>()
           .allEvents
@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
           .watch<EventsController>()
           .allEvents
           .where((element) =>
-              element.uId == FirebaseAuth.instance.currentUser!.uid &&
+              element.uId == FirebaseAuth.instance.currentUser?.uid &&
               element.status == "UpComing")
           .toList();
     }
@@ -196,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          "Welcome ${user!.firstName}",
+                          "Welcome ${user?.firstName}",
                           style: AppTextStyles.josefin(
                               style: TextStyle(
                                   color: const Color(0xFFB2E5F5),

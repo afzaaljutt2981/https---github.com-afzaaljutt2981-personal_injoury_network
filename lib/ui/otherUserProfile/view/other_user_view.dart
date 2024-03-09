@@ -92,7 +92,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
             ? Column(
                 children: [
                   CustomSizeBox(10.h),
-                  if (user!.pImage == null) ...[
+                  if (user?.pImage == null) ...[
                     Center(
                         child: Image(
                       height: 90.sp,
@@ -110,7 +110,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                       },
                       child: CircleAvatar(
                         radius: 50.sp,
-                        backgroundImage: NetworkImage(user!.pImage!),
+                        backgroundImage: NetworkImage(user?.pImage ?? ""),
                       ),
                     )
                   ],
@@ -132,7 +132,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            (user!.followings?.length ?? 0).toString(),
+                            (user?.followings?.length ?? 0).toString(),
                             style: AppTextStyles.josefin(
                                 style: TextStyle(
                                     fontSize: 16.sp,
@@ -189,7 +189,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                       ),
                     ],
                   ),
-                  if (user!.id != FirebaseAuth.instance.currentUser!.uid)
+                  if (user?.id != FirebaseAuth.instance.currentUser?.uid)
                     Column(
                       children: [
                         CustomSizeBox(15.h),
@@ -209,18 +209,19 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                             .read<OtherUserProfileController>()
                                             .sendFollowRequest(
                                                 user?.id ?? "", context);
-                                        if (user!.fcmToken != null) {
+                                        if (user?.fcmToken != null) {
                                           await CountryStateCityRepo
                                               .sendPushNotification(
-                                                  widget.currentUser?.firstName ??
+                                                  widget.currentUser
+                                                          ?.firstName ??
                                                       "",
                                                   "Started following you",
-                                                  user!.fcmToken!);
+                                                  user?.fcmToken ?? "");
                                         }
                                       } else if (followButton == "Following") {
                                         await context
                                             .read<OtherUserProfileController>()
-                                            .followTap(user!);
+                                            .followTap(user);
 
                                         // ignore: use_build_context_synchronously
                                         await context
@@ -295,7 +296,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                             MaterialPageRoute(
                                                 builder: (_) =>
                                                     SingleChatScreenView(
-                                                      user: user!,
+                                                      user: user,
                                                     )));
                                       },
                                       child: Container(
@@ -386,17 +387,17 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                     ),
                   ),
                   if (followButton == "Following" ||
-                      FirebaseAuth.instance.currentUser!.uid == user!.id ||
+                      FirebaseAuth.instance.currentUser?.uid == user?.id ||
                       FirebaseAuth.instance.currentUser?.email?.toLowerCase() ==
                           Constants.adminEmail.toLowerCase()) ...[
                     Expanded(
                         child: TabBarView(controller: tabController, children: [
                       OrganizerAbout(
-                        user: user!,
+                        user: user,
                       ),
                       OrganizerEvents(
                         userEvents: userEvents,
-                        userModel: user!,
+                        userModel: user,
                       ),
                       OtherUserReviewScreen(
                         userEvents: userEvents,
@@ -405,8 +406,8 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                   ] else if (followButton == "Follow") ...[
                     const Expanded(
                         child: Center(
-                            child:
-                                Text("Send a follow req to view hidden content")))
+                            child: Text(
+                                "Send a follow req to view hidden content")))
                   ] else ...[
                     const Expanded(
                         child: Center(
@@ -422,7 +423,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
 
   setFollowButton(List<NotificationsModel> notifications) {
     for (var element in notifications) {
-      if (element.senderId == FirebaseAuth.instance.currentUser!.uid &&
+      if (element.senderId == FirebaseAuth.instance.currentUser?.uid &&
           element.status != "Rejected" &&
           element.status != "unFollowed") {
         if (element.status == "Accepted") {

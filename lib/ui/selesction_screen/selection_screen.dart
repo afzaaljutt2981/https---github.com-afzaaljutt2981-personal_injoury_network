@@ -86,8 +86,8 @@ class _SelectionScreenState extends State<SelectionScreen> {
                   children: [
                     CustomSizeBox(25.h),
                     Image(
-                      image:
-                          const AssetImage('assets/images/intro_screen_logo.png'),
+                      image: const AssetImage(
+                          'assets/images/intro_screen_logo.png'),
                       height: 80.sp,
                       width: 80.sp,
                     ),
@@ -110,7 +110,8 @@ class _SelectionScreenState extends State<SelectionScreen> {
                               type: PageTransitionType.rightToLeft,
                               alignment: Alignment.center,
                               duration: const Duration(milliseconds: 200),
-                              reverseDuration: const Duration(milliseconds: 200),
+                              reverseDuration:
+                                  const Duration(milliseconds: 200),
                               child: const CreateAuthenticationView(),
                             ),
                           );
@@ -122,7 +123,8 @@ class _SelectionScreenState extends State<SelectionScreen> {
                               type: PageTransitionType.rightToLeft,
                               alignment: Alignment.center,
                               duration: const Duration(milliseconds: 200),
-                              reverseDuration: const Duration(milliseconds: 200),
+                              reverseDuration:
+                                  const Duration(milliseconds: 200),
                               child: BottomNavigationScreen(
                                 selectedIndex: 0,
                               ),
@@ -136,7 +138,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                                 style: TextStyle(
                                     fontSize: 16.sp,
                                     fontWeight: FontWeight.w600,
-                                color: AppColors.kWhiteColor)),
+                                    color: AppColors.kWhiteColor)),
                           )),
                     ),
                     CustomSizeBox(10.h),

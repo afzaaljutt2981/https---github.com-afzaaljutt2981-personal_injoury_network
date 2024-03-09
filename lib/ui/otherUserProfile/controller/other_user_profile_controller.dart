@@ -57,7 +57,7 @@ class OtherUserProfileController extends ChangeNotifier {
   }
 
   sendFollowRequest(String userId, BuildContext context) async {
-    var senderId = FirebaseAuth.instance.currentUser!.uid;
+    var senderId = FirebaseAuth.instance.currentUser?.uid;
     var sender = await user.doc(senderId).get().then((userSnapShot) {
       return UserModel.fromJson(userSnapShot.data() as Map<String, dynamic>);
     });
@@ -167,12 +167,12 @@ class OtherUserProfileController extends ChangeNotifier {
   }
 
   followTap(
-    UserModel userModel,
+    UserModel? userModel,
   ) {
-    String cId = FirebaseAuth.instance.currentUser!.uid;
+    String? cId = FirebaseAuth.instance.currentUser?.uid;
     final collectionRef =
-        FirebaseFirestore.instance.collection("users").doc(userModel.id);
-    var fList = userModel.followers;
+        FirebaseFirestore.instance.collection("users").doc(userModel?.id);
+    var fList = userModel?.followers;
 
     if (fList?.contains(cId) == true) {
       fList?.remove(cId);
@@ -196,7 +196,7 @@ class OtherUserProfileController extends ChangeNotifier {
   }
 
   followingTap(UserModel? userModel, String? uId) {
-    String id = FirebaseAuth.instance.currentUser!.uid;
+    String? id = FirebaseAuth.instance.currentUser?.uid;
     final collectionRef = user.doc(id);
     var fList = userModel?.followings ?? [];
 

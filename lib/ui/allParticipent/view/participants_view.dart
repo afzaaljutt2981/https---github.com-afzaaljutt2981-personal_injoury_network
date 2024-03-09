@@ -38,8 +38,9 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor:
-            Constants.userType == 'user' ? Colors.white : const Color(0xFFF5F4FF),
+        backgroundColor: Constants.userType == 'user'
+            ? Colors.white
+            : const Color(0xFFF5F4FF),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
@@ -274,7 +275,8 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                                           style: AppTextStyles.josefin(
                                               style: TextStyle(
                                                   fontSize: 14.sp,
-                                                  color: AppColors.kPrimaryColor,
+                                                  color:
+                                                      AppColors.kPrimaryColor,
                                                   fontWeight: FontWeight.w500)),
                                         ),
                                         CustomSizeBox(5.h),
@@ -283,7 +285,8 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                                           style: AppTextStyles.josefin(
                                               style: TextStyle(
                                                   fontSize: 10.sp,
-                                                  color: const Color(0xFF857FB4),
+                                                  color:
+                                                      const Color(0xFF857FB4),
                                                   fontWeight: FontWeight.w400)),
                                         ),
                                       ],

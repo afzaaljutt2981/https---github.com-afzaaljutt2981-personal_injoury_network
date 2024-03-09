@@ -46,8 +46,8 @@ class _SelectLocationState extends State<SelectLocation> {
   void initState() {
     // _determinePosition();
     if (widget.addressModel != null) {
-      var position = LatLng(widget.addressModel!.latitude ?? 37.42796133580664,
-          widget.addressModel!.longitude ?? -122.085749655962);
+      var position = LatLng(widget.addressModel?.latitude ?? 37.42796133580664,
+          widget.addressModel?.longitude ?? -122.085749655962);
       latLng = position;
       this.position = CameraPosition(
         target: LatLng(position.latitude, position.longitude),
@@ -96,7 +96,7 @@ class _SelectLocationState extends State<SelectLocation> {
                     getAddress();
                   }
                   fromPlaces = false;
-                  addMarker(latLng!);
+                  addMarker(latLng);
                 }
               },
               onCameraMove: (CameraPosition position) {
@@ -135,7 +135,8 @@ class _SelectLocationState extends State<SelectLocation> {
                 displayPrediction(p);
               },
               child: Padding(
-                padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+                padding:
+                    EdgeInsets.only(top: MediaQuery.of(context).padding.top),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
@@ -188,8 +189,8 @@ class _SelectLocationState extends State<SelectLocation> {
                           context, AppStrings.pleaseSelectALocationToContinue);
                     } else {
                       AddressModel model = AddressModel(
-                        latitude: latLng!.latitude,
-                        longitude: latLng!.longitude,
+                        latitude: latLng?.latitude ?? 0,
+                        longitude: latLng?.longitude ?? 0,
                         country: country,
                         city: city,
                         postalCode: postalCode,
@@ -217,7 +218,7 @@ class _SelectLocationState extends State<SelectLocation> {
 
   getAddress() async {
     var googleGeocoding = gc.GoogleGeocoding(Constants.mapKey);
-    var l = gc.LatLon(latLng!.latitude, latLng!.longitude);
+    var l = gc.LatLon(latLng?.latitude ?? 0, latLng?.longitude ?? 0);
     gc.GeocodingResponse? result =
         await googleGeocoding.geocoding.getReverse(l);
 
@@ -258,7 +259,7 @@ class _SelectLocationState extends State<SelectLocation> {
     }
   }
 
-  addMarker(LatLng model) {
+  addMarker(LatLng? model) {
     var markerIdVal = AppStrings.selectedLocation;
     final MarkerId markerId = MarkerId(markerIdVal);
 
@@ -266,8 +267,8 @@ class _SelectLocationState extends State<SelectLocation> {
     final Marker marker = Marker(
       markerId: markerId,
       position: LatLng(
-        model.latitude,
-        model.longitude,
+        model?.latitude ?? 0,
+        model?.longitude ?? 0,
       ),
       onTap: () {
         // _onMarkerTapped(markerId);
@@ -310,13 +311,11 @@ class _SelectLocationState extends State<SelectLocation> {
         searchResults = element.formattedAddress ?? "";
       });
 
-      final lat = detail.result.geometry!.location.lat;
-      final lng = detail.result.geometry!.location.lng;
-      var position = LatLng(lat, lng);
+      final lat = detail.result.geometry?.location.lat;
+      final lng = detail.result.geometry?.location.lng;
+      var position = LatLng(lat ?? 0, lng ?? 0);
       latLng = position;
-      if (_controller != null) {
-        _controller!.animateCamera(CameraUpdate.newLatLng(position));
-      }
+      _controller?.animateCamera(CameraUpdate.newLatLng(position));
     }
   }
 }

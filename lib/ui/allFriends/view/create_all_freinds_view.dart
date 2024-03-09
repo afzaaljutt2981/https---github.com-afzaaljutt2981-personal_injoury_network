@@ -9,7 +9,7 @@ import 'all_friends_view.dart';
 class CreateAllFriendsView extends StatefulWidget {
   CreateAllFriendsView({super.key, required this.user});
 
-  UserModel user;
+  UserModel? user;
 
   @override
   State<CreateAllFriendsView> createState() => _CreateAllFriendsViewState();

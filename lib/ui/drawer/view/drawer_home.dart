@@ -57,7 +57,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                 right: 35.sp),
                             child: Row(
                               children: [
-                                if (user!.pImage == null) ...[
+                                if (user?.pImage == null) ...[
                                   Container(
                                     decoration: BoxDecoration(
                                         borderRadius:
@@ -74,7 +74,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                   CircleAvatar(
                                     radius: 20,
                                     backgroundImage: NetworkImage(
-                                      user!.pImage!,
+                                      user?.pImage ?? "",
                                     ),
                                   ),
                                 ],
@@ -85,7 +85,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      user!.firstName ?? "",
+                                      user?.firstName ?? "",
                                       style: AppTextStyles.josefin(
                                           style: TextStyle(
                                               color: AppColors.kBlackColor,
@@ -145,14 +145,15 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                           Navigator.pop(context);
                                         }),
                                         CustomSizeBox(28.h),
-                                        user!.userType == 'user'
+                                        user?.userType == 'user'
                                             ? homeFeatures(
                                                 'assets/images/marketer_icon_drawer.png',
                                                 'Become a Marketer',
                                                 onTap: () async {
-                                                String? res =
-                                                    await Functions().showConfirmDialogueBox(
-                                                        context, "You are going to become a marketer, Press continue to confirm");
+                                                String? res = await Functions()
+                                                    .showConfirmDialogueBox(
+                                                        context,
+                                                        "You are going to become a marketer, Press continue to confirm");
                                                 if (res != null) {
                                                   // ignore: use_build_context_synchronously
                                                   context
@@ -241,7 +242,7 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
                                               reverseDuration: const Duration(
                                                   milliseconds: 200),
                                               child: CreateAllFriendsView(
-                                                user: user!,
+                                                user: user,
                                               ),
                                             ),
                                           );
@@ -436,5 +437,4 @@ class _MyDrawerHomeState extends State<MyDrawerHome> {
       ),
     );
   }
-
 }

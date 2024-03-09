@@ -380,13 +380,13 @@ class _LoginViewState extends State<LoginView> {
         [AppleIdRequest(requestedScopes: scopes)]);
     switch (result.status) {
       case AuthorizationStatus.authorized:
-        final appleIdCredential = result.credential!;
+        final appleIdCredential = result.credential;
         final oAuthProvider = OAuthProvider('apple.com');
         final credential = oAuthProvider.credential(
-            idToken: String.fromCharCodes(appleIdCredential.identityToken!));
+            idToken: String.fromCharCodes(appleIdCredential!.identityToken!));
         final userCredential = await auth.signInWithCredential(credential);
         if (userCredential.user != null) {
-          final firebaseUser = userCredential.user!;
+          final firebaseUser = userCredential.user;
           final email = appleIdCredential.email;
           getUserData(firebaseUser, userEmail: email);
         }
@@ -405,10 +405,10 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
-  getUserData(User user, {String? userEmail}) async {
+  getUserData(User? user, {String? userEmail}) async {
     var res = await FirebaseFirestore.instance
         .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(FirebaseAuth.instance.currentUser?.uid)
         .get();
     if (res.exists) {
       UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
@@ -446,16 +446,16 @@ class _LoginViewState extends State<LoginView> {
         print(token);
         await FirebaseFirestore.instance
             .collection("users")
-            .doc(user.uid)
+            .doc(user?.uid)
             .set(UserModel(
               location: "",
               country: "",
               county: "",
               position: "",
-              email: userEmail ?? user.email ?? '',
-              firstName: user.displayName ?? "",
+              email: userEmail ?? user?.email ?? '',
+              firstName: user?.displayName ?? "",
               lastName: "",
-              id: user.uid,
+              id: user?.uid,
               reference: "",
               hobbies: [],
               followers: [],
@@ -470,9 +470,9 @@ class _LoginViewState extends State<LoginView> {
               isNewNotificationReceived: false,
               timeCreated: DateTime.now().millisecondsSinceEpoch,
             ).toJson());
-        Constants.userDisplayName = user.displayName ?? '';
-        Constants.userEmail = userEmail ?? user.email ?? "";
-        Constants.uId = user.uid;
+        Constants.userDisplayName = user?.displayName ?? '';
+        Constants.userEmail = userEmail ?? user?.email ?? "";
+        Constants.uId = user?.uid ?? "";
         // ignore: use_build_context_synchronously
         Navigator.push(
           context,

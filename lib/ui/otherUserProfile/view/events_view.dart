@@ -134,8 +134,9 @@ class OrganizerEvents extends StatelessWidget {
     Color? bgColor;
     Color? textColor;
     DateTime date = DateTime.fromMillisecondsSinceEpoch(event.dateTime ?? 0);
-    DateTime startTime = DateTime.fromMillisecondsSinceEpoch(event.startTime!);
-    DateTime endTime = DateTime.fromMillisecondsSinceEpoch(event.endTime!);
+    DateTime startTime =
+        DateTime.fromMillisecondsSinceEpoch(event.startTime ?? 0);
+    DateTime endTime = DateTime.fromMillisecondsSinceEpoch(event.endTime ?? 0);
     String status = event.status ?? "";
     if (startTime.isBefore(DateTime.now()) &&
         DateTime.now().isBefore(endTime)) {

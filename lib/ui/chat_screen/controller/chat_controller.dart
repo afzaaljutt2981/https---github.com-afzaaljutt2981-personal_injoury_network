@@ -20,7 +20,7 @@ class ChatController extends ChangeNotifier {
   bool isDone = false;
 
   getUserMessages(String otherUserId) {
-    var uId = FirebaseAuth.instance.currentUser!.uid;
+    var uId = FirebaseAuth.instance.currentUser?.uid;
     chatStream = messages
         .doc(uId)
         .collection("chats")
@@ -44,7 +44,7 @@ class ChatController extends ChangeNotifier {
     });
   }
 
-  setMessageAsRead(String uid, String otherUserId, ChatMessage message) {
+  setMessageAsRead(String? uid, String otherUserId, ChatMessage message) {
     messages
         .doc(uid)
         .collection("chats")
@@ -54,7 +54,7 @@ class ChatController extends ChangeNotifier {
 
   sendMessage(
       String receiverId, String messageContent, String messageType) async {
-    var uId = FirebaseAuth.instance.currentUser!.uid;
+    var uId = FirebaseAuth.instance.currentUser?.uid;
     var senderDoc = messages
         .doc(uId)
         .collection("chats")
@@ -88,7 +88,8 @@ class ChatController extends ChangeNotifier {
     } catch (_) {}
   }
 
-  saveUserChatData(String uId, String receiverId, String messageContent) async {
+  saveUserChatData(
+      String? uId, String receiverId, String messageContent) async {
     await messages.doc(uId).collection("chats").doc(receiverId).set(ChatData(
             lastMessage: messageContent,
             name: "name",

@@ -27,7 +27,7 @@ class AllRegisteredMarketersController extends ChangeNotifier {
 
   Future<void> updateUser(
     BuildContext context, {
-    required String userUidToUpdate,
+    required String? userUidToUpdate,
     required bool isDeleted,
   }) async {
     try {

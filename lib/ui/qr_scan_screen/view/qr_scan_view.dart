@@ -73,7 +73,8 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                       child: Image(
                         height: 60.sp,
                         width: 60.sp,
-                        image: const AssetImage('assets/images/primary_icon.png'),
+                        image:
+                            const AssetImage('assets/images/primary_icon.png'),
                       ),
                     ),
 
@@ -96,7 +97,8 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
 
                               //  Container Data
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 9, right: 9),
+                                padding:
+                                    const EdgeInsets.only(left: 9, right: 9),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
@@ -121,7 +123,8 @@ class _HomeQrScanViewState extends State<HomeQrScanView> {
                                     CustomSizeBox(15.h),
                                     QrImage(
                                       foregroundColor: AppColors.kPrimaryColor,
-                                      data: FirebaseAuth.instance.currentUser?.uid
+                                      data: FirebaseAuth
+                                              .instance.currentUser?.uid
                                               .toString() ??
                                           'Q/A',
                                       version: QrVersions.auto,

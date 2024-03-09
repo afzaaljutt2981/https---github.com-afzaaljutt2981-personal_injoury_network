@@ -54,7 +54,7 @@ class _NotificationViewState extends State<NotificationView> {
     allUsers = context.watch<EventsController>().allUsers;
     if (allUsers.isNotEmpty) {
       currentUser = allUsers.firstWhere(
-          (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+          (element) => element.id == FirebaseAuth.instance.currentUser?.uid);
     }
 
     if (notiList.isNotEmpty) {
@@ -173,12 +173,11 @@ class _NotificationViewState extends State<NotificationView> {
                                                   default:
                                                     return item(
                                                         model
-                                                            .notificationsModel!,
+                                                            .notificationsModel,
                                                         snapshot.data);
                                                 }
                                               })
-                                          : item(
-                                              model.notificationsModel!, null)
+                                          : item(model.notificationsModel, null)
                                       : GestureDetector(
                                           onTap: () {
                                             Navigator.push(
@@ -200,19 +199,19 @@ class _NotificationViewState extends State<NotificationView> {
                                             );
                                           },
                                           child: campaignItem(
-                                              model.campaignModel!));
+                                              model.campaignModel));
                                 })),
                       ],
                     )),
     );
   }
 
-  Widget item(NotificationsModel model, EventModel? event) {
+  Widget item(NotificationsModel? model, EventModel? event) {
     UserModel? user =
-        allUsers.firstWhere((element) => element.id == model.senderId);
+        allUsers.firstWhere((element) => element.id == model?.senderId);
     currentUser = allUsers.firstWhere(
-        (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
-    DateTime time = DateTime.fromMillisecondsSinceEpoch(model.time ?? 0);
+        (element) => element.id == FirebaseAuth.instance.currentUser?.uid);
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(model?.time ?? 0);
     String formattedDate = formatDateTime(time);
 
     return Column(
@@ -227,7 +226,7 @@ class _NotificationViewState extends State<NotificationView> {
               (user.pImage != null)
                   ? CircleAvatar(
                       radius: 20,
-                      backgroundImage: NetworkImage(user.pImage!),
+                      backgroundImage: NetworkImage(user.pImage ?? ""),
                     )
                   : Image(
                       width: 40.sp,
@@ -262,7 +261,7 @@ class _NotificationViewState extends State<NotificationView> {
                             )
                           ]),
                       CustomSizeBox(5.h),
-                      if (model.notificationType == "Follow") ...[
+                      if (model?.notificationType == "Follow") ...[
                         Text(
                           "started following you",
                           style: AppTextStyles.josefin(
@@ -273,9 +272,9 @@ class _NotificationViewState extends State<NotificationView> {
                             "You are invited for ${event?.title ?? ""} scheduled on ${DateTime.fromMicrosecondsSinceEpoch(event?.dateTime ?? 0).day} of ${JobPositionModel.months[DateTime.fromMicrosecondsSinceEpoch(event?.dateTime ?? 0).month - 1]} at ${event?.address ?? ""}")
                       ],
                       CustomSizeBox(10.h),
-                      if ((model.status == "Pending" &&
-                              (model.notificationType == "Follow") ||
-                          model.notificationType == "Invite"))
+                      if ((model?.status == "Pending" &&
+                              (model?.notificationType == "Follow") ||
+                          model?.notificationType == "Invite"))
                         buttonRow(model, user, event)
                     ],
                   ),
@@ -303,16 +302,16 @@ class _NotificationViewState extends State<NotificationView> {
   }
 
   Widget buttonRow(
-      NotificationsModel model, UserModel user, EventModel? event) {
+      NotificationsModel? model, UserModel user, EventModel? event) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        if (model.notificationType != "Invite")
+        if (model?.notificationType != "Invite")
           GestureDetector(
             onTap: () async {
               context
                   .read<NotificationsController>()
-                  .respondRequest(model.id ?? "", "Rejected", context);
+                  .respondRequest(model?.id ?? "", "Rejected", context);
             },
             child: Container(
               decoration: BoxDecoration(
@@ -335,7 +334,7 @@ class _NotificationViewState extends State<NotificationView> {
         ),
         GestureDetector(
           onTap: () async {
-            if (model.notificationType == "Invite") {
+            if (model?.notificationType == "Invite") {
               Navigator.push(
                 context,
                 PageTransition(
@@ -345,14 +344,14 @@ class _NotificationViewState extends State<NotificationView> {
                   duration: const Duration(milliseconds: 200),
                   reverseDuration: const Duration(milliseconds: 200),
                   child: CreateEventDetailsView(
-                    event: event!,
+                    event: event,
                   ),
                 ),
               );
             } else {
               await context
                   .read<NotificationsController>()
-                  .respondRequest(model.id ?? "", "Accepted", context);
+                  .respondRequest(model?.id ?? "", "Accepted", context);
               // ignore: use_build_context_synchronously
               await context
                   .read<NotificationsController>()
@@ -370,7 +369,7 @@ class _NotificationViewState extends State<NotificationView> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 27.w, vertical: 9.h),
               child: Text(
-                (model.notificationType == "Invite") ? 'View Event' : 'Accept',
+                (model?.notificationType == "Invite") ? 'View Event' : 'Accept',
                 style: AppTextStyles.josefin(
                     style: TextStyle(color: Colors.white, fontSize: 12.sp)),
               ),
@@ -381,12 +380,12 @@ class _NotificationViewState extends State<NotificationView> {
     );
   }
 
-  Widget campaignButtonRow(CampaignModel model, String? formattedDate) {
+  Widget campaignButtonRow(CampaignModel? model, String? formattedDate) {
     return Column(
       children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(
-            model.title ?? "No title found",
+            model?.title ?? "No title found",
             style: AppTextStyles.josefin(
                 style: TextStyle(
                     color: AppColors.kBlackColor,
@@ -461,8 +460,9 @@ class _NotificationViewState extends State<NotificationView> {
     );
   }
 
-  Widget campaignItem(CampaignModel model) {
-    DateTime time = DateTime.fromMillisecondsSinceEpoch(model.timeCreated ?? 0);
+  Widget campaignItem(CampaignModel? model) {
+    DateTime time =
+        DateTime.fromMillisecondsSinceEpoch(model?.timeCreated ?? 0);
     String formattedDate = formatDateTime(time);
 
     return Column(
@@ -502,9 +502,9 @@ class _NotificationViewState extends State<NotificationView> {
                       children: [
                         campaignButtonRow(model, formattedDate),
                         Text(
-                          (model.message?.length ?? 0) > 60
-                              ? "${model.message?.substring(0, 60) ?? ""}..."
-                              : model.message ?? "",
+                          (model?.message?.length ?? 0) > 60
+                              ? "${model?.message?.substring(0, 60) ?? ""}..."
+                              : model?.message ?? "",
                           // "Campaign created for people of ${model.country} doing job as ${model.jobOrPosition}",
                           style: AppTextStyles.josefin(
                               style: TextStyle(

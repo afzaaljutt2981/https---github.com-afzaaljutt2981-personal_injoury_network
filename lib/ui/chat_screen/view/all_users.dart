@@ -67,8 +67,9 @@ class _AllUsersChatState extends State<AllUsersChat> {
                               // shrinkWrap: true,
                               itemCount: chatUsers.length,
                               itemBuilder: (context, index) {
-                                UserModel user = allUsers.firstWhere((element) =>
-                                    element.id == chatUsers[index].to);
+                                UserModel user = allUsers.firstWhere(
+                                    (element) =>
+                                        element.id == chatUsers[index].to);
                                 DateTime? dateTime = chatUsers[index].dateTime;
                                 String fDateTime = dateTime != null
                                     ? DateFormat("HH:mm a").format(dateTime)
@@ -79,7 +80,8 @@ class _AllUsersChatState extends State<AllUsersChat> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (_) =>
-                                                SingleChatScreenView(user: user))
+                                                SingleChatScreenView(
+                                                    user: user))
                                         // PageTransition(
                                         //   childCurrent: widget,
                                         //   type:
@@ -101,8 +103,8 @@ class _AllUsersChatState extends State<AllUsersChat> {
                                         right: 15.w,
                                         top: 14.h,
                                         bottom: 8.h),
-                                    margin:
-                                        EdgeInsets.only(left: 10.w, right: 10.w),
+                                    margin: EdgeInsets.only(
+                                        left: 10.w, right: 10.w),
                                     foregroundDecoration: chatUsers[index]
                                                 .isRead ==
                                             false
@@ -125,7 +127,8 @@ class _AllUsersChatState extends State<AllUsersChat> {
                                                       radius: 20,
                                                       backgroundImage:
                                                           NetworkImage(
-                                                              user.pImage!),
+                                                              user.pImage ??
+                                                                  ""),
                                                     )
                                                   : Image(
                                                       width: 40.sp,
@@ -139,7 +142,8 @@ class _AllUsersChatState extends State<AllUsersChat> {
                                                   color: Colors.transparent,
                                                   child: Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: <Widget>[
                                                       Text(
                                                         user.lastName ?? "",
@@ -150,7 +154,8 @@ class _AllUsersChatState extends State<AllUsersChat> {
                                                                         .w700,
                                                                 color: const Color(
                                                                     0xFF1A1167),
-                                                                fontSize: 12.sp)),
+                                                                fontSize:
+                                                                    12.sp)),
                                                       ),
                                                       CustomSizeBox(6.h),
                                                       Text(
@@ -170,7 +175,8 @@ class _AllUsersChatState extends State<AllUsersChat> {
                                                                         .w400,
                                                                 color: const Color(
                                                                     0xFF857FB4),
-                                                                fontSize: 11.sp)),
+                                                                fontSize:
+                                                                    11.sp)),
                                                       ),
                                                     ],
                                                   ),

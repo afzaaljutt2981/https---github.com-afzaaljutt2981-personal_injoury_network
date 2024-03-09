@@ -119,7 +119,8 @@ class _AllRegisteredUsersScreenState
                                     type: PageTransitionType.rightToLeft,
                                     alignment: Alignment.center,
                                     duration: const Duration(milliseconds: 200),
-                                    reverseDuration: const Duration(milliseconds: 200),
+                                    reverseDuration:
+                                        const Duration(milliseconds: 200),
                                     child: CreateOtherUserProfileView(
                                       participant: model,
                                       currentUser: null,
@@ -184,17 +185,20 @@ class _AllRegisteredUsersScreenState
                                             ),
                                             GestureDetector(
                                               onTap: () {
-                                                print("Delete should be initiated");
-                                                if (model.id?.isNotEmpty ?? false) {
+                                                print(
+                                                    "Delete should be initiated");
+                                                if (model.id?.isNotEmpty ??
+                                                    false) {
                                                   context
                                                       .read<
                                                           AllRegisteredMarketersController>()
                                                       .updateUser(context,
                                                           userUidToUpdate:
-                                                              model.id!,
+                                                              model?.id,
                                                           isDeleted: true);
                                                 } else {
-                                                  Functions.showSnackBar(context,
+                                                  Functions.showSnackBar(
+                                                      context,
                                                       "Invalid user, unable to delete this user");
                                                 }
                                               },

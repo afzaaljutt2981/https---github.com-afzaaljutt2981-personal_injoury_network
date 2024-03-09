@@ -10,7 +10,7 @@ import '../../authentication/model/user_model.dart';
 class OrganizerAbout extends StatelessWidget {
   OrganizerAbout({super.key, required this.user});
 
-  UserModel user;
+  UserModel? user;
 
   @override
   Widget build(BuildContext context) {
@@ -31,25 +31,25 @@ class OrganizerAbout extends StatelessWidget {
                 color: AppColors.kLiteBlueColor),
             CustomSizeBox(9.h),
             text('Job/Position', FontWeight.w600),
-            text(user.position ?? "", FontWeight.w600,
+            text(user?.position ?? "", FontWeight.w600,
                 color: AppColors.kLiteBlueColor),
             CustomSizeBox(9.h),
             text('Email', FontWeight.w600),
-            text(user.email ?? "", FontWeight.w600,
+            text(user?.email ?? "", FontWeight.w600,
                 color: AppColors.kLiteBlueColor),
             CustomSizeBox(9.h),
             text('Website', FontWeight.w600),
-            text(user.website ?? "", FontWeight.w600,
+            text(user?.website ?? "", FontWeight.w600,
                 color: AppColors.kLiteBlueColor),
             CustomSizeBox(9.h),
             text('Cellphone', FontWeight.w600),
-            text(user.phone.toString(), FontWeight.w600,
+            text(user?.phone?.toString() ?? "", FontWeight.w600,
                 color: AppColors.kLiteBlueColor),
             CustomSizeBox(9.h),
             text('Hobbies', FontWeight.w600),
             Row(
               children: [
-                for (var e in user.hobbies ?? [])
+                for (var e in user?.hobbies ?? [])
                   text("$e,", FontWeight.w600, color: AppColors.kLiteBlueColor),
               ],
             ),

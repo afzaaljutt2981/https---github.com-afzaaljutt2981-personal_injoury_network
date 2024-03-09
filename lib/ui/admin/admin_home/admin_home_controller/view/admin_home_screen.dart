@@ -40,7 +40,7 @@ class _HomeScreenState extends State<AdminHomeScreen> {
     allUsers = context.watch<EventsController>().allUsers;
     if (allUsers.isNotEmpty && FirebaseAuth.instance.currentUser != null) {
       user = allUsers.firstWhere(
-          (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+          (element) => element.id == FirebaseAuth.instance.currentUser?.uid);
     }
     if (Constants.userType == "user") {
       events = context.watch<EventsController>().allEvents;
@@ -49,7 +49,7 @@ class _HomeScreenState extends State<AdminHomeScreen> {
           .watch<EventsController>()
           .allEvents
           .where((element) =>
-              element.uId == FirebaseAuth.instance.currentUser!.uid)
+              element.uId == FirebaseAuth.instance.currentUser?.uid)
           .toList();
     }
     var screenHeight = MediaQuery.of(context).size.height;
@@ -74,7 +74,8 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 15.w, right: 25.w, top: 25.w),
+                    padding:
+                        EdgeInsets.only(left: 15.w, right: 25.w, top: 25.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -146,7 +147,7 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                           ),
                         ),
                         Text(
-                          "Welcome \n${user!.userName}!",
+                          "Welcome \n${user?.userName}!",
                           style: AppTextStyles.josefin(
                               style: TextStyle(
                                   color: const Color(0xFFFFFFFF),
@@ -161,7 +162,7 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                       child: Container(
                         height: Constants.userType == 'user'
                             ? screenHeight * 0.7
-                            : screenHeight * 0.8,
+                            : screenHeight * 0.7,
                         width: screenWidth,
                         decoration: BoxDecoration(
                             color: Colors.white,
@@ -484,7 +485,8 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                                                     milliseconds: 200),
                                                 reverseDuration: const Duration(
                                                     milliseconds: 200),
-                                                child: const CreateCampaignView(),
+                                                child:
+                                                    const CreateCampaignView(),
                                               ),
                                             );
                                           },
@@ -636,7 +638,8 @@ class _HomeScreenState extends State<AdminHomeScreen> {
                           decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(0xFFFE613D).withOpacity(0.2),
+                                  color:
+                                      const Color(0xFFFE613D).withOpacity(0.2),
                                   spreadRadius: 5,
                                   blurRadius: 7,
                                   offset: Offset(0, 8.sp),

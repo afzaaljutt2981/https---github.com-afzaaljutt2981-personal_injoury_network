@@ -15,7 +15,6 @@ class _FaqScreenViewState extends State<FaqScreenView> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (_) => MyProfileController(),
-        child: FaqScreen());
+        create: (_) => MyProfileController(), child: FaqScreen());
   }
 }

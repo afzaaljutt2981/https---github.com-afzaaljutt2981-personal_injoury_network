@@ -62,10 +62,10 @@ class AllCreatedCampaignsController extends ChangeNotifier {
             // .notifyCancelEvent(element!.id!,
             // widget.event.title!);
             await CountryStateCityRepo.sendPushNotification(
-                campaign.title??"Admin Campaign",
-                "",
-                user.fcmToken ?? "");
-            await usersRef.doc(userId).update({"isNewNotificationReceived": true});
+                campaign.title ?? "Admin Campaign", "", user.fcmToken ?? "");
+            await usersRef
+                .doc(userId)
+                .update({"isNewNotificationReceived": true});
           }
         });
       });

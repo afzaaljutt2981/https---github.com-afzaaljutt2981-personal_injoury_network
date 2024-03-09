@@ -72,7 +72,7 @@ class EventsController extends ChangeNotifier {
             EventModel.fromJson(element.data() as Map<String, dynamic>);
         if (event.isDeleted == false) allEvents.add(event);
       });
-      allEvents = allEvents.sortedBy((event) => event.startTime??0).toList();
+      allEvents = allEvents.sortedBy((event) => event.startTime ?? 0).toList();
     });
     // notifyListeners();
   }
@@ -83,19 +83,18 @@ class EventsController extends ChangeNotifier {
       print("events -> ${event.docs.length}");
       for (var element in event.docs) {
         final event =
-        EventModel.fromJson(element.data() as Map<String, dynamic>);
-        if (event.isDeleted == false) allEvents
-            .add(event);
+            EventModel.fromJson(element.data() as Map<String, dynamic>);
+        if (event.isDeleted == false) allEvents.add(event);
       }
     });
-    allEvents = allEvents.sortedBy((event) => event.startTime??0).toList();
+    allEvents = allEvents.sortedBy((event) => event.startTime ?? 0).toList();
     notifyListeners();
   }
 
   getUserBookedEvents() {
     if (FirebaseAuth.instance.currentUser != null) {
       userEventsStream = users
-          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .doc(FirebaseAuth.instance.currentUser?.uid)
           .collection("tickets")
           .snapshots()
           .listen((event) {
@@ -111,7 +110,7 @@ class EventsController extends ChangeNotifier {
     try {
       Functions.showLoaderDialog(context);
       var doc = users.doc(userId).collection("notifications").doc();
-      var senderId = FirebaseAuth.instance.currentUser!.uid;
+      var senderId = FirebaseAuth.instance.currentUser?.uid;
       await doc.set(NotificationsModel(
               id: doc.id,
               senderId: senderId,

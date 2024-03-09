@@ -11,8 +11,8 @@ class CreatePickedImageView extends StatefulWidget {
   CreatePickedImageView(
       {super.key, required this.chatUser, required this.image});
 
-  Uint8List image;
-  UserModel chatUser;
+  Uint8List? image;
+  UserModel? chatUser;
 
   @override
   State<CreatePickedImageView> createState() => _CreatePickedImageViewState();

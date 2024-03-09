@@ -17,7 +17,7 @@ class CreateEventController extends ChangeNotifier {
       required double latitude,
       required double longitude}) async {
     var doc = ref.doc();
-    var uId = FirebaseAuth.instance.currentUser!.uid;
+    var uId = FirebaseAuth.instance.currentUser?.uid;
     await doc.set(EventModel(
             endTime: endTime.millisecondsSinceEpoch,
             startTime: startTime.millisecondsSinceEpoch,

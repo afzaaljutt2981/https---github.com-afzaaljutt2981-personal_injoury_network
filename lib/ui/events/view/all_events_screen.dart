@@ -50,7 +50,7 @@ class _AllEventScreenState extends State<AllEventScreen>
       if (allEvents.isNotEmpty &&
           users.isNotEmpty &&
           FirebaseAuth.instance.currentUser != null) {
-        var uId = FirebaseAuth.instance.currentUser!.uid;
+        var uId = FirebaseAuth.instance.currentUser?.uid;
         UserModel currentUser =
             users.firstWhere((element) => element.id == uId);
         if (currentUser.userType == "user") {

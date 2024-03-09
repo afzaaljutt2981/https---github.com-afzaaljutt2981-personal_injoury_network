@@ -311,8 +311,8 @@ class _AddEventViewState extends State<AddEventView> {
                           InkWell(
                             onTap: () async {
                               final ImagePicker _picker = ImagePicker();
-                              final XFile? pickedImage = await _picker.pickImage(
-                                  source: ImageSource.gallery);
+                              final XFile? pickedImage = await _picker
+                                  .pickImage(source: ImageSource.gallery);
                               if (pickedImage != null) {
                                 image1 = await pickedImage.readAsBytes();
                                 setState(() {});
@@ -326,7 +326,8 @@ class _AddEventViewState extends State<AddEventView> {
                                   borderRadius: BorderRadius.circular(10.sp)),
                               child: (image1 != null)
                                   ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(10.sp),
+                                      borderRadius:
+                                          BorderRadius.circular(10.sp),
                                       child: Image(
                                         image: MemoryImage(image1!),
                                         fit: BoxFit.cover,
@@ -400,7 +401,8 @@ class _AddEventViewState extends State<AddEventView> {
                           return;
                         }
                         Functions.showLoaderDialog(context);
-                        String url = await Functions.uploadPic(image1!, "events");
+                        String url =
+                            await Functions.uploadPic(image1!, "events");
                         // ignore: use_build_context_synchronously
                         await context.read<CreateEventController>().addEvent(
                             endTime: endParseTime!,

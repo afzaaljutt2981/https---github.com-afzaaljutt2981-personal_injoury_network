@@ -25,7 +25,7 @@ class AuthController extends ChangeNotifier {
       String? apnsToken = await fMessaging.getAPNSToken();
       if (apnsToken != null) {
         await fMessaging
-            .subscribeToTopic(FirebaseAuth.instance.currentUser!.uid);
+            .subscribeToTopic(FirebaseAuth.instance.currentUser?.uid ?? "");
       } else {
         await Future<void>.delayed(
           const Duration(
@@ -35,11 +35,12 @@ class AuthController extends ChangeNotifier {
         apnsToken = await fMessaging.getAPNSToken();
         if (apnsToken != null) {
           await fMessaging
-              .subscribeToTopic(FirebaseAuth.instance.currentUser!.uid);
+              .subscribeToTopic(FirebaseAuth.instance.currentUser?.uid ?? "");
         }
       }
     } else {
-      await fMessaging.subscribeToTopic(FirebaseAuth.instance.currentUser!.uid);
+      await fMessaging
+          .subscribeToTopic(FirebaseAuth.instance.currentUser?.uid ?? "");
     }
     String? token = await fMessaging.getToken();
     return token;
@@ -72,32 +73,33 @@ class AuthController extends ChangeNotifier {
       )
           .then((value) async {
         if (value.user != null) {
-          var doc = ref.doc(FirebaseAuth.instance.currentUser!.uid);
+          var doc = ref.doc(FirebaseAuth.instance.currentUser?.uid);
 
           String? token = await getFirebaseMessagingToken();
           Future.delayed(const Duration(seconds: 1));
           UserModel model = UserModel(
-              id: doc.id,
-              location: location,
-              country: country,
-              county: county,
-              position: position,
-              email: email,
-              firstName: firstName,
-              lastName: lastName,
-              fcmToken: token ?? "",
-              phone: int.parse(phone),
-              company: companyName,
-              reference: reference,
-              userName: userName,
-              website: website,
-              userType: 'user',
-              hobbies: hobbies,
-              followers: [],
-              followings: [],
-              followingRequests: [],
-              isNewNotificationReceived: isNewNotificationReceived,
-            timeCreated: DateTime.now().millisecondsSinceEpoch,);
+            id: doc.id,
+            location: location,
+            country: country,
+            county: county,
+            position: position,
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+            fcmToken: token ?? "",
+            phone: int.parse(phone),
+            company: companyName,
+            reference: reference,
+            userName: userName,
+            website: website,
+            userType: 'user',
+            hobbies: hobbies,
+            followers: [],
+            followings: [],
+            followingRequests: [],
+            isNewNotificationReceived: isNewNotificationReceived,
+            timeCreated: DateTime.now().millisecondsSinceEpoch,
+          );
           await doc.set(model.toJson());
           getUserData(context, email);
 
@@ -139,7 +141,7 @@ class AuthController extends ChangeNotifier {
       Functions.showLoaderDialog(context);
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      ref.doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) async {
+      ref.doc(FirebaseAuth.instance.currentUser?.uid).get().then((value) async {
         if (value.exists) {
           Map<String, dynamic> data = value.data() as Map<String, dynamic>;
           user = UserModel.fromJson(data);
@@ -194,7 +196,7 @@ class AuthController extends ChangeNotifier {
   }
 
   getUserData(context, String email) {
-    ref.doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) async {
+    ref.doc(FirebaseAuth.instance.currentUser?.uid).get().then((value) async {
       if (value.exists) {
         Map<String, dynamic> data = value.data() as Map<String, dynamic>;
         user = UserModel.fromJson(data);
@@ -244,7 +246,7 @@ class AuthController extends ChangeNotifier {
   }) async {
     try {
       Functions.showLoaderDialog(context);
-      var doc = ref.doc(FirebaseAuth.instance.currentUser!.uid);
+      var doc = ref.doc(FirebaseAuth.instance.currentUser?.uid);
       await doc.update({
         "firstName": firstName,
         "lastName": lastName,

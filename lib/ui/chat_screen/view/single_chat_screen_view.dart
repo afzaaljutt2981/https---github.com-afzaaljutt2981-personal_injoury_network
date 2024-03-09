@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class SingleChatScreenView extends StatefulWidget {
   SingleChatScreenView({super.key, required this.user});
 
-  UserModel user;
+  UserModel? user;
 
   @override
   State<SingleChatScreenView> createState() => _SingleChatScreenViewState();
@@ -17,7 +17,7 @@ class _SingleChatScreenViewState extends State<SingleChatScreenView> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (_) => ChatController(otherUserId: widget.user.id),
-        child: ChatScreen(user: widget.user));
+        create: (_) => ChatController(otherUserId: widget.user?.id),
+        child: ChatScreen(user: widget?.user));
   }
 }

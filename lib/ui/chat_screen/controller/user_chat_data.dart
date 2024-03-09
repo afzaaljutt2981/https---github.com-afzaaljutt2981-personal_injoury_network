@@ -17,7 +17,7 @@ class UserChatData extends ChangeNotifier {
 
   //comment
   getUserChats() {
-    var uId = FirebaseAuth.instance.currentUser!.uid;
+    var uId = FirebaseAuth.instance.currentUser?.uid;
     chatStream =
         messages.doc(uId).collection("chats").snapshots().listen((event) {
       userChatsData = [];

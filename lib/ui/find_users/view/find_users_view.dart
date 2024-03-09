@@ -17,6 +17,7 @@ class FindUser extends StatefulWidget {
   FindUser({super.key, required this.currentUser});
 
   UserModel? currentUser;
+
   @override
   State<FindUser> createState() => _FindUser();
 }
@@ -30,16 +31,17 @@ class _FindUser extends State<FindUser> {
   List<UserModel?>? allUsers = [];
 
   @override
+  void initState() {
+    context.read<FindUserController>().setCounty(selectedCounty);
+    context.read<FindUserController>().setJob(selectedJobPosition);
+  }
+
+  @override
   Widget build(BuildContext context) {
     allUsers = context.watch<FindUserController>().allUsers;
     print("JobPositionModel.counties - >  ${JobPositionModel.counties}");
     print("allUsers - >  ${allUsers}");
-    context
-        .read<FindUserController>()
-        .setCounty(selectedCounty);
-    context
-        .read<FindUserController>()
-        .setJob(selectedJobPosition);
+
     return SafeArea(
       child: Scaffold(
           backgroundColor: AppColors.kWhiteColor,
@@ -114,8 +116,9 @@ class _FindUser extends State<FindUser> {
                                     style: AppTextStyles.josefin(
                                       style: TextStyle(
                                         color: const Color(0xFF1F314A)
-                                            .withOpacity(
-                                                selectedCounty == "" ? 0.31 : 1),
+                                            .withOpacity(selectedCounty == ""
+                                                ? 0.31
+                                                : 1),
                                         fontSize: 14.sp,
                                       ),
                                     ),
@@ -124,7 +127,8 @@ class _FindUser extends State<FindUser> {
                                 ],
                               ),
                               items: JobPositionModel.counties
-                                  .map((String item) => DropdownMenuItem<String>(
+                                  .map((String item) =>
+                                      DropdownMenuItem<String>(
                                         value: item ?? "",
                                         child: Row(
                                           mainAxisAlignment:
@@ -215,7 +219,8 @@ class _FindUser extends State<FindUser> {
                                 // offset: const Offset(-40, 0),
                                 scrollbarTheme: ScrollbarThemeData(
                                   radius: const Radius.circular(40),
-                                  thickness: MaterialStateProperty.all<double>(6),
+                                  thickness:
+                                      MaterialStateProperty.all<double>(6),
                                   thumbVisibility:
                                       MaterialStateProperty.all<bool>(true),
                                 ),
@@ -254,9 +259,10 @@ class _FindUser extends State<FindUser> {
                                     style: AppTextStyles.josefin(
                                       style: TextStyle(
                                         color: const Color(0xFF1F314A)
-                                            .withOpacity(selectedJobPosition == ""
-                                                ? 0.31
-                                                : 1),
+                                            .withOpacity(
+                                                selectedJobPosition == ""
+                                                    ? 0.31
+                                                    : 1),
                                         fontSize: 14.sp,
                                       ),
                                     ),
@@ -265,7 +271,8 @@ class _FindUser extends State<FindUser> {
                                 ],
                               ),
                               items: JobPositionModel.jobList
-                                  .map((String item) => DropdownMenuItem<String>(
+                                  .map((String item) =>
+                                      DropdownMenuItem<String>(
                                         value: item ?? "",
                                         child: Row(
                                           mainAxisAlignment:
@@ -355,7 +362,8 @@ class _FindUser extends State<FindUser> {
                                 // offset: const Offset(-40, 0),
                                 scrollbarTheme: ScrollbarThemeData(
                                   radius: const Radius.circular(40),
-                                  thickness: MaterialStateProperty.all<double>(6),
+                                  thickness:
+                                      MaterialStateProperty.all<double>(6),
                                   thumbVisibility:
                                       MaterialStateProperty.all<bool>(true),
                                 ),

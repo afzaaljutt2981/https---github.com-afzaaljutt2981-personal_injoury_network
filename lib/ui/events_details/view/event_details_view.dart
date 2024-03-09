@@ -128,7 +128,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                               type: PageTransitionType.rightToLeft,
                               alignment: Alignment.center,
                               duration: const Duration(milliseconds: 200),
-                              reverseDuration: const Duration(milliseconds: 200),
+                              reverseDuration:
+                                  const Duration(milliseconds: 200),
                               child: EventsQrView(
                                 eventId: widget.event?.id,
                               ),
@@ -185,8 +186,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.sp),
                                   child: Image(
-                                    image:
-                                        NetworkImage(widget.event?.pImage ?? ""),
+                                    image: NetworkImage(
+                                        widget.event?.pImage ?? ""),
                                     // 'assets/images/background_events_admin.png'
                                     fit: BoxFit.cover,
                                   ),
@@ -231,7 +232,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                           style: AppTextStyles.josefin(
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w700,
-                                                  color: const Color(0xFF9EE8FF),
+                                                  color:
+                                                      const Color(0xFF9EE8FF),
                                                   fontSize: 22.sp)),
                                         ),
                                       ),
@@ -295,7 +297,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                           widget.event?.description ?? "",
                           style: AppTextStyles.josefin(
                               style: TextStyle(
-                                  color: AppColors.kBlackColor, fontSize: 12.sp)),
+                                  color: AppColors.kBlackColor,
+                                  fontSize: 12.sp)),
                         ),
                         CustomSizeBox(25.h),
                         Container(
@@ -315,7 +318,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                           'Next schedules',
                           style: AppTextStyles.josefin(
                               style: TextStyle(
-                                  color: AppColors.kBlackColor, fontSize: 14.sp)),
+                                  color: AppColors.kBlackColor,
+                                  fontSize: 14.sp)),
                         ),
                         Padding(
                           padding: EdgeInsets.only(right: 30.w, top: 20.h),
@@ -371,7 +375,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                           )
                         ] else ...[
                           Row(children: [
-                            for (var e in eventParticipants ?? []) participant(e)
+                            for (var e in eventParticipants ?? [])
+                              participant(e)
                           ])
                         ],
                       ],
@@ -379,18 +384,18 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                   ),
                 ),
               ),
-              currentUser!.userType == 'user' &&
+              currentUser?.userType == 'user' &&
                       FirebaseAuth.instance.currentUser?.email?.toLowerCase() !=
                           Constants.adminEmail.toLowerCase()
                   ? Padding(
-                      padding:
-                          EdgeInsets.only(left: 40.w, right: 40.w, bottom: 20.h),
+                      padding: EdgeInsets.only(
+                          left: 40.w, right: 40.w, bottom: 20.h),
                       child: GetButton(50.sp, () async {
                         if (buttonName != "Registered") {
                           Functions.showLoaderDialog(context);
                           await context
                               .read<EventDetailsController>()
-                              .addEventTicket(widget?.event);
+                              .addEventTicket(widget.event);
                           // ignore: use_build_context_synchronously
                           await context
                               .read<EventDetailsController>()
@@ -411,7 +416,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                     color: Colors.white, fontSize: 18.sp)),
                           )),
                     )
-                  : (currentUser!.id != widget.event?.uId)
+                  : (currentUser?.id != widget.event?.uId)
                       ? const SizedBox()
                       : Padding(
                           padding: EdgeInsets.only(
@@ -431,7 +436,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                           endTime.isAfter(DateTime.now()) &&
                                           widget.event?.status == "UpComing") ||
                                       ((date.isAfter(DateTime.now()) &&
-                                          widget.event?.status == "UpComing"))) {
+                                          widget.event?.status ==
+                                              "UpComing"))) {
                                     _showBottomSheet(context);
                                   }
                                 },
@@ -457,7 +463,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                               : Colors.grey,
                                           width: 1.5.sp),
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.circular(12.sp)),
+                                      borderRadius:
+                                          BorderRadius.circular(12.sp)),
                                   child: Padding(
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 22.w, vertical: 14.h),
@@ -474,9 +481,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                                                   date.day ==
                                                                       today
                                                                           .day) &&
-                                                              startTime.isBefore(
-                                                                  DateTime
-                                                                      .now()) &&
+                                                              startTime.isBefore(DateTime
+                                                                  .now()) &&
                                                               endTime.isAfter(DateTime
                                                                   .now()) &&
                                                               widget.event?.status ==
@@ -506,11 +512,11 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                       if (element?.fcmToken != null) {
                                         await context
                                             .read<EventDetailsController>()
-                                            .notifyCancelEvent(element!.id!,
-                                                widget.event?.title??"");
+                                            .notifyCancelEvent(element?.id,
+                                                widget.event?.title ?? "");
                                         await CountryStateCityRepo
                                             .sendPushNotification(
-                                                eventCreater!.firstName!,
+                                                eventCreater?.firstName ?? "",
                                                 "Cancel the ${widget.event?.title}",
                                                 element?.fcmToken ?? "");
                                       }
@@ -524,14 +530,16 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                          color: ((date.isAfter(DateTime.now()) &&
-                                                  widget.event?.status ==
-                                                      "UpComing"))
-                                              ? const Color(0xFFD70E0E)
-                                              : Colors.grey,
+                                          color:
+                                              ((date.isAfter(DateTime.now()) &&
+                                                      widget.event?.status ==
+                                                          "UpComing"))
+                                                  ? const Color(0xFFD70E0E)
+                                                  : Colors.grey,
                                           width: 1.5.sp),
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.circular(12.sp)),
+                                      borderRadius:
+                                          BorderRadius.circular(12.sp)),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 22.w, vertical: 14.h),
@@ -653,10 +661,10 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
             alignment: Alignment.bottomLeft,
             child: Row(
               children: [
-                if (eventCreater!.pImage != null) ...[
+                if (eventCreater?.pImage != null) ...[
                   CircleAvatar(
                     radius: 18,
-                    backgroundImage: NetworkImage(eventCreater!.pImage!),
+                    backgroundImage: NetworkImage(eventCreater?.pImage ?? ""),
                   )
                 ] else ...[
                   Image(
@@ -706,7 +714,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         // ignore: use_build_context_synchronously
                         await context
                             .read<OtherUserProfileController>()
-                            .followingTap(currentUser!, eventCreater!.id);
+                            .followingTap(currentUser!, eventCreater?.id);
                         // ignore: use_build_context_synchronously
                         await context
                             .read<OtherUserProfileController>()
@@ -776,7 +784,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
 
   setRegisterButton() {
     for (var element in eventParticipants ?? []) {
-      if (element.id == currentUser!.id) {
+      if (element.id == currentUser?.id) {
         buttonName = "Registered";
       }
     }
@@ -801,7 +809,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   setData(List<NotificationsModel> notifications) {
     if (allUsers?.isNotEmpty == true) {
       currentUser = allUsers?.firstWhere(
-          (element) => element?.id == FirebaseAuth.instance.currentUser!.uid);
+          (element) => element?.id == FirebaseAuth.instance.currentUser?.uid);
       eventCreater =
           allUsers?.firstWhere((element) => element?.id == widget.event?.uId);
       setFollowButton(notifications);
@@ -814,7 +822,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
 
   setFollowButton(List<NotificationsModel> notifications) {
     for (var element in notifications) {
-      if (element.senderId == FirebaseAuth.instance.currentUser!.uid &&
+      if (element.senderId == FirebaseAuth.instance.currentUser?.uid &&
           element.status != "Rejected" &&
           element.status != "unFollowed") {
         if (element.status == "Accepted") {

@@ -45,17 +45,17 @@ class EventDetailsController extends ChangeNotifier {
     await tickDoc.set(TicketModel(
             id: tickDoc.id,
             eId: event?.id,
-            uId: FirebaseAuth.instance.currentUser!.uid)
+            uId: FirebaseAuth.instance.currentUser?.uid)
         .toJson());
   }
 
   addUserTicket(String eventId) async {
-    var uId = FirebaseAuth.instance.currentUser!.uid;
+    var uId = FirebaseAuth.instance.currentUser?.uid;
     var tickDoc = users.doc(uId).collection("tickets").doc();
     await tickDoc.set(TicketModel(
             id: tickDoc.id,
             eId: eventId,
-            uId: FirebaseAuth.instance.currentUser!.uid)
+            uId: FirebaseAuth.instance.currentUser?.uid)
         .toJson());
   }
 
@@ -64,9 +64,9 @@ class EventDetailsController extends ChangeNotifier {
     notifyListeners();
   }
 
-  notifyCancelEvent(String userId, String eventName) async {
+  notifyCancelEvent(String? userId, String eventName) async {
     var doc = users.doc(userId).collection("notifications").doc();
-    var senderId = FirebaseAuth.instance.currentUser!.uid;
+    var senderId = FirebaseAuth.instance.currentUser?.uid;
     await doc.set(NotificationsModel(
             id: doc.id,
             senderId: senderId,

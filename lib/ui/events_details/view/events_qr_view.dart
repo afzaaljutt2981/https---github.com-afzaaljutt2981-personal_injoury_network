@@ -51,7 +51,8 @@ class _EventsQrViewState extends State<EventsQrView> {
               child: Image(
                 height: 285.sp,
                 width: 282.sp,
-                image: const AssetImage('assets/images/scan_events_qr_view.png'),
+                image:
+                    const AssetImage('assets/images/scan_events_qr_view.png'),
               ),
             ),
             Positioned(

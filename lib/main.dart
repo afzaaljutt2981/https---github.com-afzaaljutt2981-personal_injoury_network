@@ -56,14 +56,14 @@ Future<void> main() async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     // if (kDebugMode) {
-    showOverlayNotification(navigatorKey.currentContext!, message);
+    showOverlayNotification(navigatorKey?.currentContext, message);
     // }
 
     // _messageStreamController.sink.add(message);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
     if (kDebugMode) {
-      showOverlayNotification(navigatorKey.currentContext!, message);
+      showOverlayNotification(navigatorKey?.currentContext, message);
     }
   });
   runApp(MultiProvider(providers: [
@@ -73,9 +73,9 @@ Future<void> main() async {
   ], child: MyApp()));
 }
 
-void showOverlayNotification(BuildContext context, RemoteMessage message) {
-  if (message.notification!.body!.contains("Cancel") ||
-      message.notification!.body!.contains("Started")) {
+void showOverlayNotification(BuildContext? context, RemoteMessage message) {
+  if ((message.notification?.body?.contains("Cancel") ?? false) ||
+      (message.notification?.body?.contains("Started") ?? false)) {
     // Provider.of<MyProfileController>(context, listen: false)
     //     .updateUserNotification(true);
     FirebaseFirestore.instance

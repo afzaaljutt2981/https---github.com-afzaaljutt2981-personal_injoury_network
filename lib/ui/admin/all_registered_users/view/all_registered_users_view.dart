@@ -195,7 +195,8 @@ class _AllRegisteredUsersScreenState extends State<AllRegisteredUsersScreen> {
                                     type: PageTransitionType.rightToLeft,
                                     alignment: Alignment.center,
                                     duration: const Duration(milliseconds: 200),
-                                    reverseDuration: const Duration(milliseconds: 200),
+                                    reverseDuration:
+                                        const Duration(milliseconds: 200),
                                     child: CreateOtherUserProfileView(
                                       participant: model,
                                       currentUser: null,
@@ -260,7 +261,8 @@ class _AllRegisteredUsersScreenState extends State<AllRegisteredUsersScreen> {
                                               onTap: () async {
                                                 // print("Delete should be initiated");
                                                 //   await FirebaseAuth.instance.currentUser?.delete();
-                                                if (model.id?.isNotEmpty ?? false) {
+                                                if (model.id?.isNotEmpty ??
+                                                    false) {
                                                   context
                                                       .read<
                                                           AllRegisteredUsersController>()
@@ -269,7 +271,8 @@ class _AllRegisteredUsersScreenState extends State<AllRegisteredUsersScreen> {
                                                               model.id!,
                                                           isDeleted: true);
                                                 } else {
-                                                  Functions.showSnackBar(context,
+                                                  Functions.showSnackBar(
+                                                      context,
                                                       "Invalid user, unable to delete this user");
                                                 }
                                               },

@@ -34,9 +34,10 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(widget.event?.dateTime??0);
+    DateTime date =
+        DateTime.fromMillisecondsSinceEpoch(widget.event?.dateTime ?? 0);
     DateTime startTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.event?.startTime??0);
+        DateTime.fromMillisecondsSinceEpoch(widget.event?.startTime ?? 0);
     String fStartTime = DateFormat("HH:mm a").format(startTime);
     String fDate = DateFormat("EEE,MMM d").format(date);
 
@@ -209,9 +210,9 @@ class _SingleEventWidgetState extends State<SingleEventWidget> {
         DateTime.fromMillisecondsSinceEpoch(widget.event?.dateTime ?? 0);
     DateTime today = DateTime.now();
     DateTime startTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.event?.startTime??0);
+        DateTime.fromMillisecondsSinceEpoch(widget.event?.startTime ?? 0);
     DateTime endTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.event?.endTime??0);
+        DateTime.fromMillisecondsSinceEpoch(widget.event?.endTime ?? 0);
     if (status == 'Cancelled') {
       bgColor = Colors.red.shade100;
       textColor = Colors.red.shade600;

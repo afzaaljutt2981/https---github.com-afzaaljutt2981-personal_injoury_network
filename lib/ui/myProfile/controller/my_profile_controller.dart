@@ -23,7 +23,7 @@ class MyProfileController extends ChangeNotifier {
   getUserData() {
     if (FirebaseAuth.instance.currentUser != null) {
       stream = ref
-          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .doc(FirebaseAuth.instance.currentUser?.uid)
           .snapshots()
           .listen((event) {
         if (event.data() != null) {
@@ -41,7 +41,7 @@ class MyProfileController extends ChangeNotifier {
   updateUserNotification(bool value) async {
     print("update isNewNotificationReceived called -->  $value");
     ref
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(FirebaseAuth.instance.currentUser?.uid)
         .update({"isNewNotificationReceived": value});
     notifyListeners();
   }
@@ -62,7 +62,7 @@ class MyProfileController extends ChangeNotifier {
   }
 
   becomeMarketer() async {
-    await ref.doc(user!.id).update({"userType": "marketer"});
+    await ref.doc(user?.id).update({"userType": "marketer"});
     Constants.userType = "marketer";
   }
 
@@ -75,7 +75,7 @@ class MyProfileController extends ChangeNotifier {
     required String website,
     required String location,
   }) async {
-    String docId = FirebaseAuth.instance.currentUser!.uid;
+    String? docId = FirebaseAuth.instance.currentUser?.uid;
     await ref.doc(docId).update({
       "firstName": firstName,
       "company": company,

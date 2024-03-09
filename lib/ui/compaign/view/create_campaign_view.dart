@@ -116,8 +116,9 @@ class _CreateCampaign extends State<CreateCampaign> {
                                     style: AppTextStyles.josefin(
                                       style: TextStyle(
                                         color: const Color(0xFF1F314A)
-                                            .withOpacity(
-                                                selectedCounty == "" ? 0.31 : 1),
+                                            .withOpacity(selectedCounty == ""
+                                                ? 0.31
+                                                : 1),
                                         fontSize: 14.sp,
                                       ),
                                     ),
@@ -126,7 +127,8 @@ class _CreateCampaign extends State<CreateCampaign> {
                                 ],
                               ),
                               items: JobPositionModel.counties
-                                  .map((String item) => DropdownMenuItem<String>(
+                                  .map((String item) =>
+                                      DropdownMenuItem<String>(
                                         value: item ?? "",
                                         child: Row(
                                           mainAxisAlignment:
@@ -217,7 +219,8 @@ class _CreateCampaign extends State<CreateCampaign> {
                                 // offset: const Offset(-40, 0),
                                 scrollbarTheme: ScrollbarThemeData(
                                   radius: const Radius.circular(40),
-                                  thickness: MaterialStateProperty.all<double>(6),
+                                  thickness:
+                                      MaterialStateProperty.all<double>(6),
                                   thumbVisibility:
                                       MaterialStateProperty.all<bool>(true),
                                 ),
@@ -256,9 +259,10 @@ class _CreateCampaign extends State<CreateCampaign> {
                                     style: AppTextStyles.josefin(
                                       style: TextStyle(
                                         color: const Color(0xFF1F314A)
-                                            .withOpacity(selectedJobPosition == ""
-                                                ? 0.31
-                                                : 1),
+                                            .withOpacity(
+                                                selectedJobPosition == ""
+                                                    ? 0.31
+                                                    : 1),
                                         fontSize: 14.sp,
                                       ),
                                     ),
@@ -267,7 +271,8 @@ class _CreateCampaign extends State<CreateCampaign> {
                                 ],
                               ),
                               items: JobPositionModel.jobList
-                                  .map((String item) => DropdownMenuItem<String>(
+                                  .map((String item) =>
+                                      DropdownMenuItem<String>(
                                         value: item ?? "",
                                         child: Row(
                                           mainAxisAlignment:
@@ -357,7 +362,8 @@ class _CreateCampaign extends State<CreateCampaign> {
                                 // offset: const Offset(-40, 0),
                                 scrollbarTheme: ScrollbarThemeData(
                                   radius: const Radius.circular(40),
-                                  thickness: MaterialStateProperty.all<double>(6),
+                                  thickness:
+                                      MaterialStateProperty.all<double>(6),
                                   thumbVisibility:
                                       MaterialStateProperty.all<bool>(true),
                                 ),
@@ -384,12 +390,8 @@ class _CreateCampaign extends State<CreateCampaign> {
                                 borderRadius: BorderRadius.circular(10.sp)),
                             child: Padding(
                               padding: EdgeInsets.only(top: 14.h, bottom: 4.h),
-                              child: textfield(
-                                  titleController,
-                                  'Type here..',
-                                  false,
-                                  3,
-                                  AppColors.textFieldColor),
+                              child: textfield(titleController, 'Type here..',
+                                  false, 3, AppColors.textFieldColor),
                             ),
                           ),
                           CustomSizeBox(20.h),
@@ -419,8 +421,8 @@ class _CreateCampaign extends State<CreateCampaign> {
                           InkWell(
                             onTap: () async {
                               final ImagePicker _picker = ImagePicker();
-                              final XFile? pickedImage = await _picker.pickImage(
-                                  source: ImageSource.gallery);
+                              final XFile? pickedImage = await _picker
+                                  .pickImage(source: ImageSource.gallery);
                               if (pickedImage != null) {
                                 image1 = await pickedImage.readAsBytes();
                                 setState(() {});
@@ -450,7 +452,8 @@ class _CreateCampaign extends State<CreateCampaign> {
                               ),
                               child: (image1 != null)
                                   ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(10.sp),
+                                      borderRadius:
+                                          BorderRadius.circular(10.sp),
                                       child: Image(
                                         image: MemoryImage(image1!),
                                         fit: BoxFit.cover,
@@ -589,7 +592,7 @@ class _CreateCampaign extends State<CreateCampaign> {
                           Functions.showSnackBar(
                               context, "please add image of campaign");
                           return;
-                        }else if (titleController.text.isEmpty) {
+                        } else if (titleController.text.isEmpty) {
                           Functions.showSnackBar(
                               context, "please add title of campaign");
                           return;

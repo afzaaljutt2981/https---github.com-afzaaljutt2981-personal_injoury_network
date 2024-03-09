@@ -61,16 +61,20 @@ class Functions {
     try {
       final firebasestorage.FirebaseStorage _storage =
           firebasestorage.FirebaseStorage.instance;
-      var uid = FirebaseAuth.instance.currentUser!.uid;
-
-      int mills = DateTime.now().millisecondsSinceEpoch;
-      String mils = '$mills';
-      var reference = _storage.ref().child(name).child(uid).child(mils);
-      var r = await reference.putData(
-          file, SettableMetadata(contentType: contentType ?? 'image/jpeg'));
-      if (r.state == firebasestorage.TaskState.success) {
-        String url = await reference.getDownloadURL();
-        return url;
+      var uid = FirebaseAuth.instance.currentUser?.uid;
+      if (uid != null) {
+        int mills = DateTime.now().millisecondsSinceEpoch;
+        String mils = '$mills';
+        var reference = _storage.ref().child(name).child(uid).child(mils);
+        var r = await reference.putData(
+            file, SettableMetadata(contentType: contentType ?? 'image/jpeg'));
+        if (r.state == firebasestorage.TaskState.success) {
+          String url = await reference.getDownloadURL();
+          return url;
+        } else {
+          throw PlatformException(
+              code: "404", message: AppStrings.noDownloadLinkFound);
+        }
       } else {
         throw PlatformException(
             code: "404", message: AppStrings.noDownloadLinkFound);

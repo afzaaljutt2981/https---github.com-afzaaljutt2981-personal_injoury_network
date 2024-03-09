@@ -6,6 +6,7 @@ class GenericDataModel {
   CampaignModel? campaignModel;
   String? notificationType;
   int? timeCreated;
+
   GenericDataModel({
     required this.notificationsModel,
     required this.campaignModel,

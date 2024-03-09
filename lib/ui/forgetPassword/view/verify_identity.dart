@@ -150,7 +150,8 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
               )),
               if (widget.from == 2)
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
                   child: GetwhiteButton(50.sp, () async {
                     if (widget.from == 2) {
                       print("Button clicked");

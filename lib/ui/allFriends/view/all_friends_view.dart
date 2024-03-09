@@ -13,7 +13,7 @@ import '../../events/controller/events_controller.dart';
 class AllFriendsScreen extends StatefulWidget {
   AllFriendsScreen({super.key, required this.user});
 
-  UserModel user;
+  UserModel? user;
 
   @override
   State<AllFriendsScreen> createState() => _AllFriendsScreenState();
@@ -29,7 +29,7 @@ class _AllFriendsScreenState extends State<AllFriendsScreen> {
     friendsList = [];
     allUsers = context.watch<EventsController>().allUsers;
     List<String?>? tempList =
-        (widget.user.followers ?? []) + (widget.user.followings ?? []);
+        (widget.user?.followers ?? []) + (widget.user?.followings ?? []);
     for (var element in allUsers ?? []) {
       if (tempList.contains(element.id)) {
         friendsList?.add(element);
