@@ -14,7 +14,7 @@ class AllFriendsScreen extends StatefulWidget {
 
 class _AllFriendsScreenState extends State<AllFriendsScreen> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return Scaffold(
       backgroundColor: const Color(0xFFf5f4ff),
       appBar: AppBar(
