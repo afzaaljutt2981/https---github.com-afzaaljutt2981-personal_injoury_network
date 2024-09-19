@@ -21,7 +21,7 @@ class _AllFriendsScreenState extends State<AllFriendsScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Padding(
-          padding: EdgeInsets.all(19.sp),
+          padding: EdgeInsets.all(19.sp), 
           child: GestureDetector(
             onTap: () => Navigator.pop(context),
             child: Icon(
