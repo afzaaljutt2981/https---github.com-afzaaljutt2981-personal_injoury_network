@@ -19,7 +19,7 @@ class _AllFriendsScreenState extends State<AllFriendsScreen> {
       backgroundColor: const Color(0xFFf5f4ff),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0,
+        elevation: 0, 
         leading: Padding(
           padding: EdgeInsets.all(19.sp), 
           child: GestureDetector(
