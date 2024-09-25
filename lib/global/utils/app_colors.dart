@@ -7,7 +7,7 @@ class AppColors {
   static const Color kWhiteColor = Color(0xFFFFFFFF);
   static const Color kLiteBlueColor = Color(0xFF857FB4);
   static const Color kScaffoldColor = Color(0xFFF5F5F5);
-  static const bottomSheetContianerColor = Color(0xffF9FDFF);
+  static const bottomSheetContianerColor = Color(0xffF9FDFF); 
   static const kgreenColor = Color(0xff71C341);
   static const kSnackbarSuccessColor = Color(0xff00A2FF); 
 }
