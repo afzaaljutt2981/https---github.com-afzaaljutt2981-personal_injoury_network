@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +12,11 @@ class MyProfileController extends ChangeNotifier {
     getUserData();
   }
   CollectionReference ref = FirebaseFirestore.instance.collection("users");
+  StreamSubscription<DocumentSnapshot<Object?>>? stream;
   UserModel? user;
   getUserData(){
     if (FirebaseAuth.instance.currentUser != null) {
-      ref.doc(FirebaseAuth.instance.currentUser!.uid)
+      stream = ref.doc(FirebaseAuth.instance.currentUser!.uid)
           .snapshots()
           .listen((event) {
         if (event.data() != null) {
@@ -25,12 +28,7 @@ class MyProfileController extends ChangeNotifier {
            }
         notifyListeners();
       });
-      // Navigator.pushAndRemoveUntil(context,
-      //     MaterialPageRoute(builder: (_) => BottomNavigationScreen(selectedIndex: 0)), (route) => false);
-    }else{
-      // Navigator.pop(context);
-      // Functions.showSnackBar(context, "something went wrong");
-    }
+      }
   }
   becomeMarketer() async {
     await ref.doc(user!.id).update({
@@ -40,7 +38,7 @@ class MyProfileController extends ChangeNotifier {
   }
   updateUser({
     String? pImage,
-    required String userName,
+    required String firstName,
     required String company,
     required String position,
     required String cellPhone,
@@ -49,7 +47,7 @@ class MyProfileController extends ChangeNotifier {
 }) async {
     String docId = FirebaseAuth.instance.currentUser!.uid;
     await ref.doc(docId).update({
-      "userName":userName,
+      "firstName":firstName,
       "company":company,
       "position":position,
       "phone":int.parse(cellPhone),
@@ -58,5 +56,10 @@ class MyProfileController extends ChangeNotifier {
       if(pImage != null)
       "pImage":pImage
     });
+  }
+  @override void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    stream?.cancel();
   }
 }

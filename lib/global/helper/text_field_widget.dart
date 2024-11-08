@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../utils/app_text_styles.dart';
 import 'custom_sized_box.dart';
 
+// ignore: must_be_immutable
 class TextFieldWidget extends StatefulWidget {
   TextFieldWidget({super.key,required this.controller,
     required this.index,required this.hintText,

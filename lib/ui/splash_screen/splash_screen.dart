@@ -1,16 +1,19 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
+import 'package:personal_injury_networking/ui/authentication/view/sign_up_screen.dart';
 import 'package:personal_injury_networking/ui/home/view/navigation_view.dart';
 import 'package:personal_injury_networking/ui/myProfile/controller/my_profile_controller.dart';
 import 'package:provider/provider.dart';
 
 import '../../global/helper/custom_sized_box.dart';
 import '../authentication/controller/auth_controller.dart';
+import '../authentication/model/user_model.dart';
 import '../selesction_screen/selection_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -25,14 +28,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3)).then((value) async {
-      if (FirebaseAuth.instance.currentUser != null) {
-        await Provider.of<MyProfileController>(context, listen: false)
-            .getUserData();
-
+      if (FirebaseAuth.instance.currentUser != null) {        
+        getUserData();
         // ignore: use_build_context_synchronously
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) =>
-                BottomNavigationScreen(selectedIndex: 0)));
       } else {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => const SelectionScreen()));
@@ -78,5 +76,31 @@ class _SplashScreenState extends State<SplashScreen> {
         ],
       ),
     );
+  }
+
+  getUserData() {
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .snapshots()
+        .listen((event) {
+      UserModel user = UserModel.fromJson(event.data() as Map<String, dynamic>);
+      if (user.userName == "") {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (_) => SignUpScreen(
+                      screenType: 1,
+                      isUpdate: true,
+                    )),
+            (route) => false);
+      } else {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+            (route) => false);
+      }
+    });
   }
 }

@@ -8,22 +8,25 @@ import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
+import 'package:personal_injury_networking/global/helper/image_view.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/global/utils/functions.dart';
 import 'package:personal_injury_networking/ui/authentication/model/user_model.dart';
-import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
+import 'package:personal_injury_networking/ui/chat_screen/view/invite_guests.dart';
+import 'package:personal_injury_networking/ui/events/controller/events_controller.dart';
 import 'package:personal_injury_networking/ui/events_details/controller/event_details_controller.dart';
+import 'package:personal_injury_networking/ui/otherUserProfile/view/create_other_profile_view.dart';
 import 'package:provider/provider.dart';
-
-import '../../allParticipent/view/create_all_participants_view.dart';
 import '../../allParticipent/view/participants_view.dart';
 import '../../create_event/models/event_model.dart';
-import '../../otherUserProfile/view/other_user_view.dart';
+import '../../notifications/model/nitofications_model.dart';
+import '../../otherUserProfile/controller/other_user_profile_controller.dart';
 import '../models/ticket_model.dart';
 import 'events_qr_view.dart';
 
+// ignore: must_be_immutable
 class EventsDetailsView extends StatefulWidget {
   EventsDetailsView({super.key, required this.event});
   EventModel event;
@@ -35,99 +38,105 @@ CollectionReference ref = FirebaseFirestore.instance.collection("users");
 
 class _EventsDetailsViewState extends State<EventsDetailsView> {
   bool registerFee = false;
+  String followButton = "Follow";
+  List<EventModel> userEvents = [];
+  List<TicketModel> userTickets = [];
   List<UserModel> eventParticipants = [];
   List<UserModel> allUsers = [];
   List<TicketModel> eventTickets = [];
   UserModel? currentUser;
+  UserModel? eventCreater;
+  String notifyId = "";
+  List<DateTime> weekDates = [];
   String buttonName = "Register";
   @override
   Widget build(BuildContext context) {
-    allUsers = context.watch<EventDetailsController>().allUsers;
-    if(allUsers.isNotEmpty){
-    currentUser = allUsers.firstWhere((element) => element.id == FirebaseAuth.instance.currentUser!.uid);}
-    eventTickets = context.watch<EventDetailsController>().eventTickets;
+    eventTickets = [];
+    weekDates = [];
     eventParticipants = [];
-    for (var element1 in eventTickets) {
-      eventParticipants
-          .add(allUsers.firstWhere((element) => element.id == element1.uId));
-    }
-    for (var element in eventParticipants) {
-      if(element.id == currentUser!.id){
-        buttonName = "Registered";
-      }
-    }
+    allUsers = context.watch<EventsController>().allUsers;
+    eventTickets = context.watch<EventDetailsController>().eventTickets;
+    List<NotificationsModel> notifications =
+        context.watch<OtherUserProfileController>().notifications;
+    setData(notifications);
+    setRegisterButton();
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(widget.event.dateTime);
     DateTime startTime =
         DateTime.fromMillisecondsSinceEpoch(widget.event.startTime);
     DateTime endTime =
         DateTime.fromMillisecondsSinceEpoch(widget.event.endTime);
-    Duration difference = endTime.difference(startTime);
-    int hours = difference.inHours;
-    int minutes = difference.inMinutes.remainder(60);
-    String formattedDiff =
-        "${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}";
+    addWeekDates(dateTime);
+    String formattedDiff = calculateDiff(endTime, startTime);
     String startFormat = DateFormat("HH:MM a").format(startTime);
     String endFormat = DateFormat("HH:MM a").format(endTime);
     String formattedDate = DateFormat('d MMM, y').format(dateTime);
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: Padding(
-            padding: EdgeInsets.all(19.sp),
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: AppColors.kPrimaryColor,
-                size: 18.sp,
-              ),
+        elevation: 0,
+        leading: Padding(
+          padding: EdgeInsets.all(19.sp),
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: AppColors.kPrimaryColor,
+              size: 18.sp,
             ),
           ),
-          title: Center(
-            child: Text(
-              "Event",
-              style: AppTextStyles.josefin(
-                  style: TextStyle(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w800,
-                color: AppColors.kPrimaryColor,
-              )),
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(
-                  right: Constants.userType == 'user' ? 60.w : 30.w),
-              child: Constants.userType == 'user'
-                  ? Container()
-                  : GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            childCurrent: widget,
-                            type: PageTransitionType.rightToLeft,
-                            alignment: Alignment.center,
-                            duration: const Duration(milliseconds: 200),
-                            reverseDuration: const Duration(milliseconds: 200),
-                            child: const EventsQrView(),
-                          ),
-                        );
-                      },
-                      child: Image(
-                        height: 22.sp,
-                        width: 22.sp,
-                        image: const AssetImage('assets/images/qr_events.png'),
-                      ),
-                    ),
-            ),
-          ],
         ),
-        body: Column(
-          children: [
+        title: Center(
+          child: Text(
+            "Event",
+            style: AppTextStyles.josefin(
+                style: TextStyle(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w800,
+              color: AppColors.kPrimaryColor,
+            )),
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(
+                right: Constants.userType == 'user' ? 60.w : 30.w),
+            child: Constants.userType == 'user'
+                ? Container()
+                : GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          childCurrent: widget,
+                          type: PageTransitionType.rightToLeft,
+                          alignment: Alignment.center,
+                          duration: const Duration(milliseconds: 200),
+                          reverseDuration: const Duration(milliseconds: 200),
+                          child: EventsQrView(
+                            eventId: widget.event.id,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Image(
+                      height: 22.sp,
+                      width: 22.sp,
+                      image: const AssetImage('assets/images/qr_events.png'),
+                    ),
+                  ),
+          ),
+        ],
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (currentUser == null) ...[
+            const Center(
+              child: CircularProgressIndicator(),
+            )
+          ] else ...[
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -136,78 +145,84 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Stack(
-                        children: [
-                          Container(
-                            height: 200.h,
-                            width: MediaQuery.of(context).size.width,
-                            margin: EdgeInsets.only(top: 10.h),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.sp),
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => ImageView(
+                                      imageUrl: widget.event.pImage)));
+                        },
+                        child: Stack(
+                          children: [
+                            Container(
+                              height: 200.h,
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.only(top: 10.h),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.sp),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.sp),
+                                child: Image(
+                                  image: NetworkImage(widget.event
+                                      .pImage), // 'assets/images/background_events_admin.png'
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                            child: Constants.userType == 'user'
-                                ? const Image(
-                                    image: AssetImage(
-                                        'assets/images/background_events.png'),
-                                    fit: BoxFit.contain,
-                                  )
-                                : const Image(
-                                    image: AssetImage(
-                                        'assets/images/background_events_admin.png'),
-                                    fit: BoxFit.contain,
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 20.w, top: 10.h, right: 20.w),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text('Weekly Virtual Event',
+                                          style: GoogleFonts.montserrat(
+                                            fontSize: 11.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white,
+                                          )),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 50.w,
+                                            top: Constants.userType == 'user'
+                                                ? 15.h
+                                                : 25.h,
+                                            bottom: 15.h),
+                                        child: Image(
+                                          height: 34.sp,
+                                          width: 34.sp,
+                                          image: const AssetImage(
+                                              'assets/images/verified_icon_events.png'),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 20.w, top: 10.h, right: 20.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text('Weekly Virtual Event',
-                                        style: GoogleFonts.montserrat(
-                                          fontSize: 11.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                        )),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 50.w,
-                                          top: Constants.userType == 'user'
-                                              ? 15.h
-                                              : 25.h,
-                                          bottom: 15.h),
-                                      child: Image(
-                                        height: 34.sp,
-                                        width: 34.sp,
-                                        image: const AssetImage(
-                                            'assets/images/verified_icon_events.png'),
+                                  SizedBox(
+                                    height: 95.h,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 50.w),
+                                      child: Text(
+                                        widget.event.title,
+                                        style: AppTextStyles.josefin(
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                color: const Color(0xFF9EE8FF),
+                                                fontSize: 22.sp)),
                                       ),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 95.h,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 50.w),
-                                    child: Text(
-                                      "The Creative Coffee Talks Club",
-                                      style: AppTextStyles.josefin(
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              color: const Color(0xFF9EE8FF),
-                                              fontSize: 22.sp)),
-                                    ),
                                   ),
-                                ),
-                                Constants.userType == 'user'
-                                    ? marketerInfo()
-                                    : const SizedBox()
-                              ],
+                                  Constants.userType == 'user'
+                                      ? marketerInfo()
+                                      : const SizedBox()
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.only(
@@ -227,7 +242,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                       fontSize: 15.sp)),
                             ),
                             RatingStars(
-                              value: 3,
+                              value: 0,
                               starBuilder: (index, color) {
                                 return Icon(
                                   Icons.star_sharp,
@@ -261,12 +276,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            calenderView('Mo', 7, false),
-                            calenderView('Tu', 8, false),
-                            calenderView('We', 9, false),
-                            calenderView('Th', 10, true),
-                            calenderView('Fr', 11, false),
-                            calenderView('Sa', 12, false),
+                            for (var e in weekDates) calenderView(e, dateTime),
                           ],
                         ),
                       ),
@@ -307,40 +317,61 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         ),
                       ),
                       CustomSizeBox(25.h),
-                      if(eventParticipants.length > 4)...[
+                      if (eventParticipants.length > 2) ...[
+                        Row(
+                          children: [
+                            for (var i = 0; i < 2; i++)
+                              participant(eventParticipants[i]),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => AllParticipantsView(
+                                              users: eventParticipants,
+                                              currentUser: currentUser!,
+                                            )));
+                              },
+                              child: Text(
+                                "+${eventParticipants.length - 2} Participants",
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                            )
+                          ],
+                        )
+                      ] else ...[
                         Row(children: [
-                        for(var i=0; i<4 ; i++)
-                         participant(eventParticipants[i]),
-                          Text("+${eventParticipants.length - 4} Participants")
-                          ],)
-                      ]else...[
-                      Row(
-                        children: [
-                          for (var e in eventParticipants)
-                            participant(e)])],
-                        ],
+                          for (var e in eventParticipants) participant(e)
+                        ])
+                      ],
+                    ],
                   ),
                 ),
               ),
             ),
-            Constants.userType == 'user'
+            currentUser!.userType == 'user'
                 ? Padding(
                     padding:
                         EdgeInsets.only(left: 40.w, right: 40.w, bottom: 20.h),
                     child: GetButton(50.sp, () async {
-                      if(buttonName != "Registered"){
-                      Functions.showLoaderDialog(context);
-                      await context
-                          .read<EventDetailsController>()
-                          .addEventTicket(widget.event.id);
-                      await context
-                          .read<EventDetailsController>()
-                          .addUserTicket(widget.event.id);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      Functions.showSnackBar(
-                          context, "Event register successfully");
-                    }},
+                      if (buttonName != "Registered") {
+                        Functions.showLoaderDialog(context);
+                        await context
+                            .read<EventDetailsController>()
+                            .addEventTicket(widget.event.id);
+                        // ignore: use_build_context_synchronously
+                        await context
+                            .read<EventDetailsController>()
+                            .addUserTicket(widget.event.id);
+                        // ignore: use_build_context_synchronously
+                        Navigator.pop(context);
+                        // ignore: use_build_context_synchronously
+                        Navigator.pop(context);
+                        // ignore: use_build_context_synchronously
+                        Functions.showSnackBar(
+                            context, "Event register successfully");
+                      }
+                    },
                         Text(
                           buttonName,
                           style: AppTextStyles.josefin(
@@ -348,77 +379,97 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                                   color: Colors.white, fontSize: 18.sp)),
                         )),
                   )
-                : Padding(
-                    padding: EdgeInsets.only(
-                      left: 29.w,
-                      right: 29.w,
-                      bottom: 25.h,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () => _showBottomSheet(context),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: AppColors.kPrimaryColor,
-                                    width: 1.5.sp),
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12.sp)),
-                            child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 22.w, vertical: 14.h),
-                                child: Center(
-                                  child: Text(
-                                    'Invite Guests',
-                                    style: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color: AppColors.kPrimaryColor,
-                                            fontSize: 16.sp)),
+                : (currentUser!.id != widget.event.uId)
+                    ? const SizedBox()
+                    : Padding(
+                        padding: EdgeInsets.only(
+                          left: 29.w,
+                          right: 29.w,
+                          bottom: 25.h,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () => _showBottomSheet(context),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: AppColors.kPrimaryColor,
+                                        width: 1.5.sp),
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12.sp)),
+                                child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 22.w, vertical: 14.h),
+                                    child: Center(
+                                      child: Text(
+                                        'Invite Guests',
+                                        style: AppTextStyles.josefin(
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                color: AppColors.kPrimaryColor,
+                                                fontSize: 16.sp)),
+                                      ),
+                                    )),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                Functions.showLoaderDialog(context);
+                                await context
+                                    .read<EventDetailsController>()
+                                    .deleteEvent(widget.event.id);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: const Color(0xFFD70E0E),
+                                        width: 1.5.sp),
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12.sp)),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 22.w, vertical: 14.h),
+                                  child: Center(
+                                    child: Text(
+                                      'Cancel Event',
+                                      style: AppTextStyles.josefin(
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color: const Color(0xFFD70E0E),
+                                              fontSize: 16.sp)),
+                                    ),
                                   ),
-                                )),
-                          ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xFFD70E0E),
-                                  width: 1.5.sp),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12.sp)),
-                          child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 22.w, vertical: 14.h),
-                              child: Center(
-                                child: Text(
-                                  'Cancel Event',
-                                  style: AppTextStyles.josefin(
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          color: const Color(0xFFD70E0E),
-                                          fontSize: 16.sp)),
                                 ),
-                              )),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
           ],
-        ));
+        ],
+      ),
+    );
   }
 
-  Widget calenderView(String day, int date, bool eventDay) {
+  Widget calenderView(DateTime date, DateTime eventDate) {
+    String dayName = DateFormat("MMM").format(date);
+    bool eventDay = false;
+    if (date == eventDate) {
+      eventDay = true;
+    }
     return Container(
       decoration: BoxDecoration(
           color: eventDay == false ? null : const Color(0xFFD70E0E),
           borderRadius: BorderRadius.circular(15.sp)),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
         child: Column(
           children: [
-            Text(day,
+            Text(date.day.toString(),
                 style: GoogleFonts.montserrat(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
@@ -426,7 +477,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         ? AppColors.kPrimaryColor
                         : Colors.white)),
             CustomSizeBox(7.h),
-            Text(date.toString(),
+            Text(dayName,
                 style: GoogleFonts.montserrat(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
@@ -478,202 +529,10 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
       builder: (BuildContext context) {
         return StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
-          return FractionallySizedBox(
-            heightFactor: 0.9,
-            child: SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.9,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.sp),
-                    topRight: Radius.circular(30.sp),
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomSizeBox(7.h),
-                      Center(
-                        child: Container(
-                          height: 5.h,
-                          width: 25.h,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.sp),
-                              color: const Color(0xFFB2B2B2).withOpacity(0.50)),
-                        ),
-                      ),
-                      CustomSizeBox(20.h),
-                      Text(
-                        'Invite Friend',
-                        style: AppTextStyles.josefin(
-                            style: TextStyle(
-                                color: const Color(0xFF120D26),
-                                fontSize: 24.sp,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                      CustomSizeBox(10.h),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: const Color(0xFFF0F0F0)),
-                          borderRadius: BorderRadius.circular(25.sp),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                maxLines: 1,
-                                readOnly: false,
-                                style: AppTextStyles.josefin(
-                                    style: TextStyle(
-                                        color: const Color(0xFF1F314A),
-                                        fontSize: 16.sp)),
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.only(left: 12.w),
-                                    border: InputBorder.none,
-                                    hintText: "Search",
-                                    hintStyle: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                            color: const Color(0xFF1F314A)
-                                                .withOpacity(0.40),
-                                            fontSize: 13.sp))),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(right: 20.w, left: 5.w),
-                              child: Image(
-                                height: 18.sp,
-                                width: 18.sp,
-                                image: const AssetImage(
-                                    'assets/images/search_icon.png'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Stack(
-                        children: [
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.7,
-                          ),
-                          SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.7,
-                              child: ListView.builder(
-                                  physics: const BouncingScrollPhysics(),
-                                  itemCount: 25,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    return Column(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              bottom: 20.h,
-                                              top: index == 0 ? 25.h : 0.h),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image(
-                                                image: const AssetImage(
-                                                    'assets/images/profile_pic.png'),
-                                                width: 45.sp,
-                                                height: 45.sp,
-                                              ),
-                                              SizedBox(
-                                                width: 10.w,
-                                              ),
-                                              Expanded(
-                                                  child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Micheal Ulasi',
-                                                    style: AppTextStyles.josefin(
-                                                        style: TextStyle(
-                                                            color: const Color(
-                                                                0xFF120D26),
-                                                            fontSize: 14.sp,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500)),
-                                                  ),
-                                                  CustomSizeBox(5.h),
-                                                  Text(
-                                                    '2k Follwers',
-                                                    style: AppTextStyles.josefin(
-                                                        style: TextStyle(
-                                                            color: const Color(
-                                                                0xFF747688),
-                                                            fontSize: 12.sp,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400)),
-                                                  ),
-                                                ],
-                                              )),
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    right: 20.w),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      isInvited = !isInvited;
-                                                    });
-                                                  },
-                                                  child: Image(
-                                                    height: 18.sp,
-                                                    width: 18.sp,
-                                                    image: isInvited
-                                                        ? const AssetImage(
-                                                            'assets/images/select_invite_friend.png')
-                                                        : const AssetImage(
-                                                            'assets/images/no_select_invite_friend.png'),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        index == 24
-                                            ? CustomSizeBox(90.h)
-                                            : CustomSizeBox(0.h),
-                                      ],
-                                    );
-                                  })),
-                          Positioned(
-                            bottom: 20.h,
-                            right: 10.w,
-                            left: 10.w,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GetButton(
-                                  50.sp,
-                                  () {},
-                                  Text(
-                                    'Invite',
-                                    style: AppTextStyles.josefin(
-                                        style: TextStyle(
-                                            fontSize: 15.sp,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500)),
-                                  )),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+          return InviteGuests(
+            currentUser: currentUser!,
+            event: widget.event,
+            allUsers: allUsers,
           );
         });
       },
@@ -681,50 +540,72 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
   }
 
   Widget marketerInfo() {
-    return  (currentUser != null) ?
-    Align(
-              alignment: Alignment.bottomLeft,
-              child: Row(
-                children: [
-                  if (currentUser!.pImage != null) ...[
-                    CircleAvatar(
-                      radius: 18,
-                      backgroundImage: NetworkImage(currentUser!.pImage!),
-                    )
-                  ] else ...[
-                    Image(
-                      height: 35.sp,
-                      width: 35.sp,
-                      image: const AssetImage('assets/images/profile_pic.png'),
-                    )
+    return (eventCreater != null)
+        ? Align(
+            alignment: Alignment.bottomLeft,
+            child: Row(
+              children: [
+                if (eventCreater!.pImage != null) ...[
+                  CircleAvatar(
+                    radius: 18,
+                    backgroundImage: NetworkImage(eventCreater!.pImage!),
+                  )
+                ] else ...[
+                  Image(
+                    height: 35.sp,
+                    width: 35.sp,
+                    image: const AssetImage('assets/images/profile_pic.png'),
+                  )
+                ],
+                SizedBox(
+                  width: 15.w,
+                ),
+                Expanded(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      eventCreater!.userName,
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontSize: 13.sp)),
+                    ),
+                    CustomSizeBox(5.h),
+                    Text(
+                      "Organizer ",
+                      style: AppTextStyles.josefin(
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xFF706E8F),
+                              fontSize: 10.sp)),
+                    ),
                   ],
-                  SizedBox(
-                    width: 15.w,
-                  ),
-                  Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        currentUser!.userName,
-                        style: AppTextStyles.josefin(
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                                fontSize: 13.sp)),
-                      ),
-                      CustomSizeBox(5.h),
-                      Text(
-                        "Organizer ",
-                        style: AppTextStyles.josefin(
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                color: const Color(0xFF706E8F),
-                                fontSize: 10.sp)),
-                      ),
-                    ],
-                  )),
-                  Padding(
+                )),
+                GestureDetector(
+                  onTap: () async {
+                    if (followButton == "Follow") {
+                      context
+                          .read<OtherUserProfileController>()
+                          .sendFollowRequest(
+                            eventCreater!.id,
+                          );
+                    } else if (followButton == "Following") {
+                      await context
+                          .read<OtherUserProfileController>()
+                          .followTap(eventCreater!);
+                      // ignore: use_build_context_synchronously
+                      await context
+                          .read<OtherUserProfileController>()
+                          .followingTap(currentUser!, eventCreater!.id);
+                      // ignore: use_build_context_synchronously
+                      await context
+                          .read<OtherUserProfileController>()
+                          .unFollow(eventCreater!.id, notifyId);
+                    }
+                  },
+                  child: Padding(
                     padding: EdgeInsets.only(right: 30.w),
                     child: Container(
                       decoration: BoxDecoration(
@@ -736,7 +617,7 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         padding: EdgeInsets.all(10.sp),
                         child: Center(
                           child: Text(
-                            "Follow",
+                            followButton,
                             style: AppTextStyles.josefin(
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
@@ -746,12 +627,15 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                         ),
                       ),
                     ),
-                  )
-                ],
-              ),
-        ):const SizedBox();
+                  ),
+                )
+              ],
+            ),
+          )
+        : const SizedBox();
   }
-  Widget participant(UserModel user){
+
+  Widget participant(UserModel user) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: GestureDetector(
@@ -762,24 +646,76 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
                 childCurrent: widget,
                 type: PageTransitionType.rightToLeft,
                 alignment: Alignment.center,
-                duration:
-                const Duration(milliseconds: 200),
-                reverseDuration:
-                const Duration(milliseconds: 200),
-                child:  OtherUserProfileScreen(user: user,),
+                duration: const Duration(milliseconds: 200),
+                reverseDuration: const Duration(milliseconds: 200),
+                child: CreateOtherUserProfileView(
+                  participant: user,
+                  currentUser: currentUser!,
+                ),
               ),
             );
           },
           child: (user.pImage != null)
               ? CircleAvatar(
-            radius: 20,
-            backgroundImage:
-            NetworkImage(user.pImage!),
-          )
-              :  Image(
-              width: 40.sp,
-              image: const AssetImage(
-                  "assets/images/profile_pic.png"))),
+                  radius: 20,
+                  backgroundImage: NetworkImage(user.pImage!),
+                )
+              : Image(
+                  width: 40.sp,
+                  image: const AssetImage("assets/images/profile_pic.png"))),
     );
+  }
+
+  setRegisterButton() {
+    for (var element in eventParticipants) {
+      if (element.id == currentUser!.id) {
+        buttonName = "Registered";
+      }
+    }
+  }
+
+  String calculateDiff(DateTime endTime, DateTime startTime) {
+    Duration difference = endTime.difference(startTime);
+    int hours = difference.inHours;
+    int minutes = difference.inMinutes.remainder(60);
+    String formattedDiff =
+        "${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}";
+    return formattedDiff;
+  }
+
+  addWeekDates(DateTime dateTime) {
+    DateTime tempDate = dateTime.subtract(const Duration(days: 3));
+    for (var i = 0; i < 6; i++) {
+      weekDates.add(tempDate.add(Duration(days: i)));
+    }
+  }
+
+  setData(List<NotificationsModel> notifications) {
+    if (allUsers.isNotEmpty) {
+      currentUser = allUsers.firstWhere(
+          (element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+      eventCreater =
+          allUsers.firstWhere((element) => element.id == widget.event.uId);
+      setFollowButton(notifications);
+      for (var element1 in eventTickets) {
+        eventParticipants
+            .add(allUsers.firstWhere((element) => element.id == element1.uId));
+      }
+    }
+  }
+
+  setFollowButton(List<NotificationsModel> notifications) {
+    for (var element in notifications) {
+      if (element.senderId == FirebaseAuth.instance.currentUser!.uid &&
+          element.status != "Rejected" &&
+          element.status != "unFollowed") {
+        if (element.status == "Accepted") {
+          followButton = "Following";
+          notifyId = element.id;
+        } else {
+          followButton = element.status;
+        }
+      }
+    }
   }
 }

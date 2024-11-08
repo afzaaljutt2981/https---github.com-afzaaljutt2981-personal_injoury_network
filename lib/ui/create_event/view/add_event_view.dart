@@ -7,9 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:personal_injury_networking/global/app_buttons/app_primary_button.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
-import 'package:personal_injury_networking/global/helper/text_field_widget.dart';
 import 'package:personal_injury_networking/ui/create_event/controller/create_event_controller.dart';
-import 'package:personal_injury_networking/ui/events_details/controller/event_details_controller.dart';
 import 'package:personal_injury_networking/ui/home/view/navigation_view.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +32,7 @@ class _AddEventViewState extends State<AddEventView> {
   TextEditingController titleController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  TextEditingController _startTime = TextEditingController();
+  TextEditingController startTime = TextEditingController();
   TextEditingController endTime = TextEditingController();
   DateTime? selectedDate;
   double latitude = 0.0;
@@ -316,7 +314,7 @@ class _AddEventViewState extends State<AddEventView> {
                           },
                           child: Container(
                             width: double.infinity,
-                            height: 200.h,
+                            height: 110.h,
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10.sp)),
@@ -364,13 +362,13 @@ class _AddEventViewState extends State<AddEventView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: 230.w,
+                    width: MediaQuery.of(context).size.width * 0.85,
                     child: GetwhiteButton(50.sp, () async {
                       if (formattedDate == '') {
                         Functions.showSnackBar(
                             context, "please select date of event");
                         return;
-                      } else if (_startTime.text.isEmpty) {
+                      } else if (startTime.text.isEmpty) {
                         Functions.showSnackBar(
                             context, "please select start time of event");
                         return;
@@ -396,7 +394,8 @@ class _AddEventViewState extends State<AddEventView> {
                         return;
                       }
                       Functions.showLoaderDialog(context);
-                      String url = await Functions.uploadPic(image1!,"events");
+                      String url = await Functions.uploadPic(image1!, "events");
+                      // ignore: use_build_context_synchronously
                       await context.read<CreateEventController>().addEvent(
                           endTime: endParseTime!,
                           startTime: parseTime!,
@@ -406,8 +405,8 @@ class _AddEventViewState extends State<AddEventView> {
                           title: titleController.text,
                           dateTime: selectedDate!,
                           latitude: latitude,
-
                           longitude: longitude);
+                           // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                       eventCreated();
                     },
@@ -419,12 +418,12 @@ class _AddEventViewState extends State<AddEventView> {
                                   fontSize: 17.sp)),
                         )),
                   ),
-                  Image(
-                    height: 45.sp,
-                    width: 45.sp,
-                    image: const AssetImage(
-                        'assets/images/frame_create_event.png'),
-                  ),
+                  // Image(
+                  //   height: 45.sp,
+                  //   width: 45.sp,
+                  //   image: const AssetImage(
+                  //       'assets/images/frame_create_event.png'),
+                  // ),
                 ],
               ),
             ),
@@ -602,7 +601,7 @@ class _AddEventViewState extends State<AddEventView> {
     return Row(
       children: [
         Expanded(
-            child: textfield(_startTime, "From", true, 1, Colors.white,
+            child: textfield(startTime, "From", true, 1, Colors.white,
                 suffix: const Icon(Icons.timer),
                 textAlignVertical: TextAlignVertical.center, onTap: () async {
           TimeOfDay? pickedTime = await showTimePicker(
@@ -615,10 +614,9 @@ class _AddEventViewState extends State<AddEventView> {
                 pickedTime.minute);
             String formattedTime = DateFormat('hh:mm').format(parseTime!);
             setState(() {
-              _startTime.text = formattedTime; //set the value of text field.
+              startTime.text = formattedTime; //set the value of text field.
             });
           } else {
-            print("Time is not selected");
           }
         })),
         const SizedBox(
@@ -641,7 +639,6 @@ class _AddEventViewState extends State<AddEventView> {
               endTime.text = formattedTime; //set the value of text field.
             });
           } else {
-            print("Time is not selected");
           }
         })),
       ],

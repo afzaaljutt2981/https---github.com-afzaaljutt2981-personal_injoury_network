@@ -1,33 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
-import '../../otherUserProfile/model/events_history_model.dart';
+import '../../create_event/models/event_model.dart';
 
+// ignore: must_be_immutable
 class SearchEventScreen extends StatefulWidget {
-  const SearchEventScreen({super.key});
-
+  SearchEventScreen({super.key,required this.events});
+List<EventModel> events;
   @override
   State<SearchEventScreen> createState() => _SearchEventScreenState();
 }
 
 TextEditingController searchcontroller = TextEditingController();
-List<EventHistoryModel> eventsHistoryList = [
-  EventHistoryModel('assets/images/intro_background_image.png',
-      'A virtual evening of smooth jazz', '1st  May- Sat -2:00 PM'),
-  EventHistoryModel('assets/images/intro_background_image.png',
-      'Jo malone london’s mother’s day ', '1st  May- Sat -2:00 PM'),
-  EventHistoryModel('assets/images/intro_background_image.png',
-      "Women's leadership conference", '1st  May- Sat -2:00 PM'),
-  EventHistoryModel('assets/images/intro_background_image.png',
-      'International kids safe parents night out', '1st  May- Sat -2:00 PM'),
-  EventHistoryModel('assets/images/intro_background_image.png',
-      'International gala music festival', '1st  May- Sat -2:00 PM'),
-];
 
 class _SearchEventScreenState extends State<SearchEventScreen> {
+@override
+void initState() {
+    super.initState();
+    sEvents = widget.events;
+  }
+  List<EventModel> sEvents= [];
+List<EventModel> searchEventsByTitle(List<EventModel> eventList, String searchTerm) {
+  // Create an empty list to store the matching events.
+  List<EventModel> matchingEvents = [];
+
+  // Iterate through the eventList and check if the title contains the searchTerm.
+  for (EventModel event in eventList) {
+    if (event.title.toLowerCase().contains(searchTerm.toLowerCase())) {
+      matchingEvents.add(event);
+    }
+  }
+
+  // Return the list of matching events.
+  return matchingEvents;
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,7 +114,11 @@ class _SearchEventScreenState extends State<SearchEventScreen> {
                               width: 200.w,
                               child: TextFormField(
                                 controller: searchcontroller,
-
+                                 onChanged: (v){
+                                  setState(() {
+                                    sEvents = searchEventsByTitle(widget.events, v);
+                                  });
+                                   },
                                 maxLines: 1,
 
                                 //  controller: controller,
@@ -140,11 +154,15 @@ class _SearchEventScreenState extends State<SearchEventScreen> {
           ),
           Expanded(
             child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: eventsHistoryList.length,
+                // physics: const BouncingScrollPhysics(),
+                // shrinkWrap: true,
+                itemCount: sEvents.length,
                 itemBuilder: (context, index) {
-                  var model = eventsHistoryList[index];
+                  var model = sEvents[index];
+                  DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(model.dateTime);
+                  DateTime startTime =  DateTime.fromMillisecondsSinceEpoch(model.startTime);
+                  String dateFormat = DateFormat("d MMM-EEE").format(dateTime);
+                  String startFormat = DateFormat("HH:mm a").format(startTime);
                   return Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
@@ -173,7 +191,7 @@ class _SearchEventScreenState extends State<SearchEventScreen> {
                                   color: Colors.grey[300],
                                   borderRadius: BorderRadius.circular(10.sp),
                                   image: DecorationImage(
-                                      image: AssetImage(model.image),
+                                      image: NetworkImage(model.pImage),
                                       fit: BoxFit.cover)),
                             ),
                             Expanded(
@@ -186,7 +204,7 @@ class _SearchEventScreenState extends State<SearchEventScreen> {
                                   children: [
                                     CustomSizeBox(3.h),
                                     Text(
-                                      model.time,
+                                      "$dateFormat-$startFormat",
                                       style: AppTextStyles.josefin(
                                           style: TextStyle(
                                               color: const Color(0xFF212E73),
@@ -195,7 +213,7 @@ class _SearchEventScreenState extends State<SearchEventScreen> {
                                     ),
                                     CustomSizeBox(10.h),
                                     Text(
-                                      model.eventName,
+                                      model.title,
                                       style: AppTextStyles.josefin(
                                           style: TextStyle(
                                               color: const Color(0xFF120D26),

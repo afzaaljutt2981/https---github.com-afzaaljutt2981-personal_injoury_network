@@ -1,20 +1,28 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/app_buttons/white_background_button.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
-import 'package:personal_injury_networking/global/utils/functions.dart';
+import 'package:personal_injury_networking/global/utils/constants.dart';
 import 'package:personal_injury_networking/ui/authentication/controller/auth_controller.dart';
 import 'package:personal_injury_networking/ui/authentication/view/sign_up_screen.dart';
-import 'package:personal_injury_networking/ui/home/view/home_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
+import '../../../global/utils/custom_snackbar.dart';
 import '../../forgetPassword/view/create_forget_pass_controller.dart';
-import '../../forgetPassword/view/forget_view.dart';
 import '../../home/view/navigation_view.dart';
+import '../model/user_model.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -106,28 +114,21 @@ class _LoginViewState extends State<LoginView> {
                   top: 30.h,
                 ),
                 child: GetwhiteButton(50.h, () {
-                  if(textFieldController[0].text.isEmpty || !(EmailValidator.validate(textFieldController[0].text))){
-                    Functions.showSnackBar(context, "please enter valid email");
+                  if (textFieldController[0].text.isEmpty ||
+                      !(EmailValidator.validate(textFieldController[0].text))) {
+                    CustomSnackBar(false)
+                        .showInSnackBar('Please enter valid email!', context);
                     return;
-                  }else if(textFieldController[1].text.isEmpty){
-                    Functions.showSnackBar(context, "please enter password");
+                  } else if (textFieldController[1].text.isEmpty) {
+                    CustomSnackBar(false)
+                        .showInSnackBar('Password field is empty!', context);
                     return;
-                  }else{
-                    context.read<AuthController>().signIn(textFieldController[0].text, textFieldController[1].text,
+                  } else {
+                    context.read<AuthController>().signIn(
+                        textFieldController[0].text,
+                        textFieldController[1].text,
                         context);
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      childCurrent: widget,
-                      type: PageTransitionType.rightToLeft,
-                      alignment: Alignment.center,
-                      duration: const Duration(milliseconds: 200),
-                      reverseDuration: const Duration(milliseconds: 200),
-                      child: BottomNavigationScreen(
-                        selectedIndex: 0,
-                      ),
-                    ),
-                  );}
+                  }
                 },
                     Text(
                       "Login",
@@ -150,10 +151,17 @@ class _LoginViewState extends State<LoginView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  loginGoogleApple('assets/images/google_login.png',
-                      onTap: () {}),
-                  loginGoogleApple('assets/images/apple_login.png',
-                      onTap: () {})
+                  loginGoogleApple('assets/images/google_login.png', onTap: () {
+                    signInWithGoogle();
+                  }),
+                  loginGoogleApple('assets/images/apple_login.png', onTap: () {
+                    if (Platform.isIOS) {
+                      signInWithApple();
+                    } else {
+                      CustomSnackBar(false)
+                          .showInSnackBar('Error platform'.toString(), context);
+                    }
+                  })
                 ],
               ),
               CustomSizeBox(24.h),
@@ -184,7 +192,9 @@ class _LoginViewState extends State<LoginView> {
                             reverseDuration: const Duration(milliseconds: 200),
                             child: ChangeNotifierProvider(
                                 create: (_) => AuthController(),
-                                child: const SignUpScreen()),
+                                child: SignUpScreen(
+                                  screenType: 0,
+                                )),
                           ),
                         );
                       },
@@ -279,7 +289,7 @@ class _LoginViewState extends State<LoginView> {
                             )),
               contentPadding: EdgeInsets.only(
                   left: 10.w,
-                  top: index == 0 ? 0.h : 14.h,
+                  top: index == 0 ? 0.h : 12.sp,
                   right: index == 0 ? 10.w : 0.h),
               border: InputBorder.none,
               hintText: hintText,
@@ -294,5 +304,130 @@ class _LoginViewState extends State<LoginView> {
         ),
       ],
     );
+  }
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+
+  Future<User?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      if (googleUser == null) return null;
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final UserCredential authResult =
+          await _auth.signInWithCredential(credential);
+      final User? user = authResult.user;
+      if (user != null) {
+        getUserData(user);
+      }
+      return user;
+    } catch (error) {
+      // ignore: use_build_context_synchronously
+      CustomSnackBar(false).showInSnackBar(error.toString(), context);
+      return null;
+    }
+  }
+
+  Future<User?> signInWithApple({List<Scope> scopes = const []}) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final result = await TheAppleSignIn.performRequests(
+        [AppleIdRequest(requestedScopes: scopes)]);
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+        final appleIdCredential = result.credential!;
+        final oAuthProvider = OAuthProvider('apple.com');
+        final credential = oAuthProvider.credential(
+            idToken: String.fromCharCodes(appleIdCredential.identityToken!));
+        final userCredential = await auth.signInWithCredential(credential);
+        if (userCredential.user != null) {
+          final firebaseUser = userCredential.user!;
+          final email = appleIdCredential.email;
+          getUserData(firebaseUser, userEmail: email);
+        }
+        return null;
+      case AuthorizationStatus.error:
+        throw PlatformException(
+            code: 'ERROR_AUTHORIZATION_DENIED',
+            message: result.error.toString());
+
+      case AuthorizationStatus.cancelled:
+        throw PlatformException(
+            code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
+
+      default:
+        throw UnimplementedError();
+    }
+  }
+
+  getUserData(User user, {String? userEmail}) async {
+    var res = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    if (res.exists) {
+      UserModel user = UserModel.fromJson(res.data() as Map<String, dynamic>);
+      if (user.userName == "") {
+        // ignore: use_build_context_synchronously
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => SignUpScreen(
+                    screenType: 1,
+                    isUpdate: true,
+                  )),
+        );
+      } else {
+        // ignore: use_build_context_synchronously
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+            (route) => false);
+      }
+      // });
+    } else {
+      try {
+        await FirebaseFirestore.instance.collection("users").doc(user.uid).set(
+            UserModel(
+                    location: "",
+                    position: "",
+                    email: userEmail ?? user.email ?? '',
+                    firstName: user.displayName ?? "",
+                    lastName: "",
+                    id: user.uid,
+                    reference: "",
+                    hobbies: [],
+                    followers: [],
+                    followings: [],
+                    userName: '',
+                    phone: 0,
+                    userType: "user",
+                    company: "",
+                    website: "")
+                .toJson());
+        Constants.userDisplayName = user.displayName ?? '';
+        Constants.userEmail = userEmail ?? user.email ?? "";
+        Constants.uId = user.uid;
+        // ignore: use_build_context_synchronously
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => SignUpScreen(
+                    screenType: 1,
+                    isUpdate: Platform.isIOS ? false : true,
+                  )),
+        );
+      } catch (e) {
+        // ignore: use_build_context_synchronously
+        CustomSnackBar(false).showInSnackBar(e.toString(), context);
+      }
+    }
   }
 }

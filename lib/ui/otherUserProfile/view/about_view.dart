@@ -4,14 +4,12 @@ import 'package:personal_injury_networking/global/helper/custom_sized_box.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
 import 'package:personal_injury_networking/global/utils/app_text_styles.dart';
 
-class OrgnaizerAbout extends StatefulWidget {
-  const OrgnaizerAbout({super.key});
+import '../../authentication/model/user_model.dart';
 
-  @override
-  State<OrgnaizerAbout> createState() => _OrgnaizerAboutState();
-}
-
-class _OrgnaizerAboutState extends State<OrgnaizerAbout> {
+// ignore: must_be_immutable
+class OrganizerAbout extends StatelessWidget {
+   OrganizerAbout({super.key,required this.user});
+UserModel user;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,27 +25,32 @@ class _OrgnaizerAboutState extends State<OrgnaizerAbout> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             text('Company', FontWeight.w600),
-            text('Fiverr LLC', FontWeight.w600,
+            text(user.company, FontWeight.w600,
                 color: AppColors.kLiteBlueColor),
             CustomSizeBox(9.h),
             text('Job/Position', FontWeight.w600),
-            text('Manager', FontWeight.w600, color: AppColors.kLiteBlueColor),
+            text(user.position, FontWeight.w600, color: AppColors.kLiteBlueColor),
             CustomSizeBox(9.h),
             text('Email', FontWeight.w600),
-            text('www.xyz@gmail.com ', FontWeight.w600,
+            text(user.email, FontWeight.w600,
                 color: AppColors.kLiteBlueColor),
             CustomSizeBox(9.h),
             text('Website', FontWeight.w600),
-            text('www.xyz.com ', FontWeight.w600,
+            text(user.website, FontWeight.w600,
                 color: AppColors.kLiteBlueColor),
             CustomSizeBox(9.h),
             text('Cellphone', FontWeight.w600),
-            text('+1 234 456 5435 ', FontWeight.w600,
+            text(user.phone.toString(), FontWeight.w600,
                 color: AppColors.kLiteBlueColor),
             CustomSizeBox(9.h),
             text('Hobbies', FontWeight.w600),
-            text('www.xyz@gmail.com', FontWeight.w600,
-                color: AppColors.kLiteBlueColor),
+            Row(
+              children: [
+                for(var e in user.hobbies)
+                text("$e,", FontWeight.w600,
+                    color: AppColors.kLiteBlueColor),
+              ],
+            ),
             CustomSizeBox(9.h),
           ],
         ),

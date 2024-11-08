@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:personal_injury_networking/ui/events_details/view/scan_qr_screen.dart';
+import 'package:personal_injury_networking/ui/events_details/view/scaning_screen.dart';
 
 import '../../../global/app_buttons/white_background_button.dart';
 import '../../../global/utils/app_colors.dart';
 import '../../../global/utils/app_text_styles.dart';
 
+// ignore: must_be_immutable
 class EventsQrView extends StatefulWidget {
-  const EventsQrView({super.key});
-
+  EventsQrView({required this.eventId, super.key});
+  var eventId;
   @override
   State<EventsQrView> createState() => _EventsQrViewState();
 }
@@ -54,15 +54,27 @@ class _EventsQrViewState extends State<EventsQrView> {
           ),
           Positioned(
               top: screenHeight * 0.65,
-              left: screenWidth * 0.4,
+              left: screenWidth * 0.33,
               child: Text(
-                "Scan Here",
+                "Scan QR Code",
                 style: AppTextStyles.josefin(
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w800)),
               )),
+          Positioned(
+            top: screenHeight * 0.084,
+            left: screenWidth * 0.06,
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+                size: 18.sp,
+              ),
+            ),
+          ),
           Padding(
             padding: EdgeInsets.only(
                 top: screenHeight * 0.82, left: 30.w, right: 30.w),
@@ -75,7 +87,9 @@ class _EventsQrViewState extends State<EventsQrView> {
                   alignment: Alignment.center,
                   duration: const Duration(milliseconds: 200),
                   reverseDuration: const Duration(milliseconds: 200),
-                  child: const EventScanQrScreen(),
+                  child: QRScannerScreen(
+                    eventId: widget.eventId,
+                  ),
                 ),
               );
               // Navigator.push(

@@ -9,9 +9,9 @@ class CustomSnackBar extends StatelessWidget {
   bool okOperation = true;
   CustomSnackBar(this.okOperation, {super.key});
 
-  void showInSnackBar(String value, BuildContext conx) {
-    ScaffoldMessenger.of(conx).removeCurrentSnackBar();
-    var shortestSide = MediaQuery.of(conx).size.shortestSide;
+  void showInSnackBar(String value, BuildContext context) {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
     // ignore: non_constant_identifier_names
     var CustomSnackBar = SnackBar(
         backgroundColor: okOperation == true
@@ -23,7 +23,7 @@ class CustomSnackBar extends StatelessWidget {
           children: [
             SizedBox(
                 width: shortestSide > 600
-                    ? MediaQuery.of(conx).size.width - 48
+                    ? MediaQuery.of(context).size.width - 48
                     : 300,
                 child: Text(
                   value,
@@ -38,7 +38,7 @@ class CustomSnackBar extends StatelessWidget {
                 )),
           ],
         ));
-    ScaffoldMessenger.of(conx).showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       CustomSnackBar,
     );
   }

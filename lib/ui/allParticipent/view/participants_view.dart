@@ -3,27 +3,38 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:personal_injury_networking/global/utils/app_colors.dart';
-import 'package:personal_injury_networking/ui/authentication/model/user_type.dart';
 
 import '../../../global/helper/custom_sized_box.dart';
 import '../../../global/utils/app_text_styles.dart';
 import '../../../global/utils/constants.dart';
+import '../../authentication/model/user_model.dart';
 import '../../otherUserProfile/view/create_other_profile_view.dart';
-import '../../otherUserProfile/view/other_user_view.dart';
 
+// ignore: must_be_immutable
 class AllParticipantsView extends StatefulWidget {
-  const AllParticipantsView({super.key});
-
+  AllParticipantsView({super.key, required this.users,required this.currentUser});
+  List<UserModel> users;
+  UserModel currentUser;
   @override
   State<AllParticipantsView> createState() => _AllParticipantsViewState();
 }
 
 class _AllParticipantsViewState extends State<AllParticipantsView> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+    users = widget.users;
+    users.sort((a, b) => a.userName.compareTo(b.userName));
+    });
+    }
+  List<UserModel> users = [];
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-      Constants.userType == 'user' ? Colors.white : const Color(0xFFF5F4FF),
+          Constants.userType == 'user' ? Colors.white : const Color(0xFFF5F4FF),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
@@ -98,7 +109,7 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                     children: [
                       CustomSizeBox(25.h),
                       Text(
-                        'No 0f Registered Users : 100',
+                        'No 0f Registered Users : ${users.length}',
                         textAlign: TextAlign.end,
                         style: AppTextStyles.josefin(
                           style: TextStyle(
@@ -116,51 +127,71 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
               child: Constants.userType == 'user'
                   ? GridView.builder(
                       physics: const BouncingScrollPhysics(),
-                      itemCount: 15,
+                      itemCount: users.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
-                        mainAxisExtent: 120.h,
+                        mainAxisExtent: 80.h,
                       ),
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   PageTransition(
-                            //     childCurrent: widget,
-                            //     type: PageTransitionType.rightToLeft,
-                            //     duration: const Duration(milliseconds: 200),
-                            //     reverseDuration:
-                            //         const Duration(milliseconds: 200),
-                            //     child: const CreateOtherUserProfileView(),
-                            //   ),
-                            // );
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                childCurrent: widget,
+                                type: PageTransitionType.rightToLeft,
+                                duration: const Duration(milliseconds: 200),
+                                reverseDuration:
+                                    const Duration(milliseconds: 200),
+                                child: CreateOtherUserProfileView(
+                                  participant: users[index],
+                                  currentUser: users[index],
+                                ),
+                              ),
+                            );
                           },
                           child: Column(
                             children: [
-                              Container(
-                                height: 100.sp,
-                                width: 100.sp,
-                                decoration: const BoxDecoration(
-                                    // color: Colors.red,
-                                    image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/bc_all_participants_screen.png'),
-                                        fit: BoxFit.contain),
-                                    shape: BoxShape.circle),
-                                child: Padding(
-                                  padding: EdgeInsets.all(17.sp),
-                                  child: const Image(
-                                    image: AssetImage(
-                                      'assets/images/profile_pic.png',
-                                    ),
-                                    fit: BoxFit.contain,
+                              if (users[index].pImage != null) ...[
+                                CircleAvatar(
+                                  radius: 25,
+                                  backgroundImage: NetworkImage(
+                                    users[index].pImage!,
                                   ),
+                                )
+                              ] else ...[
+                                const CircleAvatar(
+                                  radius: 25,
+                                  backgroundImage: AssetImage(
+                                      'assets/images/profile_pic.png'),
                                 ),
+                                // Container(
+                                //   height: 100.sp,
+                                //   width: 100.sp,
+                                //   decoration: const BoxDecoration(
+                                //       // color: Colors.red,
+                                //       image: DecorationImage(
+                                //           image: AssetImage(
+                                //               'assets/images/bc_all_participants_screen.png'),
+                                //           fit: BoxFit.contain),
+                                //       shape: BoxShape.circle),
+                                //   child: Padding(
+                                //     padding: EdgeInsets.all(17.sp),
+                                //     child: const Image(
+                                //       image: AssetImage(
+                                //         'assets/images/profile_pic.png',
+                                //       ),
+                                //       fit: BoxFit.contain,
+                                //     ),
+                                //   ),
+                                // ),
+                              ],
+                              const SizedBox(
+                                height: 10,
                               ),
                               Expanded(
                                 child: Text(
-                                  'Afzaal Afzaal ',
+                                  users[index].userName,
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.montserrat(
                                       color: const Color(0xFF1A1167),
@@ -175,52 +206,79 @@ class _AllParticipantsViewState extends State<AllParticipantsView> {
                     )
                   : ListView.builder(
                       physics: const BouncingScrollPhysics(),
-                      itemCount: 10,
-                      shrinkWrap: true,
+                      itemCount: users.length,
+                      // shrinkWrap: true,
                       itemBuilder: (context, index) {
+                        UserModel user = users[index];
                         return Padding(
                           padding: EdgeInsets.only(
                               left: 12.w, right: 12.w, bottom: 10.h),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20.sp),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 12.w, vertical: 15.h),
-                              child: Row(children: [
-                                Image(
-                                    width: 40.sp,
-                                    height: 40.sp,
-                                    image: const AssetImage(
-                                        'assets/images/profile_pic.png')),
-                                SizedBox(
-                                  width: 10.w,
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  childCurrent: widget,
+                                  type: PageTransitionType.rightToLeft,
+                                  duration: const Duration(milliseconds: 200),
+                                  reverseDuration:
+                                  const Duration(milliseconds: 200),
+                                  child: CreateOtherUserProfileView(
+                                    participant: users[index],
+                                    currentUser: users[index],
+                                  ),
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Amanda Johnthen',
-                                      style: AppTextStyles.josefin(
-                                          style: TextStyle(
-                                              fontSize: 14.sp,
-                                              color: AppColors.kPrimaryColor,
-                                              fontWeight: FontWeight.w500)),
-                                    ),
-                                    CustomSizeBox(5.h),
-                                    Text(
-                                      'Marketing Expert',
-                                      style: AppTextStyles.josefin(
-                                          style: TextStyle(
-                                              fontSize: 10.sp,
-                                              color: const Color(0xFF857FB4),
-                                              fontWeight: FontWeight.w400)),
-                                    ),
-                                  ],
-                                )
-                              ]),
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20.sp),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12.w, vertical: 15.h),
+                                child: Row(children: [
+                                  if(user.pImage != null)...[
+                                    CircleAvatar(
+                                      radius: 23,
+                                      backgroundImage: NetworkImage(
+                                        user.pImage!,
+                                      ),
+                                    )
+                                  ]else...[
+                                  Image(
+                                      width: 45.sp,
+                                      height: 45.sp,
+                                      image: const AssetImage(
+                                          'assets/images/profile_pic.png'))],
+                                  SizedBox(
+                                    width: 10.w,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        user.userName,
+                                        style: AppTextStyles.josefin(
+                                            style: TextStyle(
+                                                fontSize: 14.sp,
+                                                color: AppColors.kPrimaryColor,
+                                                fontWeight: FontWeight.w500)),
+                                      ),
+                                      CustomSizeBox(5.h),
+                                      Text(
+                                        user.userType,
+                                        style: AppTextStyles.josefin(
+                                            style: TextStyle(
+                                                fontSize: 10.sp,
+                                                color: const Color(0xFF857FB4),
+                                                fontWeight: FontWeight.w400)),
+                                      ),
+                                    ],
+                                  )
+                                ]),
+                              ),
                             ),
                           ),
                         );

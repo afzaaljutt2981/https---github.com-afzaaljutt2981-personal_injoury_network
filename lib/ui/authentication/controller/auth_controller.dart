@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +13,10 @@ import '../model/user_model.dart';
 
 class AuthController extends ChangeNotifier {
   List<CountryStateModel> employesList = [];
-  bool saveChagesButton = false;
+  bool saveChangesButton = false;
   CollectionReference ref = FirebaseFirestore.instance.collection("users");
   UserModel? user;
-  void signup(
+  Future<void> signup(
     BuildContext context, {
     required String firstName,
     required String lastName,
@@ -24,12 +27,13 @@ class AuthController extends ChangeNotifier {
     required String position,
     required String location,
     required String password,
-    required String hobbies,
+    required String reference,
+    required List<String> hobbies,
     required String userName,
-  }) {
+  }) async {
     try {
       Functions.showLoaderDialog(context);
-      FirebaseAuth.instance
+     await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
         email: email.trim(),
         password: password.trim(),
@@ -46,69 +50,130 @@ class AuthController extends ChangeNotifier {
               lastName: lastName,
               phone: int.parse(phone),
               company: companyName,
+              reference: reference,
               userName: userName,
               website: website,
-              userType: 'user');
+              userType: 'user',
+              hobbies: hobbies,
+              followers: [],
+              followings: []);
           await doc.set(model.toJson());
           getUserData(context);
-          setSaveChangesButtonStatus(false);
-           notifyListeners();
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+              (route) => false);
+          notifyListeners();
         }
       });
     } on Exception catch (error) {
-      setSaveChangesButtonStatus(false);
+      Navigator.pop(context);
       CustomSnackBar(false).showInSnackBar(error.toString(), context);
       notifyListeners();
     }
-   
   }
 
   Future<void> signIn(
       String email, String password, BuildContext context) async {
-    Functions.showLoaderDialog(context);
     try {
-      UserCredential user = await FirebaseAuth.instance
+      Functions.showLoaderDialog(context);
+      await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      if (user.user != null) {
-        print("user data");
-        print(user.user!.email);
-        getUserData(context);
-      }
-    } catch (e) {
-      print(e.toString());
-      print("error is here");
-    }
-  }
-
-  getUserData(BuildContext context) {
-    if (FirebaseAuth.instance.currentUser != null) {
-      ref
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .snapshots()
-          .listen((event) {
-        if (event.data() != null) {
-          Map<String, dynamic> data = event.data() as Map<String, dynamic>;
+      ref.doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) async {
+        if (value.exists) {
+          Map<String, dynamic> data = value.data() as Map<String, dynamic>;
           user = UserModel.fromJson(data);
-          print("user Data");
-          print(user?.email);
           if (user != null) {
             Constants.userType = user!.userType;
+            Constants.userName = user!.firstName;
+            Constants.userPosition = user!.position;
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+                (route) => false);
           }
+        } else {
+          await FirebaseAuth.instance.signOut();
+          Navigator.of(context).pop();
+          CustomSnackBar(false).showInSnackBar("Login Failed", context);
         }
       });
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
-          (route) => false);
-    } else {
+    } catch (e) {
+      // Navigator.pop(context);
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
-      Functions.showSnackBar(context, "something went wrong");
+      // ignore: use_build_context_synchronously
+      CustomSnackBar(false).showInSnackBar("Invalid Credentials", context);
+     
     }
   }
 
-  setSaveChangesButtonStatus(bool value) {
-    saveChagesButton = value;
-    notifyListeners();
+  getUserData(context) {
+    ref.doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) async {
+      if (value.exists) {
+        Map<String, dynamic> data = value.data() as Map<String, dynamic>;
+        user = UserModel.fromJson(data);
+        if (user != null) {
+          Constants.userType = user!.userType;
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+              (route) => false);
+        }
+      } else {
+        await FirebaseAuth.instance.signOut();
+        Navigator.of(context).pop();
+        CustomSnackBar(false).showInSnackBar("Login Failed", context);
+      }
+    });
   }
+  Future<void> updateUser(
+      BuildContext context, {
+        required String firstName,
+        required String lastName,
+        required String companyName,
+        required String email,
+        required String website,
+        required String phone,
+        required String position,
+        required String location,
+        required String reference,
+        required List<String> hobbies,
+        required String userName,
+      }) async {
+    try {
+      Functions.showLoaderDialog(context);
+          var doc = ref.doc(FirebaseAuth.instance.currentUser!.uid);
+          await doc.update({
+            "firstName": firstName,
+            "lastName": lastName,
+            "company": companyName,
+            "email": email,
+            "location": location,
+            "phone": int.parse(phone),
+            "website": website,
+            "reference":reference,
+            "userName": userName,
+            "position": position,
+            "hobbies":hobbies,
+          });
+          // ignore: use_build_context_synchronously
+          getUserData(context);
+          // ignore: use_build_context_synchronously
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => BottomNavigationScreen(selectedIndex: 0)),
+                  (route) => false);
+          notifyListeners();
+    } on Exception catch (error) {
+      // ignore: use_build_context_synchronously
+      CustomSnackBar(false).showInSnackBar(error.toString(), context);
+      notifyListeners();
+    }
+  }
+
 }
