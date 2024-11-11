@@ -11,7 +11,7 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-TextEditingController textController = TextEditingController();
+TextEditingController textController = TextEditingController(); 
 bool emplyList = false;
 
 class _ChatScreenState extends State<ChatScreen> {
